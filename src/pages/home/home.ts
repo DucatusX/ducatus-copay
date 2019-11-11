@@ -456,6 +456,7 @@ export class HomePage {
         const dataToIgnore = [
           'BitcoinAddress',
           'BitcoinCashAddress',
+          'DucatusAddress',
           'EthereumAddress',
           'PlainUrl'
         ];

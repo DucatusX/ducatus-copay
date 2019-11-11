@@ -5,7 +5,8 @@ import { availableCoins, CoinOpts } from './coin';
 export enum Coin {
   BTC = 'btc',
   BCH = 'bch',
-  ETH = 'eth'
+  ETH = 'eth',
+  DUC = 'duc'
 }
 
 export type CoinsMap<T> = { [key in Coin]: T };

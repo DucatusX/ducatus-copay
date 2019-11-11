@@ -94,6 +94,9 @@ export class DerivationPathHelperProvider {
       case 'bch':
         isValid = ["145'", "0'", "1'"].indexOf(coinCode) > -1;
         break;
+      case 'duc':
+        isValid = ["1025'", "0'", "1'"].indexOf(coinCode) > -1;
+        break;
       case 'eth':
         isValid = ["60'", "0'", "1'"].indexOf(coinCode) > -1;
         break;

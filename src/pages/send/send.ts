@@ -35,10 +35,12 @@ export class SendPage extends WalletTabsChild {
   private scannerOpened: boolean;
   private validDataTypeMap: string[] = [
     'BitcoinAddress',
+    'DucatusAddress',
     'BitcoinCashAddress',
     'EthereumAddress',
     'EthereumUri',
     'BitcoinUri',
+    'DucatusUri',
     'BitcoinCashUri'
   ];
 

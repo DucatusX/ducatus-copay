@@ -26,7 +26,7 @@
         </div>
       </ion-list>
       <div>
-        <button ion-button class="button-standard" [disabled]="!coinsSelected.btc && !coinsSelected.bch && !coinsSelected.eth" (click)="createWallet()">
+        <button ion-button class="button-standard" [disabled]="!coinsSelected.duc" (click)="createWallet()">
           {{'Create' | translate}}
         </button>
         <button ion-button clear class="button-standard" (click)="goToImportWallet()" *ngIf="isOnboardingFlow">

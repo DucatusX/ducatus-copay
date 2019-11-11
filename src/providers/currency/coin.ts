@@ -42,6 +42,41 @@ export interface CoinOpts {
 }
 
 export const availableCoins: CoinsMap<CoinOpts> = {
+  duc: {
+    name: 'Ducatus',
+    chain: 'DUC',
+    coin: 'duc',
+    unitInfo: {
+      unitName: 'DUC',
+      unitToSatoshi: 100000000,
+      unitDecimals: 8,
+      unitCode: 'duc'
+    },
+    properties: {
+      hasMultiSig: true,
+      hasMultiSend: true,
+      isUtxo: true,
+      isERCToken: false,
+      isStableCoin: false,
+      singleAddress: false
+    },
+    paymentInfo: {
+      paymentCode: 'BIP73',
+      protocolPrefix: { livenet: 'ducatus', testnet: 'ducatus' },
+      ratesApi: 'https://bitpay.com/api/rates',
+      blockExplorerUrls: 'insight.bitcore.io/#/DUC/'
+    },
+    feeInfo: {
+      feeUnit: 'sat/byte',
+      feeUnitAmount: 1000,
+      blockTime: 10,
+      maxMerchantFee: 'urgent'
+    },
+    theme: {
+      backgroundColor: 'rgba(247,146,26,1)',
+      gradientBackgroundColor: 'rgba(247,146,26, 0.2)'
+    }
+  },
   btc: {
     name: 'Bitcoin',
     chain: 'BTC',

@@ -51,8 +51,10 @@ export class MultiSendPage extends WalletTabsChild {
   private validDataTypeMap: string[] = [
     'BitcoinAddress',
     'BitcoinCashAddress',
+    'DucatusAddress',
     'BitcoinUri',
-    'BitcoinCashUri'
+    'BitcoinCashUri',
+    'DucatusUri'
   ];
 
   constructor(
@@ -322,12 +324,14 @@ export class MultiSendPage extends WalletTabsChild {
   public processInput(): void {
     if (this.search && this.search.trim() != '') {
       this.parsedData = this.incomingDataProvider.parseData(this.search);
+      console.log(this.parsedData);
       if (this.parsedData && this.parsedData.type == 'PayPro') {
         this.invalidAddress = true;
       } else if (
         this.parsedData &&
         _.indexOf(this.validDataTypeMap, this.parsedData.type) != -1
       ) {
+        console.log(this.validDataTypeMap);
         const isValid = this.checkCoinAndNetwork(this.search);
         if (isValid) this.invalidAddress = false;
       } else {
