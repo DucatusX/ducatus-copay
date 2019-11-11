@@ -532,7 +532,10 @@ export class CopayApp {
   }
 
   private processUrl(pathData): void {
-    if (pathData.indexOf('bitcoincash:/') != -1) {
+    if (pathData.indexOf('ducatus:/') != -1) {
+      this.logger.debug('Ducatus URL found');
+      this.handleOpenUrl(pathData.substring(pathData.indexOf('ducatus:/')));
+    } else if (pathData.indexOf('bitcoincash:/') != -1) {
       this.logger.debug('Bitcoin Cash URL found');
       this.handleOpenUrl(pathData.substring(pathData.indexOf('bitcoincash:/')));
     } else if (pathData.indexOf('bitcoin:/') != -1) {

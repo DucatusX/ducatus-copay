@@ -154,7 +154,7 @@ export class ConfigProvider {
 
       // Bitcore wallet service URL
       bws: {
-        url: 'https://bws.bitpay.com/bws/api'
+        url: 'http://192.168.10.177:3232/bws/api'
       },
 
       download: {

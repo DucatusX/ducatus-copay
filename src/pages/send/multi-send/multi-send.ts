@@ -49,10 +49,12 @@ export class MultiSendPage {
   private validDataTypeMap: string[] = [
     'BitcoinAddress',
     'BitcoinCashAddress',
+    'DucatusAddress',
     'EthereumAddress',
     'EthereumUri',
     'BitcoinUri',
-    'BitcoinCashUri'
+    'BitcoinCashUri',
+    'DucatusUri'
   ];
 
   constructor(

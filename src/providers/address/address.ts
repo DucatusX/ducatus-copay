@@ -12,11 +12,13 @@ export interface CoinNetwork {
 export class AddressProvider {
   private bitcore;
   private bitcoreCash;
+  private ducatuscore;
   private core;
 
   constructor(private bwcProvider: BwcProvider, private logger: Logger) {
     this.bitcore = this.bwcProvider.getBitcore();
     this.bitcoreCash = this.bwcProvider.getBitcoreCash();
+    this.ducatuscore = this.bwcProvider.getDucatuscore();
     this.core = this.bwcProvider.getCore();
   }
 
@@ -48,30 +50,35 @@ export class AddressProvider {
         return { coin: 'bch', network };
       } catch (e) {
         try {
-          const isValidEthAddress = this.core.Validation.validateAddress(
-            'ETH',
-            network,
-            address
-          );
-          if (isValidEthAddress) {
-            return { coin: 'eth', network };
-          } else {
-            throw isValidEthAddress;
-          }
+          network = this.ducatuscore.Address(address).network.name;
+          return { coin: 'duc', network };
         } catch (e) {
           try {
-            const isValidXrpAddress = this.core.Validation.validateAddress(
-              'XRP',
+            const isValidEthAddress = this.core.Validation.validateAddress(
+              'ETH',
               network,
               address
             );
-            if (isValidXrpAddress) {
-              return { coin: 'xrp', network };
+            if (isValidEthAddress) {
+              return { coin: 'eth', network };
             } else {
-              return null;
+              throw isValidEthAddress;
             }
           } catch (e) {
-            return null;
+            try {
+              const isValidXrpAddress = this.core.Validation.validateAddress(
+                'XRP',
+                network,
+                address
+              );
+              if (isValidXrpAddress) {
+                return { coin: 'xrp', network };
+              } else {
+                return null;
+              }
+            } catch (e) {
+              return null;
+            }
           }
         }
       }
@@ -85,6 +92,7 @@ export class AddressProvider {
     const Address = this.bitcore.Address;
     const URICash = this.bitcoreCash.URI;
     const AddressCash = this.bitcoreCash.Address;
+    const AddressDucatus = this.ducatuscore.Address;
     const { Validation } = this.core;
 
     // Bip21 uri
@@ -98,6 +106,8 @@ export class AddressProvider {
     if (Address.isValid(str, 'testnet')) return true;
     if (AddressCash.isValid(str, 'livenet')) return true;
     if (AddressCash.isValid(str, 'testnet')) return true;
+    if (AddressDucatus.isValid(str, 'livenet')) return true;
+    if (AddressDucatus.isValid(str, 'testnet')) return true;
     if (Validation.validateAddress('XRP', 'livenet', str)) return true;
     if (Validation.validateAddress('ETH', 'livenet', str)) return true;
 

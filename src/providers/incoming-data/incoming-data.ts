@@ -72,7 +72,7 @@ export class IncomingDataProvider {
 
   private isValidPayProNonBackwardsCompatible(data: string): boolean {
     data = this.sanitizeUri(data);
-    return !!/^(bitcoin|bitcoincash|bchtest|ethereum|ripple)?:\?r=[\w+]/.exec(
+    return !!/^(bitcoin|bitcoincash|ducatus|bchtest|ethereum|ripple)?:\?r=[\w+]/.exec(
       data
     );
   }
@@ -102,6 +102,11 @@ export class IncomingDataProvider {
   private isValidBitcoinCashUri(data: string): boolean {
     data = this.sanitizeUri(data);
     return !!this.bwcProvider.getBitcoreCash().URI.isValid(data);
+  }
+
+  private isValidDucatusUri(data: string): boolean {
+    data = this.sanitizeUri(data);
+    return !!this.bwcProvider.getDucatuscore().URI.isValid(data);
   }
 
   private isValidEthereumUri(data: string): boolean {
@@ -147,6 +152,13 @@ export class IncomingDataProvider {
     return !!(
       this.bwcProvider.getBitcoreCash().Address.isValid(data, 'livenet') ||
       this.bwcProvider.getBitcoreCash().Address.isValid(data, 'testnet')
+    );
+  }
+
+  private isValidDucatusAddress(data: string): boolean {
+    return !!(
+      this.bwcProvider.getDucatuscore().Address.isValid(data, 'livenet') ||
+      this.bwcProvider.getDucatuscore().Address.isValid(data, 'testnet')
     );
   }
 
@@ -363,6 +375,20 @@ export class IncomingDataProvider {
     } else this.goSend(address, amount, message, coin);
   }
 
+
+  private handleDucatusUri(data: string, redirParams?: RedirParams): void {
+    this.logger.debug('Incoming-data: Ducatus URI');
+    let amountFromRedirParams =
+      redirParams && redirParams.amount ? redirParams.amount : '';
+    const coin = Coin.DUC;
+    let parsed = this.bwcProvider.getDucatuscore().URI(data);
+    let address = parsed.address ? parsed.address.toString() : '';
+    let message = parsed.message;
+    let amount = parsed.amount || amountFromRedirParams;
+    if (parsed.r) this.goToPayPro(data, coin);
+    else this.goSend(address, amount, message, coin);
+  }
+
   private handleEthereumUri(data: string, redirParams?: RedirParams): void {
     this.logger.debug('Incoming-data: Ethereum URI');
     let amountFromRedirParams =
@@ -492,6 +518,26 @@ export class IncomingDataProvider {
       this.showMenu({
         data,
         type: 'bitcoinAddress',
+        coin
+      });
+    } else if (redirParams && redirParams.amount) {
+      this.goSend(data, redirParams.amount, '', coin);
+    } else {
+      this.goToAmountPage(data, coin);
+    }
+  }
+
+
+  private handlePlainDucatusAddress(
+    data: string,
+    redirParams?: RedirParams
+  ): void {
+    this.logger.debug('Incoming-data: Ducatus plain address');
+    const coin = Coin.DUC;
+    if (redirParams && redirParams.activePage === 'ScanPage') {
+      this.showMenu({
+        data,
+        type: 'ducatusAddress',
         coin
       });
     } else if (redirParams && redirParams.amount) {
@@ -681,6 +727,11 @@ export class IncomingDataProvider {
       this.handleBitcoinCashUri(data, redirParams);
       return true;
 
+      // Ducatus URI
+    } else if (this.isValidDucatusUri(data)) {
+      this.handleDucatusUri(data, redirParams);
+      return true;
+
       // Ethereum URI
     } else if (this.isValidEthereumUri(data)) {
       this.handleEthereumUri(data, redirParams);
@@ -709,6 +760,12 @@ export class IncomingDataProvider {
       // Plain Address (Bitcoin Cash)
     } else if (this.isValidBitcoinCashAddress(data)) {
       this.handlePlainBitcoinCashAddress(data, redirParams);
+      return true;
+
+
+      // Plain Address (Ducatus)
+    } else if (this.isValidDucatusAddress(data)) {
+      this.handlePlainDucatusAddress(data, redirParams);
       return true;
 
       // Address (Ethereum)
@@ -861,6 +918,14 @@ export class IncomingDataProvider {
       };
 
       // Ethereum URI
+    } else if (this.isValidDucatusUri(data)) {
+      return {
+        data,
+        type: 'DucatusUri',
+        title: this.translate.instant('Ducatus URI')
+      };
+
+      // Ethereum URI
     } else if (this.isValidEthereumUri(data)) {
       return {
         data,
@@ -906,6 +971,14 @@ export class IncomingDataProvider {
         data,
         type: 'BitcoinCashAddress',
         title: this.translate.instant('Bitcoin Cash Address')
+      };
+
+      // Plain Address (Ducatus)
+    } else if (this.isValidDucatusAddress(data)) {
+      return {
+        data,
+        type: 'DucatusAddress',
+        title: this.translate.instant('Ducatus Address')
       };
 
       // Plain Address (Ethereum)

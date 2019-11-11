@@ -44,6 +44,7 @@ export class SendPage {
   public invalidAddress: boolean;
   private validDataTypeMap: string[] = [
     'BitcoinAddress',
+    'DucatusAddress',
     'BitcoinCashAddress',
     'EthereumAddress',
     'EthereumUri',
@@ -51,6 +52,7 @@ export class SendPage {
     'RippleUri',
     'BitcoinUri',
     'BitcoinCashUri',
+    'DucatusUri',
     'BitPayUri'
   ];
   private pageMap = {
