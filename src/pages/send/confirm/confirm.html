@@ -43,7 +43,7 @@
       <div *ngIf="wallet && tx.txp[wallet.id]">
         <span class="fee-amount">{{tx.txp[wallet.id].fee | satToUnit: tx.coin}}</span>
         <div class="fee-details">
-          {{tx.txp[wallet.id].fee | satToFiat: tx.coin}}
+          {{(tx.coin !== 'duc') ? (tx.txp[wallet.id].fee | satToFiat: tx.coin) : ''}}
           <span *ngIf="tx.txp[wallet.id].feeRatePerStr">
             &middot;
             <span>

@@ -232,6 +232,10 @@ export class WalletProvider {
         cache.alternativeName = config.settings.alternativeName;
         cache.alternativeIsoCode = config.settings.alternativeIsoCode;
 
+        if (wallet.coin === 'duc') {
+          return;
+        }
+
         this.rateProvider
           .whenRatesAvailable(wallet.coin)
           .then(() => {
@@ -447,7 +451,7 @@ export class WalletProvider {
   }
 
   public getAddressView(coin: Coin, network: string, address: string): string {
-    if (coin != 'bch') return address;
+    if (coin != 'bch' && coin != 'duc') return address;
     const protoAddr = this.getProtoAddress(coin, network, address);
     return protoAddr;
   }

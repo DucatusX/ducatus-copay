@@ -87,8 +87,10 @@ export class IncomingDataProvider {
     return !!this.bwcProvider.getBitcoreCash().URI.isValid(data);
   }
 
+
   private isValidDucatusUri(data: string): boolean {
     data = this.sanitizeUri(data);
+    console.log(!!this.bwcProvider.getDucatuscore().URI.isValid(data));
     return !!this.bwcProvider.getDucatuscore().URI.isValid(data);
   }
 
@@ -812,6 +814,9 @@ export class IncomingDataProvider {
       case 'bitcoin':
         coin = Coin.BTC;
         break;
+      case 'ducatus':
+        coin = Coin.DUC;
+        break;
       case 'bitcoincash':
         coin = Coin.BCH;
         break;
@@ -827,7 +832,7 @@ export class IncomingDataProvider {
 
   public getPayProUrl(data: string): string {
     return decodeURIComponent(
-      data.replace(/(bitcoin|bitcoincash|ethereum)?:\?r=/, '')
+      data.replace(/(bitcoin|bitcoincash|ethereum|ducatus)?:\?r=/, '')
     );
   }
 
