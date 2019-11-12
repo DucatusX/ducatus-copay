@@ -51,6 +51,7 @@ export class ConfirmPage {
   @ViewChild('slideButton')
   slideButton;
   protected bitcoreCash;
+  protected ducatuscore;
 
   public countDown = null;
   public CONFIRM_LIMIT_USD: number;
@@ -131,6 +132,7 @@ export class ConfirmPage {
     this.fromWalletDetails = this.navParams.data.fromWalletDetails;
     this.fromCoinbase = this.navParams.data.fromCoinbase;
     this.bitcoreCash = this.bwcProvider.getBitcoreCash();
+    this.ducatuscore = this.bwcProvider.getDucatuscore();
     this.CONFIRM_LIMIT_USD = 20;
     this.FEE_TOO_HIGH_LIMIT_PER = 15;
     this.config = this.configProvider.get();
@@ -838,8 +840,22 @@ export class ConfirmPage {
       if (this.fromMultiSend) {
         txp.outputs = [];
         this.navParams.data.recipients.forEach(recipient => {
+
+
           if (tx.coin && tx.coin == 'bch') {
             recipient.toAddress = this.bitcoreCash
+              .Address(recipient.toAddress)
+              .toString(true);
+
+            recipient.addressToShow = this.walletProvider.getAddressView(
+              tx.coin,
+              tx.network,
+              recipient.toAddress
+            );
+          }
+
+          if (tx.coin && tx.coin == 'duc') {
+            recipient.toAddress = this.ducatuscore
               .Address(recipient.toAddress)
               .toString(true);
 
@@ -1208,6 +1224,7 @@ export class ConfirmPage {
     this.clipboardProvider.clearClipboardIfValidData([
       'PayPro',
       'BitcoinUri',
+      'DucatusUri',
       'BitcoinCashUri',
       'EthereumUri',
       'RippleUri',

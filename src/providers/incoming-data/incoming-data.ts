@@ -104,6 +104,7 @@ export class IncomingDataProvider {
     return !!this.bwcProvider.getBitcoreCash().URI.isValid(data);
   }
 
+
   private isValidDucatusUri(data: string): boolean {
     data = this.sanitizeUri(data);
     return !!this.bwcProvider.getDucatuscore().URI.isValid(data);
@@ -1075,7 +1076,7 @@ export class IncomingDataProvider {
 
   public getPayProUrl(data: string): string {
     return decodeURIComponent(
-      data.replace(/(bitcoin|bitcoincash|ethereum|ripple)?:\?r=/, '')
+      data.replace(/(bitcoin|bitcoincash|ethereum|ripple|ducatus)?:\?r=/, '')
     );
   }
 
