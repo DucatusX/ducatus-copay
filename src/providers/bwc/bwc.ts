@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Logger } from '../../providers/logger/logger';
 
-import BWC from 'ducatuscore-wallet-client';
+import BWC from 'ducatus-wallet-client';
 
 @Injectable()
 export class BwcProvider {
@@ -60,7 +60,7 @@ export class BwcProvider {
 
     // note opts use `bwsurl` all lowercase;
     let bwc = new BWC({
-      baseUrl: opts.bwsurl || 'http://192.168.10.177:3232/bws/api',
+      baseUrl: opts.bwsurl || 'http://localhost:3232/bws/api',
       verbose: opts.verbose,
       timeout: 100000,
       transports: ['polling'],
