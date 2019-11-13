@@ -90,7 +90,6 @@ export class IncomingDataProvider {
 
   private isValidDucatusUri(data: string): boolean {
     data = this.sanitizeUri(data);
-    console.log(!!this.bwcProvider.getDucatuscore().URI.isValid(data));
     return !!this.bwcProvider.getDucatuscore().URI.isValid(data);
   }
 
