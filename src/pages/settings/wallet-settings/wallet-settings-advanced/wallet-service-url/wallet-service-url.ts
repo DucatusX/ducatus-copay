@@ -80,15 +80,15 @@ export class WalletServiceUrlPage {
     switch (this.walletServiceForm.value.bwsurl) {
       case 'prod':
       case 'production':
-        bws = 'https://bws.bitpay.com/bws/api';
+        bws = 'http://89.40.4.152/bws/api';
         break;
       case 'sta':
       case 'staging':
-        bws = 'https://bws-staging.b-pay.net/bws/api';
+        bws = 'http://192.168.10.177:3232/bws/api';
         break;
       case 'loc':
       case 'local':
-        bws = 'http://192.168.10.177:3232/bws/api';
+        bws = 'http://localhost:3232/bws/api';
         break;
     }
     if (bws) {
