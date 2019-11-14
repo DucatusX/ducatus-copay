@@ -28,13 +28,13 @@ $colors: (
   secondary: $color-secondary,
   warning: #fdb455,
   danger: #df5264,
-  success: #01d1a2,
+  success: #862633,
   info: #5476eb,
   light: #f4f4f4,
-  blank: #fff,
-  dark: #000,
+  blank: #f4efe4,
+  dark: #424242,
   grey: #667,
-  light-grey: #9b9bab,
+  light-grey: #f5f0e5,
   error: #e56c7b
 );
 
@@ -50,8 +50,8 @@ $tabs-background: white;
 $tabs-border-color: rgba(0, 0, 0, 0.1);
 // Item list background color
 $list-background-color: #ffffff;
-$feather-dark: #f8f8f9;
-$feather: #fbfbff;
+$feather-dark: #f5f1e7;
+$feather: #f9f6f0;
 // Refresh color
 $refresher-icon-color: color($colors, primary);
 $refresher-icon-font-size: 12px;
@@ -67,7 +67,7 @@ $list-border-color: color($colors, light);
 $toolbar-ios-title-text-color: color($colors, light);
 $toolbar-md-title-text-color: color($colors, light);
 // Onboarding colors
-$onboarding-gradient-bottom-color: $color-secondary-dark;
+$onboarding-gradient-bottom-color: $color-light;
 $onboarding-background-image: linear-gradient(
   to bottom,
   $onboarding-gradient-top-color 0%,

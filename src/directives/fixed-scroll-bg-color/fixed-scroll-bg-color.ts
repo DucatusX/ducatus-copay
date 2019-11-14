@@ -15,7 +15,7 @@ export class FixedScrollBgColor {
   @Input('fixed-scroll-bg-color')
   color: string;
   @Input()
-  bottomColor: string = '#f8f8f9';
+  bottomColor: string = '#f5f1e7';
 
   constructor(private element: ElementRef) {}
 

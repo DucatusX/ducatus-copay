@@ -21,7 +21,7 @@ export class IonContentBackgroundColor {
     )[0];
     if (color) ionContent.style.setProperty('background-color', color);
     else {
-      const color = this.app.info.nameCase == 'Copay' ? '#192c3a' : '#2a3f90';
+      const color = this.app.info.nameCase == 'Copay' ? '#862633' : '#862633';
       ionContent.style.setProperty('background-color', color);
     }
   }
