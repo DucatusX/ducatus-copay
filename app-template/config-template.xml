@@ -12,8 +12,7 @@
         BitPay Inc.
     </author>
     <content src="index.html" />
-    <access origin="https://bws.bitpay.com" />
-    <access origin="https://bitpay.com" />
+    <access origin="http://89.40.4.152:3232" />
     <access origin="https://test.bitpay.com" />
     <access origin="https://staging.bitpay.com" />
     <access origin="https://auth.shapeshift.io" />
