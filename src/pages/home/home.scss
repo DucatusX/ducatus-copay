@@ -64,7 +64,7 @@ page-home {
     }
 
     .home-logo {
-      height: 24px;
+      //height: 24px;
       position: relative;
       top: 3px;
     }
@@ -396,7 +396,6 @@ page-home {
     left: 50%;
     transform: translateX(-50%);
     padding: 27px 22px 26px 19px;
-    border-radius: 30px;
     box-shadow: 0 7px 31px 0 rgba(0, 0, 0, 0.17);
     color: white;
     font-weight: 500;
@@ -413,12 +412,9 @@ page-home {
     }
 
     width: 100px;
-    border-radius: 30px;
 
     button {
       padding: 0px 50px 0px 55px;
-      border-radius: 30px;
-
       .fab-text {
         margin-left: 5px;
         font-weight: 500;
@@ -563,7 +559,7 @@ page-home {
       }
 
       &--send {
-        background-color: #eff1fe;
+        background-color: #862633;
 
         &.activated,
         &:hover:not(.disable-hover) {
@@ -578,9 +574,9 @@ page-home {
       }
 
       &__text {
-        color: #434d59;
+        color: #fff;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: 300;
         margin-top: 3px;
       }
     }
