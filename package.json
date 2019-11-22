@@ -82,10 +82,6 @@
     "sign:copay-linux": "gpg -u 1112CFA1 --output dist/Copay-linux.zip.sig --detach-sig dist/Copay-linux.zip",
     "sign:copay-windows": "gpg -u 1112CFA1 --output dist/Copay.exe.sig --detach-sig dist/Copay.exe",
     "verify:copay-desktop": "gpg --verify dist/Copay-linux.zip.sig dist/Copay-linux.zip; gpg --verify dist/Copay.exe.sig dist/Copay.exe; gpg --verify dist/Copay.dmg.sig dist/Copay.dmg",
-    "sign:bitpay-desktop": "npm run sign:bitpay-linux && npm run sign:bitpay-windows && npm run sign:bitpay-macos",
-    "sign:bitpay-macos": "gpg -u 1112CFA1 --output dist/BitPay.dmg.sig --detach-sig dist/BitPay.dmg",
-    "sign:bitpay-linux": "gpg -u 1112CFA1 --output dist/BitPay-linux.zip.sig --detach-sig dist/BitPay-linux.zip",
-    "sign:bitpay-windows": "gpg -u 1112CFA1 --output dist/BitPay.exe.sig --detach-sig dist/BitPay.exe",
     "verify:bitpay-desktop": "gpg --verify dist/BitPay-linux.zip.sig dist/BitPay-linux.zip; gpg --verify dist/BitPay.exe.sig dist/BitPay.exe; gpg --verify dist/BitPay.dmg.sig dist/BitPay.dmg"
   },
   "dependencies": {
