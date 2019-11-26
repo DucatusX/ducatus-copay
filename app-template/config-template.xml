@@ -12,7 +12,7 @@
         Ducatus
     </author>
     <content src="index.html" />
-    <access origin="https://ducws.rocknblock.io" />
+    <access origin="http://127.0.0.1:3232" />
     <access origin="https://bitpay.com" />
 
     <allow-navigation href="gap://ready" />
