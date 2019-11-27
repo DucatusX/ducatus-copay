@@ -1,8 +1,8 @@
 {
-  "name": "copay",
-  "description": "A Secure Ducatus Wallet",
+  "name": "ducatuswallet",
+  "description": "A Secure DucatusCoin Wallet",
   "author": "BitPay",
-  "version": "9.3.2",
+  "version": "2.0.0",
   "keywords": [
     "ducatus",
     "bitcoin",
@@ -13,7 +13,7 @@
     "bitcore"
   ],
   "main": "electron/main.js",
-  "title": "Ducatus",
+  "title": "DucatusWallet",
   "user-agent": "%name %ver (%osinfo)",
   "webkit": {
     "page-cache": false,
@@ -235,7 +235,7 @@
       "cordova-custom-config": {},
       "cordova-plugin-customurlscheme-ng": {
         "URL_SCHEME": "bitcoin",
-        "SECOND_URL_SCHEME": "copay",
+        "SECOND_URL_SCHEME": "ducatuswallet",
         "THIRD_URL_SCHEME": "bitcoincash",
         "FOURTH_URL_SCHEME": "bchtest",
         "FIFTH_URL_SCHEME": "ethereum",
@@ -253,7 +253,8 @@
       "im.ltdev.cordova.UserAgent": {},
       "cordova-launch-review": {},
       "cordova-plugin-wkwebview-engine": {},
-      "cordova-plugin-advanced-http": {}
+      "cordova-plugin-advanced-http": {},
+      "cordova-plugin-add-swift-support": {}
     },
     "platforms": [
       "android",
