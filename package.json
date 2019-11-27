@@ -156,6 +156,7 @@
     "cordova-plugin-x-toast": "2.6.0",
     "ducatuscore-lib": "git://github.com/DUCATUS-revival/ducatuscore-lib.git",
     "es6-promise-plugin": "4.2.2",
+    "ducatus-wallet-client": "8.10.14",
     "fcm-ng": "1.1.0",
     "gettext-parser": "1.3.0",
     "ionic-angular": "3.9.5",
@@ -253,7 +254,9 @@
       "im.ltdev.cordova.UserAgent": {},
       "cordova-launch-review": {},
       "cordova-plugin-wkwebview-engine": {},
-      "cordova-plugin-advanced-http": {},
+      "cordova-plugin-advanced-http": {
+        "OKHTTP_VERSION": "3.10.0"
+      },
       "cordova-plugin-add-swift-support": {}
     },
     "platforms": [
