@@ -6,12 +6,14 @@ export class DerivationPathHelperProvider {
   public defaultBCH: string;
   public defaultETH: string;
   public defaultXRP: string;
+  public defaultDUC: string;
   public defaultTestnet: string;
   public defaultMultisigBTC: string;
   public defaultMultisigBCH: string;
 
   public constructor() {
-    this.defaultBTC = "m/44'/0'/0'";
+    this.defaultBTC = "m/44'/1025'/0'";
+    this.defaultDUC = "m/44'/0'/0'";
     this.defaultBCH = "m/44'/145'/0'";
     this.defaultETH = "m/44'/60'/0'";
     this.defaultXRP = "m/44'/144'/0'";
@@ -94,13 +96,13 @@ export class DerivationPathHelperProvider {
 
     switch (coin) {
       case 'btc':
-        isValid = ["0'", "1'"].indexOf(coinCode) > -1;
+        isValid = ["1025'", "1'"].indexOf(coinCode) > -1;
         break;
       case 'bch':
         isValid = ["145'", "0'", "1'"].indexOf(coinCode) > -1;
         break;
       case 'duc':
-        isValid = ["1025'", "0'", "1'"].indexOf(coinCode) > -1;
+        isValid = ["0'", "0'", "1'"].indexOf(coinCode) > -1;
         break;
       case 'eth':
         isValid = ["60'", "0'", "1'"].indexOf(coinCode) > -1;

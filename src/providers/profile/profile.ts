@@ -482,7 +482,7 @@ export class ProfileProvider {
         wallet.n == 1 &&
         wallet.credentials.addressType == 'P2PKH' &&
         derivationStrategy == 'BIP44' &&
-        (chain == 'btc' || (chain == 'bch' && coinCode == "145'") || (chain == 'duc' && coinCode == "1025'"))
+        (chain == 'btc' || (chain == 'bch' && coinCode == "145'") || (chain == 'duc' && coinCode == "0'"))
       ) {
         return true;
       }
@@ -490,7 +490,7 @@ export class ProfileProvider {
         wallet.n > 1 &&
         wallet.credentials.addressType == 'P2SH' &&
         derivationStrategy == 'BIP48' &&
-        (chain == 'btc' || (chain == 'bch' && coinCode == "145'") || (chain == 'duc' && coinCode == "1025'"))
+        (chain == 'btc' || (chain == 'bch' && coinCode == "145'") || (chain == 'duc' && coinCode == "0'"))
       ) {
         return true;
       }
