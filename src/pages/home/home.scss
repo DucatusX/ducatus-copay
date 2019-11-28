@@ -132,7 +132,8 @@ page-home {
       display: flex;
       justify-content: left;
       align-items: center;
-      color: #4f6ef7;
+      background-color: color($colors, light);
+      color: color($colors, dark);
       height: 45px;
     }
     &-img {

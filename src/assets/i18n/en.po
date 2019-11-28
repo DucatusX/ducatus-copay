@@ -1394,6 +1394,9 @@ msgstr ""
 "If you have funds stored on a website then you should move them into a "
 "secure wallet... like this one!"
 
+msgid "No activities found. You do not have funds in the account."
+msgstr "No activities found. You do not have funds in the account."
+
 msgid ""
 "If you have successfully completed the entire payment process, remember that "
 "receiving crypto usually takes up to 1 hour."

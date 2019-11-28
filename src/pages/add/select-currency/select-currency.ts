@@ -157,8 +157,8 @@ export class SelectCurrencyPage {
 
   public createWallets(coins: Coin[]): void {
     if (this.showKeyOnboarding) {
-      this.showKeyOnboardingSlides(coins);
-      return;
+      // this.showKeyOnboardingSlides(coins);
+      // return;
     } else if (this.isZeroState) {
       this.showInfoSheet(coins);
       return;

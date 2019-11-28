@@ -1188,7 +1188,7 @@ msgstr "Ho letto, compreso e accettato i Termini di Utilizzo"
 msgid "I understand"
 msgstr "Ho capito"
 
-msgid "I understand that if this app is moved to another device or deleted, my bitcoin can only be recovered with the recovery phrase"
+msgid "I understand that if this app is moved to another device or deleted, my funds can only be recovered with the recovery phrase"
 msgstr "Ho compreso che se questa app sarà trasferita ad un altro dispositivo o cancellata, i miei bitcoin potranno essere recuperati solo tramite la frase di recupero"
 
 msgid "I understand that my funds are held securely on this device, not by a company"

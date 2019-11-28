@@ -294,11 +294,7 @@ export class SettingsPage {
   }
 
   public openHelpExternalLink(): void {
-    this.analyticsProvider.logEvent('help', {});
-    const url =
-      this.appName == 'Copay'
-        ? 'https://github.com/bitpay/copay/issues'
-        : 'https://help.bitpay.com/bitpay-app';
+    const url = 'https://ducatus.net/';
     const optIn = true;
     const title = null;
     const message = this.translate.instant(
