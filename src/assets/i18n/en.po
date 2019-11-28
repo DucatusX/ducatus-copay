@@ -1180,6 +1180,9 @@ msgstr ""
 "If you have funds stored on a website then you should move them into a "
 "secure wallet... like this one!"
 
+msgid "No activities found. You do not have funds in the account."
+msgstr "No activities found. You do not have funds in the account."
+
 msgid ""
 "If you need immediate help with a problem you are having, then get help by "
 "contacting our support team."

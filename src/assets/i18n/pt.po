@@ -992,7 +992,7 @@ msgstr "Eu li, entendi e concordo com os Termos de Uso"
 msgid "I understand"
 msgstr "Eu compreendi"
 
-msgid "I understand that if this app is moved to another device or deleted, my bitcoin can only be recovered with the recovery phrase"
+msgid "I understand that if this app is moved to another device or deleted, my funds can only be recovered with the recovery phrase"
 msgstr "Eu entendo que se este app for movido para outro dispositivo ou excluído, meu bitcoin só pode ser recuperado com a frase de recuperação"
 
 msgid "I understand that my funds are held securely on this device, not by a company"

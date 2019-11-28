@@ -384,7 +384,7 @@ msgid "Confirm"
 msgstr "Подтвердить"
 
 msgid "Confirm & Finish"
-msgstr "Подтвердить & Закончить"
+msgstr "Подтвердить и закончить"
 
 msgid "Confirm to shift {{fromCoin}} to {{toCoin}}"
 msgstr "Подтвердить переход от {{fromCoin}} к {{toCoin}}"
@@ -992,7 +992,7 @@ msgstr "Я прочитал, понял, и соглашаюсь с Услови
 msgid "I understand"
 msgstr "Я понимаю"
 
-msgid "I understand that if this app is moved to another device or deleted, my bitcoin can only be recovered with the recovery phrase"
+msgid "I understand that if this app is moved to another device or deleted, my funds can only be recovered with the recovery phrase"
 msgstr ""
 
 msgid "I understand that my funds are held securely on this device, not by a company"

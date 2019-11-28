@@ -34,6 +34,7 @@ import { PlatformProvider } from '../../providers/platform/platform';
 import { PopupProvider } from '../../providers/popup/popup';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { WalletProvider } from '../../providers/wallet/wallet';
+import { SelectCurrencyPage } from '../add/select-currency/select-currency';
 import { SettingsPage } from '../settings/settings';
 
 interface UpdateWalletOptsI {
@@ -141,6 +142,13 @@ export class HomePage {
 
     // Update list of wallets, status and TXPs
     this.setWallets(shouldUpdate);
+
+    if (!this.wallets || !this.wallets.length) {
+      this.navCtrl.push(SelectCurrencyPage, {
+        isOnboardingFlow: true,
+        isZeroState: true
+      });
+    }
 
     this.checkPriceChart();
   }
@@ -356,6 +364,7 @@ export class HomePage {
     */
 
     this.wallets = this.profileProvider.getWallets();
+
     this.walletsGroups = _.values(
       _.groupBy(
         _.filter(this.wallets, wallet => {

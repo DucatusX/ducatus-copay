@@ -9,7 +9,7 @@
       </ion-item>
       <ion-item>
         <ion-label>
-          {{'I understand that if this app is moved to another device or deleted, my bitcoin can only be recovered with the recovery phrase' | translate}}.
+          {{'I understand that if this app is moved to another device or deleted, my funds can only be recovered with the recovery phrase' | translate}}.
         </ion-label>
         <ion-checkbox [(ngModel)]="accepted.second"></ion-checkbox>
       </ion-item>
@@ -22,24 +22,21 @@
         </ion-item>
         <a class="external-link" (click)="openPrivacyPolicy()" translate>View Privacy Policy</a>
       </div>
-    </ion-list>
-  </div>
-  <div footer-content>
-    <ion-toolbar>
-      <div class="checkbox-list footer-container">
-        <div *ngIf="accepted.first && accepted.second && accepted.third">
-          <ion-item no-lines>
-            <ion-label>
-              {{'I have read, understood, and agree to the Terms of Use' | translate}}.
-            </ion-label>
-            <ion-checkbox [(ngModel)]="terms.accepted"></ion-checkbox>
-          </ion-item>
+      <div *ngIf="accepted.first && accepted.second && accepted.third">
+        <ion-item no-lines>
+          <ion-label>
+            {{'I have read, understood, and agree to the Terms of Use' | translate}}.
+          </ion-label>
+          <ion-checkbox [(ngModel)]="terms.accepted"></ion-checkbox>
+        </ion-item>
+        <ion-item no-lines>
           <a class="external-link" (click)="openDisclaimer()" translate>View complete Terms of Use</a>
-        </div>
-        <button ion-button class="button-standard" [disabled]="!accepted.first || !accepted.second || !accepted.third || !terms.accepted" (click)="confirm()">
-          <span translate>Confirm &amp; Finish</span>
-        </button>
+        </ion-item>
       </div>
-    </ion-toolbar>
+    </ion-list>
+    <button ion-button class="button-standard" [disabled]="!accepted.first || !accepted.second || !accepted.third || !terms.accepted" (click)="confirm()">
+      <span translate>Confirm &amp; Finish</span>
+    </button>
   </div>
+
 </wide-header-page>

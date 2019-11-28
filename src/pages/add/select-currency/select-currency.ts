@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import {
   Events,
-  ModalController,
+  // ModalController,
   NavController,
   NavParams
 } from 'ionic-angular';
@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 
 // pages
 import { ImportWalletPage } from '../../add/import-wallet/import-wallet';
-import { WalletGroupOnboardingPage } from '../../settings/wallet-group-settings/wallet-group-onboarding/wallet-group-onboarding';
+// import { WalletGroupOnboardingPage } from '../../settings/wallet-group-settings/wallet-group-onboarding/wallet-group-onboarding';
 import { CreateWalletPage } from '../create-wallet/create-wallet';
 
 // providers
@@ -57,15 +57,16 @@ export class SelectCurrencyPage {
     private translate: TranslateService,
     private events: Events,
     private popupProvider: PopupProvider,
-    private modalCtrl: ModalController,
+    // private modalCtrl: ModalController,
     private persistenceProvider: PersistenceProvider
   ) {
     this.availableChains = this.navParam.data.isShared
       ? this.currencyProvider.getMultiSigCoins()
       : this.currencyProvider.getAvailableChains();
-    for (const coin of this.availableChains) {
-      this.coinsSelected[coin] = true;
-    }
+
+    // for (const coin of this.availableChains) {
+      this.coinsSelected['duc'] = true;
+    // }
     this.shouldShowKeyOnboarding();
   }
 
@@ -93,18 +94,18 @@ export class SelectCurrencyPage {
     });
   }
 
-  private showKeyOnboardingSlides(coins: Coin[]) {
-    this.logger.debug('Showing key onboarding');
-    const modal = this.modalCtrl.create(WalletGroupOnboardingPage, null, {
-      showBackdrop: false,
-      enableBackdropDismiss: false
-    });
-    modal.present();
-    modal.onDidDismiss(() => {
-      this._createWallet(coins);
-    });
-    this.persistenceProvider.setKeyOnboardingFlag();
-  }
+  // private showKeyOnboardingSlides(coins: Coin[]) {
+  //   this.logger.debug('Showing key onboarding');
+  //   const modal = this.modalCtrl.create(WalletGroupOnboardingPage, null, {
+  //     showBackdrop: false,
+  //     enableBackdropDismiss: false
+  //   });
+  //   modal.present();
+  //   modal.onDidDismiss(() => {
+  //     this._createWallet(coins);
+  //   });
+  //   this.persistenceProvider.setKeyOnboardingFlag();
+  // }
 
   public goToCreateWallet(coin: string): void {
     this.navCtrl.push(CreateWalletPage, {
@@ -124,10 +125,10 @@ export class SelectCurrencyPage {
   }
 
   public createWallet(coins: Coin[]): void {
-    if (this.showKeyOnboarding) {
-      this.showKeyOnboardingSlides(coins);
-      return;
-    }
+    // if (this.showKeyOnboarding) {
+    //   this.showKeyOnboardingSlides(coins);
+    //   return;
+    // }
     this._createWallet(coins);
   }
 

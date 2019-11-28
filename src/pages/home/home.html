@@ -86,7 +86,7 @@
       <price-card #priceCard></price-card>
     </div>
 
-    <create-new-wallet *ngIf="!wallets || !wallets[0]"></create-new-wallet>
+    <!--<create-new-wallet *ngIf="!wallets || !wallets[0]"></create-new-wallet>-->
 
     <ion-card class="server-message" *ngIf="accessDenied">
       <ion-card-content class="server-message-content">
@@ -194,8 +194,7 @@
                 {{
                   card.balance
                     ? card.currencySymbol + (card.balance | number: '1.2-2')
-                    : ('Add
-                  funds to get started' | translate)
+                    : ('Add funds to get started' | translate)
                 }}
               </div>
               <div class="number ellipsis">
