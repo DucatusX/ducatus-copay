@@ -351,6 +351,9 @@ export class TxDetailsPage {
 
   private updateFiatRate() {
     const settings = this.configProvider.get().wallet.settings;
+    if (this.btx.amountUnitStr === 'DUC') {
+      return;
+    }
     this.rateProvider
       .getHistoricFiatRate(
         settings.alternativeIsoCode,
