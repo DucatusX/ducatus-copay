@@ -1,0 +1,3564 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "(possible double spend)"
+msgstr "(có thể chi tiêu kép)"
+
+msgid "Delete"
+msgstr "Xóa"
+
+msgid ""
+"* A payment proposal can be deleted if 1) you are the creator, and no other "
+"Ducater has signed, or 2) 10 minutes have passed since the proposal was "
+"created."
+msgstr ""
+"* Yêu cầu thanh toán có thể bị xóa nếu 1) bạn là người tạo, và không có ai khác"
+"Người đồng chi trả đã ký hoặc 2) quá 10 từ khi yêu cầu "
+"được tạo."
+
+msgid ""
+"5-star ratings help us get Ducatus Wallet into more hands, and more users "
+"means more resources can be committed to the app!"
+msgstr ""
+"xếp hạng 5-sao giúp chúng ta có Ví Ducatus Wallet cho nhiều người dùng hơn"
+"có nghĩa là nhiều nguồn lực cam kết dành cho app!"
+
+msgid "A new Ducater just joined your wallet {{walletName}}."
+msgstr "Người đồng chi trả mới vừa tham gia ví của bạn {{walletName}}."
+
+msgid "A new payment proposal has been created in your wallet {{walletName}}."
+msgstr "Một đề xuất thanh toán mới đã được tạo trong ví của bạn {{walletName}}."
+
+msgid ""
+"A payment of {{amountStr}} has been received into your wallet {{walletName}}."
+msgstr ""
+"Khoản thanh toán {{amountStr}} đã được nhận vào ví {{walletName}}."
+
+msgid "A payment proposal in your wallet {{walletName}} has been rejected."
+msgstr "Yêu cầu thanh toán vào ví của bạn  {{walletName}} đã bị từ chối."
+
+msgid ""
+"A total of {{amountAboveMaxSizeStr}} {{coin}} were excluded. The maximum "
+"size allowed for a transaction was exceeded."
+msgstr ""
+"Tổng {{amountAboveMaxSizeStr}} {{coin}} bị loại. Tối đa "
+"Vượt quá số lượng cho phép cho một giao dịch."
+
+msgid ""
+"A total of {{amountBelowFeeStr}} {{coin}} were excluded. These funds come "
+"from UTXOs smaller than the network fee provided."
+msgstr ""
+"Tổng {{amountBelowFeeStr}} {{coin}} bị loại. Nguồn vốn này đến "
+"từ UTXOs nhỏ hơn mức phí của network đưa ra."
+
+msgid ""
+"A total of {{amountStr}} ({{fiatAmount | number:'1.2-2'}} "
+"{{currencyIsoCode}}) will be exchanged for {{withdrawalStr}} "
+"({{fiatWithdrawal | number:'1.2-2'}} {{currencyIsoCode}}). ShapeShift fee: "
+"{{withdrawalFee}} {{toWallet.coin | uppercase}}"
+msgstr ""
+"Tổng {{amountStr}} ({{fiatAmount | number:'1.2-2'}} "
+"{{currencyIsoCode}}) sẽ được chuyển đổi thành {{withdrawalStr}} "
+"({{fiatWithdrawal | number:'1.2-2'}} {{currencyIsoCode}}). Phí ShapeShift: "
+"{{withdrawalFee}} {{toWallet.coin | uppercase}}"
+
+msgid ""
+"A total of {{fee}} {{coin}} were excluded. The maximum size allowed for a "
+"transaction was exceeded."
+msgstr ""
+"Tổng số {{fee}} {{coin}} bị loại. Vượt quá số lượng tối đa cho phép cho "
+"giao dịch."
+
+msgid ""
+"A total of {{fee}} {{coin}} were excluded. These funds come from UTXOs "
+"smaller than the network fee provided."
+msgstr ""
+"Tổng {{fee}} {{coin}} bị loại. Nguồn vốn này đến "
+"từ UTXOs nhỏ hơn mức phí của network đưa ra."
+
+msgid "About"
+msgstr "Về"
+
+msgid "About {{appName}}"
+msgstr "Về {{appName}}"
+
+msgid "Accept"
+msgstr "Chấp nhận"
+
+msgid "Accepted"
+msgstr "Đã chấp nhận"
+
+msgid "Access denied"
+msgstr "Truy cập bị từ chối"
+
+msgid "Account"
+msgstr "Tài khoản"
+
+msgid "Activation Fee"
+msgstr "Phí kích hoạt"
+
+msgid "Activity"
+msgstr "Hoạt động"
+
+msgid "Add"
+msgstr "Thêm vào"
+
+msgid "Add Ducatus Account?"
+msgstr "Thêm tài khoản Ducatus?"
+
+msgid "Add Card"
+msgstr "Thêm Thẻ"
+
+msgid "Add Contact"
+msgstr "Thêm Liên hệ"
+
+msgid "Add Recipient"
+msgstr "Thêm Người nhận"
+
+msgid "Add Wallet"
+msgstr "Thêm Ví"
+
+msgid "Add account"
+msgstr "Thêm tài khoản"
+
+msgid "Add as a contact"
+msgstr  "Thêm như một liên hệ"
+
+msgid "Add funds"
+msgstr "Thêm vốn"
+
+msgid "Add this Ducatus account ({{email}})?"
+msgstr "Thêm tài khoản Ducatus ({{email}})?"
+
+msgid "Address"
+msgstr "Địa chỉ"
+
+msgid "Address Book"
+msgstr "Sổ Địa chỉ"
+
+msgid "Address Type"
+msgstr "Loại Địa chỉ"
+
+msgid "Addressbook is empty"
+msgstr "Sổ địa chỉ trống"
+
+msgid "Addresses"
+msgstr "Các địa chỉ"
+
+msgid "Addresses with balance"
+msgstr "Các địa chỉ có số dư"
+
+msgid "Advanced"
+msgstr "Nâng cao"
+
+msgid "All"
+msgstr "Tất cả"
+
+msgid "All addresses"
+msgstr "Tất cả các địa chỉ"
+
+msgid ""
+"All of your bitcoin wallet balance may not be available for immediate "
+"spending."
+msgstr ""
+"Tất cả số dư trong ví bitcoin của bạn không sẵn sàng để chi tiêu. ngay "
+
+msgid "Allow camera access"
+msgstr "Cho phép camera truy cập"
+
+msgid "Already duplicated"
+msgstr "Tất cả được sao chép"
+
+msgid "Alternative currency"
+msgstr "Loại tiền thay thế"
+
+msgid ""
+"Amazon.co.jp Gift Cards never expire and can be redeemed towards millions of "
+"items at www.amazon.co.jp."
+msgstr ""
+"Gift Cards của Amazon.co.jp không bao giờ hết hạn và có thể đổi lấy hàng triệu "các loại đồ vật tại www.amazon.co.jp."
+
+msgid ""
+"Amazon.com Gift Cards never expire and can be redeemed towards millions of "
+"items at www.amazon.com."
+msgstr ""
+"Gift Cards của Amazon.co.jp không bao giờ hết hạn và có thể đổi lấy hàng triệu "các loại đồ vật tại www.amazon.co.jp."
+
+msgid "Amount"
+msgstr "Số lượng"
+
+msgid "Amount Too Low To Spend"
+msgstr "Số lượng Quá Thấp để Chi tiêu"
+
+msgid "Amount below minimum allowed"
+msgstr "Số lượng Dưới mức tối thiểu cho phép"
+
+msgid "Amount too big"
+msgstr "Số lượng Quá Lớn"
+
+msgid "Apply changes"
+msgstr "Áp dụng các thay đổi"
+
+msgid ""
+"Approximate Bitcoin network fee to transfer wallet's balance (with normal "
+"priority)"
+msgstr ""
+"Ước tính phí hệ thống Bitcoin để chuyển  số dư trong ví (với mức ưu tiên trung bình)
+
+msgid "Archive All {brand} Gift Cards?"
+msgstr "Lưu trữ Tất cả Thẻ Quà tặng của các {brand}?"
+
+msgid "Archive Card"
+msgstr "Lưu trữ Thẻ"
+
+msgid "Archive this Card?"
+msgstr "Lưu trữ Thẻ này?"
+
+msgid "Archived Cards"
+msgstr "Đã lưu trữ Thẻ"
+
+msgid "Are you sure you want to cancel and delete this wallet?"
+msgstr "Bạn có chắc muốn hủy và xóa ví này không?"
+
+msgid "Are you sure you want to delete all wallets using this key?"
+msgstr "Bạn có chắc muốn xóa tất cả các ví bằng phím này không?"
+
+msgid "Are you sure you want to delete this contact?"
+msgstr "Bạn có chắc muốn xóa tất địa chỉ liên hệ này không?"
+
+msgid "Are you sure you want to delete this wallet?"
+msgstr "Bạn có chắc muốn xóa ví này không?"
+
+msgid "Are you sure you want to reject this transaction?"
+msgstr "Bạn có chắc muốn từ chối giao dịch này không?"
+
+msgid "Are you sure you want to remove this transaction?"
+msgstr "Bạn có chắc muốn gỡ bỏ giao dịch này không?"
+
+msgid "Are you sure?"
+msgstr "Bạn có chắc chắn không?"
+
+msgid "Available"
+msgstr "Sẵn sàng"
+
+msgid "Average confirmation time"
+msgstr "Thời gian xác nhận trung bình"
+
+msgid "Awaiting payment to confirm"
+msgstr "Thanh toán đang đợi xác nhận"
+
+msgid "Back up all your wallets before using this function"
+msgstr "Lưu dự phòng tất cả các ví của bạn trước khi sử dụng chức năng này"
+
+msgid "Back up your wallet before using this function"
+msgstr "Lưu dự phòng ví của bạn trước khi sử dụng chức năng này"
+
+msgid "Backup"
+msgstr "Lưu dự phòng"
+
+msgid "Backup wallet"
+msgstr "Ví dự phòng"
+
+msgid "Bad wallet invitation"
+msgstr "Lời mời tạo ví không tin cậy"
+
+msgid "Be sure to store your recovery phrase in a safe and secure place"
+msgstr "Đảm bảo lưu đoạn mã khôi phục tài khoản của bạn nơi an toàn và an ninh"
+
+msgid ""
+"Be sure to store your recovery phrase in a secure place. If this app is "
+"deleted, your money cannot be recovered without it."
+msgstr ""
+"Đảm bảo lưu đoạn mã khôi phục tài khoản của bạn nơi an toàn và an ninh. Nếu app này bị xóa, sẽ không lấy lại được tiền của bạn nếu không có đoạn mã này"
+
+msgid ""
+"Because you are sending the maximum amount contained in this wallet, the "
+"{coinName} miner fee ({fee} {coin}) will be deducted from the total. {msg}"
+msgstr ""
+"Vì bạn gửi số lượng tối đa còn trong ví, phí
+"{coinName} ({fee} {coin}) sẽ được trừ vào tổng số. {msg}"
+
+msgid ""
+"Before duplicating your wallet, it's recommended that you first write down "
+"your recovery phrase and store it securely so that your wallet can be "
+"recovered in the case your device was lost or stolen."
+msgstr ""
+"Trước khi sao chép ví, bạn nên ghi lại "
+"đoạn mã khôi phục và cất nó an toàn để ví của bạn có thể "
+"được khôi phục trong trường hợp thiết bị bị mất hay mất cắp."
+
+msgid ""
+"Before retrieving your wallet address, it's recommended that you first write "
+"down your recovery phrase and store it securely so that your wallet can be "
+"recovered in the case your device was lost or stolen."
+msgstr ""
+"Trước khi khôi phục địa chỉ ví, bạn nên ghi lại đoạn mã khôi phục và cất nó an toàn để ví của bạn có thể được khôi phục trong trường hợp thiết bị bị mất hay đánh cắp."
+
+msgid ""
+"Before retrieving your wallets addresses, it's recommended that you first "
+"write down your recovery phrase and store it securely so that your wallets "
+"can be recovered in the case your device was lost or stolen."
+msgstr ""
+"Trước khi khôi phục các địa chỉ ví, bạn nên ghi lại đoạn mã khôi phục và cất nó an toàn để ví của bạn có thể được khôi phục trong trường hợp thiết bị bị mất hay mất cắp."
+
+msgid "Below Minimum Amount"
+msgstr "Dưới mức tối thiểu"
+
+msgid "Biometric"
+msgstr "Sinh trắc"
+
+msgid "Ducatus Card URI"
+msgstr "Thẻ Ducatus URI"
+
+msgid "Ducatus does not receive and does not control miner fees."
+msgstr "Ducatus không nhận và không kiểm soát phí đào."
+
+msgid "Bitcoin Address"
+msgstr "Địa chỉ Bitcoin"
+
+msgid "Bitcoin Cash Address"
+msgstr "Địa chỉ Bitcoin Cash"
+
+msgid "Bitcoin Cash URI"
+msgstr "Bitcoin Cash URI"
+
+msgid "Bitcoin Cash Wallets"
+msgstr "Ví Bitcoin Cash"
+
+msgid "Bitcoin Network Fee Policy"
+msgstr "Chính sách Phí Hệ thống Bitcoin"
+
+msgid "Bitcoin URI"
+msgstr "Bitcoin URI"
+
+msgid "Bitcoin Wallets"
+msgstr "Ví Bitcoin"
+
+msgid "Bitcoin transactions include a fee collected by miners on the network."
+msgstr "Các giao dịch Bitcoin bao gồm phí cho các thợ đào trên hệ thống"
+
+msgid ""
+"Bitcore Wallet Service is under maintenance. Please check https://insight."
+"ducatus.io/."
+msgstr ""
+"Dịch vụ Ví Bitcore Wallet đang được bảo trì. Hãy kiểm tra https://insight."
+"ducatus.io/."
+
+msgid "Broadcast Payment"
+msgstr "Thông báo Thanh toán"
+
+msgid "Broadcasted"
+msgstr "Đã thông báo"
+
+msgid "Broadcasting transaction..."
+msgstr "Thông báo giao dịch..."
+
+msgid "Buy Gift Card"
+msgstr "Mua Thẻ Quà tặng"
+
+msgid "Buy Gift Cards"
+msgstr "Mua Các Thẻ Quà tặng"
+
+msgid "Buying Bitcoin..."
+msgstr "Đang mua Bitcoin..."
+
+msgid ""
+"By providing your email address, you give explicit consent to Ducatus to use "
+"your email address to send you email notifications about payments."
+msgstr ""
+"Bằng việc cung cấp địa chỉ email, bạn đã đồng ý cho Ducatus gửi mail đến địa chỉ này"
+"địa chỉ email của bạn dùng để gửi cho bạn những thông báo về các khoản thanh toán."
+
+msgid "Calculating fee..."
+msgstr "Đang tính phí..."
+
+msgid "Calculating send max..."
+msgstr "Đang tính lượng gửi tố đa..."
+
+msgid "Cancel"
+msgstr "Hủy"
+
+msgid "Canceling Gift Card..."
+msgstr "Đang hủy các Thẻ Quà tặng..."
+
+msgid "Cannot join the same wallet more that once"
+msgstr "Không thể kết nối vào cùng một ví hơn một lần"
+
+msgid "Card Archived"
+msgstr "Thẻ đã được lưu trữ"
+
+msgid "Card Settings"
+msgstr "Cài đặt thẻ"
+
+msgid "Cards"
+msgstr "Thẻ"
+
+msgid "Change Amount"
+msgstr "Thay đổi số lượng"
+
+msgid "Check the transaction on your wallet details"
+msgstr "Kiểm tra giao dịch trong các chi tiết ví"
+
+msgid "Choose a backup file from your computer"
+msgstr "Chọn file dự phòng từ máy tính của bạn"
+
+msgid "Clear"
+msgstr "Dọn sạch"
+
+msgid "Clear cache"
+msgstr "Dọn kho lưu trữ"
+
+msgid "Click to accept"
+msgstr "Nhấn nút để chấp nhận"
+
+msgid "Click to confirm"
+msgstr "Nhấn nút để xác nhận"
+
+msgid "Click to open Terms"
+msgstr "Nhấn nút để mở Điều khoản"
+
+msgid "Click to pay"
+msgstr "Nhấn nút để thanh toán"
+
+msgid "Click to send"
+msgstr "Nhấn nút để gửi"
+
+msgid "Close"
+msgstr "Đóng"
+
+msgid "Coin"
+msgstr "Coin"
+
+msgid "Completed"
+msgstr "Đã hoàn thành"
+
+msgid "Configuration (m-n)"
+msgstr "Cấu hình (m-n)"
+
+msgid "Confirm"
+msgstr "Xác nhận"
+
+msgid "Confirm & Finish"
+msgstr "Xác nhận & kết thúc"
+
+msgid "Confirm to shift {{fromCoin}} to {{toCoin}}"
+msgstr  "Xác nhậnđể chuyển {{fromCoin}} đến {{toCoin}}"
+
+msgid "Confirm your PIN"
+msgstr "Xác nhận mã PIN của bạn"
+
+msgid "Confirm your new encrypt password"
+msgstr "Xác nhận mật khẩu mã hóa mới của bạn"
+
+msgid "Confirmations"
+msgstr "Các xác nhận"
+
+msgid "Confirming"
+msgstr "Đang xác nhận"
+
+msgid ""
+"Congratulations! It looks like you've recently received money. It's highly "
+"advised that you verify your recovery phrase so that your funds can be "
+"recovered in case your phone was lost or stolen."
+msgstr ""
+"Chúc mừng! Có vẻ như bạn vừa nhận được tiền. Bạn "nên xác thực lại đoạn mã không phục tài khoản để có thể khôi phục được tiền của bạn trong trường hợp điện thoại của bạn bị mất hoặc mất cắp."
+
+msgid "Connect my Ducatus Card"
+msgstr "Kết nổi thẻ Ducatus của tôi"
+
+msgid "Connect to ShapeShift Account"
+msgstr "Kết nối với Tài khoản ShapeShift"
+
+msgid "Connecting to Coinbase..."
+msgstr "Đang kết nối với Coinbase..."
+
+msgid "Connecting to ShapeShift..."
+msgstr "Đang kết nối với ShapeShift..."
+
+msgid "Connection reset by peer"
+msgstr "Kết nối được reset bởi đồng cấp"
+
+msgid "Contact the ShapeShift support team."
+msgstr "Liên hệ với nhóm hỗ trợ của ShapeShift."
+
+msgid "Continue"
+msgstr "Tiếp tục"
+
+msgid "Continue Backup"
+msgstr  "Tiếp tục sao lưu dự phòng"
+
+msgid "Contribute translations"
+msgstr "Đóng góp cho bản dịch"
+
+msgid "Ducater already in this wallet"
+msgstr "Người đồng chi trả đã có trong ví này"
+
+msgid "Ducater already voted on this spend proposal"
+msgstr "Người đồng chi trả đã duyệt cho yêu cầu chi này"
+
+msgid "Ducater data mismatch"
+msgstr "Số liệu của Người đồng chi trả không khớp"
+
+msgid "Copied"
+msgstr "Đã copy"
+
+msgid "Copied to Clipboard"
+msgstr "Đã copy vào Clipboard"
+
+msgid "Copied {coin} address"
+msgstr "Đã copy địa chỉ {coin}"
+
+msgid "Copied: {claimCode}"
+msgstr "Đã copy: {claimCode}"
+
+msgid "Copy"
+msgstr "Copy"
+
+#| msgid "Copy Code"
+msgid "Copy Code"
+msgstr "Copy Code"
+
+msgid "Copy this text as it is to a safe place (notepad or email)"
+msgstr "Copy nguyên bản đoạn văn bản vào chỗ an toàn (notepad hoặc email)"
+
+msgid "Copy to clipboard"
+msgstr "Copy vào clipboard"
+
+msgid "Could not access the wallet at the server"
+msgstr  "Không thể truy cập ví tại máy chủ"
+
+msgid "Could not access wallet"
+msgstr "Không thể truy cập ví"
+
+msgid "Could not add message to imported wallet without shared encrypting key"
+msgstr "Không thể thêm tin nhắn vào ví đã nhập nếu không chia sẻ khóa mã hóa"
+
+msgid "Could not build transaction"
+msgstr "Không thể thiết lập giao dịch"
+
+msgid "Could not create address"
+msgstr "Không thể tạo địa chỉ"
+
+msgid "Could not create transaction"
+msgstr "Không thể khởi tạo giao dịch"
+
+msgid "Could not create using the specified extended private key"
+msgstr "Không thể tạo sử dụng khóa cá nhân mở rộng chuyên biệt"
+
+msgid "Could not create: Invalid wallet recovery phrase"
+msgstr "Không thể tạo: câu mã khôi phục ví không có hiệu lực"
+
+msgid "Could not decrypt file, check your password"
+msgstr "Không thể giải mã file, kiểm tra lại mật khẩu của bạn"
+
+msgid "Could not decrypt wallet"
+msgstr "Không thể giải mã ví"
+
+msgid "Could not delete payment proposal"
+msgstr "Không thể xóa yêu cầu thanh toán"
+
+msgid "Could not encrypt wallet"
+msgstr "Không thể mã hóa ví"
+
+msgid "Could not get claim code. Please contact Ducatus support."
+msgstr "Không thể lấy mã code. Xin liên hệ hỗ trợ của Ducatus."
+
+msgid "Could not get dynamic fee"
+msgstr "Không nhận được phí năng động"
+
+msgid "Could not get dynamic fee for level:"
+msgstr "Không nhận được phí năng động cho cấp độ:"
+
+msgid "Could not get fee levels"
+msgstr "Không nhận được các mức phí"
+
+msgid "Could not get the Addressbook"
+msgstr "Không nhận được Sổ địa chỉ"
+
+msgid "Could not get transactions"
+msgstr "Không nhận được các giao dịch"
+
+msgid "Could not import. Check input file."
+msgstr "Không thể nhập. Kiểm tra file đầu vào."
+
+msgid "Could not join wallet"
+msgstr  "Không thể liên kết ví"
+
+msgid "Could not reject payment"
+msgstr "Không thể từ chối thanh toán"
+
+msgid "Could not save preferences on the server"
+msgstr "Không thể lưu các ưa thích trên máy chủ"
+
+msgid "Could not send transaction"
+msgstr "Không thể gửi được giao dịch"
+
+msgid "Could not update transaction history"
+msgstr "Không thể cập nhật lịch sử giao dịch"
+
+msgid "Could not update wallet"
+msgstr "Không thể cập nhật ví"
+
+msgid "Create"
+msgstr "Tạo"
+
+#| msgid "Create a new key"
+msgid "Create New Key"
+msgstr "Tạo khóa mới"
+
+#| msgid "Create shared wallet"
+msgid "Create a new wallet"
+msgstr "Tạo ví mới"
+
+msgid "Created"
+msgstr "Đã tạo"
+
+msgid "Created by"
+msgstr "Được tạo bởi"
+
+msgid "Creating Gift Card..."
+msgstr "Đang tạo Thẻ Quà tặng..."
+
+msgid "Creating Wallet..."
+msgstr "Đang tạo Ví..."
+
+msgid "Creating transaction..."
+msgstr "Đang tạo giao dịch..."
+
+msgid "Current Cards"
+msgstr "Các Thẻ hiện tại"
+
+msgid "Current fee rate for this policy"
+msgstr "Mức phí hiện hành cho chính sách này"
+
+msgid "Custom"
+msgstr "Tùy chỉnh"
+
+msgid "Date"
+msgstr "Ngày"
+
+msgid "Delete"
+msgstr "Xóa"
+
+msgid "Delete Payment Proposal"
+msgstr "Xóa Yêu cầu Thanh toán"
+
+msgid "Delete Wallet"
+msgstr "Xóa Ví"
+
+msgid "Delete it and create a new one"
+msgstr "Xóa và tạo mới"
+
+msgid "Delete key"
+msgstr "Xóa khóa"
+
+msgid "Deleting Wallet..."
+msgstr "Đang xóa Ví..."
+
+msgid "Deleting payment proposal..."
+msgstr "Đang xóa yêu cầu thanh toán..."
+
+msgid "Deposit"
+msgstr "Ký quỹ"
+
+msgid "Deposit Max"
+msgstr "Ký quỹ Tối đa"
+
+msgid "Deposit Min"
+msgstr "Ký quỹ Tối thiểu"
+
+msgid "Derivation Path"
+msgstr "Đường Phát sinh"
+
+msgid "Destination wallet needs to be backed up"
+msgstr "Ví nhận cần phải được sao lưu"
+
+msgid "Details"
+msgstr "Chi tiết"
+
+msgid "Disable notifications"
+msgstr "Tắt thông báo"
+
+msgid "Disabled"
+msgstr "Đã tắt"
+
+msgid "Discount"
+msgstr "Chiết khấu"
+
+msgid "Do not include private key"
+msgstr "Không bao gồm khóa cá nhân"
+
+msgid "Do this later?"
+msgstr "Bạn muốn làm vào lần tới không?"
+
+msgid "Do you want to verify your account now?"
+msgstr "Bạn có muốn xác minh tài khoản ngay bây giờ không?"
+
+msgid "Don't see your Key?"
+msgstr "Bạn không nhìn thấy mã của bạn?"
+
+msgid ""
+"Don't see your language on Crowdin? Contact the Owner on Crowdin! We'd love "
+"to support your language."
+msgstr ""
+"Bạn không thấy ngôn ngữ của mình trên Crowdin? Hãy liên hệ với Chủ sở hữu trên Crowdin! Chúng tôi sẵn sàng hỗ trợ ngôn ngữ của bạn"
+
+msgid "Done"
+msgstr "Hoàn tất"
+
+msgid "Download"
+msgstr "Tải xuống"
+
+msgid "Download logs"
+msgstr "Tải xuống bản ghi"
+
+msgid "Duplicate to BCH"
+msgstr "Sao chép đến BCH"
+
+msgid "Duplicating wallet..."
+msgstr "Sao chép ví..."
+
+msgid ""
+"Each bitcoin wallet can generate billions of addresses from your 12-word "
+"recovery phrase. A new address is automatically generated and shown each "
+"time you receive a payment."
+msgstr ""
+"Mỗi ví bitcoin có thể tạo ra hàng tỉ địa chỉ từ cụm từ khôi phục 12 chữ của bạn. Một địa chỉ mới sẽ được tạo và hiển thị mỗi lần bạn nhận được một khoản thanh toán"
+
+msgid ""
+"Each Ducater has their own recovery phrase. To recover funds stored in a "
+"Shared Wallet you will need the recovery phrase from each Ducater."
+msgstr ""
+"Mỗi người đồng trả sẽ có cụm từ khôi phục riêng của họ. Để phục hồi số tiền trữ trong một ví chung, bạn cần cụm từ khôi phục từ mỗi người đồng trả"
+
+msgid "Economy"
+msgstr "Kinh tế"
+
+msgid "Edit"
+msgstr "chỉnh sửa"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Empty addresses limit reached. New addresses cannot be generated."
+msgstr "Số lượng địa chỉ trống đã đạt giới hạn. Không thể tạo thêm địa chỉ mới"
+
+msgid "Enable camera access in your device settings to get started."
+msgstr "Cho phép truy cập camera trong điều chỉnh thiết bị để có thể bắt đầu"
+
+msgid "Enable desktop notifications"
+msgstr "Cho phép hiển thị tin nhắn trên màn hình"
+
+msgid "Enable email notifications"
+msgstr "Cho phép hiển thị tin nhắn email"
+
+msgid "Enable push notifications"
+msgstr "Cho phép hiển thị tin nhắn đẩy"
+
+msgid "Enable the camera to get started."
+msgstr "Kích hoạt camera để bắt đầu"
+
+msgid ""
+"Encryption can protect your funds if this device is stolen or compromised by "
+"malicious software."
+msgstr ""
+"Mã hóa có thể bảo vệ quỹ tiền của bạn nếu thiết bị này bị đánh cắp hay bị tấn công bới phần mềm độc hại"
+
+msgid "Enter Amount"
+msgstr "Hãy nhập số lượng"
+
+msgid "Enter Two Factor for your Ducatus account"
+msgstr "Hãy nhập mã bảo vệ hai lớp từ tài khoản Ducatus của bạn"
+
+msgid "Enter a new encrypt password"
+msgstr "Hãy nhập mật khẩu mã hóa mới"
+
+msgid "Enter a password to encrypt your wallet"
+msgstr "Hãy nhập mật khẩu để mã hóa ví của bạn"
+
+msgid "Enter a transaction memo"
+msgstr "Hãy nhập nội dung chuyển khoản"
+
+msgid "Enter bitcoin address"
+msgstr "Nhập địa chỉ ví bitcoin"
+
+msgid "Enter custom fee in {feeUnit}"
+msgstr "Nhập phí chuyển khoản bằng {feeUnit}"
+
+msgid "Enter email address"
+msgstr "Nhập địa chỉ email"
+
+msgid "Enter encrypt password"
+msgstr "Nhập mật khẩu mã hóa"
+
+msgid "Enter your encrypt password again to confirm"
+msgstr "Nhập mật khẩu mã hóa lần nữa để duyệt"
+
+msgid "Entry already exist"
+msgstr "Mục đã nhập đã tồn tại"
+
+msgid "Entry does not exist"
+msgstr "Mục đã nhập không tồn tại"
+
+msgid "Error"
+msgstr "Đã xảy ra lỗi"
+
+msgid "Error adding new entry"
+msgstr "Đã xảy ra lỗi nhập thêm mục mới"
+
+msgid "Error connecting to ShapeShift"
+msgstr "Đã xảy ra lỗi kết nối đến ShapeShift"
+
+msgid "Error creating wallet"
+msgstr "Đã xảy ra lỗi tạo ví mới"
+
+msgid "Error deleting entry"
+msgstr "Đã xảy ra lỗi xóa mục nhập"
+
+msgid "Error fetching this invoice"
+msgstr "Đã xảy ra lỗi thu thập hóa đơn"
+
+msgid "Error getting SendMax information"
+msgstr "Đã xảy ra lỗi thu thập thông tin SendMax"
+
+msgid "Error getting fee rate"
+msgstr "Đã xảy ra lỗi thu thập phí"
+
+msgid "Error in Payment Protocol"
+msgstr "Đã xảy ra lỗi trong giao thức thanh toán"
+
+msgid "Error pairing Ducatus Account"
+msgstr "Đã xảy ra lỗi ghép nối với tài khoản Ducatus"
+
+msgid "Error scanning funds:"
+msgstr "Đã xảy ra lỗi quét tiền trong ví"
+
+msgid "Error sweeping wallet:"
+msgstr "Đã xảy ra lỗi quét ví"
+
+msgid "Error updating Debit Cards"
+msgstr "Đã xảy ra lỗi cập nhật thẻ ghi nợ"
+
+#| msgid "Share Address"
+msgid "Ethereum Address"
+msgstr "Địa chỉ ví Ethereum"
+
+msgid "Ethereum URI"
+msgstr "Ethereum URI"
+
+#| msgid "Shared Wallet"
+msgid "Ethereum Wallets"
+msgstr "Ví Ethereum"
+
+msgid "Exceeded daily limit of $500 per user"
+msgstr "Quá hạn mức $500/ngày trên mỗi người dùng"
+
+msgid "Expired"
+msgstr "Đã quá hạn"
+
+msgid "Expires"
+msgstr "Quá hạn"
+
+msgid "Export Wallet"
+msgstr "Xuất dữ liệu ví"
+
+msgid "Export to file"
+msgstr "Xuất tới tệp"
+
+msgid "Export wallet"
+msgstr "Xuất dữ liệu ví"
+
+msgid "Exporting via QR not supported for this wallet"
+msgstr "Ví này không hỗ trợ xuất dữ liệu thông qua QR"
+
+msgid "Extended Private Key"
+msgstr "Khóa cá nhân đã được gia hạn"
+
+msgid "Extended Public Keys"
+msgstr "Khóa công đã được gia hạn"
+
+msgid "Extracting Wallet information..."
+msgstr "Trích xuất thông tin ví"
+
+msgid "Failed"
+msgstr "Thất bại"
+
+msgid "Failed to export"
+msgstr "Xuất dữ liệu thất bại"
+
+msgid "Featured Brands"
+msgstr "Nhãn hiệu nổi bật"
+
+#| msgid "Featured Brands"
+msgid "Featured Currencies"
+msgstr "Tiền tệ nổi bật"
+
+msgid "Fee"
+msgstr "Phí"
+
+msgid "Fee level"
+msgstr "Bậc phí"
+
+msgid "Fee level is not defined"
+msgstr "Bậc phí chưa được xác định"
+
+msgid "Fee rate"
+msgstr "Mức phí"
+
+msgid "Feedback"
+msgstr "Phản hồi"
+
+msgid "Feedback could not be submitted. Please try again later."
+msgstr "Phản hồi không thể được gửi. Xin hãy thử lại lần sau"
+
+msgid "Fetching Ducatus Account..."
+msgstr "Đang thu thập tài khoản Ducatus"
+
+msgid "Fetching Ducatus Cards..."
+msgstr "Đang thu thập thẻ Ducatus"
+
+msgid "Fetching payment information..."
+msgstr "Đang thu thập thông tin thanh toán"
+
+msgid "File/Text"
+msgstr "Tệp/văn bản"
+
+msgid ""
+"Found something broken? Please report it as a bug. If you need immediate "
+"help with a problem you are having, then get help by contacting our support "
+"team."
+msgstr ""
+"Bạn tìm thấy thứ gì không hoạt động? Xin hãy báo cáo nếu như đó là lỗi kĩ thuật. Nếu bạn cần hỗ trợ ngay lập tức với vấn đề này, xin hãy yêu cầu trợ giúp từ đội hỗ trợ của chúng tôi"
+
+msgid "From"
+msgstr "Từ"
+
+msgid "From Ducatus account"
+msgstr "Từ tài khoản Ducatus"
+
+msgid "Funds Will Not Be Accessible"
+msgstr "Không thể truy cập khoản tiền"
+
+msgid "Funds are locked by pending spend proposals"
+msgstr "Tiền trong ví bị khóa vì yêu cầu chi đang chờ xử lí"
+
+msgid "Funds found"
+msgstr "Đã tìm thấy khoản tiền"
+
+msgid "Funds to be added"
+msgstr "Khoản tiền sẽ được thêm vào"
+
+msgid "Funds were added to debit card"
+msgstr "Khoản tiền đã được thêm vào thẻ ghi nợ"
+
+msgid "Funds will be transferred to"
+msgstr "Khoản tiền trên sẽ được chuyển tới"
+
+msgid "GOT IT"
+msgstr "ĐÃ HIỂU!"
+
+msgid "Generate New Address"
+msgstr "Tạo địa chỉ mới"
+
+msgid "Generating .csv file..."
+msgstr "Đang tạo tệp .csv"
+
+msgid "Generating new address..."
+msgstr "Đang tạo địa chỉ mới"
+
+msgid "Get Help"
+msgstr "Nhận trợ giúp"
+
+msgid "Get Started"
+msgstr "Hãy bắt đầu"
+
+msgid "Get a Ducatus Card"
+msgstr "Nhận Thẻ Ducatus"
+
+msgid "Get help"
+msgstr "Nhận trợ giúp"
+
+msgid ""
+"Get local cash anywhere you go, from any Visa® compatible ATM. ATM bank fees "
+"may apply."
+msgstr ""
+"Nhận tiền mặt tại chỗ, bất cứ nơi đâu bạn đi, từ bất cứ cây ATM nào chấp nhận thẻ Visa. Có thể tính phí rút tiền ATM"
+
+msgid "Get news and updates from Ducatus"
+msgstr "Nhận tin tức và cập nhật từ Ducatus"
+
+msgid "Get started"
+msgstr "Hãy bắt đầu"
+
+msgid "Get started by adding your first one."
+msgstr "Hãy bắt đầu bằng việc thêm vào tài khoản đầu tiên của bạn"
+
+msgid "Getting fee levels..."
+msgstr "Nhận các mức phí"
+
+msgid "Gift Card"
+msgstr "Thẻ quà tặng"
+
+msgid "Gift card canceled"
+msgstr "Thẻ quà tặng đã được hủy"
+
+msgid ""
+"Gift card purchases are temporarily unavailable. Please try again later."
+msgstr ""
+"Tạm thời không thể mua thẻ quà tặng bây giờ. Xin vui lòng thử lại sau"
+
+msgid "Give us feedback"
+msgstr "Hãy phản hồi với chúng tôi"
+
+msgid "Go Back"
+msgstr "Quay về"
+
+msgid ""
+"Have you redeemed all of your {brand} Gift Cards? Archived gift cards will "
+"still be accessible in settings."
+msgstr ""
+"Bạn đã đổi tất cả thẻ quà tặng của {brand} chưa? Bạn vẫn có thể truy cập các thẻ quà tặng được lưu trữ trong tùy chọn"
+
+msgid "Have you redeemed the entire balance of this gift card?"
+msgstr "Bạn đã đổi toàn bộ số tiền của thẻ quà tặng này chưa?"
+
+msgid "Having problems with a ShapeShift?"
+msgstr "Bạn có gặp vấn đề gì với ShapeShift hay không?"
+
+msgid "Help & support"
+msgstr "Trợ giúp và hỗ trợ"
+
+msgid "Help and support information is available at the website"
+msgstr "Thông tin trợ giúp và hỗ trợ đều có mặt trên website"
+
+msgid "Hidden"
+msgstr "Bị ẩn"
+
+msgid "Hide"
+msgstr "Ẩn"
+
+msgid "Hide Balance"
+msgstr "Ẩn số sư"
+
+msgid "Hide advanced options"
+msgstr "Ẩn tùy chọn nâng cao"
+
+msgid "Hide discount?"
+msgstr "Ẩn chiết khấu?"
+
+msgid "Home"
+msgstr "Trang chủ"
+
+msgid "How satisfied are you with {{appName}} wallet?"
+msgstr "Mức độ hài lòng của bạn với ví của {{appName}}?" 
+
+msgid ""
+"However, unconfirmed funds are not allowed for spending with merchants, "
+"Ducatus Card loads, or Ducatus in-app gift card purchases."
+msgstr ""
+"Tuy nhiên, các khoản tiền chưa xác định không thể được dùng để trả cho người bán, nạp thẻ Ducatus, hay mua thẻ quà tặng trong ứng dụng Ducatus"
+
+msgid ""
+"I agree to the Terms and certify that I am the beneficial owner of the input "
+"assets and the destination address."
+msgstr ""
+"Tôi đồng ý với các Điều khoản trên và xác nhận rằng tôi là người chủ hưởng lợi của các tài sản nhập vào và của địa chỉ đích."
+
+msgid ""
+"I give explicit consent to Ducatus to use my email address to send me email "
+"notifications about payments (and, if selected, email updates and news about "
+"the wallet)."
+msgstr ""
+"Tôi cho phép Ducatus sử dụng địa chỉ email của tôi để gửi tới tôi thông báo về các giao dịch thành toán (và, nếu được chọn, email cập nhật và tin tức về ví của tôi)"
+
+msgid "I have read, understood, and agree to the Terms of Use"
+msgstr "Tôi đã đọc, hiểu và chấp nhận Điều khoản dịch vụ"
+
+msgid "I understand"
+msgstr "Tôi hiểu"
+
+msgid ""
+"I understand that if this app is moved to another device or deleted, my "
+"bitcoin can only be recovered with the recovery phrase"
+msgstr ""
+"Tôi hiểu rằng nếu ứng dụng này được di chuyển tới một thiết bị khác hay bị xóa, số bitcoin của tôi chỉ có thể được phục hồi qua Cụm từ khôi phục"
+
+msgid ""
+"I understand that my funds are held securely on this device, not by a company"
+msgstr ""
+"Tôi hiểu rằng số tiền trong ví của tôi được lưu trữ một cách bảo mật trên thiết bị này, không phải bởi một công ty khác"
+
+msgid "I'm disappointed"
+msgstr "Tôi cảm thấy thất vọng"
+
+msgid "I'm satisfied"
+msgstr "Tôi cảm thấy hài lòng"
+
+msgid "I'm sure"
+msgstr "Tôi chắc chắn"
+
+msgid "I'm very happy"
+msgstr "Tôi cảm thấy rất vui"
+
+msgid "I've used this card"
+msgstr "Tôi đã sử dụng thẻ này rồi"
+
+msgid ""
+"If enabled, the new wallets may have different keys and will require a new "
+"backup."
+msgstr ""
+"Nếu được kích hoạt, chiếc ví mới này sẽ có những mã khóa khác nhau và cần một lượt lưu trữ mới"
+
+msgid "If enabled, wallets will also try to spend unconfirmed funds."
+msgstr "Nếu được kích hoạt, ví sẽ cố gắng chi các khoản tiền không xác định"
+
+msgid ""
+"If you have funds stored on a website then you should move them into a "
+"secure wallet... like this one!"
+msgstr ""
+"Nếu bạn có khoản tiền được lưu trên một website thì bạn nên chuyển chúng vào một chiếc ví bảo mật... giống như chiếc ví này vậy!"
+
+msgid ""
+"If you need immediate help with a problem you are having, then get help by "
+"contacting our support team."
+msgstr ""
+"Nếu bạn cần hỗ trợ khẩn cấp về vấn đề đang đối mặt, bạn có thể liên lạc với đội hỗ trợ của chúng tôi"
+
+msgid ""
+"If you need to send to \"old\" addresses (like the one you just pasted), and "
+"you are SURE those are BCH addresses, you can \"translate\" them using the "
+"BCH Translator tool and paste the corresponding address in CashAddr format "
+"for that \"old\" address."
+msgstr ""
+"Nếu bạn cần gửi đến địa chỉ \"tên địa chĩ cũ\" (giống như địa chỉ mà bạn vừa mới dán vào), và bạn CHẮC CHẮN rằng chúng là những địa chỉ BCH, bạn có thể \"dịch\" chúng sử dụng công cụ dịch BCH và dán các địa chỉ tương ứng dưới dạng CashAddr cho địa chỉ \"tên địa chỉ cũ\" đó. 
+
+msgid "Import"
+msgstr "Nhập liệu"
+
+msgid "Import Wallet"
+msgstr "Nhập Ví"
+
+msgid "Import Words"
+msgstr "Nhập chữ"
+
+#| msgid "Import wallet"
+msgid "Import existing wallet"
+msgstr "Nhập ví hiện hữu"
+
+msgid "Importing Wallet..."
+msgstr "Nhập Ví..."
+
+msgid ""
+"In order to verify your wallet recovery phrase, please type your password."
+msgstr ""
+"Để có thể kiểm tra Cụm từ khôi phục của ví, xin hãy nhập mật khẩu của bạn vào"
+
+msgid "Incomplete"
+msgstr "Chưa hoàn chỉnh"
+
+msgid "Incorrect PIN, try again."
+msgstr "Mã PIN chưa đúng, xin hãy thử lại"
+
+msgid "Incorrect backup phrase"
+msgstr "Cụm từ khôi phục chưa chính xác"
+
+msgid "Incorrect network address"
+msgstr "Địa chỉ mạng chưa chính xác"
+
+msgid "Information"
+msgstr "Thông tin"
+
+msgid "Insufficient funds"
+msgstr "Số tiền không đủ để thực hiện giao dịch"
+
+msgid "Insufficient funds for fee"
+msgstr "Số tiền không đủ để trả phí"
+
+msgid "Integrations"
+msgstr "Tích hợp"
+
+msgid "Invalid"
+msgstr "Không hợp lệ"
+
+msgid "Invalid Email"
+msgstr "Email không hợp lệ"
+
+msgid "Invalid URL"
+msgstr "Đường link không hợp lệ"
+
+msgid "Invalid address"
+msgstr "Địa chỉ ví không hợp lệ"
+
+msgid "Invalid data"
+msgstr "Dữ liệu không hợp lệ"
+
+msgid "Invalid derivation path"
+msgstr "Đường dẫn xuất không hợp lệ"
+
+msgid "Invalid derivation path for selected coin"
+msgstr "Đường dẫn xuất cho đồng tiền được chọn không hợp lệ"
+
+msgid "Invitation Code"
+msgstr "Mã không hợp lệ"
+
+msgid "Invoice URL"
+msgstr "Link hóa đơn"
+
+msgid "Is this correct?"
+msgstr "Thông tin này có đúng không?"
+
+msgid "Is this email address correct?"
+msgstr "Đây có phải là địa chỉ email chính xác của bạn?"
+
+msgid "It appears that you do not have any money to send."
+msgstr "Có vẻ như bạn không có khoản tiền nào để chuyển đi"
+
+msgid "It's a ghost town in here"
+msgstr "Nơi đây thật vắng vẻ..."
+
+msgid ""
+"It's a good idea to avoid reusing addresses - this both protects your "
+"privacy and keeps your bitcoins secure against hypothetical attacks by "
+"quantum computers."
+msgstr ""
+"Bạn nên tránh việc sử dụng lại địa chỉ - Điều này bảo vệ lẫn sự riêng tư và giữ bitcoin của bạn an toàn giả sử trong trường hợp bạn bị tấn công bởi máy tính lượng tử"
+
+msgid ""
+"It's important that you write your recovery phrase down correctly. If "
+"something happens to your wallet, you'll need it to recover your money. "
+"Please review and try again."
+msgstr ""
+"Bạn nên viết xuống Cụm từ khôi phục thật chính xác. Nếu điều gì xảy ra với ví của bạn, bạn sẽ cần nó để hồi phục tiền của mình. Xin hãy xem và thử lại lần nữa"
+
+msgid "Join"
+msgstr "Liên kết"
+
+msgid "Join Shared Wallet"
+msgstr "Liên kết ví chia sẻ"
+
+msgid "Joining Wallet..."
+msgstr "Đang liên kết ví"
+
+#| msgid "Name"
+msgid "Key Name"
+msgstr "Tên của khóa"
+
+#| msgid "Settings"
+msgid "Key Settings"
+msgstr "Tùy chỉnh khóa"
+
+msgid "Key already associated with an existing wallet"
+msgstr "Khóa đã liên kết với ví"
+
+msgid "Keys"
+msgstr "Các khóa"
+
+msgid "Language"
+msgstr "Ngôn ngữ"
+
+msgid "Last Month"
+msgstr "Tháng trước"
+
+msgid "Learn More"
+msgstr "Biết thêm thông tin"
+
+msgid "Learn more about testnet blockchain"
+msgstr Biết thêm về testnet blockchain"
+
+msgid "Legacy"
+msgstr "Kế thừa"
+
+msgid ""
+"Legacy wallets created before 9/15 can't support additional wallets being "
+"added."
+msgstr ""
+"Ví kế thừa tạo trước 15/9 không thể hỗ trợ việc thêm ví khác vào"
+
+msgid "Linked"
+msgstr "Đã được liên kết"
+
+msgid ""
+"Load dollars onto your Ducatus Card using your bitcoin wallet. Shop anywhere "
+"that accepts Visa®"
+msgstr ""
+"Nạp đô la vào Thẻ Ducatus bằng ví bitcoin của bạn. Mua sắm ở mọi nơi chấp nhận thẻ Visa"
+
+msgid "Loading addresses..."
+msgstr "Đang tải địa chỉ"
+
+msgid "Loading transaction info..."
+msgstr "Đang tải thông tin giao dịch"
+
+msgid "Lock"
+msgstr "Khóa"
+
+msgid "Locked"
+msgstr "Đã khóa"
+
+msgid "Locktime in effect. Please wait to create a new spend proposal"
+msgstr "Đang trong thời gian khóa. Xin hãy đợi để tạo yêu cầu chi khác"
+
+msgid "Locktime in effect. Please wait to remove this spend proposal"
+msgstr "Đang trong thời gian khóa. Xin hãy đợi để xóa bỏ yêu cầu chi này"
+
+msgid "Log out"
+msgstr "Đăng thoát"
+
+msgid "Low Fee"
+msgstr "Phí thấp"
+
+msgid "Low amount inputs"
+msgstr "Lượng nhập vào thấp"
+
+msgid "Maximum amount allowed is {{max}}"
+msgstr "Lượng tối đa cho phép là {{max}}
+
+msgid "Me"
+msgstr "Tôi"
+
+msgid "Memo"
+msgstr "Ghi chú"
+
+msgid "Merchant Message"
+msgstr "Thông tin thương gia"
+
+msgid "Miner Fee"
+msgstr "Phí đào"
+
+msgid "Miner Fee Notice"
+msgstr "Thông báo phí đào"
+
+msgid "Miner fee"
+msgstr "Phí đào"
+
+msgid "Minimum amount required is {{min}}"
+msgstr "Lượng tối thiểu cần là {{min}}
+
+msgid "Missing parameter"
+msgstr "Thiếu tham số"
+
+msgid "Missing private keys to sign"
+msgstr "Thiếu khóa cá nhân để kí"
+
+msgid "Mmm..."
+msgstr "Mmm..."
+
+msgid "More"
+msgstr "Thêm"
+
+msgid "More Brands"
+msgstr "Thêm nhãn hiệu"
+
+msgid "Moved"
+msgstr "Đã di chuyển"
+
+msgid "Moved Funds"
+msgstr "Khoản tiền đã di chuyển"
+
+msgid "Moving"
+msgstr "Đang di chuyển"
+
+msgid "Multiple Recipients"
+msgstr "Nhiều người nhận"
+
+msgid ""
+"NOTE: To import a wallet from a 3rd party software, please go to Add Wallet, "
+"Create Wallet, and specify the Recovery Phrase there."
+msgstr ""
+"LƯU Ý: Để nhập một ví từ phần mềm bên thứ 3, xin hãy đi tới Thêm Ví, Tạo Ví, và ghi rõ Cụm từ khôi phục ở đấy"
+
+msgid "Name"
+msgstr "Tên"
+
+msgid "Name (at creation)"
+msgstr "Tên (vào thời điểm tạo)"
+
+msgid "Needs Backup"
+msgstr "Cần được lưu trữ"
+
+msgid "Network"
+msgstr "Mạng"
+
+msgid "Network Cost"
+msgstr "Phí dữ liệu"
+
+msgid "Network Fee Warning"
+msgstr "Cảnh báo tính phí dữ liệu"
+
+msgid "Network error"
+msgstr "Lỗi mạng"
+
+msgid "New Ducater"
+msgstr "Người đồng chi trả mới"
+
+msgid "New payment proposal"
+msgstr "Yêu cầu thanh toán mới"
+
+msgid "New payment received"
+msgstr "Đã nhận thanh toán mới"
+
+msgid "Next"
+msgstr "Kế tiếp"
+
+msgid "No"
+msgstr "Không"
+
+msgid "No Private Key"
+msgstr "Không có khóa cá nhân"
+
+msgid "No contacts yet"
+msgstr "Chưa có thông tin liên hệ"
+
+msgid "No enough confirmed funds"
+msgstr "Không đủ khoản tiền xác định"
+
+msgid "No entries for this log level"
+msgstr "Không có mục nào trong cấp độ ghi này"
+
+msgid "No funds found"
+msgstr "Không tìm thấy khoản tiền"
+
+msgid "No password"
+msgstr "Không có mật khẩu"
+
+msgid "No private key"
+msgstr "Không có khóa cá nhân"
+
+msgid "No signing proposal: No private key"
+msgstr "Không có yêu cầu đăng nhập: Không tìm thấy khóa cá nhân"
+
+msgid "No transactions"
+msgstr "Không tìm thấy giao dịch"
+
+msgid "No wallet found"
+msgstr "Không tìm thấy Ví"
+
+msgid "No wallets available"
+msgstr "Không có ví nào hiện tại"
+
+msgid "No wallets available to receive funds"
+msgstr "Không có ví nào hiện tại để nhận tiền"
+
+msgid "No wallets available to use ShapeShift"
+msgstr "Không có ví nào hiện tại để sử dụng ShapeShift"
+
+msgid "No wallets with funds"
+msgstr "Không tìm thấy ví có tiền"
+
+msgid "Non BIP44 wallet"
+msgstr "Ví không BIP44"
+
+msgid "Normal"
+msgstr "Bình thường"
+
+msgid "Not authorized"
+msgstr "Không có thẩm quyền"
+
+msgid "Not enough funds"
+msgstr "Không đủ tiền"
+
+msgid "Not enough funds for fee"
+msgstr "Không đủ tiền để trả phí"
+
+msgid "Not enough funds for fee {{shiftFee}}"
+msgstr "Không đủ tiền để trả phí {{shiftFee}}
+
+msgid ""
+"Not including the private key allows to check the wallet balance, "
+"transaction history, and create spend proposals from the export. However, "
+"does not allow to approve (sign) proposals, so funds will not be accessible "
+"from the export."
+msgstr ""
+"Không bao gồm khóa cá nhân sẽ cho phép bạn kiểm tra số dư, lịch sử giao dịch, và tạo yêu cầu chi từ việc xuất. Tuy nhiên, điều này không cho phép bạn chấp nhận yêu cầu (kí), vì thế tiền không thể được truy cập từ việc xuất"
+
+msgid "Not right now"
+msgstr "Không phải bây giờ"
+
+msgid "Not set"
+msgstr "Chưa được đặt"
+
+msgid "Not valid bitcoin address"
+msgstr "Địa chỉ bitcoin không hợp lệ"
+
+msgid "Note"
+msgstr "Ghi chú"
+
+msgid "Notifications"
+msgstr "Thông báo"
+
+msgid "Notifications by email"
+msgstr "Thông báo bằng email"
+
+msgid "Notify me if confirmed"
+msgstr "Thông báo cho tôi nếu được duyệt"
+
+msgid "Notify me when transactions are confirmed"
+msgstr "Thông báo cho tôi khi giao dịch được duyệt"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "OPEN IN BROWSER"
+msgstr "MỞ TRONG TRÌNH DUYỆT"
+
+msgid "Off"
+msgstr "Tắt"
+
+msgid "On"
+msgstr "Mở"
+
+msgid "Only redeemable on Mercado Livre (Brazil)"
+msgstr "Chỉ được đổi trên Mercado Livre (Brazil)"
+
+msgid "Only redeemable on www.amazon.co.jp (Japan website)"
+msgstr "Chỉ được đổi trên www.amazon.co.jp (Website của Nhật Bản)"
+
+msgid "Only redeemable on www.amazon.com (USA website)"
+msgstr "Chỉ được đổi trên www.amazon.com (website của Hoa Kì)"
+
+msgid "Open"
+msgstr "Mở"
+
+msgid "Open Crowdin"
+msgstr "Mở Crowdin"
+
+msgid "Open GitHub"
+msgstr "Mở GitHub"
+
+msgid "Open GitHub Project"
+msgstr "Mở GitHub Project"
+
+msgid "Open Insight"
+msgstr "Mở Insight"
+
+msgid "Open Translation Community"
+msgstr "Mở cộng đồng phiên dịch"
+
+msgid "Open settings"
+msgstr "Mở Cài đặt"
+
+msgid "Open website"
+msgstr "Mở website"
+
+msgid "Order the Ducatus Card"
+msgstr Đặt mua Thẻ Ducatus
+
+msgid "Ouch!"
+msgstr "Ây da!"
+
+msgid "PIN"
+msgstr "PIN"
+
+msgid "Password"
+msgstr "Mật khẩu"
+
+msgid "Password Not Recoverable"
+msgstr "Mật khẩu không thể phục hồi được"
+
+msgid "Password mismatch"
+msgstr "Mật khẩu không tương xứng"
+
+msgid "Password required. Make sure to enter your password in advanced options"
+msgstr ""
+"Yêu cầu mật khẩu. Xin hãy đảm bảo rằng bạn nhập mật khẩu bằng tùy chọn nâng cao"
+
+msgid "Passwords do not match"
+msgstr "Mật khẩu không khớp"
+
+msgid "Paste the backup plain text code"
+msgstr "Dán đoạn mã lưu trữ chưa được format"
+
+msgid ""
+"Paste this code on {cardConfig.website}. This gift card cannot be recovered "
+"if your claim code is lost."
+msgstr ""
+"Dán đoạn mã này vào {cardConfig.website}. Thẻ quà tặng này không thể được khôi phục nếu bạn làm mất mã đã nhận"
+
+msgid "Pay 0% fees to turn bitcoin into dollars."
+msgstr "Trả 0% phí để chuyển bitcoin thành Đô La"
+
+msgid "Payment Accepted"
+msgstr "Thanh toán được chấp thuận"
+
+msgid "Payment Expires:"
+msgstr "Thanh toán đã hết hạn"
+
+msgid "Payment Proposal"
+msgstr "Đề xuất thanh toán"
+
+msgid "Payment Published"
+msgstr "Thanh toán đã được xuất bản"
+
+msgid "Payment Rejected"
+msgstr "Thanh toán bị từ chối"
+
+msgid "Payment Request"
+msgstr "Yêu cầu thanh toán"
+
+msgid "Payment Request info"
+msgstr "Thông tin yêu cầu thanh toán"
+
+msgid "Payment Sent"
+msgstr "Thanh toán đã được gửi đi"
+
+msgid "Payment URL"
+msgstr "Đường link thanh toán"
+
+msgid "Payment accepted, but not yet broadcasted"
+msgstr "Thanh toán đã được chấp thuận, nhưng chưa phát đi"
+
+msgid "Payment proposal rejected"
+msgstr "Đề xuất thanh toán bị từ chối"
+
+msgid "Pending"
+msgstr "Đang chờ xử lí"
+
+msgid "Pending Proposals"
+msgstr "Đề xuất đang chờ được xử lí"
+
+msgid "Permanently delete all wallets using this key."
+msgstr "Sử dụng khóa này để xóa vĩnh viễn tất cả các ví"
+
+msgid "Permanently delete this wallet."
+msgstr "Vĩnh viễn xóa ví này."
+
+msgid "Personal Wallet"
+msgstr "Ví riêng"
+
+msgid "Plain URL"
+msgstr "URL thuần túy"
+
+msgid "Please complete your account verification on ShapeShift website."
+msgstr "Xin hãy hoàn tất xác minh tài khoản của bạn tên website của ShapeShift"
+
+msgid "Please connect a camera to get started."
+msgstr "Xin hãy kết nối với camera để bắt đầu"
+
+msgid "Please enter the recovery phrase"
+msgstr "Xin hãy nhập Cụm từ khôi phục"
+
+msgid "Please enter the wallet recovery phrase"
+msgstr "Xin hãy nhập Cụm từ khôi phục của ví"
+
+msgid "Please enter your PIN"
+msgstr "Xin hãy nhập mã PIN của bạn"
+
+msgid "Please review"
+msgstr "Xin hãy xem lại"
+
+msgid "Please upgrade the app to perform this action"
+msgstr "Xin hãy nâng cấp ứng dụng này để thực hiện chức năng trên"
+
+msgid "Please wait..."
+msgstr "Xin đợi một lát..."
+
+msgid "Please, enter the amount"
+msgstr "Xin nhập số tiền"
+
+msgid "Please, select your backup file"
+msgstr "Xin hãy chọn tệp lưu trữ"
+
+msgid "Pre-Auth Holds"
+msgstr "Khoản tạm giữ"
+
+msgid "Preferences"
+msgstr "Tùy thích"
+
+msgid "Preparing addresses..."
+msgstr "Chuẩn bị địa chỉ..."
+
+msgid "Preparing backup..."
+msgstr "Chuẩn bị lưu trữ"
+
+msgid "Previous"
+msgstr "Quay lại"
+
+msgid "Price Chart"
+msgstr "Biểu giá"
+
+msgid "Print"
+msgstr "In"
+
+msgid "Print Card"
+msgstr "In Thẻ"
+
+msgid "Printed Gift Card Required"
+msgstr "Yêu cầu Thẻ quà tặng được in"
+
+msgid "Priority"
+msgstr "Ưu tiên"
+
+msgid "Privacy Policy"
+msgstr "Chính sách Quyền Riêng tư"
+
+msgid "Privacy Policy update"
+msgstr "Cập nhật chính sách Quyền Riêng tư"
+
+msgid "Private Key"
+msgstr "Khóa cá nhân"
+
+msgid "Private key encrypted. Enter password"
+msgstr "Khóa cá nhân đã được mã hóa. Xin nhập mật khẩu"
+
+msgid "Private key is encrypted, cannot sign"
+msgstr "Khóa cá nhân đã bị mã hóa, không thể kí"
+
+msgid "Proposal Created"
+msgstr "Yêu cầu đã được tạo"
+
+msgid "Purchase Limit Reached"
+msgstr "Đã đạt mức mua tối đa"
+
+msgid "Purchased Brands"
+msgstr "Nhãn hàng đã mua"
+
+msgid ""
+"Push notifications for {{appName}} are currently disabled. Enable them in "
+"the Settings app."
+msgstr ""
+"Thông báo đẩy cho {{appName}} đang bị vô hiệu hóa. Hãy bật chúng lên tại ứng dụng Cài đặt"
+
+msgid "Quick and easy setup"
+msgstr "Cài đặt nhanh chóng và dễ dàng"
+
+msgid "Random"
+msgstr "Ngẫu nhiên"
+
+msgid "Rate"
+msgstr "Đánh giá"
+
+msgid "Rate on the {storeName}"
+msgstr "Đánh giá trên {{storeName}}"
+
+msgid "Read Only Wallet"
+msgstr "Ví chỉ đọc được"
+
+msgid "Read Only Wallets"
+msgstr "Các ví chỉ đọc được"
+
+msgid "Read Only wallets don't include the private key."
+msgstr "Ví chỉ được đọc không bao gồm khóa cá nhân"
+
+msgid "Read more in our Wiki"
+msgstr "Xin hãy đọc thêm ở trang wiki của chung tôi"
+
+msgid "Read more in our support page"
+msgstr "Xin hãy đọc thêm ở trang hỗ trợ của chúng tôi"
+
+msgid "Receipt Email"
+msgstr "Email người nhận"
+
+msgid "Receive"
+msgstr "Nhận"
+
+msgid "Received"
+msgstr "Đã nhận"
+
+msgid "Received Funds"
+msgstr "Tiền đã nhận"
+
+msgid "Receiving"
+msgstr "Đang nhận"
+
+msgid ""
+"Receiving funds will be temporary disabled until you can verify your "
+"recovery phrase has been stored away securely. You can always complete this "
+"later from your wallet settings."
+msgstr ""
+"Khoản tiền đang nhận sẽ được tạm thời vô hiệu hóa cho đến khi bạn có thể xác minh Cụm từ khôi phục đã được lưu trữ an toàn. Bạn có thể luôn thực hiện điều này trong mục cài đặt ví"
+
+msgid "Receiving {coinName} address"
+msgstr "Đang nhận địa chỉ {{coinName}}"
+
+msgid "Recent"
+msgstr "Gần đây"
+
+msgid "Recipient"
+msgstr "Người nhận"
+
+msgid "Recover old wallets"
+msgstr "Khôi phục ví cũ"
+
+msgid "Recover your wallet using your passphrase"
+msgstr "Khôi phục ví của bạn sử dụng mật khẩu"
+
+msgid "Recovery Phrase"
+msgstr "Cụm từ khôi phục"
+
+msgid "Recreating Wallet..."
+msgstr '"Đang tái tạo ví"
+
+msgid "Redeem Now"
+msgstr "Đổi thẻ ngay"
+
+msgid "Reject Payment Proposal"
+msgstr "Yêu cầu đổi thẻ bị từ chối"
+
+msgid "Rejected"
+msgstr "Đã bị từ chối"
+
+msgid "Rejecting payment proposal..."
+msgstr "Đang từ chối yêu cầu thanh toán"
+
+msgid "Release information"
+msgstr "Phát hành thông tin"
+
+msgid "Remove"
+msgstr "Gỡ bỏ"
+
+msgid "Repeat the password"
+msgstr "Lặp lại mật khẩu"
+
+msgid "Report an Issue"
+msgstr "Báo cáo một Vấn đề"
+
+msgid "Request Biometric Authentication"
+msgstr "Yêu cầu xác thực sinh trắc"
+
+msgid "Request Encrypt Password"
+msgstr "Yêu cầu Mã hóa Mật khẩu"
+
+msgid "Request Fingerprint"
+msgstr "Yêu cầu cung cấp Dấu vân tay"
+
+msgid "Request Specific Amount"
+msgstr "Yêu cầu nhập Khoản tiền Cụ thể"
+
+msgid "Request a Feature"
+msgstr "Yêu cầu một Tính năng"
+
+msgid "Request a new feature"
+msgstr "Yêu cầu một tính năng mới"
+
+msgid "Required number of signatures"
+msgstr "Yêu cầu số lượng chữ kí" 
+
+msgid "Requires invitation to join"
+msgstr "Yêu cầu lời mời để tham dự"
+
+msgid "Requires multiple devices (most secure)"
+msgstr "Yêu cầu đa thiết bị (an toàn nhất)"
+
+#| msgid "Retrieving inputs information..."
+msgid "Retrieving gas limit..."
+msgstr "Thu thập giới hạn gas"
+
+msgid "Retrieving inputs information..."
+msgstr "Thu thập thông tin lệnh nhập"
+
+msgid "Retry camera"
+msgstr "Hãy thử lại camera"
+
+msgid "START OVER"
+msgstr "BẮT ĐẦU LẠI"
+
+msgid "Safeguard your recovery phrase"
+msgstr "Bảo vệ mã khôi phục của bạn"
+
+msgid "Save"
+msgstr "Lưu"
+
+msgid "Scan"
+msgstr "Quét"
+
+msgid "Scan QR Codes"
+msgstr "Quét mã QR"
+
+msgid "Scan addresses for funds"
+msgstr "Quét địa chỉ để tìm khoản tiền"
+
+msgid "Scan again"
+msgstr "Quét lại"
+
+msgid "Scanning Wallet funds..."
+msgstr "Quét khoản tiền trong Ví"
+
+msgid "Search Transactions"
+msgstr "Tìm Giao dịch"
+
+msgid "Search Wallets or Contacts"
+msgstr "Tìm Ví hay Thông tin liên lạc"
+
+msgid "Search a contact"
+msgstr "Tìm một thông tin liên lạc"
+
+#| msgid "Search or enter bitcoin address"
+msgid "Search or enter address"
+msgstr "Tìm hay nhập địa chỉ"
+
+msgid "Search your currency"
+msgstr "Tìm tiền tệ của bạn"
+
+msgid "Security"
+msgstr "Bảo mật"
+
+msgid "See transaction"
+msgstr "Xem giao dịch"
+
+#| msgid "Select currency"
+msgid "Select Key"
+msgstr "Chọn Khóa"
+
+#| msgid "Select the Key for the New Wallet"
+msgid "Select Key to add ETH Wallet to"
+msgstr "Chọn Khóa để thêm vào ví ETH"
+
+msgid "Select a wallet"
+msgstr "Xin hãy chọn một ví"
+
+#| msgid "Select currency"
+msgid "Select currencies"
+msgstr "Xin hãy chọn loại tiền tệ"
+
+msgid "Select currency"
+msgstr "Xin hãy chọn một loại tiền tệ"
+
+msgid "Selling Bitcoin..."
+msgstr "Đang bán Bitcoin"
+
+msgid "Send"
+msgstr "Gửi"
+
+msgid "Send Max"
+msgstr "Gửi tối đa"
+
+msgid "Send Money"
+msgstr "Gửi Tiền"
+
+msgid "Send addresses by email"
+msgstr "Gửi địa chỉ qua email"
+
+msgid "Send by email"
+msgstr "Gửi qua email"
+
+msgid "Send feedback"
+msgstr "Gửi phản hồi"
+
+msgid "Send from"
+msgstr "Gửi từ"
+
+msgid "Send payment to this address"
+msgstr "Gửi thanh toán tới địa chỉ này"
+
+msgid "Sending"
+msgstr "Đang gửi"
+
+msgid "Sending 2FA code..."
+msgstr "Đang gửi mã xác thực 2 lớp 2FA..."
+
+msgid "Sending From"
+msgstr "Đang gửi từ"
+
+msgid "Sending feedback..."
+msgstr "Đang gửi phản hồi..."
+
+msgid "Sending maximum amount"
+msgstr "Đang gửi số lượng tối đa"
+
+msgid "Sending transaction..."
+msgstr "Đang gửi giao dịch"
+
+msgid "Sending {{amount}} {{unit}} from your {{name}} wallet"
+msgstr "Đang gửi {{amount}} {{unit}} từ ví {{name}} của bạn"
+
+msgid "Sensitive Data"
+msgstr "Dữ liệu nhạy cảm"
+
+msgid "Sent"
+msgstr "Đã gửi"
+
+msgid "Sent Funds"
+msgstr "Đã gửi khoản tiền"
+
+msgid "Sent to {walletName}"
+msgstr "Đã gửi tới {walletName}"
+
+msgid "Server response could not be verified"
+msgstr "Không thể xác minh phản hồi từ máy chủ"
+
+msgid "Services"
+msgstr "Các dịch vụ"
+
+msgid "Session Log"
+msgstr "Nhật kí về phiên làm việc"
+
+msgid "Session Logs. Be careful, this could contain sensitive private data"
+msgstr "Nhật kí về phiên làm việc. Cẩn thận, có thể chứa thông tin cá nhân quan trọng"
+
+msgid "Set up a password"
+msgstr "Đặt mật khẩu"
+
+msgid "Settings"
+msgstr "Cài đặt"
+
+msgid "ShapeShift is not available at this moment. Please, try again later."
+msgstr "ShapeShift không thể hoạt động ngay bây giờ. Xin hãy thử lại sau"
+
+msgid "ShapeShift max limit reached"
+msgstr "ShapeShift đã đạt giới hạn tối đa"
+
+msgid "ShapeShift requires a minimum value of {{min}}"
+msgstr "ShapeShift yêu cầu giá trị tối thiểu là {{min}}"
+
+msgid "Share"
+msgstr "Chia sẻ"
+
+msgid "Share Address"
+msgstr "Chia sẻ Địa chỉ"
+
+msgid "Share Claim Code"
+msgstr "Chia sẻ Mã đã nhận"
+
+msgid "Share logs"
+msgstr "Chia sẻ nhật kí"
+
+msgid "Share the love by inviting your friends."
+msgstr "Chia sẻ sự yêu thích bằng cách mời bạn bè"
+
+msgid "Share this QR code to receive {amount} in your wallet {name}."
+msgstr "Chia sẻ mã QR này để nhận {{amount}} vào ví {{name}} của bạn."
+
+msgid "Share this address with the devices joining this account."
+msgstr "Chia sẻ địa chỉ này với các thiết bị liên kết với địa chỉ này"
+
+msgid "Share this invitation with your Ducaters"
+msgstr "Chia sẻ lời mời này với người đồng chi trả"
+
+msgid "Share {{appName}}"
+msgstr "Chia sẻ {{appName}}"
+
+msgid "Shared Wallet"
+msgstr "Ví được chia sẻ"
+
+msgid "Show advanced options"
+msgstr "Hiển thị tùy chọn nâng cao"
+
+msgid "Show all"
+msgstr "Hiển thị tất cả"
+
+msgid "Show in Home"
+msgstr "Hiển thị tại Trang chủ"
+
+msgid "Sign Up for ShapeShift"
+msgstr "Đăng kí sử dụng ShapeShift"
+
+msgid "Sign selected proposals"
+msgstr "Kí vào các yêu cầu đã chọn"
+
+msgid "Signatures rejected by server"
+msgstr "Chữ kí bị từ chối bởi máy chủ"
+
+msgid "Signing transaction..."
+msgstr "Đang kí vào giao dịch..."
+
+#| msgid "Delete Wallet"
+msgid "Simple Wallet"
+msgstr "Ví đơn giản"
+
+msgid "Single address"
+msgstr "Địa chỉ đơn"
+
+msgid "Skip"
+msgstr "Bỏ qua"
+
+msgid "Slide to accept"
+msgstr "Gạt qua để chấp nhận"
+
+msgid "Slide to confirm"
+msgstr "Gạt qua để xác nhận"
+
+msgid "Slide to pay"
+msgstr "Gạt qua để trả"
+
+msgid "Slide to send"
+msgstr "Gạt qua để gửi"
+
+msgid "Something goes wrong..."
+msgstr "Điều gì đang tiếc đã xảy ra..."
+
+msgid "Specify Recovery Phrase"
+msgstr "Ghi rõ mã khôi phục"
+
+msgid "Specify derivation path"
+msgstr "Ghi rõ đường dẫn xuất"
+
+msgid "Spend proposal is not accepted"
+msgstr "Yêu cầu chi trả không được chấp nhận"
+
+msgid "Spend proposal not found"
+msgstr "Không tìm thấy yêu cầu chi trả"
+
+msgid "Spendable balance"
+msgstr "Số dư có thể chi được"
+
+msgid "Spending this balance will need significant Bitcoin network fees"
+msgstr "Chi số dư này sẽ cần lượng phí mạng lưới Bitcoin đang kể"
+
+msgid "Status"
+msgstr "Trạng thái"
+
+msgid "Super Economy"
+msgstr "Siêu kinh tế"
+
+msgid "Support Wallets with Different Keys"
+msgstr "Hỗ trợ ví với nhiều khóa khác nhau"
+
+msgid "Sweep"
+msgstr "Quét"
+
+msgid "Sweep Completed"
+msgstr "Quét hoàn tất"
+
+msgid "Sweep paper wallet"
+msgstr "Quét ví tiền mặt"
+
+msgid "Sweeping Wallet..."
+msgstr "Đang quét ví..."
+
+msgid "THIS ACTION CANNOT BE REVERSED"
+msgstr "HÀNH ĐỘNG NÀY KHÔNG THỂ BỊ ĐẢO NGƯỢC"
+
+msgid "Tap and hold to show"
+msgstr "Nhấn và giữ để hiển thị"
+
+msgid "Tap each word in the correct order."
+msgstr "Nhấn vào từng từ theo thứ tự"
+
+msgid "Tap to recreate"
+msgstr "Nhấn để tái tạo"
+
+msgid "Temporarily Unavailable"
+msgstr "Hiện tại không truy cập được"
+
+msgid "Terms of Use"
+msgstr "Điều khoản sử dụng"
+
+msgid "Testnet Wallet"
+msgstr "Ví Testnet"
+
+msgid "Text"
+msgstr "Văn bản"
+
+msgid "Thanks!"
+msgstr "Xin cảm ơn!"
+
+msgid "The Safest, Fastest Asset Exchange on Earth"
+msgstr "Sàn trao đổi tài sản nhanh nhất và an toàn nhất Thế giới"
+
+msgid "The amount of bitcoin immediately spendable from this wallet."
+msgstr "Số lượng bitcoin sẽ được chi ngay lập tức từ ví này"
+
+msgid ""
+"The amount of bitcoin stored in this wallet that is allocated as inputs to "
+"your pending transaction proposals. The amount is determined using unspent "
+"transaction outputs associated with this wallet and may be more than the "
+"actual amounts associated with your pending transaction proposals."
+msgstr ""
+"Số lượng bitcoin được trữ trong ví mà đang được sử dụng như đầu vào cho các yêu cầu giao dịch "
+" đang chờ xử lí của bạn. Số lượng sẽ được định bằng cách sử dụng giao dịch đầu ra chưa được trả"
+" đã được liên kết với ví này và có thể nhiều hơn "
+" đã được liên kết với ví này và có thể nhiều hơn số lượng liên kết thật với yêu cầu giao dịch đang chờ xử lí của bạn"
+
+msgid ""
+"The amount of bitcoin stored in this wallet with less than 1 blockchain "
+"confirmation."
+msgstr ""
+"Số lượng bitcoin được trữ trong chiếc ví này với ít hơn 1 xác nhận blockchain"
+
+msgid ""
+"The destination wallet is not backed up. Please, complete the backup process "
+"before continue."
+msgstr ""
+"Ví nhận chưa được lưu trữ. Xin hãy hoàn tất thủ tục lưu trữ trước khi tiếp tục"
+
+msgid ""
+"The higher the fee, the greater the incentive a miner has to include that "
+"transaction in a block. Current fees are determined based on network load "
+"and the selected policy."
+msgstr ""
+"Phí càng cao, người đào càng có nhiều sự khích lệ để bao gồm giao dịch đó trong 1 block. Phí hiện tại đang được quy định dựa trên tải lượng và chính sách chọn lọc"
+
+msgid ""
+"The information you are about to share/export may contain sensitive data "
+"such us wallet IDs, addresses, balances, etc. Please be sure you trust the "
+"person or entity with whom you are sharing this information."
+msgstr ""
+"Thông tin mà bạn đang chuẩn bị chia sẻ/xuất ra có thể chứa thông tin nhạy cảm như là ID của ví, địa chỉ, số dư,... Xin hãy chắc chắn rằng bạn tin tưởng người hay tổ chức mà bạn đang chia sẻ thông tin này với"
+
+msgid ""
+"The payment was created but could not be completed. Please try again from "
+"home screen"
+msgstr ""
+"Giao dịch đã được tạo nhưng không thể hoàn tất. Xin hãy thử lại ở màn hình chính"
+
+msgid "The payment was removed by creator"
+msgstr "Giao dịch này đã bị xóa bởi người tạo"
+
+msgid ""
+"The private key of this wallet is not available. The export allows to check "
+"the wallet balance, transaction history, and create spend proposals from the "
+"export. However, does not allow to approve (sign) proposals, so funds will "
+"not be accessible from the export."
+msgstr ""
+"Khóa cá nhân của ví này hiện tại không sử dụng được. Việc xuất cho phép kiểm tra "
+"số dư của ví, lịch sử giao dịch và tạo yêu cầu chi trả từ  "
+"việc xuất, tuy nhiên điều này không cho phép chấp thuận (kí) đề xuất, vì thế bạn sẽ không thể truy cập "
+"khoản tiền từ việc xuất."
+
+msgid ""
+"The purchase amount is limited to {maxAmount} {currency} per day. Please "
+"modify your amount."
+msgstr ""
+"Số lượng mua bị giới hạn đến mức {maxAmount} {currency} mỗi ngày. Xin "
+"thay đổi số lượng của bạn."
+
+msgid ""
+"The purchase amount must be at least {minAmount} {currency}. Please modify "
+"your amount."
+msgstr ""
+"Số lượng mua phải đạt tối thiểu {minAmount} {currency}. Xin hãy thay đổi "
+"số lượng của bạn."
+
+msgid "The request could not be understood by the server"
+msgstr "Server không thể nhận yêu cầu của bạn"
+
+msgid ""
+"The single address feature will force the wallet to only use one address "
+"rather than generating new addresses."
+msgstr ""
+"Chức năng địa chỉ đơn sẽ bắt buộc ví của bạn chỉ sử dụng một địa chỉ "
+"hơn là tạo ra một địa chỉ mới."
+
+msgid "The spend proposal is not pending"
+msgstr "Yêu cầu chi đang không chờ xử lí"
+
+msgid ""
+"The testnet is an alternative Bitcoin block chain, to be used for testing. "
+"Testnet coins are separate and distinct from actual bitcoins, and do not "
+"have any value. This allows application developers or bitcoin testers to "
+"experiment, without having to use real bitcoins."
+msgstr ""
+"Testnet là một blockchain Bitcoin thay thế, chỉ được sử dụng để chạy thử. "
+"Coin của Testnet được tách riêng và phân biệt với bitcoin thật, và không có "
+"giá trị nào. Điều này cho phép nhà phát triển ứng dụng hay người thủ bitcoin "
+"thí nghiệm, mà không cần dùng đến bitcoin thật."
+
+msgid "The total amount of bitcoin stored in this wallet."
+msgstr "Tổng số lượng bitcoin được trữ trong ví này."
+
+msgid ""
+"The transaction from {{walletName}} that you were waiting for has been "
+"confirmed."
+msgstr ""
+"Giao dịch từ {{walletName}} mà bạn đang đợi đã được "
+"duyệt."
+
+msgid ""
+"The transaction history and every new incoming transaction are cached in the "
+"app. This feature clean this up and synchronizes again from the server"
+msgstr ""
+"Lịch sử giao dịch và mỗi giao dịch sắp tới được lưu trữ tạm thời bên trong "
+"ứng dụng này. Chức năng này sẽ dọn dẹp điều này và đồng bộ hóa lần nữa từ server"
+
+msgid "The wallet is already in the app"
+msgstr "Ví này đã có sẵn trong ứng dụng rồi"
+
+msgid ""
+"The wallet won't be removed from this device. You can hide it whenever you "
+"need it."
+msgstr ""
+"Ví này sẽ không bị xóa khỏi thiết bị này. Bạn có thể ẩn nó bất cứ khi nào bạn "
+"cần làm việc đó."
+
+msgid ""
+"The wallet you are using does not match the network and/or the currency of "
+"the address provided"
+msgstr ""
+"Ví mà bạn đang sử dụng không khớp với mạng lưới và/hay đồng tiền của "
+"đại chỉ ví mà bạn cung cấp."
+
+msgid "There is an error in the form"
+msgstr "Mẫu đã xảy ra lỗi"
+
+msgid ""
+"There was problem while trying to sign {{txpsFailed}} of your transactions "
+"proposals. Please, try again"
+msgstr ""
+"Đã xảy ra lỗi khi kí {{txpsFailed}} của yêu cầu giao dịch của bạn "
+"Xin hãy thử lại lần nữa."
+
+msgid ""
+"There's obviously something we're doing wrong. How could we improve your "
+"experience?"
+msgstr ""
+"Có lẽ chúng tôi đang làm điều gì đó sai cách rồi. Làm sao để chúng tôi cải thiện "
+"trải nghiệm cho bạn?"
+
+msgid "This app is not available for your device."
+msgstr "Ứng dụng này không có sẵn cho thiết bị của bạn."
+
+msgid "This bitcoin payment request has expired."
+msgstr "Yêu cầu thanh toán bitcoin đã hết hạn."
+
+msgid ""
+"This feature duplicates a Bitcoin wallet on the Bitcoin Cash chain, enabling "
+"access to pre-fork coins. This should only be used if there are unclaimed "
+"funds before the Bitcoin Cash fork day on the wallet. The resulting wallet "
+"will use the same derivation path as the original BTC wallet."
+msgstr ""
+"Tính năng này sao chép một ví Bitcoin trên chuỗi Bitcoin Cash, cho phép "
+"truy cập các coin trước cập nhật. Bạn chỉ nên sử dụng tính năng này khi bạn đang có khoản tiền chưa nhận "
+"trước ngày cập nhật Bitcoin Cash trên ví. Chiếc ví sau khi cập nhật "
+"sẽ sử dụng cùng đường dẫn xuất với lại ví BTC gốc."
+
+msgid ""
+"This field is only for users who, in previous versions (it's not supported "
+"anymore), set a password to protect their recovery phrase. This field is not "
+"for your encrypt password."
+msgstr ""
+"Ô này chỉ dành cho người dùng mà, trong phiên bản trước (hiện tại không còn hỗ trợ "
+"nữa), đặt mật khẩu để bảo vệ mã khôi phục của họ. Ô này không phải là "
+"dành cho mật khẩu bảo mật của bạn."
+
+msgid "This field only accepts addresses supported by {appName} Wallet"
+msgstr "Ô này chỉ chấp nhận địa chỉ được hỗ trợ bởi ví của {{appName}}"
+
+msgid "This information is available at the website."
+msgstr "Thông tin này chỉ được hiển thị trên website."
+
+msgid "This invoice does not accept unconfirmed inputs."
+msgstr "Hóa đơn này không chấp nhận thông tin nhập không xác định được."
+
+msgid "This invoice is not longer accepting payments"
+msgstr "Hóa đơn này không còn chấp nhận thanh toán nữa."
+
+msgid ""
+"This password cannot be recovered. If this password is lost, funds can only "
+"be recovered by reimporting your 12-word recovery phrase."
+msgstr ""
+"Mật khẩu này không thể được phục hồi. Nếu mật khẩu này bị mất, tiền trong ví chỉ có thể "
+"được khôi phục bằng cách nhập lại mã khôi phục 12 kí tự."
+
+msgid ""
+"This password is only for this device, and it cannot be recovered. To avoid "
+"losing funds, write your password down."
+msgstr ""
+"Nếu mật khẩu này chỉ được sử dụng riêng cho thiết bị này, và nó không thể được khôi phục. Để tránh "
+"việc tiền trong ví bị mất, xin hãy viết xuống mật khẩu này của bạn."
+
+msgid "This payment requires a miner fee of:"
+msgstr "Giao dịch này cần phí đào bao gồm:"
+
+msgid ""
+"This recovery phrase was created with a password. To recover this wallet "
+"both the recovery phrase and password are needed."
+msgstr ""
+"Mã khôi phục này đã được tạo cùng với một mật khẩu. Để khôi phục ví này, "
+"bạn cần có cả mã khôi phục và mật khẩu."
+
+msgid ""
+"This transaction amount is too small compared to current Bitcoin network "
+"fees. Spending these funds will need a Bitcoin network fee cost comparable "
+"to the funds itself."
+msgstr ""
+"Số lượng tiền giao dịch này quá nhỏ so với lại phí mạng lưới Bitcoin "
+"Bằng cách chi những khoản tiền này bạn sẽ cần phí mạng lưới Bitcoin tương đương "
+"với lại chính khoản tiền ấy."
+
+msgid ""
+"This transaction could take a long time to confirm or could be dropped due "
+"to the low fees set by the sender."
+msgstr ""
+"Giao dịch này có thể mất rất nhiều thời gian để duyệt hay có thể bị hủy vì "
+"phí đặt bởi người gửi quá thấp."
+
+msgid ""
+"This transaction requires a high network fee because either the sending "
+"amount is too small or the network is experiencing congestion."
+msgstr ""
+"Giao dịch này cần trả phí mạng lưới cao bởi hoặc là vì số lượng gửi đi "
+"quá nhỏ hay mạng lưới hiện tại đang bị nghẽn."
+
+msgid ""
+"This wallet is not registered at the given Bitcore Wallet Service (BWS). You "
+"can recreate it from the local information."
+msgstr ""
+"Ví này không được đăng kí tại bất kì Dịch vụ Ví Bitcore (BWS) nào đã cung cấp. Bạn "
+"có thể tái tạo lại ví này tạo bất kì thông tin có sẵn nào."
+
+msgid "Timeline"
+msgstr "Dòng thời gian"
+
+msgid "To"
+msgstr "Tới"
+
+#| msgid ""
+#| "To get started, you'll need to create a bitcoin wallet and get some "
+#| "bitcoin."
+msgid "To get started, you'll need to create a wallet and get some funds."
+msgstr "Để bắt đầu, bạn sẽ cần tạo một ví cùng với một khoản tiền trong đó."
+
+msgid ""
+"To get started, you'll need to enter a valid address, contact or wallet."
+msgstr ""
+"Để bắt đầu, bạn sẽ cần phải nhập địa chỉ phù hợp, thông tin liên lạc hay một ví."
+
+msgid "To {{reason}} you must first add your Ducatus account - {{email}}"
+msgstr "Để có thể {{reason}}, trước hết bạn cần thêm tài khoản Ducatus của mình - {{email}}"
+
+msgid "Top up in progress..."
+msgstr "Đang nạp tiền..."
+
+msgid "Top-up with this cryptocurrency is not enabled"
+msgstr "Chưa kích hoạt chức năng nạp tiền sử dụng đồng tiền ảo này"
+
+msgid "Total"
+msgstr "Tổng"
+
+msgid "Total Locked Balance"
+msgstr "Tổng số dư bị khóa"
+
+msgid "Total number of Ducaters"
+msgstr "Tổng số người đồng chi trả"
+
+msgid "Total wallet inputs"
+msgstr "Tổng thu của ví"
+
+msgid "Trade any leading blockchain asset for any other. Protection by Design."
+msgstr ""
+"Giao dịch bất kỳ tài sản blockchain hàng đầu nào cho bất kỳ tài sản nào khác. Bảo vệ theo thiết kế."
+
+msgid "Transaction"
+msgstr "Giao dịch"
+
+msgid "Transaction History"
+msgstr "Lịch sử giao dịch"
+
+msgid "Transaction ID"
+msgstr "ID Giao dịch"
+
+msgid "Transaction already broadcasted"
+msgstr "Giao dịch đã được phát đi"
+
+msgid "Transaction confirmed"
+msgstr "Giao dịch đã được duyệt"
+
+msgid "Transaction has not been created"
+msgstr "Giao dịch chưa được tạo"
+
+msgid "Transaction initiated"
+msgstr "Giao dịch bắt đầu"
+
+msgid "Transaction not available at this time"
+msgstr "Giao dịch hiện không có"
+
+msgid "Transactions"
+msgstr "Các giao dịch"
+
+msgid "Transactions without fee are not supported."
+msgstr "Không hỗ trợ giao dịch không tính phí"
+
+msgid "Transfer to"
+msgstr "Chuyển đến"
+
+msgid "Transfer to Bitcoin Cash Wallet"
+msgstr "Chuyển đến ví Bitcoin Cash"
+
+msgid "Transfer to Bitcoin Wallet"
+msgstr "Chuyển đến ví Bitcoin"
+
+msgid "Transfer to Contact"
+msgstr "Chuyển đến thông tin liên hệ"
+
+#| msgid "Transfer to Bitcoin Wallet"
+msgid "Transfer to Ethereum Wallet"
+msgstr "Chuyển đến ví Ethereum"
+
+msgid "Transfer to Multiple Recipients"
+msgstr "Chuyển đến nhiều người nhận"
+
+msgid "Translate address"
+msgstr "Dịch địa chỉ"
+
+msgid "Try again"
+msgstr "Xin hãy thử lại"
+
+msgid "Try again in {{expires}}"
+msgstr "Xin hãy thử lại trong vòng {{expires}}"
+
+msgid "Turn bitcoin into dollars, swipe anywhere Visa® is accepted."
+msgstr "Chuyển bitcoin thành đô la, có thể quẹt thẻ bất cứ nơi nào chấp nhận Visa®."
+
+msgid "Type the recovery phrase (usually 12 words)"
+msgstr "Xin hãy nhập mã khôi phục (thường bao gồm 12 kí tự)"
+
+msgid "Unarchive Card"
+msgstr "Thẻ chưa được lưu giữ"
+
+msgid "Unconfirmed"
+msgstr "Không xác định"
+
+msgid ""
+"Unfortunately, your country/region has banned the use or acceptance of "
+"cryptocurrencies as a valid form of payment and we are therefore unable to "
+"service you."
+msgstr ""
+"Thật đáng tiếc, quốc gia/vùng lãnh thổ của bạn đã nghiêm cấm việc sử dụng hay nhận "
+"tiền ảo như là một phương tiện thanh toán và vì thế chúng tôi không thể "
+"cung cấp dịch vụ cho bạn."
+
+msgid "Unlink account"
+msgstr "Ngừng liên kết tài khoản"
+
+msgid "Unlink card"
+msgstr "Ngừng liên kết với thẻ"
+
+msgid ""
+"Unlink the account will remove it and all associated cards from this device."
+msgstr ""
+"Ngừng liên kết tài khoản sẽ loại bỏ tài khoản và những thẻ liên kết với tài khoản này khỏi thiết bị này"
+
+msgid "Unlink the card will remove it from this device."
+msgstr "Ngừng liên kết với thẻ sẽ loại bỏ thẻ đó khỏi thiết bị này"
+
+msgid "Unlock App"
+msgstr "Mở khóa ứng dụng"
+
+msgid "Unsent transactions"
+msgstr "Những giao dịch chưa được gửi đi"
+
+msgid "Unused addresses"
+msgstr "Những địa chỉ chưa được sử dụng"
+
+msgid "Unverified Account"
+msgstr "Tài khoản chưa được xác minh"
+
+msgid "Updating Gift Card..."
+msgstr "Đang cập nhật thẻ quà tặng..."
+
+msgid "Updating Gift Cards..."
+msgstr "Đang cập nhật các thẻ quà tặng"
+
+msgid "Updating transaction history. Please stand by."
+msgstr "Đang cập nhật lịch sử giao dịch. Xin hãy chờ trong giây lát."
+
+msgid "Urgent"
+msgstr "Khẩn"
+
+msgid "Use Unconfirmed Funds"
+msgstr "Sử dụng khoản tiền chưa được xác thực"
+
+msgid "Use default url"
+msgstr "Sử dụng đường link mặc định"
+
+msgid "Validating recovery phrase..."
+msgstr "Đang xác thực mã khôi phục"
+
+msgid "Verify Account"
+msgstr "Đang xác minh tài khoản"
+
+msgid "Verify Your Phrase"
+msgstr "Xác minh mã khôi phục của bạn"
+
+msgid "Version"
+msgstr "Phiên bản"
+
+msgid "View"
+msgstr "Xem"
+
+msgid "View Confirmation Status"
+msgstr "Xem trạng thái duyệt"
+
+msgid "View Invoice"
+msgstr "Xem hóa đơn"
+
+msgid "View Privacy Policy"
+msgstr "Xem chính sách riêng tư"
+
+msgid "View Redemption Code"
+msgstr "Xem thông tin nhận mã"
+
+msgid "View Transaction on Insight"
+msgstr "Xem Giao dịch trên Insight"
+
+msgid "View Wallet Terms of Use"
+msgstr "Xem Điều khoản dịch vụ của Ví"
+
+msgid "View all addresses"
+msgstr "Xem toàn bộ các địa chỉ"
+
+msgid "View complete Terms of Use"
+msgstr "Xem đầy đủ Điều khoản dịch vụ"
+
+msgid "View on blockchain"
+msgstr "Xem trên blockchain"
+
+msgid "Visit ShapeShift.io"
+msgstr "Truy cập ShapeShift.io"
+
+msgid ""
+"WARNING: Key derivation is not working on this device/wallet. Actions cannot "
+"be performed on this wallet."
+msgstr ""
+"CẢNH BÁO: Dẫn xuất khóa hiện tại không hoạt động trên thiết bị/ví này. Không thể thực hiện "
+"thao tác trên ví này."
+
+msgid "Waiting"
+msgstr "Đang đợi"
+
+msgid "Waiting for authorized Ducaters to join"
+msgstr "Đang đợi người đồng chi trả có thẩm quyền tham gia"
+
+#| msgid "Wallet Addresses"
+msgid "Wallet Address"
+msgstr "Địa chỉ ví"
+
+msgid "Wallet Addresses"
+msgstr "Các địa chỉ ví"
+
+msgid "Wallet Information"
+msgstr "Thông tin ví"
+
+msgid "Wallet Inputs"
+msgstr "Dữ kiện đầu vào của ví"
+
+msgid "Wallet Invitation"
+msgstr "Lời mời của ví"
+
+msgid "Wallet Name"
+msgstr "Tên của ví"
+
+msgid "Wallet Needs Backup"
+msgstr "Ví cần được Sao lưu"
+
+msgid "Wallet Recovery Phrase is invalid"
+msgstr "Mã khôi phục của ví không hợp lệ"
+
+msgid "Wallet Settings"
+msgstr "Cài đặt Ví"
+
+msgid "Wallet already exists"
+msgstr "Ví đã tồn tại"
+
+msgid "Wallet complete"
+msgstr "Ví đã hoàn thiện"
+
+msgid "Wallet incomplete and broken"
+msgstr "Ví chưa hoàn thiện và bị hỏng"
+
+msgid "Wallet invitation"
+msgstr "Lời mời của ví"
+
+msgid "Wallet is full"
+msgstr "Ví đầy"
+
+msgid "Wallet is locked"
+msgstr "Ví bị khóa"
+
+msgid "Wallet is not complete"
+msgstr "Ví chưa hoàn thiện"
+
+msgid "Wallet key"
+msgstr "Chìa khóa ví"
+
+msgid "Wallet name"
+msgstr "Tên Ví"
+
+msgid "Wallet needs backup"
+msgstr "Ví cần được sao lưu"
+
+msgid "Wallet not found"
+msgstr "Không tìm thấy Ví"
+
+msgid "Wallet not registered"
+msgstr "Ví chưa được đăng kí"
+
+msgid ""
+"Wallet not registered at the wallet service. Recreate it from \"Create Wallet"
+"\" using \"Advanced Options\" to set your recovery phrase"
+msgstr ""
+"Ví hiện tại chưa được đăng kí trên hệ thống dịch vụ Ví. Xin hãy tái tạo lại Ví từ \"Tạo Ví"
+"\" sử dụng \"Cài đặt Nâng cao\" để đặt mã khôi phục"
+
+msgid "Wallet recovery phrase"
+msgstr "Mã khôi phục của Ví"
+
+msgid "Wallet recovery phrase not available"
+msgstr "Mã khôi phục hiện không có sẵn"
+
+msgid "Wallet service not found"
+msgstr "Không tìm thấy dịch vụ Ví"
+
+msgid "Wallets"
+msgstr "Các Ví"
+
+msgid "Warning!"
+msgstr "Cảnh báo!"
+
+msgid "Warning: this transaction has unconfirmed inputs"
+msgstr "Cảnh báo: giao dịch này có dữ kiện nhập chưa được duyệt"
+
+msgid "We appreciate your review"
+msgstr "Chúng tôi xin trân trọng đánh giá của bạn"
+
+msgid ""
+"We are always looking for translation contributions! You can make "
+"corrections or help to make this app available in your native language by "
+"joining our community on Crowdin."
+msgstr ""
+"Chúng tôi luôn tìm kiếm đóng góp cho việc biên dịch! Bạn có thể "
+"chỉnh sửa hay giúp ứng dụng này hỗ trợ ngôn ngữ của mình bằng cách "
+"tham gia cộng đồng của chúng tôi trên Crowdin."
+
+msgid ""
+"We're always listening for ways we can improve your experience. Feel free to "
+"leave us a review in the app store or request a new feature."
+msgstr ""
+"Chúng tôi luôn luôn lắng nghe những cách giúp chúng tôi cải thiện trải nghiệm của bạn. Hãy "
+"để lại đánh giá cho chúng tôi trên cửa hàng ứng dụng hay yêu cầu một tính năng mới."
+
+msgid ""
+"We're always listening for ways we can improve your experience. Feel free to "
+"leave us a review in the app store or request a new feature. Also, let us "
+"know if you experience any technical issues."
+msgstr ""
+"Chúng tôi luôn luôn lắng nghe những cách giúp chúng tôi cải thiện trải nghiệm của bạn. Hãy "
+"để lại đánh giá cho chúng tôi trên cửa hàng ứng dụng hay yêu cầu một tính năng mới. Không "
+"những thế, hãy cho chúng tôi biết nếu bạn gặp phải vấn đề kĩ thuật gì"
+
+msgid ""
+"We're always listening for ways we can improve your experience. Is there "
+"anything we could do to improve your experience?"
+msgstr ""
+"Chúng tôi luôn lắng nghe những cách có thể giúp cải thiện trả nghiệm của bạn. Chúng tôi có thể "
+"làm gì để cải thiện điều ấy không?"
+
+msgid "Website"
+msgstr "Website"
+
+#| msgid "What do you call this wallet?"
+msgid "What do you call this key?"
+msgstr "Bạn muốn gọi khóa này là gì?"
+
+msgid "What do you call this wallet?"
+msgstr "Bạn muốn gọi Ví này là gì?"
+
+msgid ""
+"When this wallet was created, it was called \"{{walletName}}\". You can "
+"change the name displayed on this device below."
+msgstr ""
+"Khi chiếc Ví này được tạo, nó được gọi là \"{{walletName}}\". Bạn có thể "
+"đổi tên được hiển thị trên thiết bị này phía dưới."
+
+msgid "Where would you like to receive email notifications about payments?"
+msgstr "Bạn muốn nhận thông báo email về thanh toán ở đâu?"
+
+msgid ""
+"Where would you like to receive your Amazon gift card purchase receipts?"
+msgstr ""
+"Bạn muốn nhận hóa đơn mua thẻ quà tặng Amazon ở đâu?"
+
+msgid "Why does this require authentication?"
+msgstr "Tại sao điều này lại yêu cầu xác minh?"
+
+msgid "Why is my transaction unconfirmed?"
+msgstr "Tại sao giao dịch của tôi chưa được duyệt?"
+
+msgid "Why?"
+msgstr "Tại sao?"
+
+msgid "Withdraw"
+msgstr "Rút"
+
+msgid ""
+"Without encryption, a thief or another application on this device may be "
+"able to access your funds."
+msgstr ""
+"Khi không có mã hóa, một tên cướp hay một ứng dụng khác trên thiết bị nãy có thể "
+"truy cập tiền trong Ví của bạn." 
+
+msgid "Would you like to hide this gift card discount?"
+msgstr "Bạn có muốn ẩn khuyến mãi cho thẻ quà tặng này?"
+
+msgid "Would you like to protect this wallet with a password?"
+msgstr "Bạn có muốn bảo vệ ví này bằng một mật khẩu?"
+
+msgid "Write Down Recovery Phrase"
+msgstr "Xin hãy viết xuống Mã Khôi phục"
+
+msgid "Write a Review"
+msgstr "Xin hãy viết một Đánh giá"
+
+msgid "Write down each word."
+msgstr "Xin hãy viết xuống từng kí tự một"
+
+msgid "Wrong number of recovery words:"
+msgstr "Sai số lượng kí tự của mã khôi phục"
+
+msgid "Wrong password"
+msgstr "Sai mật khẩu"
+
+msgid "YES"
+msgstr "VÂNG"
+
+msgid ""
+"You are trying to send more funds than you have available. Make sure you do "
+"not have funds locked by pending transaction proposals."
+msgstr ""
+"Bạn đang cố gắng gửi nhiều tiền hơn là bạn đang có. Xin hãy đảm bảo rằng bạn "
+"không có các khoản tiền bị khóa bởi các yêu cầu giao dịch đang chờ được duyệt."
+
+msgid ""
+"You are trying to send more funds than you have available. Make sure you do "
+"not have funds locked by pending transaction proposals. You can also try "
+"with a lower amount or send max."
+msgstr ""
+"Bạn đang cố gắng gửi nhiều tiền hơn là bạn đang có. Xin hãy đảm bảo rằng bạn "
+"không có các khoản tiền bị khóa bởi các yêu cầu giao dịch đang chờ được duyệt. Bạn cũng có thể "
+"thử lại với khoản tiền nhỏ hơn hay chọn gửi tối đa."
+
+#| msgid ""
+#| "When this wallet was created, it was called \"{{walletName}}\". You can "
+#| "change the name displayed on this device below."
+msgid "You can change the name displayed on this device below."
+msgstr "Bạn có thể thay đổi tên được hiển thị trên thiết bị này ở phía dưới"
+
+msgid ""
+"You can continue to view your archived cards here if you need to access them."
+msgstr ""
+"Bạn có thể tiếp tục xem các thẻ được lưu giữ tại đây nếu bạn muốn truy cập chúng."
+
+msgid ""
+"You can make contributions by signing up on our Crowdin community "
+"translation website. We’re looking forward to hearing from you!"
+msgstr ""
+"Bạn có thể đóng góp bằng cách đăng kí trên website cộng đồng dịch thuật của chúng tôi "
+"trên Crowdin. Chúng tôi rất mong được giao lưu với bạn!"
+
+msgid ""
+"You can scan bitcoin addresses, payment requests, paper wallets, and more."
+msgstr ""
+"Bạn có thể quét các địa chỉ bitcoin, yêu cầu thanh toán, các ví giấy, và nhiều hơn nữa."
+
+msgid ""
+"You can see the latest developments and contribute to this open source app "
+"by visiting our project on GitHub."
+msgstr ""
+"Bạn có thể xem các thông tin cập nhật mới nhất và đóng góp cho ứng dụng mở này "
+"bằng cách truy cập dự án của chúng tôi trên GitHub."
+
+msgid "You can still export it from \"Export Wallet\" option."
+msgstr "Bạn vẫn có thể xuất thông tin ví từ lựa chọn \"Xuất Ví\" ."
+
+msgid ""
+"You can use your Mercado Livre gift cards on your Mercado Pago account for "
+"everyday expenses like utilities and metro rides."
+msgstr ""
+"Bạn vẫn có thể sử dụng thẻ quà tặng Mercado Livre trên tài khoản Mercado Pago cho "
+"các chi tiêu hàng ngày giống như tiền điện nước hay vé tàu."
+
+msgid "You could sign the transaction later in your wallet details"
+msgstr "Bạn có thể kí giao dịch này sau tại thông tin chi tiết của Ví."
+
+msgid ""
+"You do not have enough confirmed funds to make this payment. Wait for your "
+"pending transactions to confirm or enable \"Use unconfirmed funds\" in "
+"Advanced Settings."
+msgstr ""
+"Bạn không có đủ nguồn tiền được xác thực cho giao dịch thanh toán này. Xin hãy đợi "
+"các giao dịch đang chờ được duyệt xong hay bật tính năng \"Sử dụng nguồn tiền chưa xác thực\" "trong" "mục Cài đặt Nâng cao."
+
+msgid "You reach the limit of twenty wallets from the same coin and network"
+msgstr "Bạn đã đạt giới hạn của hai mươi ví cho cùng một loại tiền và mạng lưới."
+
+#| msgid ""
+#| "You should not set a fee higher than {{maxFeeRecommended}} satoshis/byte."
+msgid "You should not set a fee higher than {{maxFeeRecommended}} {{feeUnit}}."
+msgstr ""
+"Bạn không nên đặt lượng phí cao hơn {{maxFeeRecommended}} {{feeUnit}}."
+
+msgid ""
+"Your Ducatus Card is ready. Add funds to your card to start using it at "
+"stores."
+msgstr ""
+"Thẻ Ducatus của bạn đã sẵn sàng. Xin hãy nạp tiền vào trong thẻ để bắt đầu sử dụng thẻ tại " 
+"các cửa hàng."
+
+msgid ""
+"Your extended private keys are all that is needed to access your funds. Be "
+"sure to protect your private keys and store them only on secure devices. "
+"Ducatus does not have access to your private keys, so you alone are "
+"responsible for your keys. If you share key access with external services, "
+"you take responsibility for the risk of theft or breach. Only advanced users "
+"should handle extended private keys directly."
+msgstr ""
+"Bạn chỉ cần các khóa cá nhân được gia hạn của bạn để truy cập nguồn tiền trong ví. Xin hãy " "chắc chắn bảo vệ các khóa cá nhân này và chỉ lưu trữ chúng trong các thiết bị an toàn. "
+"Ducatus không có quyền truy cập vào các khóa cá nhân của bạn, vì thế bản thân bạn là người "
+"chịu trách nhiệm cho các khóa của mình. Nếu bạn chia sẻ quyền truy cập khóa này với các thiết "
+"bị bên ngoài khác, bạn đang chịu trách nhiệm cho mối nguy hiểm như trộm cắp hay vi phạm. "
+"Chỉ những người dùng nâng cao nên quản lý các khóa này trực tiếp"
+
+msgid "Your fee is lower than recommended."
+msgstr "Phí của bạn thấp hơn mức được đề nghị."
+
+msgid "Your name"
+msgstr "Tên của bạn"
+
+msgid ""
+"Your recovery phrase is composed of 12 randomly selected words. Please "
+"carefully write down each word in the order they appear."
+msgstr ""
+"Mã khôi phục của bạn bao gồm 12 kí tự được chọn lựa ngẫu nhiên. Xin "
+"hãy cẩn thận viết xuống từng kí từ xuống theo thứ tự mà chúng xuất hiện."
+
+msgid "Your recovery phrase is verified"
+msgstr "Mã khôi phục của bạn đã được xác minh."
+
+msgid ""
+"Your wallet address is similar to a bank account number. You can add funds "
+"to your wallet by withdrawing funds you may have stored on an exchange to "
+"your wallet address. Or other {coinName} users can send you money by "
+"scanning your QR code."
+msgstr ""
+"Địa chỉ ví cũng tương tự như số tài khoản ngân hàng của bạn vậy. Bạn có thể gửi tiền vào Ví "
+"bằng cách rút tiền mà bạn có thể đã trữ trên một sàn giao dịch vào trong "
+"địa chỉ ví, Hay từ các người dùng {{coinName}} mà bạn có thể gửi tiền tới bằng cách "
+"quét mã QR của bạn."
+
+msgid ""
+"Your wallet key will be encrypted. The encrypt password cannot be recovered. "
+"Be sure to write it down."
+msgstr ""
+"Ví của bạn sẽ được mã hóa. Mật khẩu mã hóa không thể được phục hồi. "
+"Xin đảm bảo là bạn viết mật khẩu này xuống."
+
+msgid "Your wallet {{walletName}} is complete."
+msgstr "Ví {{walletName}} của bạn đã sẵn sàng."
+
+msgid "Your {walletType} wallet is backed up!"
+msgstr "Ví {{walletType}} của bạn đã được lưu lại!"
+
+msgid "[Balance Hidden]"
+msgstr "[Số dư bị ẩn]"
+
+msgid "[Scanning Funds]"
+msgstr "[Đang quét khoản tiền trong ví]"
+
+msgid "add your Ducatus Visa card(s)"
+msgstr "thêm vào thẻ Ducatus của bạn"
+
+msgid "me"
+msgstr "tôi"
+
+msgid "of total amount"
+msgstr "của tổng số"
+
+msgid "preparing..."
+msgstr "đang chuẩn bị..."
+
+msgid "{appName} BCH wallets use the CashAddr format by default"
+msgstr "Ví BCH của {{appName}} sử dụng format CashAddr như mặc định"
+
+msgid "{coinName} Address"
+msgstr "Địa chỉ {coinName}"
+
+msgid ""
+"{displayName} gift cards contain an additional activation fee of {fee} "
+"{currency}."
+msgstr ""
+"Thẻ quà tặng {displayName} chứa một lượng phí kích hoạt bao gồm {fee} "
+"{currency}."
+
+msgid ""
+"{displayName} requires you to present a printed gift card at redemption."
+msgstr ""
+"{displayName} yêu cầu bạn trình thẻ quà tặng được in ra tại thời điểm sử dụng."
+
+msgid ""
+"{{appName}} depends on Bitcore Wallet Service (BWS) for blockchain "
+"information, networking and Ducater synchronization. The default "
+"configuration points to https://bws.Ducatus.com (Ducatus public BWS "
+"instance)."
+msgstr ""
+"{{appName}} phụ thuộc vào Dịch vụ Ví Bitcore (BWS) cho thông tin "
+"blockchain, xây dựng mạng lưới và đồng bộ hóa Người đồng chi trả. "
+"tùy chọn mặc định sẽ dẫn bạn tới https://bws.Ducatus.com (ví dụ như BWS mặc định của "
+"Ducatus)."
+
+msgid ""
+"{{appName}} only supports Bitcoin Cash using new version numbers addresses."
+msgstr ""
+"{{appName}} ứng dụng chỉ hỗ trợ Bitcoin Cash sử dụng địa chỉ số phiên bản mới nhất."
+
+msgid "{{countInArray}} of your wallets already exist in {{nameCase}}"
+msgstr "{{countInArray}} của Ví đã tồn tại trong {{nameCase}}"
+
+msgid "{{fee}} {{coin}} will be deducted for bitcoin networking fees."
+msgstr "{{fee}} {{coin}} sẽ được trừ đi cho các phí mạng lưới của bitcoin."
+
+msgid "{{txpsSuccess}} proposal signed"
+msgstr "{{txpsSuccess}} yêu cầu đã được kí."
+
+msgid "{{txpsSuccess}} proposals signed"
+msgstr "{{txpsSuccess}} các yêu cầu đã được kí."
+
+msgid "{{updatingTxHistoryProgress}} transactions downloaded"
+msgstr "{{updatingTxHistoryProgress}} các giao dịch đã được tải về."
+
+msgid "{{wallet.m}}-of-{{wallet.n}}"
+msgstr "{{wallet.m}}-của-{{wallet.n}}"
+
+#~ msgid "BCH Wallet"
+#~ msgstr "Ví BCH"
+
+#~ msgid "BTC Wallet"
+#~ msgstr "Ví BCT"
+
+#~ msgid "Basic Wallet"
+#~ msgstr "Ví Cơ bản"
+
+#~ msgid ""
+#~ "By reusing a current key, your new wallet will share the recovery phrase, "
+#~ "so you don't need to backup it again."
+#~ msgstr ""
+#~ "Bằng cách tái sử dụng lại khóa hiện tại, ví mới của bạn sẽ cũng sẽ chia sẻ mã khôi phục, "
+#~ "vì thế mà bạn không cần phải lưu trữ chúng lại nữa."
+
+#~ msgid "Enter an email address"
+#~ msgstr "Hãy nhập một địa chỉ email"
+
+#~ msgid "Enter custom fee in sat/byte"
+#~ msgstr "Hãy nhập phí tự chọn dưới dạng sat/byte"
+
+#~ msgid ""
+#~ "If there is an issue with this payment, or a refund needs to be made, we "
+#~ "will contact you at this address."
+#~ msgstr ""
+#~ "Nếu bạn có vấn đề với khoản thanh toán này, hay bạn cần hoàn lại khoản chi, chúng tôi "
+#~ "sẽ liên hệ với bạn qua địa chỉ này."
+
+#~ msgid "Now it's time for you to create a wallet to store your funds into."
+#~ msgstr "Bây giờ đã đến lúc bạn tạo một ví để trữ khoản tiền này của bạn vào rồi."
+
+#~ msgid "Refund Email"
+#~ msgstr "Hoàn lại email"
+
+#~ msgid "The invoice is no longer receiving payments."
+#~ msgstr "Hóa đơn này hiện không còn nhận tahnh toán nữa"
+
+#~ msgid ""
+#~ "The key on the response is not trusted for transactions on the 'test' "
+#~ "network"
+#~ msgstr ""
+#~ "Khóa này ở phản hồi trên không được tin tưởng để giao dịch trên mạng lưới "
+#~ "'thử'"
+
+#~ msgid "Wallet Key Settings"
+#~ msgstr "Cài đặt khóa của Ví"
+
+#~ msgid "Wallets (Grouped by key)"
+#~ msgstr "Các ví (nhóm theo khóa)"
+
+#~ msgid "Wallets using this key"
+#~ msgstr "Các ví sử dụng khóa này"
+
+#~ msgid ""
+#~ "Inspired by physical wallets, the home view is now clean and more "
+#~ "spacious such that all the important details are accessible and "
+#~ "summarized in a glance."
+#~ msgstr ""
+#~ "Được truyền cảm hứng bởi những chiếc ví ngoài đời thật, trang chủ bây giờ đã gọn gàng và nhiều "
+#~ "không gian hơn để các chi tiết quan trọng có thể dễ dàng truy cập hơn và "
+#~ "tóm gọn lại chỉ bằng một lần thoáng nhìn."
+
+#~ msgid "New look and feel"
+#~ msgstr "Vẻ ngoài và trải nghiệm mới"
+
+#~ msgid "Swipe to Send/Receive"
+#~ msgstr "Gạt để Gửi/Nhận"
+
+#~ msgid "What changed?"
+#~ msgstr "Điều gì đã thay đổi?"
+
+#~ msgid ""
+#~ "You can now send or receive a payment directly from the home view by "
+#~ "sliding your wallet to the left or right."
+#~ msgstr ""
+#~ "Bây giờ bạn có thể gửi hay nhận một thanh toán trực tiếp từ màn hình chính bằng cách "
+#~ "gạt ví của bạn từ tái sang phải."
+
+#~ msgid "Duplicate"
+#~ msgstr "Nhân đôi"
+
+#~ msgid ""
+#~ "To recover BCH from your {{appName}} Wallet, you must duplicate your BTC "
+#~ "wallet. We strongly recommend you protect your wallets with a password to "
+#~ "keep your funds safe."
+#~ msgstr ""
+#~ "Để khôi phục BCH từ Ví {{appName}}, bạn trước hết phải cần nhân đôi ví BTC của mình. "
+#~ "Chúng tôi khuyên bạn nên bảo vệ các ví của mình với một mật khẩu để "
+#~ "giữ tiền của mình an toàn."
+
+#~| msgid "Disabled"
+#~ msgid "Enabled"
+#~ msgstr "Đã kích hoạt"
+
+#~| msgid "Export wallet"
+#~ msgid "Export Wallet Metadata"
+#~ msgstr "Xuất siêu dữ liệu của Ví"
+
+#~ msgid "Fingerprint"
+#~ msgstr "Vân tay"
+
+#~| msgid ""
+#~| "The private key of this wallet is not available. The export allows to "
+#~| "check the wallet balance, transaction history, and create spend "
+#~| "proposals from the export. However, does not allow to approve (sign) "
+#~| "proposals, so funds will not be accessible from the export."
+#~ msgid ""
+#~ "The private key of this wallet will not be included in the generated "
+#~ "file. The export allows to check the wallet balance, transaction history, "
+#~ "and create spend proposals. However, does not allow to approve (sign) "
+#~ "proposals, so funds will not be accessible from the export."
+#~ msgstr ""
+#~ "Khóa cá nhân của chiếc ví này sẽ không được bao gồm trong tệp được tạo "
+#~ "Việc xuất cho phép kiểm tra số dư của ví, lịch sử giao dịch, "
+#~ "và tạo đề xuất chi. Tuy nhiên, điều này không cho phép chấp thuận việc (kí) "
+#~ "các đề xuất ấy, vì thế bạn không thể truy cập khoản tiền từ việc xuất."
+
+#~ msgid "Color"
+#~ msgstr "Màu"
+
+#~ msgid "Could not create using the specified extended public key"
+#~ msgstr "Không thể sử dụng khóa công đã gia hạn này để tạo"
+
+#~ msgid "Could not import"
+#~ msgstr "Không thể nhập"
+
+#~ msgid "Derivation Strategy"
+#~ msgstr "Chiến lược dẫn xuất"
+
+#~ msgid "Export"
+#~ msgstr "Xuất"
+
+#~ msgid ""
+#~ "From the destination device, go to Add wallet > Import wallet and scan "
+#~ "this QR code"
+#~ msgstr ""
+#~ "Từ thiết bị đích này, hãy đi tới Thêm ví > Nhập thông tin ví và quét "
+#~ "mã QR này."
+
+#~ msgid ""
+#~ "Note: if this BCH wallet was duplicated from a BTC wallet, they share the "
+#~ "same recovery phrase."
+#~ msgstr ""
+#~ "nếu ví BCH này được nhân đôi lên từ một ví BTC, chúng sẽ chia sẻ với nhau "
+#~ "mã khôi phục."
+
+#~ msgid "QR Code"
+#~ msgstr "Mã QR"
+
+#~ msgid "The Wallet Service URL"
+#~ msgstr "Đường link Dịch vụ Ví"
+
+#~ msgid "The password of the recovery phrase (if set)"
+#~ msgstr "Mật khẩu của khóa khôi phục (nếu được đặt)"
+
+#~ msgid "This wallet is waiting for authorized users/devices to join."
+#~ msgstr "Chiếc ví này đang đợi người dùng/thiết bị được phép tham gia."
+
+#~ msgid "Wallet Color"
+#~ msgstr "Màu sắc Ví"
+
+#~ msgid "Wallet Incomplete"
+#~ msgstr "Ví chưa hoàn thiện"
+
+#~ msgid "Wallet Preferences"
+#~ msgstr "Tùy chỉnh Ví"
+
+#~ msgid ""
+#~ "Add gift cards to your {appName} wallet from brands like Amazon, Delta, "
+#~ "Google Play, and Uber."
+#~ msgstr ""
+#~ "Thêm thẻ quà tặng vào ví {appName} từ các hàng như Amazon, Delta, "
+#~ "Google Play, và Uber"
+
+#~ msgid "Shop Now"
+#~ msgstr "Mua sắm ngay"
+
+#~ msgid "Cancel invitation"
+#~ msgstr "Hủy lời mời"
+
+#~ msgid "Error deleting addressbook"
+#~ msgstr "Xảy ra lỗi khi xóa sổ địa chỉ"
+
+#~ msgid "Scanning funds"
+#~ msgstr "Đang quét tiền trong ví"
+
+#~ msgid "Your wallet is backed up!"
+#~ msgstr "Ví của bạn đã được sao lưu!"
+
+#~ msgid "{{wallet.credentials.m}}-of-{{wallet.credentials.n}}"
+#~ msgstr "{{wallet.credentials.m}}-của-{{wallet.credentials.n}}
+
+#~ msgid "Add amount"
+#~ msgstr "Thêm một khoản"
+
+#~ msgid "Change amount"
+#~ msgstr "Thay đổi khoản tiền"
+
+#~ msgid "Ducater joined"
+#~ msgstr "Người đồng chi trả đã tham gia"
+
+#~ msgid ""
+#~ "If enabled, Bitcoin Cash addresses will be shown using Ducatus style "
+#~ "address, and not the new cashaddr format."
+#~ msgstr ""
+#~ "Nếu được kích hoạt, địa chỉ BitCoin Cash sẽ được hiển thị sử dụng kiểu địa chỉ "
+#~ "Ducatus, và không phải theo định dạng cashaddr mới."
+
+#~ msgid "New Proposal"
+#~ msgstr "Đề xuất Mới"
+
+#~ msgid "Payment Received"
+#~ msgstr "Đã nhận Khoản thanh toán"
+
+#~ msgid "Proposal Accepted"
+#~ msgstr "Đề xuất được Chấp nhận"
+
+#~ msgid "Proposal Deleted"
+#~ msgstr "Đề xuất bị Hủy"
+
+#~ msgid "Proposal Rejected"
+#~ msgstr "Đề xuất bị Từ chối"
+
+#~ msgid "Send logs by email"
+#~ msgstr "Gửi nhật kí qua email"
+
+#~ msgid "Suggested by Merchant"
+#~ msgstr "Được gợi ý bởi Thương gia"
+
+#~ msgid "Tap to retry"
+#~ msgstr "Nhấn để thử lại"
+
+#~ msgid "Use Bitcoin Cash Ducatus Style Addresses"
+#~ msgstr "Sử dụng Các địa chỉ theo Mẫu Bitcoin Cash Ducatus"
+
+#~ msgid "Wallet created"
+#~ msgstr "Ví đã được tạo"
+
+#~ msgid ""
+#~ "You are trying to send ({amount} {coin}) more than what your wallet "
+#~ "contains. Please enter a lower amount or send max."
+#~ msgstr ""
+#~ "Bạn đang cố gắng gửi ({amount} {coin}) nhiều hơn khoản chứa trong ví của mình "
+#~ "Xin hãy nhập lại một khoản ít hơn hay nhấn gửi tối đa."
+
+#~ msgid "Add Memo"
+#~ msgstr "Thêm nhắc nhở"
+
+#~ msgid "Almost done! Let's review."
+#~ msgstr "Sắp hoàn tất rồi! Hãy cùng đánh giá nào."
+
+#~ msgid "Are you sure you want to skip it?"
+#~ msgstr "Bạn có chắc là mình muốn bỏ qua không?"
+
+#~ msgid "Bitcoin is a currency."
+#~ msgstr "Bitcoin là một loại tiền tệ."
+
+#~ msgid ""
+#~ "Bitcoin is different - it cannot be safely held with a bank or web "
+#~ "service."
+#~ msgstr ""
+#~ "Bitcoin khác biệt - nó không thể được giữ an toàn bằng một ngân hàng hay một dịch vụ "
+#~ "mạng nào"
+
+#~ msgid "Bitcoin is secure, digital money."
+#~ msgstr "Bitcoin là một đồng tiền điện tử an toàn"
+
+#~ msgid "Cannot create wallet"
+#~ msgstr "Không thể tạo ví"
+
+#~ msgid "Create a new wallet to start using this app."
+#~ msgstr "Hãy tạo ví để bắt đầu sử dụng ứng dụng này."
+
+#~ msgid "Do it later"
+#~ msgstr "Thực hiện lại thao tác này sau"
+
+#~| msgid "Do it later"
+#~ msgid "Got it"
+#~ msgstr "Đã hiểu"
+
+#~ msgid ""
+#~ "If this device is replaced or this app is deleted, neither you nor Ducatus "
+#~ "can recover your funds without a backup."
+#~ msgstr ""
+#~ "Nếu thiết bị này bị thay thế hay ứng dụng này bị gỡ bỏ, ngay cả bạn lẫn Ducatus "
+#~ "đều không thể khôi phục lại khoản tiền của bạn mà không có sao lưu"
+
+#~ msgid ""
+#~ "If you were using the old desktop version you will need to import your "
+#~ "wallets manually."
+#~ msgstr ""
+#~ "Nếu bạn đã sử dụng phiên bản dành cho máy tính cũ hơn thì bạn cần nhập "
+#~ "thông tin ví một cách thủ công."
+
+#~ msgid "Just scan the code to pay."
+#~ msgstr "Chỉ cần quét đoạn mã để thanh toán."
+
+#~ msgid "Makes sense"
+#~ msgstr "Có lí"
+
+#~ msgid "New {appName} desktop platform"
+#~ msgstr "Nền tảng {appName} dành cho máy tính mới"
+
+#~ msgid "No backup, no bitcoin."
+#~ msgstr "Không sao lưu, không bitcoin"
+
+#~ msgid "Not even Ducatus can access it."
+#~ msgstr "Thậm chí Ducatus không thể truy cập chúng được"
+
+#~ msgid "On this screen you can see all your wallets, accounts, and assets."
+#~ msgstr "Trên màn hình này bạn sẽ thấy toàn bộ các ví, tài khoản, và tài sản của bạn."
+
+#~ msgid "Quick review!"
+#~ msgstr "Dành một ít thời gian để đánh giá chúng tôi nhé!"
+
+#~ msgid "Restore from backup"
+#~ msgstr "Khôi phục từ sao lưu"
+
+#~ msgid "Retry"
+#~ msgstr "Hãy thử lại"
+
+#~ msgid ""
+#~ "Since only you control your money, you’ll need to save your recovery "
+#~ "phrase in case this app is deleted."
+#~ msgstr ""
+#~ "Vì chỉ có bạn là người điều khiển tiền của mình, bạn sẽ cần phải lưu lại mã "
+#~ "khôi phục trong trường hợp ứng dụng này bị xóa."
+
+#~ msgid "Take control of your money, get started with bitcoin."
+#~ msgstr "Hãy tự nắm quyền với tiền của bạn, bắt đầu ngay với bitcoin."
+
+#~ msgid "The exchange rate changes with the market."
+#~ msgstr "Tỉ giá giao dịch thay đổi tùy thuộc vào thị trường."
+
+#~ msgid "This app stores your bitcoin with cutting-edge security."
+#~ msgstr "Ứng dụng này lưu trữ bitcoin của bạn với công nghệ bảo mật tiên tiến nhất."
+
+#~| msgid "Wallet Information"
+#~ msgid "Wallet Configuration"
+#~ msgstr "Tùy chỉnh Ví"
+
+#~ msgid "Watch Out!"
+#~ msgstr "Hãy Coi chừng!"
+
+#~ msgid "Yes, skip"
+#~ msgstr "Vâng, bỏ qua"
+
+#~ msgid "You are ready!"
+#~ msgstr "Bạn đã sẵn sàng!"
+
+#~ msgid "You can back up your wallet later from your wallet settings."
+#~ msgstr "Bạn costheer sao lưu lại ví sau từ cài đặt ví."
+
+#~ msgid "You can spend bitcoin at millions of websites and stores worldwide."
+#~ msgstr "Bạn có thể sử dụng bitcoin tại hàng triệu website và cửa hàng trên toàn tehes giới."
+
+#~ msgid ""
+#~ "You can trade it for other currencies like US Dollars, Euros, or Pounds."
+#~ msgstr ""
+#~ "Bạn có thể trao đổi bitcoin nhưu các loại tiền tệ khác nhưu Đô la Mỹ, Euro hay Bảng Anh."
+
+#~ msgid "You control your bitcoin."
+#~ msgstr "Bạn nắm quyền kiểm soát bitcoin của mình."
+
+#~ msgid ""
+#~ "Your wallet is never saved to cloud storage or standard device backups."
+#~ msgstr ""
+#~ "Ví của bạn sẽ không bao giờ được lưu trữ trên điện toán đám mây hay thiết bị sao lưu thông dụng khác."
+
+#~ msgid "(Trusted)"
+#~ msgstr "(Được tin tưởng)"
+
+#~ msgid "Anyone with your recovery phrase can access or spend your bitcoin."
+#~ msgstr "Bất cứ ai với mã khôi phục của bạn có thể truy cập hay sử dụng bitcoin của bạn."
+
+#~ msgid "Are you being watched?"
+#~ msgstr "Bạn có đang bị theo dõi không?"
+
+#~ msgid "Certified by"
+#~ msgstr "Được chứng nhận bởi"
+
+#~ msgid "Could Not Fetch Payment: Check if it is still valid"
+#~ msgstr "Không Thể Thu thập Thông tin thanh toán: Xin hãy kiểm tra lại nếu còn khả dụng hay không"
+
+#~ msgid "Create bitcoin wallet"
+#~ msgstr "Tạo ví bitcoin"
+
+#~ msgid "Enable in-app notification"
+#~ msgstr "Cho phép thông báo trong ứng dụng"
+
+#~ msgid "Enter wallet invitation"
+#~ msgstr "Xin hãy nhập lời mời cho ví"
+
+#~ msgid "Enter wallet name"
+#~ msgstr "Xin hãy nhập tên cho ví"
+
+#~ msgid "Enter your name"
+#~ msgstr "Xin hãy nhập tên của bạn"
+
+#~ msgid "I have written it down"
+#~ msgstr "Tôi đã viết xuống"
+
+#~ msgid ""
+#~ "If you take a screenshot, your recovery phrase may be viewed by other "
+#~ "apps. You can make a safe backup with physical paper and a pen."
+#~ msgstr ""
+#~ "Nếu bạn có thể chụp ảnh màn hình, mã khôi phục của bạn có thể được nhìn thấy bởi những "
+#~ "ứng dụng khác. Bạn có thể lưu lại một bản sao với giấy và viết."
+
+#~ msgid "Merchant fee too high. Payment rejected"
+#~ msgstr "Phí của người bán quá cao. Thanh toán bị từ chối"
+
+#~ msgid "New wallet"
+#~ msgstr "Ví mới"
+
+#~ msgid ""
+#~ "Now is a perfect time to assess your surroundings. Nearby windows? Hidden "
+#~ "cameras? Shoulder-spies?"
+#~ msgstr ""
+#~ "Bây giờ là thời điểm thích hợp để xem xét xung quanh. Bạn có ở gần cửa sổ nào không? Có "
+#~ "camera ẩn nào không? Ai đó đang nhìn qua vai bạn chẳng hạn?"
+
+#~ msgid "Pay To"
+#~ msgstr "Thanh toán tới"
+
+#~ msgid "Payment Protocol Invalid"
+#~ msgstr "Giao thức thanh toán không hợp lệ"
+
+#~ msgid "Please carefully write down this phrase."
+#~ msgstr "Xin hãy viết kĩ mã này xuống."
+
+#~ msgid "Proposals"
+#~ msgstr "Các đề xuất"
+
+#~ msgid "Screenshots are not secure"
+#~ msgstr "Ảnh chụp màn hình không mang tính an toàn"
+
+#~ msgid "Select a coin"
+#~ msgstr "Xin hãy chọn một loại tiền"
+
+#~ msgid "Self-signed Certificate"
+#~ msgstr "Chứng chỉ đã tự kí"
+
+#~ msgid "Uh oh..."
+#~ msgstr "Uh oh..."
+
+#~ msgid "WARNING: UNTRUSTED CERTIFICATE"
+#~ msgstr "CẢNH BÁO: CHỨNG CHỈ KHÔNG ĐÁNG TIN CẬY"
+
+#~ msgid "We will confirm on the next screen."
+#~ msgstr "Chúng tôi sẽ duyệt ở màn hình kế tiếp"
+
+#~ msgid ""
+#~ "{coinName} miner fees are high due to record demand for limited space on "
+#~ "the {coinName} network. Ducatus does not receive and does not control "
+#~ "{coinName} miner fees."
+#~ msgstr ""
+#~ "phí đào {coinName} đang cao vì nhu cầu kỉ lục cho dung lượng giới hạn của mạng lưới "
+#~ "{coinName}. Ducatus không thể nhận hay kiểm soát "
+#~ "phí đào {coinName}"
+
+#~ msgid "{coinName} miner fees unusually high"
+#~ msgstr "Phí đào cho {coinName} đang cao một cách bất thường"
+
+#~ msgid "1. Tap \"Add Payment Method\" and select \"Gift Card\""
+#~ msgstr "1. Nhấn vào \"Thêm Phương thức Thanh toán\" và chọn \"Thẻ Quà tặng\""
+
+#~ msgid "2. Enter Gift Code"
+#~ msgstr "2. Xin hãy nhập Mã Quà tặng vào"
+
+#~ msgid "Connecting to Glidera..."
+#~ msgstr "Đang kết nối tới Glidera..."
+
+#~ msgid ""
+#~ "Delta Gift Cards can be used toward airfare on any Delta marketed flight "
+#~ "through www.delta.com, at the airport, through reservations, or by phone "
+#~ "with Delta Vacations®. Delta Gift Cards do not have any expiration dates "
+#~ "or fees."
+#~ msgstr ""
+#~ "Thẻ Quà tặng của Delta có thể được dùng cho cước bay trên bất cứ chuyến bay của Delta nào "
+#~ "được bán qua www.delta.com, tại sân bay, thông qua giữ chỗ trước, hay qua điện thoại "
+#~ "với Delta Vacations®. Thẻ Quà tặng Delta không có ngày đáo hạn "
+#~ "hay phí đính kèm."
+
+#~ msgid ""
+#~ "Give friends and family the gift of tapping a button and getting a ride - "
+#~ "any time of day, any day of year."
+#~ msgstr ""
+#~ "Hãy trao cho bạn bè hay gia đình bạn món quà chỉ cần với một cú nhấn nút và tận hưởng một chuyến đi - "
+#~ "vào bất kì thời điểm nào trong ngày, vào bất cứ ngày nào trong năm."
+
+#~ msgid ""
+#~ "If enabled, the Recent Transactions card - a list of transactions "
+#~ "occuring across all wallets - will appear in the Home tab."
+#~ msgstr ""
+#~ "Nếu được kích hoạt, thẻ Giao dịch Gần đây nhất - một danh sách của tất cả các giao dịch "
+#~ "diễn ra trên khắp các ví - sẽ xuất hiện tại trang chủ."
+
+#~ msgid "Payment Proposals"
+#~ msgstr "Các yêu cầu Thanh toán"
+
+#~ msgid ""
+#~ "Payment accepted. It will be broadcasted by Glidera. In case there is a "
+#~ "problem, it can be deleted 6 hours after it was created."
+#~ msgstr ""
+#~ "Thanh toán đã được chấp thuận. Nó sẽ được phát đi bởi Glidera. Trong trường hợp có vấn đề "
+#~ "nào đó, nó có thể được xóa đi 6 tiếng sau khi nó đã được tạo."
+
+#~ msgid "Recent Transaction Card"
+#~ msgstr "Thẻ Giao dịch Gần đây"
+
+#~ msgid "Recent Transactions"
+#~ msgstr "Các giao dịch Gần đây"
+
+#~ msgid "Redeem by going to the payment section in the Uber app."
+#~ msgstr "Sử dụng bằng cách truy cập mục thanh toán trong ứng dùng Uber."
+
+#~ msgid ""
+#~ "The Gift of Go.™ With over 300 destinations and limitless adventures to "
+#~ "choose from, the Delta Gift Card opens up a world of possibilities."
+#~ msgstr ""
+#~ "The Gift of Go. ™ Với hơn 300 điểm đến và vô tận các cuộc phiêu lưu để bạn chọn lựa, "
+#~ "Thẻ Quà tặng Delta giúp bạn khám phá vô số khả năng."
+
+#~ msgid "Transaction not found"
+#~ msgstr "Giao dịch không tìm thấy"
+
+#~ msgid ""
+#~ "Uber gift cards also apply to UberEATS orders. Enjoy food from hundreds "
+#~ "of restaurants, delivered at Uber speed."
+#~ msgstr ""
+#~ "Thẻ quà tặng Uber cũng có thể được áp dụng cho các đơn đặt hàng UberEATS. Hãy thưởng thức "
+#~ "những món ăn đến từ hàng trăm nhà hàng, giao với tốc độ Uber siêu việt."
+
+#~ msgid "Updating pending proposals... Please stand by"
+#~ msgstr "Đang cập nhật các yêu cầu chờ xử lí... Xin hãy chờ trong giây lát"
+
+#~ msgid "Updating... Please stand by"
+#~ msgstr "Đang cập nhật... Xin hãy chờ trong giây lát"
+
+#~ msgid "Wallet Service URL"
+#~ msgstr "Đường link Dịch vụ Ví"

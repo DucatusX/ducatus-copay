@@ -76,7 +76,7 @@
             {{wallet?.cachedStatus.spendableBalanceStr}}
           </strong>
           &nbsp;
-          <span>
+          <span *ngIf="wallet?.cachedStatus.spendableBalanceAlternative">
             ({{wallet?.cachedStatus.spendableBalanceAlternative}} {{wallet?.cachedStatus.alternativeIsoCode}})
           </span>
           &rarr;

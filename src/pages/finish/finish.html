@@ -1,8 +1,8 @@
 <div class="container">
-  <div class="content" [ngClass]="{'success': cssClass == 'success', 'warning': cssClass == 'warning', 'danger': cssClass == 'danger', 'primary': cssClass == 'primary'}">
+  <div class="content" [ngClass]="{'warning': cssClass == 'warning', 'danger': cssClass == 'danger', 'success': (cssClass == 'primary') || cssClass == 'success'}">
     <div class="body">
-      <div class="body-img success-img" *ngIf="cssClass == 'primary'"></div>
-      <img class="body-img" *ngIf="cssClass == 'success'" src="assets/img/onboarding-success.svg">
+      <!--<div class="body-img success-img" *ngIf="cssClass == 'primary'"></div>-->
+      <img class="body-img" *ngIf="cssClass == 'success' || cssClass == 'primary'" src="assets/img/onboarding-success.svg">
       <img class="body-img" *ngIf="(cssClass != 'success' && cssClass != 'primary')" src="assets/img/warning.svg">
       <div class="body-text">
         {{finishText}}
