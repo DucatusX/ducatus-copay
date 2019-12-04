@@ -25,7 +25,7 @@
             </div>
             <img class="sending-img" src="assets/img/icon-tx-sent-outline.svg">
           </div>
-          <div class="alternative">{{tx.amount | satToFiat: tx.coin}}</div>
+          <div class="alternative" *ngIf="(tx.coin | uppercase) !== 'DUC'">{{tx.amount | satToFiat: tx.coin}}</div>
         </div>
       </div>
     </ion-item>

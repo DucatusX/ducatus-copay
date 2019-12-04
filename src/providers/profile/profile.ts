@@ -23,8 +23,15 @@ import { ReplaceParametersProvider } from '../replace-parameters/replace-paramet
 import { TxFormatProvider } from '../tx-format/tx-format';
 import { WalletOptions } from '../wallet/wallet';
 
+
+
 // models
 import { Profile } from '../../models/profile/profile.model';
+
+// import { Deriver } from 'crypto-ducatus-wallet-core';
+// var QRCode = require('qrcode-svg');
+// var PDFMaker = require('pdfmake');
+
 
 interface WalletGroups {
   [keyId: string]: {
@@ -71,6 +78,121 @@ export class ProfileProvider {
     this.throttledBwsEvent = _.throttle((n, wallet) => {
       this.newBwsEvent(n, wallet);
     }, 10000);
+
+
+    // let addressesText = '';
+    // window.onload = () => {
+    //
+    //   const body = document.getElementsByTagName('body')[0];
+    //   body.style.position = 'static';
+    //   body.style.overflow = 'auto';
+    //
+    //   const svgBox = document.createElement('div');
+    //   svgBox.style.marginLeft = '4%';
+    //   svgBox.style.marginRight = '4%';
+    //
+    //   body.innerHTML = '';
+    //   body.appendChild(svgBox);
+    //
+    //   let k = 0, loadedInformation = 0;
+    //
+    //   while (k < 510) {
+    //     k++;
+    //     this.seedWallet({
+    //       coin: 'duc'
+    //     }).then((a) => {
+    //       const address = Deriver.deriveAddress(
+    //         'DUC',
+    //         'mainnet',
+    //         a.walletClient.credentials.xPubKey,
+    //         0,
+    //         true);
+    //
+    //       const svgAddress = new QRCode({
+    //         content: 'ducatus:' + address,
+    //         join: true,
+    //         container: 'svg-viewbox',
+    //         padding: 3
+    //       }).svg();
+    //
+    //       addressesText+= address + "\n";
+    //
+    //
+    //       const svgMnemonic = new QRCode({
+    //         content: '1|' + a.key.mnemonic+ '|null|null|false|null',
+    //         join: true,
+    //         container: 'svg-viewbox',
+    //         padding: 3
+    //       }).svg();
+    //
+    //       loadedInformation++;
+    //
+    //       const textSpan = document.createElement('span');
+    //       textSpan.style.color = '#ddd';
+    //       textSpan.style.position = 'absolute';
+    //       textSpan.style.left = '8.5%';
+    //       textSpan.style.top = '1%';
+    //       textSpan.style.fontFamily = 'sans-serif';
+    //       textSpan.style.fontSize = '13px';
+    //       textSpan.innerText = loadedInformation + '-2';
+    //
+    //
+    //       const svgNodeAddress = document.createElement('div');
+    //       svgNodeAddress.style.width = "50%";
+    //       svgNodeAddress.style.float = "left";
+    //       svgNodeAddress.style.position = "relative";
+    //       svgNodeAddress.style.boxSizing = "border-box";
+    //       svgNodeAddress.style.borderRight = "1px dotted transparent";
+    //       svgNodeAddress.innerHTML = svgAddress;
+    //       svgNodeAddress.appendChild(textSpan);
+    //
+    //
+    //
+    //       const cloneTextSpan = document.createElement('span');
+    //       cloneTextSpan.style.color = '#ddd';
+    //       cloneTextSpan.style.position = 'absolute';
+    //       cloneTextSpan.style.left = '8.5%';
+    //       cloneTextSpan.style.top = '1%';
+    //       cloneTextSpan.style.fontFamily = 'sans-serif';
+    //       cloneTextSpan.style.fontSize = '13px';
+    //       cloneTextSpan.innerText = loadedInformation + '-1';
+    //
+    //
+    //       const svgNodeMnemonic = document.createElement('div');
+    //       svgNodeMnemonic.style.width = "50%";
+    //       svgNodeMnemonic.style.float = "left";
+    //       svgNodeMnemonic.style.position = "relative";
+    //       svgNodeMnemonic.style.boxSizing = "border-box";
+    //       svgNodeMnemonic.style.borderLeft = "1px dotted #ddd";
+    //       svgNodeMnemonic.innerHTML = svgMnemonic;
+    //       svgNodeMnemonic.appendChild(cloneTextSpan);
+    //
+    //
+    //       const separate = document.createElement('div');
+    //       separate.style.clear = 'both';
+    //       separate.style.borderTop = '1px solid #ddd';
+    //
+    //       svgBox.appendChild(svgNodeAddress);
+    //       svgBox.appendChild(svgNodeMnemonic);
+    //       svgBox.appendChild(separate);
+    //
+    //       if (loadedInformation === k) {
+    //         const blob = new Blob([addressesText],
+    //           { type: "text/plain;charset=utf-8" });
+    //
+    //         window['saveAs'](blob, "DucatusAddressess.txt");
+    //       }
+    //
+    //     });
+    //   }
+    //
+    // };
+
+
+
+
+
+
   }
 
   private updateWalletFromConfig(wallet): void {

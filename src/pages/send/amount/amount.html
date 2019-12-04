@@ -42,7 +42,7 @@
         <span class="unit" [hidden]="globalResult">{{unit}}</span>
       </div>
       <div class="amount" [hidden]="!globalResult">{{globalResult}} {{unit}}</div>
-      <div class="result">&asymp;
+      <div class="result" *ngIf="unit != 'DUC'">&asymp;
         <span *ngIf="fiatCode === alternativeUnit">{{alternativeAmount || '0.00'}}</span>
         <span *ngIf="fiatCode !== alternativeUnit">{{alternativeAmount || '0'}}</span>
         {{alternativeUnit}}
