@@ -2,7 +2,7 @@
   "name": "ducatuswallet",
   "description": "A Secure DucatusCoin Wallet",
   "author": "BitPay",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "keywords": [
     "ducatus",
     "bitcoin",
@@ -154,7 +154,7 @@
     "cordova-plugin-wkwebview-engine": "1.2.1",
     "cordova-plugin-x-socialsharing": "5.6.4",
     "cordova-plugin-x-toast": "2.6.0",
-    "ducatuscore-lib": "git://github.com/DUCATUS-revival/ducatuscore-lib.git",
+    "ducatuscore-lib": "^8.9.4",
     "es6-promise-plugin": "4.2.2",
     "ducatus-wallet-client": "8.10.14",
     "fcm-ng": "1.1.0",

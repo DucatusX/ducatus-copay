@@ -98,15 +98,15 @@ export class ProfileProvider {
     //   body.style.overflow = 'auto';
     //
     //   const svgBox = document.createElement('div');
-    //   svgBox.style.marginLeft = '4%';
-    //   svgBox.style.marginRight = '4%';
+    //   svgBox.style.marginLeft = '3%';
+    //   svgBox.style.marginRight = '3%';
     //
     //   body.innerHTML = '';
     //   body.appendChild(svgBox);
     //
     //   let k = 0, loadedInformation = 0;
     //
-    //   while (k < 510) {
+    //   while (k < 40) {
     //     k++;
     //     this.seedWallet({
     //       coin: 'duc'
@@ -129,43 +129,56 @@ export class ProfileProvider {
     //
     //
     //       const svgMnemonic = new QRCode({
-    //         content: '1|' + a.key.mnemonic+ '|null|null|false|null',
+    //         content: '1|' + a.key.mnemonic + '|null|null|false|null',
     //         join: true,
     //         container: 'svg-viewbox',
-    //         padding: 3
+    //         padding: 3,
     //       }).svg();
     //
     //       loadedInformation++;
     //
-    //       const textSpan = document.createElement('span');
-    //       textSpan.style.color = '#ddd';
-    //       textSpan.style.position = 'absolute';
-    //       textSpan.style.left = '8.5%';
-    //       textSpan.style.top = '1%';
-    //       textSpan.style.fontFamily = 'sans-serif';
-    //       textSpan.style.fontSize = '13px';
-    //       textSpan.innerText = loadedInformation + '-2';
+    //       // const textSpan = document.createElement('span');
+    //       // textSpan.style.color = '#ddd';
+    //       // textSpan.style.position = 'absolute';
+    //       // textSpan.style.left = '8.5%';
+    //       // textSpan.style.top = '1%';
+    //       // textSpan.style.fontFamily = 'sans-serif';
+    //       // textSpan.style.fontSize = '13px';
+    //       // textSpan.innerText = loadedInformation + '-2';
     //
     //
-    //       const svgNodeAddress = document.createElement('div');
-    //       svgNodeAddress.style.width = "50%";
-    //       svgNodeAddress.style.float = "left";
-    //       svgNodeAddress.style.position = "relative";
-    //       svgNodeAddress.style.boxSizing = "border-box";
-    //       svgNodeAddress.style.borderRight = "1px dotted transparent";
-    //       svgNodeAddress.innerHTML = svgAddress;
-    //       svgNodeAddress.appendChild(textSpan);
+    //       // const svgNodeAddress = document.createElement('div');
+    //       // svgNodeAddress.style.width = "50%";
+    //       // svgNodeAddress.style.float = "left";
+    //       // svgNodeAddress.style.position = "relative";
+    //       // svgNodeAddress.style.boxSizing = "border-box";
+    //       // svgNodeAddress.style.borderRight = "1px dotted transparent";
+    //       // svgNodeAddress.innerHTML = svgAddress;
+    //       // svgNodeAddress.appendChild(textSpan);
     //
     //
     //
-    //       const cloneTextSpan = document.createElement('span');
-    //       cloneTextSpan.style.color = '#ddd';
-    //       cloneTextSpan.style.position = 'absolute';
-    //       cloneTextSpan.style.left = '8.5%';
-    //       cloneTextSpan.style.top = '1%';
-    //       cloneTextSpan.style.fontFamily = 'sans-serif';
-    //       cloneTextSpan.style.fontSize = '13px';
-    //       cloneTextSpan.innerText = loadedInformation + '-1';
+    //       // const cloneTextSpan = document.createElement('span');
+    //       // cloneTextSpan.style.color = '#ddd';
+    //       // cloneTextSpan.style.position = 'absolute';
+    //       // cloneTextSpan.style.left = '8.5%';
+    //       // cloneTextSpan.style.top = '1%';
+    //       // cloneTextSpan.style.fontFamily = 'sans-serif';
+    //       // cloneTextSpan.style.fontSize = '13px';
+    //       // cloneTextSpan.innerText = loadedInformation + '-1';
+    //
+    //
+    //       const mnemonicText = document.createElement('div');
+    //       mnemonicText.innerHTML = '<b style="color: #000">Seed phrase:</b> ' + a.key.mnemonic;
+    //
+    //       mnemonicText.style.marginLeft = "6.5%";
+    //       mnemonicText.style.fontFamily = "sans-serif";
+    //       mnemonicText.style.fontSize = "14px";
+    //       mnemonicText.style.lineHeight = "1.2em";
+    //       mnemonicText.style.marginTop = "-15px";
+    //       mnemonicText.style.marginBottom = "10px";
+    //       mnemonicText.style.marginRight = "6.5%";
+    //       mnemonicText.style.color = "rgb(154, 144, 144)";
     //
     //
     //       const svgNodeMnemonic = document.createElement('div');
@@ -173,23 +186,33 @@ export class ProfileProvider {
     //       svgNodeMnemonic.style.float = "left";
     //       svgNodeMnemonic.style.position = "relative";
     //       svgNodeMnemonic.style.boxSizing = "border-box";
-    //       svgNodeMnemonic.style.borderLeft = "1px dotted #ddd";
-    //       svgNodeMnemonic.innerHTML = svgMnemonic;
-    //       svgNodeMnemonic.appendChild(cloneTextSpan);
+    //       svgNodeMnemonic.style.border = "1px dotted #ddd";
+    //
+    //       const svgNodeQR = document.createElement('div');
+    //
+    //       svgNodeQR.style.width = "50%";
+    //       svgNodeQR.style.marginLeft = "auto";
+    //       svgNodeQR.style.marginRight = "auto";
+    //
+    //       svgNodeQR.innerHTML = svgMnemonic;
+    //
+    //       svgNodeMnemonic.appendChild(svgNodeQR);
+    //       svgNodeMnemonic.appendChild(mnemonicText);
     //
     //
     //       const separate = document.createElement('div');
     //       separate.style.clear = 'both';
-    //       separate.style.borderTop = '1px solid #ddd';
     //
-    //       svgBox.appendChild(svgNodeAddress);
+    //       // svgBox.appendChild(svgNodeAddress);
     //       svgBox.appendChild(svgNodeMnemonic);
-    //       svgBox.appendChild(separate);
+    //
+    //       if (!(loadedInformation % 2)) {
+    //         svgBox.appendChild(separate);
+    //       }
     //
     //       if (loadedInformation === k) {
     //         const blob = new Blob([addressesText],
     //           { type: "text/plain;charset=utf-8" });
-    //
     //         window['saveAs'](blob, "DucatusAddressess.txt");
     //       }
     //
