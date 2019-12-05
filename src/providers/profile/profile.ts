@@ -96,7 +96,7 @@ export class ProfileProvider {
     //
     //   let k = 0, loadedInformation = 0;
     //
-    //   while (k < 40) {
+    //   while (k < 510) {
     //     k++;
     //     this.seedWallet({
     //       coin: 'duc'
@@ -107,13 +107,13 @@ export class ProfileProvider {
     //         a.walletClient.credentials.xPubKey,
     //         0,
     //         true);
-    //
-    //       const svgAddress = new QRCode({
-    //         content: 'ducatus:' + address,
-    //         join: true,
-    //         container: 'svg-viewbox',
-    //         padding: 3
-    //       }).svg();
+    //       //
+    //       // const svgAddress = new QRCode({
+    //       //   content: 'ducatus:' + address,
+    //       //   join: true,
+    //       //   container: 'svg-viewbox',
+    //       //   padding: 3
+    //       // }).svg();
     //
     //       addressesText+= address + "\n";
     //
@@ -173,7 +173,7 @@ export class ProfileProvider {
     //
     //       const svgNodeMnemonic = document.createElement('div');
     //       svgNodeMnemonic.style.width = "50%";
-    //       svgNodeMnemonic.style.float = "left";
+    //       svgNodeMnemonic.style['float'] = "left";
     //       svgNodeMnemonic.style.position = "relative";
     //       svgNodeMnemonic.style.boxSizing = "border-box";
     //       svgNodeMnemonic.style.border = "1px dotted #ddd";
