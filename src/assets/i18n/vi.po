@@ -15,9 +15,6 @@ msgstr ""
 msgid "(possible double spend)"
 msgstr "(có thể chi tiêu kép)"
 
-msgid "Delete"
-msgstr "Xóa"
-
 msgid ""
 "* A payment proposal can be deleted if 1) you are the creator, and no other "
 "Ducater has signed, or 2) 10 minutes have passed since the proposal was "
@@ -472,7 +469,7 @@ msgid ""
 "advised that you verify your recovery phrase so that your funds can be "
 "recovered in case your phone was lost or stolen."
 msgstr ""
-"Chúc mừng! Có vẻ như bạn vừa nhận được tiền. Bạn "nên xác thực lại đoạn mã không phục tài khoản để có thể khôi phục được tiền của bạn trong trường hợp điện thoại của bạn bị mất hoặc mất cắp."
+"Chúc mừng! Có vẻ như bạn vừa nhận được tiền. Bạn nên xác thực lại đoạn mã không phục tài khoản để có thể khôi phục được tiền của bạn trong trường hợp điện thoại của bạn bị mất hoặc mất cắp."
 
 msgid "Connect my Ducatus Card"
 msgstr "Kết nổi thẻ Ducatus của tôi"
@@ -648,9 +645,6 @@ msgstr "Tùy chỉnh"
 msgid "Date"
 msgstr "Ngày"
 
-msgid "Delete"
-msgstr "Xóa"
-
 msgid "Delete Payment Proposal"
 msgstr "Xóa Yêu cầu Thanh toán"
 
@@ -692,6 +686,8 @@ msgstr "Tắt thông báo"
 
 msgid "Disabled"
 msgstr "Đã tắt"
+
+
 
 msgid "Discount"
 msgstr "Chiết khấu"
@@ -2812,6 +2808,7 @@ msgstr "Sai mật khẩu"
 msgid "YES"
 msgstr "VÂNG"
 
+
 msgid ""
 "You are trying to send more funds than you have available. Make sure you do "
 "not have funds locked by pending transaction proposals."
@@ -2877,10 +2874,11 @@ msgid ""
 "Advanced Settings."
 msgstr ""
 "Bạn không có đủ nguồn tiền được xác thực cho giao dịch thanh toán này. Xin hãy đợi "
-"các giao dịch đang chờ được duyệt xong hay bật tính năng \"Sử dụng nguồn tiền chưa xác thực\" "trong" "mục Cài đặt Nâng cao."
+"các giao dịch đang chờ được duyệt xong hay bật tính năng \"Sử dụng nguồn tiền chưa xác thực\" trong mục Cài đặt Nâng cao."
 
 msgid "You reach the limit of twenty wallets from the same coin and network"
 msgstr "Bạn đã đạt giới hạn của hai mươi ví cho cùng một loại tiền và mạng lưới."
+
 
 #| msgid ""
 #| "You should not set a fee higher than {{maxFeeRecommended}} satoshis/byte."
@@ -3018,6 +3016,10 @@ msgstr "{{updatingTxHistoryProgress}} các giao dịch đã được tải về.
 
 msgid "{{wallet.m}}-of-{{wallet.n}}"
 msgstr "{{wallet.m}}-của-{{wallet.n}}"
+
+
+msgid "Delete"
+msgstr "Xóa"
 
 #~ msgid "BCH Wallet"
 #~ msgstr "Ví BCH"
