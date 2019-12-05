@@ -10,7 +10,7 @@ import {
 } from 'ionic-angular';
 
 // Pages
-import { CoinSelectorPage } from '../../includes/coin-selector/coin-selector';
+// import { CoinSelectorPage } from '../../includes/coin-selector/coin-selector';
 import { ScanPage } from '../../scan/scan';
 import { TabsPage } from '../../tabs/tabs';
 
