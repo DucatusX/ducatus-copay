@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1033462178944",
+    "firebase_url": "https://ducatus-wallet-dfc0f.firebaseio.com",
+    "project_id": "ducatus-wallet-dfc0f",
+    "storage_bucket": "ducatus-wallet-dfc0f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1033462178944:android:b554b23bf2aa653e247265",
+        "android_client_info": {
+          "package_name": "io.ducatus.walnew"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1033462178944-iu6fsjkicfe14rn4p0hdl42ucv4i7nfu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiNSahTYhAfWniAsp7212Xg66cyE7KL-U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1033462178944-iu6fsjkicfe14rn4p0hdl42ucv4i7nfu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
