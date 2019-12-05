@@ -240,7 +240,7 @@ export class ImportWalletPage {
     let iteractions = 0;
 
     const checkFinishProgress = (walletId, type) => {
-      if (type === 'ScanFinished') {
+      if (type === 'ScanFinished' && walletId) {
         iteractions++;
         if (iteractions === wallets.length) {
           this.onGoingProcessProvider.clear();
