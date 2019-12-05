@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import {
   App,
   Events,
-  ModalController,
+  // ModalController,
   NavController,
   NavParams
 } from 'ionic-angular';
@@ -73,7 +73,7 @@ export class ImportWalletPage {
     private pushNotificationsProvider: PushNotificationsProvider,
     private actionSheetProvider: ActionSheetProvider,
     private derivationPathHelperProvider: DerivationPathHelperProvider,
-    private modalCtrl: ModalController,
+    // private modalCtrl: ModalController,
     private bwcErrorProvider: BwcErrorProvider
   ) {
     this.okText = this.translate.instant('Ok');
