@@ -237,22 +237,44 @@ export class ImportWalletPage {
   }
 
   private async finish(wallets: any[]) {
+    let iteractions = 0;
+
+    const checkFinishProgress = (walletId, type) => {
+      if (type === 'ScanFinished') {
+        iteractions++;
+        if (iteractions === wallets.length) {
+          this.onGoingProcessProvider.clear();
+          this.events.unsubscribe('bwsEvent', checkFinishProgress);
+          this.app
+            .getRootNavs()[0]
+            .setRoot(TabsPage)
+            .then(() => {
+              this.events.publish('Local/WalletListChange');
+            });
+          setTimeout(() => {
+            this.profileProvider.setLastKnownBalance();
+          }, 100);
+        }
+      }
+    };
+
+
+    this.events.subscribe('bwsEvent', checkFinishProgress);
+
+    if (wallets.length) {
+      this.onGoingProcessProvider.set('recreating');
+    }
+
     wallets.forEach(wallet => {
+      this.walletProvider.startScan(wallet).then(() => {});
       this.walletProvider.updateRemotePreferences(wallet);
       this.pushNotificationsProvider.updateSubscription(wallet);
       this.profileProvider.setWalletBackup(wallet.credentials.walletId);
     });
+
     if (wallets && wallets[0]) {
       this.profileProvider.setBackupGroupFlag(wallets[0].credentials.keyId);
     }
-
-    // using setRoot(TabsPage) as workaround when coming from scanner
-    this.app
-      .getRootNavs()[0]
-      .setRoot(TabsPage)
-      .then(() => {
-        this.events.publish('Local/WalletListChange');
-      });
   }
 
   private importExtendedPrivateKey(xPrivKey, opts) {
@@ -296,42 +318,44 @@ export class ImportWalletPage {
 
   private processError(err?) {
     if (err == 'WALLET_DOES_NOT_EXIST') {
-      const noWalletWarningInfoSheet = this.actionSheetProvider.createInfoSheet(
-        'import-no-wallet-warning'
-      );
-      noWalletWarningInfoSheet.present();
-      noWalletWarningInfoSheet.onDidDismiss(option => {
-        if (option || typeof option === 'undefined') {
-          // Go back
-          this.logger.debug('Go back clicked');
-        } else {
-          // Continue anyway
-          this.logger.debug('Continue anyway clicked');
+      // const noWalletWarningInfoSheet = this.actionSheetProvider.createInfoSheet(
+      //   'import-no-wallet-warning'
+      // );
+      this.setOptsAndCreate(!this.importForm.value.derivationPathEnabled ? 'duc' : this.importForm.value.coin);
 
-          if (this.importForm.value.derivationPathEnabled) {
-            this.setOptsAndCreate(this.importForm.value.coin);
-          } else {
-            const modal = this.modalCtrl.create(
-              CoinSelectorPage,
-              {
-                description: this.translate.instant(
-                  'Please select the coin of the wallet to import:'
-                )
-              },
-              {
-                enableBackdropDismiss: false,
-                cssClass: 'fullscreen-modal'
-              }
-            );
-            modal.present({ animate: false });
-            modal.onDidDismiss(data => {
-              if (data.selectedCoin) {
-                this.setOptsAndCreate(data.selectedCoin);
-              }
-            });
-          }
-        }
-      });
+      // noWalletWarningInfoSheet.present();
+      // noWalletWarningInfoSheet.onDidDismiss(option => {
+      //   if (option || typeof option === 'undefined') {
+      //     // Go back
+      //     this.logger.debug('Go back clicked');
+      //   } else {
+      //     // Continue anyway
+      //     this.logger.debug('Continue anyway clicked');
+      //
+      //     if (this.importForm.value.derivationPathEnabled) {
+      //       this.setOptsAndCreate(this.importForm.value.coin);
+      //     } else {
+      //       const modal = this.modalCtrl.create(
+      //         CoinSelectorPage,
+      //         {
+      //           description: this.translate.instant(
+      //             'Please select the coin of the wallet to import:'
+      //           )
+      //         },
+      //         {
+      //           enableBackdropDismiss: false,
+      //           cssClass: 'fullscreen-modal'
+      //         }
+      //       );
+      //       modal.present({ animate: false });
+      //       modal.onDidDismiss(data => {
+      //         if (data.selectedCoin) {
+      //           this.setOptsAndCreate(data.selectedCoin);
+      //         }
+      //       });
+      //     }
+      //   }
+      // });
     } else {
       const title = this.translate.instant('Error');
       this.showErrorInfoSheet(title, err);

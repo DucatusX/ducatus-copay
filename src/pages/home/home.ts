@@ -246,6 +246,9 @@ export class HomePage {
       this.events.unsubscribe('Local/WalletFocus', this.walletFocusHandler);
     });
     this.setWallets(true);
+    setTimeout(() => {
+      this.debounceSetWallets();
+    }, 200);
   }
 
   ngOnDestroy() {
