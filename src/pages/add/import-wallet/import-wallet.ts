@@ -237,40 +237,47 @@ export class ImportWalletPage {
   }
 
   private async finish(wallets: any[]) {
-    let iteractions = 0;
 
     const checkFinishProgress = (walletId, type) => {
+
       if (type === 'ScanFinished' && walletId) {
-        iteractions++;
-        if (iteractions === wallets.length) {
-          this.onGoingProcessProvider.clear();
-          this.events.unsubscribe('bwsEvent', checkFinishProgress);
-          this.app
-            .getRootNavs()[0]
-            .setRoot(TabsPage)
-            .then(() => {
-              this.events.publish('Local/WalletListChange');
-            });
-          setTimeout(() => {
-            this.profileProvider.setLastKnownBalance();
-          }, 100);
-        }
+        this.onGoingProcessProvider.clear();
+        this.events.unsubscribe('bwsEvent', checkFinishProgress);
+        this.app
+          .getRootNavs()[0]
+          .setRoot(TabsPage)
+          .then(() => {
+            this.events.publish('Local/WalletListChange');
+          });
+        setTimeout(() => {
+          this.profileProvider.setLastKnownBalance();
+        }, 100);
       }
     };
 
-
-    this.events.subscribe('bwsEvent', checkFinishProgress);
-
-    if (wallets.length) {
+    if (wallets.length === 1) {
+      this.events.subscribe('bwsEvent', checkFinishProgress);
       this.onGoingProcessProvider.set('recreating');
     }
 
+
     wallets.forEach(wallet => {
-      this.walletProvider.startScan(wallet).then(() => {});
+      if (wallets.length === 1) {
+        this.walletProvider.startScan(wallet).then(() => {});
+      }
       this.walletProvider.updateRemotePreferences(wallet);
       this.pushNotificationsProvider.updateSubscription(wallet);
       this.profileProvider.setWalletBackup(wallet.credentials.walletId);
     });
+
+    if (wallets.length > 1) {
+      this.app
+        .getRootNavs()[0]
+        .setRoot(TabsPage)
+        .then(() => {
+          this.events.publish('Local/WalletListChange');
+        });
+    }
 
     if (wallets && wallets[0]) {
       this.profileProvider.setBackupGroupFlag(wallets[0].credentials.keyId);
