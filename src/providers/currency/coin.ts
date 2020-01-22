@@ -64,7 +64,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'BIP73',
       protocolPrefix: { livenet: 'ducatus', testnet: 'ducatus' },
       ratesApi: 'https://bitpay.com/api/rates',
-      blockExplorerUrls: 'ducins.rocknblock.io/#/DUC/'
+      blockExplorerUrls: 'insight.ducatus.io/#/DUC/'
     },
     feeInfo: {
       feeUnit: 'sat/byte',
@@ -99,7 +99,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'BIP73',
       protocolPrefix: { livenet: 'bitcoin', testnet: 'bitcoin' },
       ratesApi: 'https://bitpay.com/api/rates',
-      blockExplorerUrls: 'ducins.rocknblock.io/#/BTC/'
+      blockExplorerUrls: 'insight.ducatus.io/#/BTC/'
     },
     feeInfo: {
       feeUnit: 'sat/byte',
@@ -134,7 +134,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'BIP73',
       protocolPrefix: { livenet: 'bitcoincash', testnet: 'bchtest' },
       ratesApi: 'https://bitpay.com/api/rates/bch',
-      blockExplorerUrls: 'ducins.rocknblock.io/#/BCH/'
+      blockExplorerUrls: 'insight.ducatus.io/#/BCH/'
     },
     feeInfo: {
       feeUnit: 'sat/byte',
@@ -169,7 +169,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'EIP681',
       protocolPrefix: { livenet: 'ethereum', testnet: 'ethereum' },
       ratesApi: 'https://bitpay.com/api/rates/eth',
-      blockExplorerUrls: 'ducins.rocknblock.io/#/ETH/'
+      blockExplorerUrls: 'insight.ducatus.io/#/ETH/'
     },
     feeInfo: {
       feeUnit: 'Gwei',
