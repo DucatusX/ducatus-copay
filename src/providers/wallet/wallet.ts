@@ -122,6 +122,143 @@ export class WalletProvider {
     this.isPopupOpen = false;
   }
 
+
+  private getKeysWithFixes(parsedFile): Promise<any[]> {
+    const Key = this.bwcProvider.getKey();
+    return new Promise((resolve) => {
+      this.persistenceProvider.getKeys().then((keys) => {
+        const allKeys = keys ? keys.filter(k => !k.xPrivKeyEncrypted).map((key) => {
+          const currentXPrivKey = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(key.xPrivKey).toObject();
+          const credentialsData = { ...parsedFile };
+          credentialsData.useLegacyCoinType = undefined;
+          credentialsData.useLegacyPurpose = undefined;
+          if (currentXPrivKey.network === 'restore') {
+            currentXPrivKey.network = 'livenet';
+            currentXPrivKey.xprivkey = undefined;
+            currentXPrivKey.checksum = undefined;
+            const newXPrivKey = this.bwcProvider.Client.Ducatuscore.HDPrivateKey.fromObject(currentXPrivKey);
+            key.xPrivKey = newXPrivKey.toString();
+          }
+
+          const recoveryKey = Key.fromObj(
+            key
+          );
+          const recoveryCredentials = recoveryKey.createCredentials(
+            parsedFile.passphrase, credentialsData
+          );
+          return {
+            key: recoveryKey,
+            keyId: recoveryCredentials.keyId,
+            xPubKey: recoveryCredentials.xPubKey,
+            copayerId: recoveryCredentials.copayerId
+          }
+        }) : [];
+        resolve(allKeys);
+      })
+    });
+  };
+
+  public normalizeJSON(parsedFile): any {
+
+    if (this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(parsedFile.xPubKey).network.name !== 'restore') {
+      return new Promise((resolve) => {
+        resolve(parsedFile);
+      });
+    }
+
+    parsedFile.coin = 'duc';
+    parsedFile.useLegacyCoinType = false;
+    parsedFile.useLegacyPurpose = parsedFile.n > 1;
+    parsedFile.singleAddress = parsedFile.useLegacyPurpose;
+
+    const walletXPub = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(parsedFile.xPubKey).toObject();
+    walletXPub.network = 'livenet';
+    walletXPub.xpubkey = undefined;
+    walletXPub.checksum = undefined;
+    const walletXPubStr = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromObject(walletXPub).toString();
+
+    parsedFile.xPubKey = walletXPubStr;
+
+    parsedFile.publicKeyRing.forEach((oneRing) => {
+      const oldXPubKey = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(oneRing.xPubKey).toObject();
+      oldXPubKey.network = 'livenet';
+      oldXPubKey.xpubkey = undefined;
+      oldXPubKey.checksum = undefined;
+      oneRing.xPubKey = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromObject(oldXPubKey).toString();
+    });
+
+    const Key = this.bwcProvider.getKey();
+
+    const fromSavedKey = (existsKey) => {
+      return this.keyProvider.removeKey(existsKey.keyId).then(() => {
+        return this.keyProvider.addKey(existsKey.key).then(() => {
+          const credentialsData = { ...parsedFile };
+          credentialsData.useLegacyCoinType = undefined;
+          credentialsData.useLegacyPurpose = undefined;
+          const newCredentials = existsKey.key.createCredentials(parsedFile.passphrase, credentialsData).toObj();
+          parsedFile.rootPath = newCredentials.rootPath;
+          parsedFile.keyId = newCredentials.keyId;
+          parsedFile.copayerId = newCredentials.copayerId;
+          return this.persistenceProvider.setBackupGroupFlag(newCredentials.keyId);
+        });
+      });
+    };
+
+    const fromPrivate = () => {
+      const recreateData: any = {};
+
+      if (parsedFile.mnemonic) {
+        recreateData.method = 'fromMnemonic';
+        recreateData.data = parsedFile.mnemonic;
+      } else {
+        recreateData.method = 'fromExtendedPrivateKey';
+        recreateData.data = parsedFile.xPrivKey;
+      }
+
+      const key = Key[recreateData.method](recreateData.data, {
+        useLegacyCoinType: parsedFile.useLegacyCoinType,
+        useLegacyPurpose: parsedFile.useLegacyPurpose,
+        passphrase: parsedFile.passphrase,
+      });
+
+      const credentialsData = { ...parsedFile };
+      credentialsData.useLegacyCoinType = undefined;
+      credentialsData.useLegacyPurpose = undefined;
+      const newCredentials = key.createCredentials(parsedFile.passphrase, credentialsData);
+      parsedFile.copayerId = newCredentials.copayerId;
+
+      if (parsedFile.version && parsedFile.version !== 1) {
+        return this.keyProvider.addKey(key).then(() => {
+          parsedFile.keyId = key.id;
+          return this.persistenceProvider.setBackupGroupFlag(key.id);
+        });
+      } else {
+        parsedFile.xPrivKey = key.xPrivKey;
+        return Promise.resolve();
+
+      }
+    };
+
+    return new Promise((resolve, reject) => {
+      this.getKeysWithFixes(parsedFile).then((savedKeys) => {
+        const existsKey = savedKeys.filter((k) => {
+          return k.xPubKey === walletXPubStr;
+        })[0];
+        if (existsKey) {
+          fromSavedKey(existsKey).then(() => {
+            resolve();
+          }, reject);
+        } else if (parsedFile.xPrivKey) {
+          fromPrivate().then(() => {
+            resolve();
+          }, reject);
+        }
+      });
+    });
+  }
+
+
+
   public invalidateCache(wallet): void {
     if (wallet.cachedStatus) wallet.cachedStatus.isValid = false;
     if (wallet.completeHistory) wallet.completeHistoryIsValid = false;

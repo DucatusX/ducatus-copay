@@ -125,6 +125,9 @@ export class HomePage {
       this._willEnter(true);
       this._didEnter();
     });
+
+    // const parsedFile = this.walletProvider.normalizeJSON(JSON.parse(str2));
+
   }
 
   ionViewWillEnter() {

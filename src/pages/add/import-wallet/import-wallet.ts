@@ -105,6 +105,7 @@ export class ImportWalletPage {
       isMultisig: [false]
     });
     this.events.subscribe('Local/BackupScan', this.updateWordsHandler);
+
     this.setForm();
   }
 
@@ -198,6 +199,8 @@ export class ImportWalletPage {
     return info;
   }
 
+
+
   private importBlob(str: string, opts): void {
     let str2: string;
     let err = null;
@@ -222,22 +225,25 @@ export class ImportWalletPage {
     opts.compressed = null;
     opts.password = null;
 
-    this.profileProvider
-      .importFile(str2, opts)
-      .then((wallet: any[]) => {
-        this.onGoingProcessProvider.clear();
-        if (wallet) this.finish([].concat(wallet));
-      })
-      .catch(err => {
-        this.onGoingProcessProvider.clear();
-        const title = this.translate.instant('Error');
-        this.popupProvider.ionicAlert(title, err);
-        return;
-      });
+    const parsedFile = JSON.parse(str2);
+
+    this.walletProvider.normalizeJSON(parsedFile).then(() => {
+      this.profileProvider
+        .importFile(JSON.stringify(parsedFile), opts)
+        .then((wallet: any[]) => {
+          this.onGoingProcessProvider.clear();
+          if (wallet) this.finish([].concat(wallet), parsedFile.addressType === 'P2SH');
+        })
+        .catch(err => {
+          this.onGoingProcessProvider.clear();
+          const title = this.translate.instant('Error');
+          this.popupProvider.ionicAlert(title, err);
+          return;
+        });
+    });
   }
 
-  private async finish(wallets: any[]) {
-
+  private async finish(wallets: any[], noScan?: boolean) {
     const checkFinishProgress = (walletId, type) => {
 
       if (type === 'ScanFinished' && walletId) {
@@ -255,14 +261,14 @@ export class ImportWalletPage {
       }
     };
 
-    if (wallets.length === 1) {
+    if (!noScan && wallets.length === 1) {
       this.events.subscribe('bwsEvent', checkFinishProgress);
       this.onGoingProcessProvider.set('recreating');
     }
 
 
     wallets.forEach(wallet => {
-      if (wallets.length === 1) {
+      if (!noScan && wallets.length === 1) {
         this.walletProvider.startScan(wallet).then(() => {});
       }
       this.walletProvider.updateRemotePreferences(wallet);
@@ -270,7 +276,7 @@ export class ImportWalletPage {
       this.profileProvider.setWalletBackup(wallet.credentials.walletId);
     });
 
-    if (wallets.length > 1) {
+    if (wallets.length > 1 || noScan) {
       this.app
         .getRootNavs()[0]
         .setRoot(TabsPage)
@@ -576,8 +582,7 @@ export class ImportWalletPage {
       // set opts.useLegacyCoinType
       if (
         opts.coin == 'bch' &&
-        this.derivationPathHelperProvider.parsePath(derivationPath).coinCode ==
-          "0'"
+        this.derivationPathHelperProvider.parsePath(derivationPath).coinCode == "0'"
       ) {
         opts.useLegacyCoinType = true;
         this.logger.debug('Using 0 for BCH creation');
