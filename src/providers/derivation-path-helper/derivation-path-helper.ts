@@ -10,6 +10,7 @@ export class DerivationPathHelperProvider {
   public defaultTestnet: string;
   public defaultMultisigBTC: string;
   public defaultMultisigBCH: string;
+  public defaultMultisigDUC: string;
 
   public constructor() {
     this.defaultBTC = "m/44'/1025'/0'";
@@ -17,7 +18,8 @@ export class DerivationPathHelperProvider {
     this.defaultBCH = "m/44'/145'/0'";
     this.defaultETH = "m/44'/60'/0'";
     this.defaultXRP = "m/44'/144'/0'";
-    this.defaultMultisigBTC = "m/48'/0'/0'";
+    this.defaultMultisigBTC = "m/48'/1025'/0'";
+    this.defaultMultisigDUC = "m/44'/0'/0'";
     this.defaultMultisigBCH = "m/48'/145'/0'";
     this.defaultTestnet = "m/44'/1'/0'";
   }
@@ -57,7 +59,10 @@ export class DerivationPathHelperProvider {
     let networkName: string;
 
     switch (coinCode) {
-      case "0'": // for BTC
+      case "1025'": // for BTC
+        networkName = 'livenet';
+        break;
+      case "0'": // for DUC
         networkName = 'livenet';
         break;
       case "1'": // testnet for all coins

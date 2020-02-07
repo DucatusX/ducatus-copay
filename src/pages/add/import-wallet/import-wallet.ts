@@ -10,7 +10,7 @@ import {
 } from 'ionic-angular';
 
 // Pages
-// import { CoinSelectorPage } from '../../includes/coin-selector/coin-selector';
+import { CoinSelectorPage } from '../../includes/coin-selector/coin-selector';
 import { ScanPage } from '../../scan/scan';
 import { TabsPage } from '../../tabs/tabs';
 
@@ -546,8 +546,7 @@ export class ImportWalletPage {
       // set opts.useLegacyCoinType
       if (
         opts.coin == 'bch' &&
-        this.derivationPathHelperProvider.parsePath(derivationPath).coinCode ==
-          "0'"
+        this.derivationPathHelperProvider.parsePath(derivationPath).coinCode == "0'"
       ) {
         opts.useLegacyCoinType = true;
         this.logger.debug('Using 0 for BCH creation');

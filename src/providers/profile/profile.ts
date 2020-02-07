@@ -23,16 +23,13 @@ import { PopupProvider } from '../popup/popup';
 import { RateProvider } from '../rate/rate';
 import { ReplaceParametersProvider } from '../replace-parameters/replace-parameters';
 import { TxFormatProvider } from '../tx-format/tx-format';
-import { WalletOptions } from '../wallet/wallet';
+import { WalletOptions, WalletProvider } from '../wallet/wallet';
 
 
 
 // models
 import { Profile } from '../../models/profile/profile.model';
 
-// import { Deriver } from 'crypto-ducatus-wallet-core';
-// var QRCode = require('qrcode-svg');
-// var PDFMaker = require('pdfmake');
 
 
 interface WalletGroups {
@@ -82,6 +79,7 @@ export class ProfileProvider {
     private actionSheetProvider: ActionSheetProvider,
     private keyProvider: KeyProvider,
     private derivationPathHelperProvider: DerivationPathHelperProvider,
+    private walletProvider: WalletProvider,
     private errorsProvider: ErrorsProvider,
     private rateProvider: RateProvider
   ) {
@@ -522,7 +520,6 @@ export class ProfileProvider {
     let date;
     if (groupBackupInfo && groupBackupInfo.timestamp)
       date = new Date(Number(groupBackupInfo.timestamp));
-
     this.logger.info(
       `Binding wallet: ${wallet.id} - Backed up: ${!needsBackup} ${
         date ? date : ''
@@ -1254,9 +1251,16 @@ export class ProfileProvider {
       });
     };
 
-    return bindWallets().then(() => {
-      return this.isDisclaimerAccepted().catch(() => {
-        return Promise.reject(new Error('NONAGREEDDISCLAIMER'));
+    const mPromises = [];
+    _.each(profile.credentials, credentials => {
+      mPromises.push(this.walletProvider.normalizeJSON(credentials));
+    });
+
+    return Promise.all(mPromises).then(() => {
+      return bindWallets().then(() => {
+        return this.isDisclaimerAccepted().catch(() => {
+          return Promise.reject(new Error('NONAGREEDDISCLAIMER'));
+        });
       });
     });
   }
@@ -1362,7 +1366,6 @@ export class ProfileProvider {
           }
 
           this.profile = Profile.fromObj(profile);
-
           // Deprecated: storageService.tryToMigrate
           this.logger.info('Profile loaded');
 

@@ -101,7 +101,9 @@ export class CreateWalletPage implements OnInit {
     this.tc = this.isShared ? this.defaults.wallet.totalCopayers : 1;
     this.copayers = _.range(2, this.defaults.limits.totalCopayers + 1);
     this.derivationPathByDefault = this.isShared
-      ? this.coin === 'bch'
+      ? this.coin === 'duc'
+        ? this.derivationPathHelperProvider.defaultMultisigDUC
+        :this.coin === 'bch'
         ? this.derivationPathHelperProvider.defaultMultisigBCH
         : this.derivationPathHelperProvider.defaultMultisigBTC
       : this.bwcProvider.getCore().Deriver.pathFor(this.coin, 'livenet');
