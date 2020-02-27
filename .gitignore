@@ -19,6 +19,7 @@ yarn.lock
 # Desktop electron
 cache
 dist/*
+.history/
 electron/afterPack.js
 electron/build-electron.js
 *-embedded.provisionprofile
