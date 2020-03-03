@@ -74,9 +74,10 @@ export class SelectCurrencyPage {
       ? this.currencyProvider.getMultiSigCoins()
       : this.currencyProvider.getAvailableChains();
     this.availableTokens = this.currencyProvider.getAvailableTokens();
-    for (const chain of this.availableChains) {
-      this.coinsSelected[chain] = true;
-    }
+    // for (const coin of this.availableChains) {
+    this.coinsSelected['duc'] = true;
+    this.coinsSelected['ducx'] = true;
+    // }
     this.shouldShowKeyOnboarding();
     this.setTokens();
   }

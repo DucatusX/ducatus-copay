@@ -373,7 +373,7 @@ export class WalletProvider {
         cache.alternativeName = config.settings.alternativeName;
         cache.alternativeIsoCode = config.settings.alternativeIsoCode;
 
-        if (wallet.coin === 'duc') {
+        if (wallet.coin === 'duc' || wallet.coin === 'ducx') {
           return;
         }
 

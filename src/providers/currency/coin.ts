@@ -77,6 +77,41 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       gradientBackgroundColor: 'rgba(247,146,26, 0.2)'
     }
   },
+  ducx: {
+    name: 'DucatusX',
+    chain: 'DUCX',
+    coin: 'ducx',
+    unitInfo: {
+      unitName: 'DUCX',
+      unitToSatoshi: 1e18,
+      unitDecimals: 18,
+      unitCode: 'ducx'
+    },
+    properties: {
+      hasMultiSig: false,
+      hasMultiSend: false,
+      isUtxo: false,
+      isERCToken: false,
+      isStableCoin: false,
+      singleAddress: true
+    },
+    paymentInfo: {
+      paymentCode: 'EIP681',
+      protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
+      ratesApi: 'https://bitpay.com/api/rates/eth',
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+    },
+    feeInfo: {
+      feeUnit: 'Gwei',
+      feeUnitAmount: 1e9,
+      blockTime: 0.2,
+      maxMerchantFee: 'urgent'
+    },
+    theme: {
+      backgroundColor: 'rgba(135,206,250,1)',
+      gradientBackgroundColor: 'rgba(30,144,255, 0.2)'
+    }
+  },
   btc: {
     name: 'Bitcoin',
     chain: 'BTC',

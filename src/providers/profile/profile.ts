@@ -439,6 +439,7 @@ export class ProfileProvider {
 
   private async bindWalletClient(wallet): Promise<boolean> {
     const walletId = wallet.credentials.walletId;
+
     let keyId = wallet.credentials.keyId;
     if (this.wallet[walletId] && this.wallet[walletId].started) {
       this.logger.info('This wallet has been initialized. Skip. ' + walletId);
@@ -468,6 +469,7 @@ export class ProfileProvider {
     wallet.canAddNewAccount = this.checkAccountCreation(wallet, keyId);
 
     this.updateWalletFromConfig(wallet);
+
     this.wallet[walletId] = wallet;
 
     // INIT WALLET GROUP VIEWMODEL

@@ -6,6 +6,7 @@ export class DerivationPathHelperProvider {
   public defaultBCH: string;
   public defaultETH: string;
   public defaultXRP: string;
+  public defaultDUCX: string;
   public defaultDUC: string;
   public defaultTestnet: string;
   public defaultMultisigBTC: string;
@@ -17,6 +18,7 @@ export class DerivationPathHelperProvider {
     this.defaultDUC = "m/44'/0'/0'";
     this.defaultBCH = "m/44'/145'/0'";
     this.defaultETH = "m/44'/60'/0'";
+    this.defaultDUCX = "m/44'/1060'/0'";
     this.defaultXRP = "m/44'/144'/0'";
     this.defaultMultisigBTC = "m/48'/1025'/0'";
     this.defaultMultisigDUC = "m/44'/0'/0'";
@@ -77,6 +79,9 @@ export class DerivationPathHelperProvider {
       case "144'": // for XRP
         networkName = 'livenet';
         break;
+      case "1060'": // for DUCX
+        networkName = 'livenet';
+        break;
     }
     return networkName;
   }
@@ -114,6 +119,9 @@ export class DerivationPathHelperProvider {
         break;
       case 'xrp':
         isValid = ["144'", "0'", "1'"].indexOf(coinCode) > -1;
+        break;
+      case 'ducx':
+        isValid = ["1060'", "0'", "1'"].indexOf(coinCode) > -1;
         break;
     }
 
