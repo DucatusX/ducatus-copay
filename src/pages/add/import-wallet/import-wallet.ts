@@ -232,7 +232,7 @@ export class ImportWalletPage {
         .importFile(JSON.stringify(parsedFile), opts)
         .then((wallet: any[]) => {
           this.onGoingProcessProvider.clear();
-          if (wallet) this.finish([].concat(wallet), parsedFile.addressType === 'P2SH');
+          if (wallet) this.finish([].concat(wallet), true);
         })
         .catch(err => {
           this.onGoingProcessProvider.clear();
@@ -296,7 +296,7 @@ export class ImportWalletPage {
       .importExtendedPrivateKey(xPrivKey, opts)
       .then((wallets: any[]) => {
         this.onGoingProcessProvider.clear();
-        this.finish(wallets);
+        this.finish(wallets, true);
       })
       .catch(err => {
         this.processError(err);
@@ -309,7 +309,7 @@ export class ImportWalletPage {
       .importWithDerivationPath(opts)
       .then(wallet => {
         this.onGoingProcessProvider.clear();
-        if (wallet) this.finish([].concat(wallet));
+        if (wallet) this.finish([].concat(wallet), true);
       })
       .catch(err => {
         this.processError(err);
@@ -322,7 +322,7 @@ export class ImportWalletPage {
       .importMnemonic(words, opts)
       .then((wallets: any[]) => {
         this.onGoingProcessProvider.clear();
-        this.finish(wallets);
+        this.finish(wallets, true);
       })
       .catch(err => {
         this.processError(err);
@@ -476,7 +476,7 @@ export class ImportWalletPage {
       .createWallet(addingNewWallet, opts)
       .then(wallet => {
         this.onGoingProcessProvider.clear();
-        if (wallet) this.finish([].concat(wallet));
+        if (wallet) this.finish([].concat(wallet), true);
       })
       .catch(err => {
         this.onGoingProcessProvider.clear();

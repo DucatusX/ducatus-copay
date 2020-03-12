@@ -421,7 +421,7 @@ export class ProfileProvider {
         wallet.n == 1 &&
         wallet.credentials.addressType == 'P2PKH' &&
         derivationStrategy == 'BIP44' &&
-        (wallet.coin == 'eth' && coinCode == "60'")
+        ((wallet.coin == 'eth' && coinCode == "60'") || (wallet.coin == 'ducx' && coinCode == "1060'"))
       ) {
         return true;
       }

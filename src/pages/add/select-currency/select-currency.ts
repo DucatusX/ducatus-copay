@@ -66,6 +66,7 @@ export class SelectCurrencyPage {
 
     // for (const coin of this.availableChains) {
       this.coinsSelected['duc'] = true;
+      this.coinsSelected['ducx'] = true;
     // }
     this.shouldShowKeyOnboarding();
   }

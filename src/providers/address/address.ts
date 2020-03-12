@@ -44,23 +44,18 @@ export class AddressProvider {
           return { coin: 'duc', network };
         } catch (e) {
           try {
-            network = this.bitcoreCash.Address(address).network.name;
-            return { coin: 'bch', network };
-          } catch (e) {
-            try {
-              const isValidEthAddress = this.core.Validation.validateAddress(
-                'ETH',
-                network,
-                address
-              );
-              if (isValidEthAddress) {
-                return { coin: 'eth', network };
-              } else {
-                return null;
-              }
-            } catch (e) {
+            const isValidEthAddress = this.core.Validation.validateAddress(
+              'ETH',
+              network,
+              address
+            );
+            if (isValidEthAddress) {
+              return { coin: 'eth', network };
+            } else {
               return null;
             }
+          } catch (e) {
+            return null;
           }
         }
       }

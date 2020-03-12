@@ -127,9 +127,10 @@ export class SendPage extends WalletTabsChild {
           this.currencyProvider.getChain(this.wallet.coin).toLowerCase() &&
         data.network == this.wallet.network;
     } else {
-      addrData = this.addressProvider.getCoinAndNetwork(data);
+      addrData = this.addressProvider.getCoinAndNetwork(data, this.wallet.network);
+      const testCoin = this.wallet.coin === 'ducx' ? 'eth' : this.wallet.coin;
       isValid =
-        this.wallet.coin == addrData.coin &&
+        testCoin == addrData.coin &&
         addrData.network == this.wallet.network;
     }
 
