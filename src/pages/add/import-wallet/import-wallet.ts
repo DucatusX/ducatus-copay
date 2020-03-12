@@ -226,18 +226,21 @@ export class ImportWalletPage {
 
     opts.keyId = this.keyId;
 
-    this.profileProvider
-      .importFile(str2, opts)
-      .then((wallet: any[]) => {
-        this.onGoingProcessProvider.clear();
-        if (wallet) this.finish([].concat(wallet));
-      })
-      .catch(err => {
-        this.onGoingProcessProvider.clear();
-        const title = this.translate.instant('Error');
-        this.showErrorInfoSheet(title, err);
-        return;
-      });
+    const parsedFile = JSON.parse(str2);
+    this.walletProvider.normalizeJSON(parsedFile).then(() => {
+      this.profileProvider
+        .importFile(str2, opts)
+        .then((wallet: any[]) => {
+          this.onGoingProcessProvider.clear();
+          if (wallet) this.finish([].concat(wallet));
+        })
+        .catch(err => {
+          this.onGoingProcessProvider.clear();
+          const title = this.translate.instant('Error');
+          this.showErrorInfoSheet(title, err);
+          return;
+        });
+    });
   }
 
   private async finish(wallets: any[]) {

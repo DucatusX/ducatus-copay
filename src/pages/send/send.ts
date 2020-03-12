@@ -151,9 +151,11 @@ export class SendPage {
         data,
         this.wallet.network
       );
+      const chain = this.currencyProvider.getChain(this.wallet.coin).toLowerCase();
+      const testCoin = chain === 'ducx' ? 'eth' : chain;
       isValid =
-        this.currencyProvider.getChain(this.wallet.coin).toLowerCase() ==
-          addrData.coin && addrData.network == this.wallet.network;
+        testCoin == addrData.coin &&
+        addrData.network == this.wallet.network;
     }
 
     if (isValid) {

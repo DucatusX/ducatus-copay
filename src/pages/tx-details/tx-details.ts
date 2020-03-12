@@ -377,7 +377,7 @@ export class TxDetailsModal {
 
   private updateFiatRate() {
     const settings = this.configProvider.get().wallet.settings;
-    if (this.btx.amountUnitStr === 'DUC') {
+    if (this.btx.amountUnitStr === 'DUC' || this.btx.amountUnitStr === 'DUCX') {
       return;
     }
     this.rateProvider
