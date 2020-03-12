@@ -70,7 +70,7 @@ export class IncomingDataProvider {
 
   private isValidPayProNonBackwardsCompatible(data: string): boolean {
     data = this.sanitizeUri(data);
-    return !!/^(bitcoin|bitcoincash|ducatus|bchtest|ethereum)?:\?r=[\w+]/.exec(data);
+    return !!/^(bitcoin|bitcoincash|ducatus|ducatusx|bchtest|ethereum)?:\?r=[\w+]/.exec(data);
   }
 
   private isValidBitPayInvoice(data: string): boolean {
@@ -822,6 +822,9 @@ export class IncomingDataProvider {
       case 'ethereum':
         coin = Coin.ETH;
         break;
+      case 'ducatusx':
+        coin = Coin.DUCX;
+        break;
       default:
         coin = Coin.BTC;
         break;
@@ -831,7 +834,7 @@ export class IncomingDataProvider {
 
   public getPayProUrl(data: string): string {
     return decodeURIComponent(
-      data.replace(/(bitcoin|bitcoincash|ethereum|ducatus)?:\?r=/, '')
+      data.replace(/(bitcoin|bitcoincash|ethereum|ducatus|ducatusx)?:\?r=/, '')
     );
   }
 
