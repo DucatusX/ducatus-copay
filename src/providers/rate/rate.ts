@@ -12,7 +12,7 @@ export class RateProvider {
   private ratesAvailable = {} as CoinsMap<boolean>;
   private rateServiceUrl = {} as CoinsMap<string>;
 
-  private fiatRateAPIUrl = 'https://ducws.rocknblock.io/bws/api/v1/fiatrates';
+  private fiatRateAPIUrl = 'http://127.0.0.1:3232/bws/api/v1/fiatrates';
 
   constructor(
     private currencyProvider: CurrencyProvider,

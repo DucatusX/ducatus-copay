@@ -293,6 +293,10 @@ export class TabsPage {
     });
   }
 
+  ionViewDidLoad() {
+    this.tabs.select(1);
+  }
+
   homeRoot = HomePage;
   walletsRoot = WalletsPage;
   cardsRoot = CardsPage;

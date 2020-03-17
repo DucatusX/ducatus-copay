@@ -20,6 +20,9 @@ body {
   line-height: 22px;
 }
 
+.scroll-content {
+  background-color: color($colors, blank);
+}
 // all content without menu
 ion-content.add-bottom-safe-area {
   .fixed-content,
@@ -84,13 +87,13 @@ ion-header.bp-header .toolbar {
   }
 }
 .wide-header__title {
-  color: black;
-  font-size: 25px;
-  font-weight: 700;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  color: #a8a8a8;
+  font-size: 18px;
+  font-weight: 500;
+  /* padding-top: 10px; */
+  /* padding-bottom: 10px; */
   padding-left: 20px;
-  background: $background-color;
+  //background: $background-color;
 }
 
 .close-container {

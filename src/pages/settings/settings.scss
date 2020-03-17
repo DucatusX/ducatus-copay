@@ -38,7 +38,8 @@ page-about {
         padding: 14.5px;
         font-size: 20px;
         &.icon-settings {
-          opacity: 0.5;
+          //opacity: 0.5;
+          color: #862633;
         }
         img {
           width: 20px;
@@ -59,12 +60,12 @@ page-about {
   .create-button {
     background: white;
     color: color($colors, primary);
-    margin-left: -12px;
+    //margin-left: -12px;
     text-align: center;
   }
 
   .ion-md-eye:before {
     width: 20px;
-    opacity: 0.55;
+    //opacity: 0.55;
   }
 }

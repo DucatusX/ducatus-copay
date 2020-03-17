@@ -22,7 +22,7 @@
   },
   "dom_storage_quota": 200,
   "id": "jid1-x7bV5evAaI1P9Q",
-  "homepage": "https://ducatus.net/",
+  "homepage": "https://ducatus.io",
   "license": "MIT",
   "repository": {
     "url": "git://github.com/dimanok87/ducatus-copay.git",
@@ -156,7 +156,7 @@
     "cordova-plugin-x-toast": "2.6.0",
     "ducatuscore-lib": "^8.10.0",
     "es6-promise-plugin": "4.2.2",
-    "ducatus-wallet-client": "8.10.14",
+    "ducatus-wallet-client": "^8.12.1",
     "fcm-ng": "1.1.0",
     "gettext-parser": "1.3.0",
     "ionic-angular": "3.9.5",

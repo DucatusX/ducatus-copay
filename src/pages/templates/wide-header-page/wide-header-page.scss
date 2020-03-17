@@ -19,9 +19,9 @@ card-catalog-page {
     }
 
     &__title {
-      color: black;
-      font-size: 25px;
-      font-weight: 700;
+      color: #862633;
+      font-size: 16px;
+      font-weight: 500;
       padding-top: 10px;
       padding-bottom: 10px;
       padding-left: 20px;
@@ -88,6 +88,9 @@ purchased-cards-page {
 
 @include toolbar-button-color();
 
-ion-title .toolbar-title {
-  color: black;
+ion-title {
+
+  .toolbar-title {
+    color: #862633;
+  }
 }

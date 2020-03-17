@@ -40,6 +40,7 @@ import { PopupProvider } from '../../providers/popup/popup';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { SimplexProvider } from '../../providers/simplex/simplex';
 import { WalletProvider } from '../../providers/wallet/wallet';
+import { SelectCurrencyPage } from '../add/select-currency/select-currency';
 
 interface UpdateWalletOptsI {
   walletId: string;
@@ -121,6 +122,12 @@ export class WalletsPage {
   }
 
   ionViewDidEnter() {
+    if (!this.wallets || !this.wallets.length) {
+      this.navCtrl.push(SelectCurrencyPage, {
+        isOnboardingFlow: true,
+        isZeroState: true
+      });
+    }
     this._didEnter();
   }
 

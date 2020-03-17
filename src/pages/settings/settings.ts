@@ -89,7 +89,7 @@ export class SettingsPage {
     private translate: TranslateService,
     private modalCtrl: ModalController,
     private touchid: TouchIdProvider,
-    private analyticsProvider: AnalyticsProvider,
+    // private analyticsProvider: AnalyticsProvider,
     private persistanceProvider: PersistenceProvider,
     private bitPayIdProvider: BitPayIdProvider,
     private changeRef: ChangeDetectorRef,

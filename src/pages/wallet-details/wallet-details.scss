@@ -1,6 +1,6 @@
 page-coinbase-account,
 page-wallet-details {
-  $wallet-details-primary-color: #0c204e;
+  $wallet-details-primary-color: #862633;
   $icon-width: 36px;
 
   ion-refresher {
@@ -47,7 +47,7 @@ page-wallet-details {
   .balance-header {
     position: relative;
     margin: 1rem 2rem 1rem 2rem;
-    height: 23rem;
+    height: 12rem;
     color: color($colors, light);
     display: flex;
     flex-direction: column;
@@ -66,7 +66,7 @@ page-wallet-details {
 
   .balance-str {
     cursor: pointer;
-    font-size: 38px;
+    font-size: 28px;
     font-weight: 500;
     display: flex;
     align-items: baseline;

@@ -50,7 +50,7 @@
         </page-clipboard-card>
       </div>
 
-      <create-new-wallet *ngIf="!wallets || !wallets[0]"></create-new-wallet>
+      <!--<create-new-wallet *ngIf="!wallets || !wallets[0]"></create-new-wallet>-->
 
       <div *ngFor="let walletGroup of walletsGroups; let i = index" class="wallets-container">
         <div class="section-header" *ngIf="walletGroup[0].canSign && walletsGroups.length > 1">

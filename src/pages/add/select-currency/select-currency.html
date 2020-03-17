@@ -48,7 +48,7 @@
         </div>
       </ion-list>
       <div>
-        <button ion-button class="button-standard" [disabled]="!coinsSelected.duc" (click)="createWallet()">
+        <button ion-button class="button-standard" [disabled]="!coinsSelected.duc" (click)="createWallets()">
           {{'Create' | translate}}
         </button>
         <button ion-button clear class="button-standard" (click)="goToImportWallet()" *ngIf="isOnboardingFlow">

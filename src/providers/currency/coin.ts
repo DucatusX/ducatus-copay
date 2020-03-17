@@ -75,6 +75,11 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     theme: {
       backgroundColor: 'rgba(247,146,26,1)',
       gradientBackgroundColor: 'rgba(247,146,26, 0.2)'
+    },
+    qrColor: {
+      moduleColor: '#434D5A',
+      positionRingColor: '#F7931A',
+      positionCenterColor: '#434D5A'
     }
   },
   ducx: {
@@ -98,7 +103,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     paymentInfo: {
       paymentCode: 'EIP681',
       protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
-      ratesApi: 'https://bitpay.com/api/rates/eth',
+      ratesApi: 'https://bitpay.com/api/rates',
       blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
     },
     feeInfo: {
@@ -110,6 +115,11 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     theme: {
       backgroundColor: 'rgba(135,206,250,1)',
       gradientBackgroundColor: 'rgba(30,144,255, 0.2)'
+    },
+    qrColor: {
+      moduleColor: '#434D5A',
+      positionRingColor: '#434D5A',
+      positionCenterColor: '#6B71D6'
     }
   },
   btc: {

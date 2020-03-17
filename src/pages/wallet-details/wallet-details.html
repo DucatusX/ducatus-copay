@@ -174,15 +174,15 @@
         <div class="prompt-user activity-fix white-card" *ngIf="shouldShowZeroState()">
           <div class="title-icon larger-icon">
             <img *ngIf="wallet.coin === 'xrp' && wallet.cachedStatus && !wallet.cachedStatus.lockedBalanceSat; else ghostTongue" width="42" src="assets/img/icon-warning-circled.svg" />
-            <ng-template #ghostTongue>
-              <img src="assets/img/ghost-tongue-out.svg">
-            </ng-template>
+            <!--<ng-template #ghostTongue>-->
+              <!--<img src="assets/img/ghost-tongue-out.svg">-->
+            <!--</ng-template>-->
           </div>
           <div class="title-info">
             <span translate *ngIf="wallet?.coin === 'xrp' && wallet?.cachedStatus && !wallet?.cachedStatus.lockedBalanceSat; else ghostTown">XRP Minimum Balance</span>
-            <ng-template #ghostTown>
-              <span translate>It's a ghost town in here</span>
-            </ng-template>
+            <!--<ng-template #ghostTown>-->
+              <!--<span translate>It's a ghost town in here</span>-->
+            <!--</ng-template>-->
           </div>
           <div class="subtitle-info">
             <span translate *ngIf="wallet?.coin === 'xrp' && wallet?.cachedStatus && !wallet?.cachedStatus.lockedBalanceSat; else noFunds">
@@ -190,7 +190,8 @@
             </span>
             <ng-template #noFunds>
               <span translate>
-                If you have funds stored on a website then you should move them into a secure wallet... like this one!
+                No activities found. You do not have funds in the account.
+                <!--If you have funds stored on a website then you should move them into a secure wallet... like this one!-->
               </span>
             </ng-template>
           </div>
