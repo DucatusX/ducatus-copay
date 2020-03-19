@@ -78,8 +78,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     },
     qrColor: {
       moduleColor: '#434D5A',
-      positionRingColor: '#F7931A',
-      positionCenterColor: '#434D5A'
+      positionRingColor: '#434D5A',
+      positionCenterColor: '#862633'
     }
   },
   ducx: {
@@ -119,7 +119,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     qrColor: {
       moduleColor: '#434D5A',
       positionRingColor: '#434D5A',
-      positionCenterColor: '#6B71D6'
+      positionCenterColor: '#862633'
     }
   },
   btc: {

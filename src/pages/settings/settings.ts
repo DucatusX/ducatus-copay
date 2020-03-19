@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 // pages
 import { User } from '../../models/user/user.model';
 import { BitPayIdProvider, IABCardProvider } from '../../providers';
-import { AnalyticsProvider } from '../../providers/analytics/analytics';
+// import { AnalyticsProvider } from '../../providers/analytics/analytics';
 import { AppProvider } from '../../providers/app/app';
 import { BitPayCardProvider } from '../../providers/bitpay-card/bitpay-card';
 import { ConfigProvider } from '../../providers/config/config';

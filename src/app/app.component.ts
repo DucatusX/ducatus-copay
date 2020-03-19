@@ -355,10 +355,10 @@ export class CopayApp {
     }
 
     if (lockMethod == 'pin') {
-      this.iabCardProvider.pause();
+      // this.iabCardProvider.pause();
       this.openPINModal('checkPin');
     } else if (lockMethod == 'fingerprint') {
-      this.iabCardProvider.pause();
+      // this.iabCardProvider.pause();
       this.openFingerprintModal();
     }
   }
@@ -398,7 +398,7 @@ export class CopayApp {
   private onLockDidDismiss(): void {
     this.appProvider.isLockModalOpen = false;
     this.events.publish('Home/reloadStatus');
-    this.iabCardProvider.resume();
+    // this.iabCardProvider.resume();
   }
 
   private registerIntegrations(): void {
