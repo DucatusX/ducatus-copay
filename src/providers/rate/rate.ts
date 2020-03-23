@@ -12,7 +12,7 @@ export class RateProvider {
   private ratesAvailable = {} as CoinsMap<boolean>;
   private rateServiceUrl = {} as CoinsMap<string>;
 
-  private fiatRateAPIUrl = 'http://192.168.10.177:3232/bws/api/v1/fiatrates';
+  private fiatRateAPIUrl = 'http://81.94.17.13:3232/bws/api/v1/fiatrates';
 
   constructor(
     private currencyProvider: CurrencyProvider,

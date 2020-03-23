@@ -12,7 +12,7 @@
         Ducatus
     </author>
     <content src="index.html" />
-    <access origin="http://192.168.10.177:3232" />
+    <access origin="http://81.94.17.13:3232" />
     <access origin="https://bitpay.com" />
 
     <access origin="http://89.40.4.152:3232" />
