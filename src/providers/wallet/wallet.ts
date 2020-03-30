@@ -163,7 +163,11 @@ export class WalletProvider {
   };
 
   public normalizeJSON(parsedFile): any {
-
+    if (!parsedFile.xPubKey) {
+      return new Promise((resolve) => {
+        resolve(parsedFile);
+      });
+    }
     if (this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(parsedFile.xPubKey).network.name !== 'restore') {
       return new Promise((resolve) => {
         resolve(parsedFile);
