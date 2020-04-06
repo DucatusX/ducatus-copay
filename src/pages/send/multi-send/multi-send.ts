@@ -182,7 +182,8 @@ export class MultiSendPage {
       this.parsedData &&
       (this.parsedData.type === 'BitcoinUri' ||
         this.parsedData.type === 'BitcoinCashUri' ||
-        this.parsedData.type === 'EthereumUri')
+        this.parsedData.type === 'EthereumUri' ||
+        this.parsedData.type === 'DucatusUri')
     ) {
       let parsed;
       let toAddress;

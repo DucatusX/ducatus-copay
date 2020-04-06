@@ -306,7 +306,12 @@ page-integrations {
         margin-bottom: -2rem;
       }
     }
-
+    .bp-list {
+      margin: 0 18px;
+      border-radius: 9px;
+      overflow: hidden;
+      box-shadow: 0 5px 18px 0 rgba(0, 0, 0, 0.03);
+    }
     .bp-list ion-item {
       cursor: pointer;
     }
@@ -314,7 +319,7 @@ page-integrations {
 
   .section-header {
     margin-right: 12px;
-    border-bottom: 1px solid #e0e0e0;
+    //border-bottom: 1px solid #e0e0e0;
   }
 
   .collapse {
