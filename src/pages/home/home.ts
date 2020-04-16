@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Events, ModalController, NavController, Slides } from 'ionic-angular';
+import { Events/*, ModalController, */, NavController, Slides } from 'ionic-angular';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { IntegrationsPage } from '../../pages/integrations/integrations';
@@ -28,7 +28,7 @@ import { PhaseOneCardIntro } from '../integrations/bitpay-card/bitpay-card-phase
 import { CoinbasePage } from '../integrations/coinbase/coinbase';
 import { BuyCardPage } from '../integrations/gift-cards/buy-card/buy-card';
 import { CardCatalogPage } from '../integrations/gift-cards/card-catalog/card-catalog';
-import { NewDesignTourPage } from '../new-design-tour/new-design-tour';
+// import { NewDesignTourPage } from '../new-design-tour/new-design-tour';
 
 export interface Advertisement {
   name: string;
@@ -89,7 +89,7 @@ export class HomePage {
     private simplexProvider: SimplexProvider,
     private feedbackProvider: FeedbackProvider,
     private homeIntegrationsProvider: HomeIntegrationsProvider,
-    private modalCtrl: ModalController,
+    // private modalCtrl: ModalController,
     private translate: TranslateService,
     private configProvider: ConfigProvider,
     private events: Events,
@@ -108,7 +108,7 @@ export class HomePage {
     this.totalBalanceAlternativeIsoCode =
       config.wallet.settings.alternativeIsoCode;
     this.setMerchantDirectoryAdvertisement();
-    this.showNewDesignSlides();
+    // this.showNewDesignSlides();
     this.showSurveyCard();
     this.checkFeedbackInfo();
     this.showTotalBalance = config.totalBalance.show;
@@ -562,7 +562,7 @@ export class HomePage {
     this.externalLinkProvider.open(url);
   }
 
-  private showNewDesignSlides() {
+  /* private showNewDesignSlides() {
     if (this.appProvider.isLockModalOpen) return; // Opening a modal together with the lock modal makes the pin pad unresponsive
     this.persistenceProvider.getNewDesignSlidesFlag().then(value => {
       if (!value) {
@@ -574,7 +574,7 @@ export class HomePage {
         modal.present();
       }
     });
-  }
+  } */
 
   public enableBitPayIdPairing() {
     this.tapped++;
