@@ -170,15 +170,14 @@ export class ConfirmPage {
     let networkName;
     let amount;
     this.setTitle();
-    if (this.fromMultiSend) {
-      networkName = this.navParams.data.network;
-      amount = this.navParams.data.totalAmount;
-    }
     if (this.fromSelectInputs) {
       networkName = this.navParams.data.network;
       amount = this.navParams.data.amount
         ? this.navParams.data.amount
         : this.navParams.data.totalInputsAmount;
+    } else if (this.fromMultiSend) {
+      networkName = this.navParams.data.network;
+      amount = this.navParams.data.totalAmount;
     } else {
       amount = this.navParams.data.amount;
       try {

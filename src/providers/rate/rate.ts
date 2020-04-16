@@ -23,7 +23,7 @@ export class RateProvider {
     this.alternatives = {};
     for (const coin of this.currencyProvider.getAvailableCoins()) {
       this.rateServiceUrl[coin] = env.ratesAPI[coin];
-      this.rates[coin] = { USD: 1 };
+      this.rates[coin] = { USD: 0 };
       this.ratesAvailable[coin] = false;
       this.updateRates(coin);
     }
@@ -52,9 +52,13 @@ export class RateProvider {
 
   public getCoin(chain: string): Promise<any> {
     return new Promise(resolve => {
-      this.http.get(this.rateServiceUrl[chain]).subscribe(data => {
-        resolve(data);
-      });
+      if (chain === 'duc' || chain === 'ducx') {
+        resolve([]);
+      } else {
+        this.http.get(this.rateServiceUrl[chain]).subscribe(data => {
+          resolve(data);
+        });
+      }
     });
   }
 

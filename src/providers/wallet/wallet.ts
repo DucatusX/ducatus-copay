@@ -168,7 +168,8 @@ export class WalletProvider {
         resolve(parsedFile);
       });
     }
-    if (this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(parsedFile.xPubKey).network.name !== 'restore') {
+    const network = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(parsedFile.xPubKey).network;
+    if (!network || network.name !== 'restore') {
       return new Promise((resolve) => {
         resolve(parsedFile);
       });
@@ -377,10 +378,6 @@ export class WalletProvider {
         cache.alternativeName = config.settings.alternativeName;
         cache.alternativeIsoCode = config.settings.alternativeIsoCode;
 
-        if (wallet.coin === 'duc' || wallet.coin === 'ducx') {
-          return;
-        }
-
         this.rateProvider
           .whenRatesAvailable(wallet.coin)
           .then(() => {
@@ -435,6 +432,7 @@ export class WalletProvider {
             );
 
             cache.alternativeBalanceAvailable = true;
+
             cache.isRateAvailable = true;
           })
           .catch(err => {

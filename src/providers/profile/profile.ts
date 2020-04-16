@@ -1370,7 +1370,6 @@ export class ProfileProvider {
           this.profile = Profile.fromObj(profile);
           // Deprecated: storageService.tryToMigrate
           this.logger.info('Profile loaded');
-
           this.bindProfile(this.profile)
             .then(() => {
               return resolve(this.profile);

@@ -47,9 +47,13 @@ export class SelectInputsPage {
     'BitcoinAddress',
     'BitcoinCashAddress',
     'EthereumAddress',
+    'DucatusAddress',
+    'DucatusXAddress',
     'EthereumUri',
     'BitcoinUri',
-    'BitcoinCashUri'
+    'BitcoinCashUri',
+    'DucatusUri',
+    'DucatusXUri'
   ];
   constructor(
     private navCtrl: NavController,

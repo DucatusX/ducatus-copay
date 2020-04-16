@@ -108,7 +108,7 @@ export class WalletReceiveComponent extends ActionSheetParent {
         }
         if (this.wallet.coin === 'bch') this.bchCashAddress = address;
 
-        this.updateQrAddress(address, newAddr);
+        this.updateQrAddress(address);
       })
       .catch(err => {
         this.logger.warn('Retrying to create new adress:' + ++this.retryCount);
@@ -131,13 +131,13 @@ export class WalletReceiveComponent extends ActionSheetParent {
       });
   }
 
-  private async updateQrAddress(address, newAddr?: boolean): Promise<void> {
-    if (newAddr) {
-      address = this.bchAddrFormat
-        ? this.addressProvider.getLegacyBchAddressFormat(this.bchCashAddress)
-        : this.bchCashAddress;
-      await Observable.timer(400).toPromise();
-    }
+  private async updateQrAddress(address): Promise<void> {
+    // if (newAddr) {
+    //   address = this.bchAddrFormat
+    //     ? this.addressProvider.getLegacyBchAddressFormat(this.bchCashAddress)
+    //     : this.bchCashAddress;
+    //   await Observable.timer(400).toPromise();
+    // }
     this.address = address;
 
     await Observable.timer(200).toPromise();
@@ -148,7 +148,7 @@ export class WalletReceiveComponent extends ActionSheetParent {
     if (this.bchAddrFormat === 'legacy') this.showFirstWarning();
     else {
       this.disclaimerAccepted = false;
-      this.updateQrAddress(this.bchCashAddress, false);
+      this.updateQrAddress(this.bchCashAddress);
     }
   }
 
@@ -190,7 +190,7 @@ export class WalletReceiveComponent extends ActionSheetParent {
           this.bchCashAddress
         );
         this.disclaimerAccepted = true;
-        this.updateQrAddress(legacyAddr, false);
+        this.updateQrAddress(legacyAddr);
       } else {
         this.disclaimerAccepted = false;
         this.bchAddrFormat = 'cashAddress';
@@ -198,3 +198,4 @@ export class WalletReceiveComponent extends ActionSheetParent {
     });
   }
 }
+

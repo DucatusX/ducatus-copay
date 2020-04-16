@@ -75,11 +75,6 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     theme: {
       backgroundColor: 'rgba(247,146,26,1)',
       gradientBackgroundColor: 'rgba(247,146,26, 0.2)'
-    },
-    qrColor: {
-      moduleColor: '#434D5A',
-      positionRingColor: '#434D5A',
-      positionCenterColor: '#862633'
     }
   },
   ducx: {
@@ -115,11 +110,6 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     theme: {
       backgroundColor: 'rgba(135,206,250,1)',
       gradientBackgroundColor: 'rgba(30,144,255, 0.2)'
-    },
-    qrColor: {
-      moduleColor: '#434D5A',
-      positionRingColor: '#434D5A',
-      positionCenterColor: '#862633'
     }
   },
   btc: {

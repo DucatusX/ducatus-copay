@@ -48,7 +48,7 @@
               <balance-to-show [balance]="wallet?.cachedStatus ? wallet?.cachedStatus.totalBalanceStr  : wallet?.lastKnownBalance"></balance-to-show>
               <img *ngIf="wallet.coin === 'xrp'" width="21" (click)="openBalanceDetails()" src="assets/img/icon-info-blue.svg">
             </div>
-            <div class="balance-alt-str" *ngIf="wallet?.cachedStatus && wallet?.cachedStatus.totalBalanceAlternative">
+            <div class="balance-alt-str" *ngIf="wallet?.cachedStatus && wallet?.cachedStatus.totalBalanceAlternative != 0">
               {{wallet?.cachedStatus.totalBalanceAlternative}} {{wallet?.cachedStatus.alternativeIsoCode}}
             </div>
           </div>

@@ -160,9 +160,10 @@ export class TabsPage {
           response => {
             let ratesByCoin = {};
             for (const unitCode of availableChains) {
-              ratesByCoin[unitCode] = _.find(response[unitCode], d => {
+              const cacheData = _.find(response[unitCode], d => {
                 return d.ts < ts;
-              }).rate;
+              });
+              ratesByCoin[unitCode] = cacheData ? cacheData.rate : 0;
             }
             return resolve(ratesByCoin);
           },

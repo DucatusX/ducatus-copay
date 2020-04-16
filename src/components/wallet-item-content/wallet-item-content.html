@@ -13,7 +13,7 @@
     <div>
       <div *ngIf="!hasZeroBalance(wallet, wallet?.coin.toUpperCase()) && !wallet?.balanceHidden">
         <div class="main-note">{{ getBalance(wallet, wallet?.coin.toUpperCase()) }}</div>
-        <div class="secondary-note" *ngIf="wallet?.cachedStatus">
+        <div class="secondary-note" *ngIf="wallet?.cachedStatus && wallet?.cachedStatus.totalBalanceAlternative != 0">
           {{ getAlternativeBalance(wallet, wallet?.coin.toUpperCase()) }}
           {{ wallet?.cachedStatus.alternativeIsoCode }}
         </div>
