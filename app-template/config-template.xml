@@ -13,7 +13,7 @@
     </author>
     <content src="index.html" />
     <access origin="https://ducapi.rocknblock.io" />
-    <access origin="http://81.94.17.13:3232" />
+    <access origin="https://ducws.rocknblock.io" />
     <access origin="https://bitpay.com" />
 
     <access origin="http://89.40.4.152:3232" />
