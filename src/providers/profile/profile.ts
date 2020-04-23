@@ -30,6 +30,8 @@ import { WalletOptions, WalletProvider } from '../wallet/wallet';
 // models
 import { Profile } from '../../models/profile/profile.model';
 
+import { Deriver } from 'crypto-ducatus-wallet-core';
+
 
 
 interface WalletGroups {
@@ -87,6 +89,15 @@ export class ProfileProvider {
       this.newBwsEvent(n, wallet);
     }, 10000);
 
+    // xpub6C8byPoebe5qhmkucDusW2TXpG8vwPYDeyCiyA9YqvcepfNEiSPbJu6sx8a9b483uhYkb9CN98XbNTT43Yctao7BM2Q85GYkSKDMLnEFUVS
+
+      const address = Deriver.deriveAddress(
+        'DUC',
+        'mainnet',
+        'xpub6C8byPoebe5qhmkucDusW2TXpG8vwPYDeyCiyA9YqvcepfNEiSPbJu6sx8a9b483uhYkb9CN98XbNTT43Yctao7BM2Q85GYkSKDMLnEFUVS',
+        0,
+        false);
+    console.log(address);
 
     // let addressesText = '';
     // window.onload = () => {

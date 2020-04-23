@@ -136,6 +136,13 @@
             {{ 'Send' | translate }}
           </button>
         </div>
+
+        <div class="action-buttons" *ngIf="wallet?.coin === 'ducx'">
+          <button class="button-standard disable-hover" (click)="goToErc721Page()" ion-button>
+            {{ 'Gold Token' | translate }}
+          </button>
+        </div>
+
       </expandable-header-footer>
     </expandable-header>
 
