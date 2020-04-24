@@ -229,7 +229,7 @@ export class ImportWalletPage {
     const parsedFile = JSON.parse(str2);
     this.walletProvider.normalizeJSON(parsedFile).then(() => {
       this.profileProvider
-        .importFile(str2, opts)
+        .importFile(JSON.stringify(parsedFile), opts)
         .then((wallet: any[]) => {
           this.onGoingProcessProvider.clear();
           if (wallet) this.finish([].concat(wallet));
