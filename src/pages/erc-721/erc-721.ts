@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavParams, Slides } from 'ionic-angular';
+import { NavController, NavParams, Slides } from 'ionic-angular';
 import { WalletProvider } from '../../providers';
 
 import Web3 from 'web3';
+import { SendPage } from '../send/send';
 import { GOLD_TOKEN_ABI } from './gold-token';
 
 const TokenAddresses = {
@@ -54,7 +55,7 @@ export class Erc721Page {
   }];
 
   private tokensCache = {
-    BASE_INFO: {}
+    BASE_INFO: {} as any
   };
 
 
@@ -65,11 +66,11 @@ export class Erc721Page {
   private goldABI: any;
   private tokenContract: any;
   public activeIndex: number = 0;
-
   public tokenInfo: any;
 
   constructor(
     private navParams: NavParams,
+    private navCtrl: NavController,
     private walletProvider: WalletProvider
   ) {
     this.wallet = this.navParams.data.wallet;
@@ -80,6 +81,7 @@ export class Erc721Page {
     const web3Provider = new Web3.providers.HttpProvider(NetworkProvidersUrls[this.wallet.network]);
     this.web3.setProvider(web3Provider);
 
+    // this.web3.eth.sendSignedTransaction('0xf8c904848321560083020d0294cfa3915fe88fd9fb8c7dae54e8ca59e6caf0657780b86423b872dd000000000000000000000000a2a55ee6114383de7fc2ac72ca54bdbadc33ebc5000000000000000000000000656607abb0a80f0f7e5eeb692af982c86649d0a4000000000000000000000000000000000000000000000000000000000000000125a0b4147662c9eb1c0407d22b204f0ec4c837cca91bab0915cd3f1c621f970a3f76a074bee1dbd6bfc6fd889dad5ec8abbad389197264f547e15485b2c9109211ad33');
     this.activeIndex = 0;
 
     this.walletProvider
@@ -88,6 +90,10 @@ export class Erc721Page {
         this.address = addr;
         this.tokenContract = new this.web3.eth.Contract(this.goldABI);
         this.tokenContract.options.address = Web3.utils.toChecksumAddress(TokenAddresses[this.wallet.network]);
+        // this.tokenContract.methods.tokenOfOwnerByIndex(addr, 1).call().then((a, b) => {
+        //   console.log(a, b);
+        // });
+
         this.getTokenInfo();
       });
 
@@ -138,23 +144,29 @@ export class Erc721Page {
     });
   }
 
+  ionViewWillLeave() {
+    // this.tokenChecker.abort();
+  }
+
   public goToReceive() {
     alert('Спроси Вадима! Он знает, где достать!!');
   }
 
   private getTokenInfo() {
     const baseContractInfo = this.tokensCache['BASE_INFO'];
+    this.tokensCache['BASE_INFO'].address = this.tokenContract.options.address;
+    const allPromises = [];
     this.TokenContractInfoMethods.forEach((oneMethod: any) => {
       const key = oneMethod.return || oneMethod.method;
       if (baseContractInfo[key] && !this.forRepeatInfo.includes(key)) {
         return;
       }
-      this.callMethod(oneMethod.method).then((result) => {
+      allPromises.push(this.callMethod(oneMethod.method).then((result) => {
         baseContractInfo[key] = result;
-      });
+      }));
     });
 
-    this.callMethod('balanceOf', [this.address]).then((result: string) => {
+    allPromises.push(this.callMethod('balanceOf', [this.address]).then((result: string) => {
       const count = parseInt(result, 10);
       baseContractInfo['tokensCount'] = Array(count);
       if (count) {
@@ -162,6 +174,20 @@ export class Erc721Page {
       }
     }, () => {
       baseContractInfo['tokensCount'] = Array(0);
+    }));
+
+  }
+
+
+  public goToSendPage() {
+    this.navCtrl.push(SendPage, {
+      wallet: this.wallet,
+      token: {
+        type: 'erc721',
+        base: this.tokensCache['BASE_INFO'],
+        selected: this.tokenInfo
+      }
     });
   }
+
 }

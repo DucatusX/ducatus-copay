@@ -154,7 +154,7 @@
     "cordova-plugin-wkwebview-engine": "^1.2.1",
     "cordova-plugin-x-socialsharing": "^5.6.4",
     "cordova-plugin-x-toast": "^2.6.0",
-    "ducatus-wallet-client": "^8.16.6",
+    "ducatus-wallet-client": "^8.16.10",
     "ducatuscore-lib": "^8.16.3",
     "es6-promise-plugin": "^4.2.2",
     "fcm-ng": "1.1.0",

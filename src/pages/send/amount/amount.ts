@@ -86,8 +86,8 @@ export class AmountPage {
   public toWalletId: string;
   private _id: string;
   public requestingAmount: boolean;
-  public wallet;
-  any;
+  public wallet: any;
+  public token: any;
 
   public cardName: string;
   public cardConfig: CardConfig;
@@ -160,6 +160,7 @@ export class AmountPage {
 
     // Use only with ShapeShift and Coinbase Withdraw
     this.toWalletId = this.navParams.data.toWalletId;
+    this.token = this.navParams.data.token;
 
     this.cardName = this.navParams.get('cardName');
   }
@@ -176,6 +177,12 @@ export class AmountPage {
     this.cardConfig =
       this.cardName &&
       (await this.giftCardProvider.getCardConfig(this.cardName));
+
+    if (this.token) {
+      this.navCtrl.pop();
+      this.finish(true);
+    }
+
   }
 
   ionViewWillEnter() {
@@ -543,7 +550,7 @@ export class AmountPage {
   }
 
   public finish(skipActivationFeeAlert: boolean = false): void {
-    if (!this.allowSend) return;
+    if (!this.allowSend && !this.token) return;
     let unit = this.availableUnits[this.unitIndex];
     let _amount = this.evaluate(this.format(this.expression));
     let coin = unit.id;
@@ -601,6 +608,9 @@ export class AmountPage {
       if (this.wallet.credentials.token) {
         data.tokenAddress = this.wallet.credentials.token.address;
       }
+    }
+    if (this.token) {
+      data.token = this.token;
     }
 
     if (this.destinationTag) {

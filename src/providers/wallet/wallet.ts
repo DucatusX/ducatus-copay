@@ -77,6 +77,7 @@ export interface TransactionProposal {
   feeLevel: string;
   dryRun: boolean;
   tokenAddress?: string;
+  tokenId?: string;
   destinationTag?: string;
   invoiceID?: string;
 }
