@@ -27,8 +27,7 @@
 
             </expandable-header-primary>
 
-            <ion-slides #coinsSlides pager="true" class="tokens-slides"
-                        [show]="tokensCache.BASE_INFO.tokensCount && tokensCache.BASE_INFO.tokensCount.length">
+            <ion-slides #coinsSlides pager="true" class="tokens-slides">
                 <ion-slide *ngFor="let t of tokensCache.BASE_INFO.tokensCount">
                     <div class="token-image">
                         <img src="./assets/img/tokens/gold-token.png">
@@ -45,7 +44,7 @@
                     <button class="button-standard disable-hover" (click)="goToReceive()" ion-button>
                         {{ 'Receive' | translate }}
                     </button>
-                    <button class="button-standard disable-hover" (click)="goToSendPage()" ion-button>
+                    <button class="button-standard disable-hover" (click)="goToSendPage()" ion-button *ngIf="tokensCache.BASE_INFO.tokensCount?.length">
                         {{ 'Send' | translate }}
                     </button>
                 </div>

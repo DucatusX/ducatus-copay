@@ -34,6 +34,10 @@ page-erc-721 {
     margin: 5px auto 50px;
     text-align: center;
     height: 230px;
+    img {
+      height: auto;
+      max-height: 100%;
+    }
   }
   .balance-header {
     margin-top: 2rem;
