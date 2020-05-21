@@ -16,24 +16,21 @@ export class MoonPayProvider {
 
     if (walletId) {
       wallet = this.profileProvider.getWallet(walletId);
+      console.log('get wallet', wallet);
       if (wallet.needsBackup) {
         return false;
       }
     }
 
-    const api_key: string = 'pk_live_BmtkWKbJbVkO0Fr8XSQMTPxkBfgsx1a2';
-    let url: string = 'https://buy.moonpay.io?apiKey=' + api_key;
+    const api_key: string = 'pk_test_h7x0He1BR6K8IQVndW0mFJ27p9ccsb';
+    let url: string = 'https://buy-staging.moonpay.io?apiKey=' + api_key;
     return new Promise(resolve => {
       if (walletId) {
         url += '&currencyCode=' + wallet.coin;
-        this.walletProvider.getAddress(wallet, false).then(
-          addr => {
-            url += '&walletAddress=' + addr;
-          },
-          () => {
-            resolve(url);
-          }
-        );
+        this.walletProvider.getAddress(wallet, false).then(addr => {
+          url += '&walletAddress=' + addr;
+          resolve(url);
+        });
       } else {
         resolve(url);
       }
@@ -42,6 +39,8 @@ export class MoonPayProvider {
 
   public openMoonPay(walletId?) {
     const linkPromise = this.getMoonPayLink(walletId);
+
+    console.log('link', linkPromise);
     if (!linkPromise) {
       return false;
     }

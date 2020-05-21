@@ -235,9 +235,11 @@ export class WalletDetailsPage {
   }
 
   public openMoonPay() {
-    if (!this.moonPayProvider.openMoonPay(this.wallet.credentials.walletId)) {
-      this.goToReceivePage();
-    }
+    // if (!this.moonPayProvider.openMoonPay(this.wallet.credentials.walletId)) {
+    //   this.goToReceivePage();
+    // }
+    console.log(this.wallet.credentials.walletId);
+    this.moonPayProvider.openMoonPay(this.wallet.credentials.walletId);
   }
 
   public isUtxoCoin(): boolean {
