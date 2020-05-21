@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [hidden]="token">
   <ion-navbar [hideBackButton]="useAsModal">
     <ion-buttons left *ngIf="useAsModal">
       <button class="close-container disable-hover" (click)="closeModal()" ion-button>
@@ -13,7 +13,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content class="add-bottom-safe-area" no-bounce>
+<ion-content class="add-bottom-safe-area" no-bounce [hidden]="token">
   <div class="container">
     <div class="amount-content">
       <div class="expression-container">

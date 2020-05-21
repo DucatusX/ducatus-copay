@@ -206,12 +206,12 @@
 
       <div class="line-divider"></div>
 
-      <ion-item *ngIf="wallet && wallet.coin !== 'xrp'; else destinationTag" (click)="editMemo(tx.description)">
+      <ion-item *ngIf="!token && wallet && wallet.coin !== 'xrp'; else destinationTag" (click)="editMemo(tx.description)">
         <ion-label stacked>{{'Memo' | translate}}</ion-label>
         <ion-textarea placeholder="{{'Enter a transaction memo' | translate}}" [(ngModel)]="tx.description" name="tx.description" autocomplete="off" autocorrect="off" readonly disabled></ion-textarea>
       </ion-item>
 
-      <ng-template #destinationTag>
+      <ng-template #destinationTag *ngIf="!token">
         <ion-item *ngIf="!tx.paypro">
           <ion-label stacked>{{'Destination Tag' | translate}}</ion-label>
           <ion-input class="padded-input" type="number" placeholder="{{'Enter a destination tag' | translate}}" [(ngModel)]="tx.destinationTag" name="tx.destinationTag" autocomplete="off" autocorrect="off"></ion-input>

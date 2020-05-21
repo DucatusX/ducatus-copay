@@ -39,6 +39,7 @@ import { ProposalsNotificationsPage } from '../../pages/wallets/proposals-notifi
 import { AmountPage } from '../send/amount/amount';
 import { SearchTxModalPage } from './search-tx-modal/search-tx-modal';
 import { WalletBalanceModal } from './wallet-balance/wallet-balance';
+import { Erc721Page } from '../erc-721/erc-721';
 
 const HISTORY_SHOW_LIMIT = 10;
 const MIN_UPDATE_TIME = 2000;
@@ -629,6 +630,13 @@ export class WalletDetailsPage {
     receive.onDidDismiss(data => {
       if (data === 'goToBackup') this.goToBackup();
       else if (data) this.showErrorInfoSheet(data);
+    });
+  }
+
+
+  public goToErc721Page() {
+    this.navCtrl.push(Erc721Page, {
+      wallet: this.wallet
     });
   }
 

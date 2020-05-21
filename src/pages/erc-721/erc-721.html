@@ -1,0 +1,122 @@
+<ion-header no-border class="wallet-details-header">
+    <ion-navbar>
+        <ion-title>
+            <div class="header-wallet-name" [reveal-at-scroll-pos]="(expandableHeader.headerHeight - 300)" [scrollArea]="scrollArea">
+                {{tokensCache.BASE_INFO.name}}
+                <span *ngIf="tokensCache.BASE_INFO.tokensCount?.length">
+                     ({{activeIndex + 1}}/{{tokensCache.BASE_INFO.tokensCount.length}})
+                </span>
+            </div>
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content #scrollArea [fixed-scroll-bg-color]="'#862633'">
+    <!--<ion-refresher (ionRefresh)="doRefresh($event)" [ngStyle]="{'background': '#862633'}">-->
+        <!--<ion-refresher-content></ion-refresher-content>-->
+    <!--</ion-refresher>-->
+    <div class="wrapper">
+        <expandable-header class="balance-card" [scrollArea]="scrollArea" #expandableHeader>
+            <expandable-header-primary class="balance-header">
+                <div class="wallet-name" *ngIf="tokensCache.BASE_INFO.tokensCount?.length">
+                    {{tokensCache.BASE_INFO.name}} ({{activeIndex + 1}}/{{tokensCache.BASE_INFO.tokensCount.length}})
+                </div>
+                <div class="wallet-name" *ngIf="!tokensCache.BASE_INFO.tokensCount?.length">
+                    {{tokensCache.BASE_INFO.name}}
+                </div>
+
+            </expandable-header-primary>
+
+            <ion-slides #coinsSlides pager="true" class="tokens-slides">
+                <ion-slide *ngFor="let t of tokensCache.BASE_INFO.tokensCount">
+                    <div class="token-image">
+                        <img src="./assets/img/tokens/gold-token.png">
+                    </div>
+                </ion-slide>
+            </ion-slides>
+
+            <div class="token-image" *ngIf="!tokensCache.BASE_INFO.tokensCount || !tokensCache.BASE_INFO.tokensCount.length">
+                <img src="./assets/img/tokens/gold-token.png">
+            </div>
+
+            <expandable-header-footer>
+                <div class="action-buttons">
+                    <button class="button-standard disable-hover" (click)="goToReceive()" ion-button>
+                        {{ 'Receive' | translate }}
+                    </button>
+                    <button class="button-standard disable-hover" (click)="goToSendPage()" ion-button *ngIf="tokensCache.BASE_INFO.tokensCount?.length">
+                        {{ 'Send' | translate }}
+                    </button>
+                </div>
+            </expandable-header-footer>
+        </expandable-header>
+
+        <div class="fix-margin">
+            <div class="history-wrapper">
+                <div class="token-info">
+
+                    <div class="token-info_article">
+                        <div class="token-info_article_header">Coin info</div>
+                        <div class="token-info_article_body">
+                            <div class="token-info_article_cell">
+                                <span class="token-info_article_cell_label">Name:</span>
+                                <span class="token-info_article_cell_value">{{tokensCache.BASE_INFO.name}}</span>
+                            </div>
+                            <div class="token-info_article_cell">
+                                <span class="token-info_article_cell_label">Symbol:</span>
+                                <span class="token-info_article_cell_value">{{tokensCache.BASE_INFO.symbol}}</span>
+                            </div>
+                            <div class="token-info_article_cell">
+                                <span class="token-info_article_cell_label">Purity:</span>
+                                <span class="token-info_article_cell_value">{{tokensCache.BASE_INFO.purity}}</span>
+                            </div>
+                            <div class="token-info_article_cell">
+                                <span class="token-info_article_cell_label">Total supply:</span>
+                                <span class="token-info_article_cell_value">{{tokensCache.BASE_INFO.totalSupply}}</span>
+                            </div>
+                            <div class="token-info_article_cell">
+                                <span class="token-info_article_cell_label">Maximum supply:</span>
+                                <span class="token-info_article_cell_value">{{tokensCache.BASE_INFO.maxSupplyTotal}}</span>
+                            </div>
+                            <div class="token-info_article_cell">
+                                <span class="token-info_article_cell_label">Certified Assayer:</span>
+                                <span class="token-info_article_cell_value">{{tokensCache.BASE_INFO.certifiedAssayer}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="token-info_article" *ngIf="tokenInfo.tokenId">
+                        <div class="token-info_article_header">Coin data</div>
+                        <div class="token-info_article_body">
+                            <div class="token-info_article_cell">
+                                <span class="token-info_article_cell_label">ID:</span>
+                                <span class="token-info_article_cell_value">{{tokenInfo.tokenId}}</span>
+                            </div>
+                            <div class="token-info_article_cell">
+                                <span class="token-info_article_cell_label">Country of Origin:</span>
+                                <span class="token-info_article_cell_value">{{tokenInfo.originOf}}</span>
+                            </div>
+                            <div class="token-info_article_cell">
+                                <span class="token-info_article_cell_label">Mint date:</span>
+                                <span class="token-info_article_cell_value">{{tokenInfo.releaseDateOf * 1000 | date}}</span>
+                            </div>
+                            <div class="token-info_article_cell">
+                                <span class="token-info_article_cell_label">Purchase date:</span>
+                                <span class="token-info_article_cell_value">{{tokenInfo.purchaseDateOf}}</span>
+                            </div>
+                            <div class="token-info_article_cell">
+                                <span class="token-info_article_cell_label">Weight:</span>
+                                <span class="token-info_article_cell_value">{{tokenInfo.weightOf}}g</span>
+                            </div>
+                            <div class="token-info_article_cell">
+                                <span class="token-info_article_cell_label">Secret code:</span>
+                                <span class="token-info_article_cell_value">***********</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</ion-content>

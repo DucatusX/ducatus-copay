@@ -107,6 +107,10 @@ export class TransferToPage {
     return this._wallet;
   }
 
+  get token() {
+    return this.navParams.data.token;
+  }
+
   @Input()
   set searchInput(search) {
     this.search = search;
@@ -268,7 +272,7 @@ export class TransferToPage {
     });
   }
 
-  public close(item): void {
+  public close(item, token?): void {
     item
       .getAddress()
       .then((addr: string) => {
@@ -290,6 +294,7 @@ export class TransferToPage {
           this.viewCtrl.dismiss();
         } else {
           this.navCtrl.push(AmountPage, {
+            token,
             walletId: this.navParams.data.wallet.id,
             recipientType: item.recipientType,
             amount: parseInt(this.navParams.data.amount, 10),

@@ -137,6 +137,8 @@ import { WideHeaderPage } from './templates/wide-header-page/wide-header-page';
 import { CardCatalogPage } from './integrations/gift-cards/card-catalog/card-catalog';
 import { GIFT_CARD_PAGES } from './integrations/gift-cards/gift-cards';
 
+import { Erc721Page } from './erc-721/erc-721'
+
 export const PAGES = [
   AddPage,
   AddWalletPage,
@@ -162,6 +164,7 @@ export const PAGES = [
   CoinbaseTxDetailsPage,
   CoinbaseWithdrawPage,
   CopayersPage,
+  Erc721Page,
   SelectInputsPage,
   FeedbackCardPage,
   SharePage,
