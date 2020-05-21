@@ -25,6 +25,7 @@ import { WalletDetailsPage } from '../wallet-details/wallet-details';
 import { ProposalsNotificationsPage } from './proposals-notifications/proposals-notifications';
 
 // Providers
+import { MoonPayProvider } from '../../providers';
 import { ActionSheetProvider } from '../../providers/action-sheet/action-sheet';
 import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { ClipboardProvider } from '../../providers/clipboard/clipboard';
@@ -41,7 +42,6 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import { SimplexProvider } from '../../providers/simplex/simplex';
 import { WalletProvider } from '../../providers/wallet/wallet';
 import { SelectCurrencyPage } from '../add/select-currency/select-currency';
-import { MoonPayProvider } from '../../providers';
 
 interface UpdateWalletOptsI {
   walletId: string;

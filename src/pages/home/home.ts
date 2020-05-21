@@ -17,9 +17,9 @@ import {
   FeedbackProvider,
   GiftCardProvider,
   Logger,
+  MoonPayProvider,
   PersistenceProvider,
-  SimplexProvider,
-  MoonPayProvider
+  SimplexProvider
 } from '../../providers';
 import { AnalyticsProvider } from '../../providers/analytics/analytics';
 import { ConfigProvider } from '../../providers/config/config';

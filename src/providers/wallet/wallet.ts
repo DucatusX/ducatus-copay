@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import encoding from 'text-encoding';
 
 // Providers
+import { MoonPayProvider } from '../../providers';
 import { AddressProvider } from '../address/address';
 import { BwcErrorProvider } from '../bwc-error/bwc-error';
 import { BwcProvider } from '../bwc/bwc';
@@ -21,7 +22,6 @@ import { PopupProvider } from '../popup/popup';
 import { RateProvider } from '../rate/rate';
 import { TouchIdProvider } from '../touchid/touchid';
 import { TxFormatProvider } from '../tx-format/tx-format';
-import { ExternalLinkProvider, MoonPayProvider } from '../../providers';
 
 export interface HistoryOptionsI {
   limitTx?: string;

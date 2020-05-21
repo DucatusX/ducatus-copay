@@ -1,6 +1,5 @@
 import { InAppBrowserProvider, ProfileProvider, WalletProvider } from '..';
 
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { InAppBrowserRef } from '../../models/in-app-browser/in-app-browser-ref.model';
 
@@ -9,7 +8,6 @@ export class MoonPayProvider {
   constructor(
     private walletProvider: WalletProvider,
     private profileProvider: ProfileProvider,
-    private http: HttpClient,
     private iab: InAppBrowserProvider
   ) {}
 
