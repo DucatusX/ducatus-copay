@@ -1,0 +1,63 @@
+import { InAppBrowserProvider, ProfileProvider, WalletProvider } from '..';
+
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { InAppBrowserRef } from '../../models/in-app-browser/in-app-browser-ref.model';
+
+@Injectable()
+export class MoonPayProvider {
+  constructor(
+    private walletProvider: WalletProvider,
+    private profileProvider: ProfileProvider,
+    private http: HttpClient,
+    private iab: InAppBrowserProvider
+  ) {}
+
+  private getMoonPayLink(walletId?) {
+    let wallet;
+
+    if (walletId) {
+      wallet = this.profileProvider.getWallet(walletId);
+      if (wallet.needsBackup) {
+        return false;
+      }
+    }
+
+    const api_key: string = 'pk_live_BmtkWKbJbVkO0Fr8XSQMTPxkBfgsx1a2';
+    let url: string = 'https://buy.moonpay.io?apiKey=' + api_key;
+    return new Promise(resolve => {
+      if (walletId) {
+        url += '&currencyCode=' + wallet.coin;
+        this.walletProvider.getAddress(wallet, false).then(
+          addr => {
+            url += '&walletAddress=' + addr;
+          },
+          () => {
+            resolve(url);
+          }
+        );
+      } else {
+        resolve(url);
+      }
+    });
+  }
+
+  public openMoonPay(walletId?) {
+    const linkPromise = this.getMoonPayLink(walletId);
+    if (!linkPromise) {
+      return false;
+    }
+
+    return linkPromise.then((link: string) => {
+      this.iab
+        .createIABInstance(
+          'MoonPay',
+          'location=yes,toolbarcolor=#000000ff,closebuttoncaption=Сlose,closebuttoncolor=#d8373e,navigationbuttoncolor=#d8373e,fullscreen=no,toolbarposition=top,lefttoright=yes',
+          link
+        )
+        .then((res: InAppBrowserRef) => {
+          res.show();
+        });
+    });
+  }
+}

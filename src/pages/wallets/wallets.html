@@ -46,7 +46,8 @@
             </button>
           </div>
         </ion-item-divider>
-        <page-clipboard-card [remainingTimeStr]="remainingTimeStr" [payProDetailsData]="payProDetailsData" [validDataFromClipboard]="validDataFromClipboard" (click)="processClipboardData(validDataFromClipboard.data)">
+        <page-clipboard-card [remainingTimeStr]="remainingTimeStr" [payProDetailsData]="payProDetailsData"
+          [validDataFromClipboard]="validDataFromClipboard" (click)="processClipboardData(validDataFromClipboard.data)">
         </page-clipboard-card>
       </div>
 
@@ -74,11 +75,15 @@
           </div>
         </div>
         <ion-list no-lines class="bp-list" [ngClass]="{ collapsed: isCollapsed(walletGroup[0].keyId) }">
-          <wallet-item-content *ngFor="let wallet of walletGroup" [wallet]="wallet" (click)="goToWalletDetails(wallet)"></wallet-item-content>
+          <wallet-item-content *ngFor="let wallet of walletGroup" [wallet]="wallet" (click)="goToWalletDetails(wallet)">
+          </wallet-item-content>
         </ion-list>
-        <label-tip type="warn" *ngIf="walletGroup && walletGroup[0] && walletGroup[0].needsBackup" header="no-header" margin-top>
+        <label-tip type="warn" *ngIf="walletGroup && walletGroup[0] && walletGroup[0].needsBackup" header="no-header"
+          margin-top>
           <div label-tip-body>
-            <span translate>Before retrieving your wallets addresses, it's recommended that you first write down your recovery phrase and store it securely so that your wallets can be recovered in the case your device was lost or stolen.</span>
+            <span translate>Before retrieving your wallets addresses, it's recommended that you first write down your
+              recovery phrase and store it securely so that your wallets can be recovered in the case your device was
+              lost or stolen.</span>
             <br>
             <a class="label-tip-link" (click)="openBackupPage(walletGroup[0].keyId)" translate>Backup now</a>
           </div>
@@ -96,7 +101,8 @@
 
       <div *ngFor="let readOnlyWallet of readOnlyWalletsGroup; let i = index">
         <ion-list no-lines class="bp-list">
-          <wallet-item-content [wallet]="readOnlyWallet" (click)="goToWalletDetails(readOnlyWallet)"></wallet-item-content>
+          <wallet-item-content [wallet]="readOnlyWallet" (click)="goToWalletDetails(readOnlyWallet)">
+          </wallet-item-content>
         </ion-list>
       </div>
 
@@ -110,7 +116,8 @@
             <span *ngIf="coinbaseData.user">{{ coinbaseData.user.name }}'s Coinbase Account</span>
           </ion-label>
           <div class="collapse">
-            <div class="collapse-btn" *ngIf="coinbaseData.accounts.length > 1" (click)="collapsedAccounts = !collapsedAccounts">
+            <div class="collapse-btn" *ngIf="coinbaseData.accounts.length > 1"
+              (click)="collapsedAccounts = !collapsedAccounts">
               <ion-icon *ngIf="!collapsedAccounts" name="ios-arrow-down"></ion-icon>
               <ion-icon *ngIf="collapsedAccounts" name="ios-arrow-up"></ion-icon>
             </div>
@@ -127,7 +134,8 @@
               <ion-note item-end>
                 <div class="main-note">{{ac.balance.amount | number:'1.2-8'}}</div>
                 <div class="secondary-note" *ngIf="getNativeBalance(ac.balance.amount, ac.balance.currency)">
-                  {{ getNativeBalance(ac.balance.amount, ac.balance.currency) | currency:' ':' ' }} {{ coinbaseData.user.native_currency }}
+                  {{ getNativeBalance(ac.balance.amount, ac.balance.currency) | currency:' ':' ' }}
+                  {{ coinbaseData.user.native_currency }}
                 </div>
               </ion-note>
             </button>
@@ -143,4 +151,13 @@
     <ion-avatar item-start> <img src="assets/img/scan.svg" /> </ion-avatar>
     <div translate>Scan</div>
   </button>
+
+  <div class="census-scan-buttons" *ngIf="wallets && wallets[0]">
+    <button class="census-scan-button" (click)="openMoonPay()">
+      <span class="census-scan-button_icon">
+        <img src="assets/img/tangem/icons/buy-crypto.svg" />
+      </span>
+      <span class="census-scan-button_text" translate>Buy crypto</span>
+    </button>
+  </div>
 </ion-content>

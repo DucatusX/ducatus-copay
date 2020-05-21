@@ -50,6 +50,7 @@ import {
   LanguageProvider,
   LaunchReview,
   Logger,
+  MoonPayProvider,
   OnGoingProcessProvider,
   PayproProvider,
   PersistenceProvider,
@@ -157,7 +158,8 @@ import {
     DecimalPipe,
     PersistenceProvider,
     File,
-    CardPhasesProvider
+    CardPhasesProvider,
+    MoonPayProvider
   ]
 })
 export class ProvidersModule {}

@@ -22,7 +22,7 @@ import { ErrorsProvider } from '../../providers/errors/errors';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
 import { GiftCardProvider } from '../../providers/gift-card/gift-card';
 import { CardConfigMap } from '../../providers/gift-card/gift-card.types';
-import { ActionSheetProvider } from '../../providers/index';
+import { ActionSheetProvider, MoonPayProvider } from '../../providers/index';
 import { Logger } from '../../providers/logger/logger';
 import { OnGoingProcessProvider } from '../../providers/on-going-process/on-going-process';
 import { PlatformProvider } from '../../providers/platform/platform';
@@ -104,7 +104,8 @@ export class WalletDetailsPage {
     private statusBar: StatusBar,
     private socialSharing: SocialSharing,
     private bwcErrorProvider: BwcErrorProvider,
-    private errorsProvider: ErrorsProvider
+    private errorsProvider: ErrorsProvider,
+    private moonPayProvider: MoonPayProvider
   ) {
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.isCordova = this.platformProvider.isCordova;
@@ -231,6 +232,12 @@ export class WalletDetailsPage {
           });
         }
       });
+  }
+
+  public openMoonPay() {
+    if (!this.moonPayProvider.openMoonPay(this.wallet.credentials.walletId)) {
+      this.goToReceivePage();
+    }
   }
 
   public isUtxoCoin(): boolean {
@@ -632,7 +639,6 @@ export class WalletDetailsPage {
       else if (data) this.showErrorInfoSheet(data);
     });
   }
-
 
   public goToErc721Page() {
     this.navCtrl.push(Erc721Page, {

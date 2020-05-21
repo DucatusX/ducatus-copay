@@ -1,6 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Events/*, ModalController, */, NavController, Slides } from 'ionic-angular';
+import {
+  Events /*, ModalController, */,
+  NavController,
+  Slides
+} from 'ionic-angular';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { IntegrationsPage } from '../../pages/integrations/integrations';
@@ -14,7 +18,8 @@ import {
   GiftCardProvider,
   Logger,
   PersistenceProvider,
-  SimplexProvider
+  SimplexProvider,
+  MoonPayProvider
 } from '../../providers';
 import { AnalyticsProvider } from '../../providers/analytics/analytics';
 import { ConfigProvider } from '../../providers/config/config';
@@ -94,7 +99,8 @@ export class HomePage {
     private configProvider: ConfigProvider,
     private events: Events,
     private releaseProvider: ReleaseProvider,
-    private platformProvider: PlatformProvider
+    private platformProvider: PlatformProvider,
+    private moonPayProvider: MoonPayProvider
   ) {
     this.logger.info('Loaded: HomePage');
     this.subscribeEvents();
@@ -142,6 +148,10 @@ export class HomePage {
         imgSrc: 'assets/img/icon-merch-dir.svg',
         dismissible: true
       });
+  }
+
+  public openMoonPay() {
+    this.moonPayProvider.openMoonPay();
   }
 
   private getCachedTotalBalance() {
