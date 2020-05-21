@@ -7,6 +7,7 @@ import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { ConfigProvider } from '../../providers/config/config';
 import { CurrencyProvider } from '../../providers/currency/currency';
 import { ExchangeRatesProvider } from '../../providers/exchange-rates/exchange-rates';
+import { MoonPayProvider } from '../../providers/index';
 import { Logger } from '../../providers/logger/logger';
 import { PersistenceProvider } from '../../providers/persistence/persistence';
 import { ProfileProvider } from '../../providers/profile/profile';
@@ -50,7 +51,8 @@ export class TabsPage {
     private persistenceProvider: PersistenceProvider,
     private translate: TranslateService,
     private bwcErrorProvider: BwcErrorProvider,
-    private tabProvider: TabProvider
+    private tabProvider: TabProvider,
+    private moonPayProvider: MoonPayProvider
   ) {
     this.logger.info('Loaded: TabsPage');
     this.appName = this.appProvider.info.nameCase;
@@ -296,6 +298,11 @@ export class TabsPage {
 
   ionViewDidLoad() {
     this.tabs.select(1);
+  }
+
+  public openMoonPay() {
+    console.log('openmoonpay');
+    this.moonPayProvider.openMoonPay();
   }
 
   homeRoot = HomePage;
