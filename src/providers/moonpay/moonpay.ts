@@ -16,7 +16,6 @@ export class MoonPayProvider {
 
     if (walletId) {
       wallet = this.profileProvider.getWallet(walletId);
-      console.log('get wallet', wallet);
       if (wallet.needsBackup) {
         return false;
       }
@@ -39,8 +38,6 @@ export class MoonPayProvider {
 
   public openMoonPay(walletId?) {
     const linkPromise = this.getMoonPayLink(walletId);
-
-    console.log('link', linkPromise);
     if (!linkPromise) {
       return false;
     }
