@@ -5,7 +5,6 @@ import * as _ from 'lodash';
 import encoding from 'text-encoding';
 
 // Providers
-import { MoonPayProvider } from '../../providers';
 import { AddressProvider } from '../address/address';
 import { BwcErrorProvider } from '../bwc-error/bwc-error';
 import { BwcProvider } from '../bwc/bwc';
@@ -122,8 +121,7 @@ export class WalletProvider {
     private translate: TranslateService,
     private addressProvider: AddressProvider,
     private languageProvider: LanguageProvider,
-    private keyProvider: KeyProvider,
-    private moonPayProvider: MoonPayProvider
+    private keyProvider: KeyProvider
   ) {
     this.logger.debug('WalletProvider initialized');
     this.isPopupOpen = false;
@@ -169,10 +167,6 @@ export class WalletProvider {
         resolve(allKeys);
       });
     });
-  }
-
-  public openMoonPay() {
-    this.moonPayProvider.openMoonPay();
   }
 
   public normalizeJSON(parsedFile): any {
