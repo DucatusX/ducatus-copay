@@ -5,7 +5,7 @@ import { Events } from 'ionic-angular';
 import { AppProvider } from '../../providers/app/app';
 import { BitPayCardProvider } from '../../providers/bitpay-card/bitpay-card';
 import { BitPayProvider } from '../../providers/bitpay/bitpay';
-import { GiftCardProvider } from '../../providers/gift-card/gift-card';
+// import { GiftCardProvider } from '../../providers/gift-card/gift-card';
 import { HomeIntegrationsProvider } from '../../providers/home-integrations/home-integrations';
 import { IABCardProvider } from '../../providers/in-app-browser/card';
 import {
@@ -34,7 +34,7 @@ export class CardsPage {
     private homeIntegrationsProvider: HomeIntegrationsProvider,
     private bitPayProvider: BitPayProvider,
     private bitPayCardProvider: BitPayCardProvider,
-    private giftCardProvider: GiftCardProvider,
+    // private giftCardProvider: GiftCardProvider,
     private persistenceProvider: PersistenceProvider,
     private tabProvider: TabProvider,
     private events: Events,
@@ -99,17 +99,17 @@ export class CardsPage {
     this.gotCardItems = true;
   }
 
-  private async fetchActiveGiftCards() {
-    this.activeCards = await this.tabProvider.activeGiftCardsPromise;
-    const updatedActiveGiftCardsPromise = this.giftCardProvider.getActiveCards();
-    this.activeCards = await updatedActiveGiftCardsPromise;
-    this.tabProvider.activeGiftCardsPromise = updatedActiveGiftCardsPromise;
-  }
+  // private async fetchActiveGiftCards() {
+  //   this.activeCards = await this.tabProvider.activeGiftCardsPromise;
+  //   const updatedActiveGiftCardsPromise = this.giftCardProvider.getActiveCards();
+  //   this.activeCards = await updatedActiveGiftCardsPromise;
+  //   this.tabProvider.activeGiftCardsPromise = updatedActiveGiftCardsPromise;
+  // }
 
   private async fetchAllCards() {
     return Promise.all([
-      this.fetchBitpayCardItems(),
-      this.fetchActiveGiftCards()
+      this.fetchBitpayCardItems()
+      // this.fetchActiveGiftCards()
     ]);
   }
 

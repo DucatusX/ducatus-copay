@@ -18,7 +18,7 @@ import { Observable, Subscription } from 'rxjs';
 import {
   BitPayIdProvider,
   BitPayProvider,
-  GiftCardProvider,
+  // GiftCardProvider,
   IABCardProvider,
   InAppBrowserProvider,
   PersistenceProvider
@@ -116,7 +116,7 @@ export class CopayApp {
     private appProvider: AppProvider,
     private profile: ProfileProvider,
     private configProvider: ConfigProvider,
-    private giftCardProvider: GiftCardProvider,
+    // private giftCardProvider: GiftCardProvider,
     private imageLoaderConfig: ImageLoaderConfig,
     private modalCtrl: ModalController,
     private coinbaseProvider: CoinbaseProvider,
@@ -304,7 +304,7 @@ export class CopayApp {
             CARD_IAB_CONFIG,
             `https://${host}/wallet-card?context=bpa`,
             `(() => {
-              sessionStorage.setItem('isPaired', ${!!token}); 
+              sessionStorage.setItem('isPaired', ${!!token});
               sessionStorage.setItem('cards', ${JSON.stringify(
                 JSON.stringify(cards)
               )});
@@ -403,8 +403,8 @@ export class CopayApp {
 
   private registerIntegrations(): void {
     // Gift Cards
-    if (this.appProvider.info._enabledExtensions.giftcards)
-      this.giftCardProvider.register();
+    // if (this.appProvider.info._enabledExtensions.giftcards)
+    //   this.giftCardProvider.register();
 
     // ShapeShift
     if (this.appProvider.info._enabledExtensions.shapeshift) {

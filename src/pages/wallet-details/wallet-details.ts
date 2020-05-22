@@ -20,7 +20,7 @@ import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { CurrencyProvider } from '../../providers/currency/currency';
 import { ErrorsProvider } from '../../providers/errors/errors';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
-import { GiftCardProvider } from '../../providers/gift-card/gift-card';
+// import { GiftCardProvider } from '../../providers/gift-card/gift-card';
 import { CardConfigMap } from '../../providers/gift-card/gift-card.types';
 import { ActionSheetProvider, MoonPayProvider } from '../../providers/index';
 import { Logger } from '../../providers/logger/logger';
@@ -89,7 +89,7 @@ export class WalletDetailsPage {
     private walletProvider: WalletProvider,
     private addressbookProvider: AddressBookProvider,
     private events: Events,
-    public giftCardProvider: GiftCardProvider,
+    // public giftCardProvider: GiftCardProvider,
     private logger: Logger,
     private timeProvider: TimeProvider,
     private translate: TranslateService,
@@ -113,7 +113,7 @@ export class WalletDetailsPage {
 
   async ionViewDidLoad() {
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
-    this.supportedCards = this.giftCardProvider.getSupportedCardMap();
+    // this.supportedCards = this.giftCardProvider.getSupportedCardMap();
 
     // Getting info from cache
     if (this.navParams.data.clearCache) {

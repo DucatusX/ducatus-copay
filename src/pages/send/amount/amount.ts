@@ -27,7 +27,7 @@ import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
 // Pages
 import {
   ActionSheetProvider,
-  GiftCardProvider,
+  // GiftCardProvider,
   IABCardProvider
 } from '../../../providers';
 import { getActivationFee } from '../../../providers/gift-card/gift-card';
@@ -101,7 +101,7 @@ export class AmountPage {
     private actionSheetProvider: ActionSheetProvider,
     private configProvider: ConfigProvider,
     private filterProvider: FilterProvider,
-    private giftCardProvider: GiftCardProvider,
+    // private giftCardProvider: GiftCardProvider,
     private currencyProvider: CurrencyProvider,
     private logger: Logger,
     private navParams: NavParams,
@@ -174,15 +174,14 @@ export class AmountPage {
     };
     this.setAvailableUnits();
     this.updateUnitUI();
-    this.cardConfig =
-      this.cardName &&
-      (await this.giftCardProvider.getCardConfig(this.cardName));
+    // this.cardConfig =
+    // this.cardName;
+    //  && (await this.giftCardProvider.getCardConfig(this.cardName));
 
     if (this.token) {
       this.navCtrl.pop();
       this.finish(true);
     }
-
   }
 
   ionViewWillEnter() {

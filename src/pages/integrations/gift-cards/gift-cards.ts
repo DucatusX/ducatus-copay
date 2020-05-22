@@ -5,8 +5,8 @@ import { PrintableCardComponent } from './card-details/printable-card/printable-
 import { RedeemInstructionsComponent } from './card-details/redeem-instructions/redeem-instructions';
 import { CardTermsComponent } from './card-terms/card-terms';
 import { ConfirmCardPurchasePage } from './confirm-card-purchase/confirm-card-purchase';
-import { GiftCardSettingsPage } from './gift-card-settings/gift-card-settings';
-import { GiftCardsSettingsPage } from './gift-cards-settings/gift-cards-settings';
+// import { GiftCardSettingsPage } from './gift-card-settings/gift-card-settings';
+// import { GiftCardsSettingsPage } from './gift-cards-settings/gift-cards-settings';
 import { HOME_GIFT_CARD_COMPONENTS } from './home-gift-cards/home-gift-cards';
 import { PURCHASED_CARDS_PAGE_COMPONENTS } from './purchased-cards/purchased-cards';
 
@@ -16,8 +16,8 @@ export const GIFT_CARD_PAGES = [
   CardDetailsPage,
   CardTermsComponent,
   ConfirmCardPurchasePage,
-  GiftCardSettingsPage,
-  GiftCardsSettingsPage,
+  // GiftCardSettingsPage,
+  // GiftCardsSettingsPage,
   ...HOME_GIFT_CARD_COMPONENTS,
   PrintableCardComponent,
   ...PURCHASED_CARDS_PAGE_COMPONENTS,

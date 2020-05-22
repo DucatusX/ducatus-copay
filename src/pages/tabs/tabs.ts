@@ -12,7 +12,7 @@ import { Logger } from '../../providers/logger/logger';
 import { PersistenceProvider } from '../../providers/persistence/persistence';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { RateProvider } from '../../providers/rate/rate';
-import { TabProvider } from '../../providers/tab/tab';
+// import { TabProvider } from '../../providers/tab/tab';
 import { WalletProvider } from '../../providers/wallet/wallet';
 
 import { CardsPage } from '../cards/cards';
@@ -51,7 +51,7 @@ export class TabsPage {
     private persistenceProvider: PersistenceProvider,
     private translate: TranslateService,
     private bwcErrorProvider: BwcErrorProvider,
-    private tabProvider: TabProvider,
+    // private tabProvider: TabProvider,
     private moonPayProvider: MoonPayProvider
   ) {
     this.logger.info('Loaded: TabsPage');
@@ -76,11 +76,11 @@ export class TabsPage {
   }
 
   ngOnInit() {
-    this.tabProvider.prefetchCards().then(data => {
-      // [0] BitPay Cards
-      // [1] Gift Cards
-      this.events.publish('Local/FetchCards', data[0]);
-    });
+    // this.tabProvider.prefetchCards().then(data => {
+    //   // [0] BitPay Cards
+    //   // [1] Gift Cards
+    //   this.events.publish('Local/FetchCards', data[0]);
+    // });
   }
 
   disableCardNotificationBadge() {
@@ -301,7 +301,6 @@ export class TabsPage {
   }
 
   public openMoonPay() {
-    console.log('openmoonpay');
     this.moonPayProvider.openMoonPay();
   }
 
