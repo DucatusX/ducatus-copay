@@ -1,15 +1,17 @@
-import { InAppBrowserProvider, ProfileProvider, WalletProvider } from '..';
+import { ProfileProvider, WalletProvider } from '..';
 
 import { Injectable } from '@angular/core';
-import { InAppBrowserRef } from '../../models/in-app-browser/in-app-browser-ref.model';
+// import { InAppBrowserRef } from '../../models/in-app-browser/in-app-browser-ref.model';
+
+declare const cordova;
 
 @Injectable()
 export class MoonPayProvider {
   constructor(
     private walletProvider: WalletProvider,
     private profileProvider: ProfileProvider,
-    private iab: InAppBrowserProvider
-  ) {}
+    // private iab: InAppBrowserProvider
+  ) { }
 
   private getMoonPayLink(walletId?) {
     let wallet;
@@ -41,17 +43,29 @@ export class MoonPayProvider {
     if (!linkPromise) {
       return false;
     }
-
-    return linkPromise.then((link: string) => {
-      this.iab
-        .createIABInstance(
-          'MoonPay',
-          'location=yes,toolbarcolor=#000000ff,closebuttoncaption=Сlose,closebuttoncolor=#d8373e,navigationbuttoncolor=#d8373e,fullscreen=no,toolbarposition=top,lefttoright=yes',
-          link
-        )
-        .then((res: InAppBrowserRef) => {
-          res.show();
-        });
+    linkPromise.then((link) => {
+      cordova.InAppBrowser.open(link, '_blank', 'location=no,toolbarcolor=#23272A,closebuttoncaption=Сlose,closebuttoncolor=#d8373e,navigationbuttoncolor=#d8373e,fullscreen=no,toolbarposition=bottom,lefttoright=yes');
     });
+
+    return true;
   }
+
+  // public openMoonPay(walletId?) {
+  //   const linkPromise = this.getMoonPayLink(walletId);
+  //   if (!linkPromise) {
+  //     return false;
+  //   }
+
+  //   return linkPromise.then((link: string) => {
+  //     this.iab
+  //       .createIABInstance(
+  //         'MoonPay',
+  //         'location=yes,toolbarcolor=#000000ff,closebuttoncaption=Сlose,closebuttoncolor=#d8373e,navigationbuttoncolor=#d8373e,fullscreen=no,toolbarposition=top,lefttoright=yes',
+  //         link
+  //       )
+  //       .then((res: InAppBrowserRef) => {
+  //         res.show();
+  //       });
+  //   });
+  // }
 }
