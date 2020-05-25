@@ -17,6 +17,8 @@
     <access origin="http://89.40.14.180:8545" />
     <access origin="https://bitpay.com" />
     <access origin="https://buy.moonpay.io" />
+    <access origin="https://ducx-testnet-node1.ducatus.com" />
+    <access origin="https://ducx-node1.ducatus.com" />
     <access origin="http://89.40.4.152:3232" />
     <access origin="https://test.bitpay.com" />
     <access origin="https://staging.bitpay.com" />

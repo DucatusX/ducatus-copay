@@ -149,7 +149,7 @@
             {{ 'Send' | translate }}
           </button>
         </div>
-        <div class="action-buttons">
+        <div class="action-buttons" *ngIf="!['ducx','duc'].includes(wallet?.coin)">
           <button class="button-standard disable-hover" (click)="openMoonPay()" ion-button>
             {{ 'Buy crypto' | translate }}
           </button>

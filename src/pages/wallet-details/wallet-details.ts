@@ -641,9 +641,16 @@ export class WalletDetailsPage {
   }
 
   public goToErc721Page() {
-    this.navCtrl.push(Erc721Page, {
-      wallet: this.wallet
-    });
+    if (this.wallet.credentials.walletId) {
+      if (
+        this.profileProvider.getWallet(this.wallet.credentials.walletId)
+          .needsBackup
+      ) {
+        this.goToReceivePage();
+      } else {
+        this.navCtrl.push(Erc721Page, { wallet: this.wallet });
+      }
+    }
   }
 
   public goToSendPage() {
