@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, Slides } from 'ionic-angular';
 import { WalletProvider } from '../../providers';
+import { ExternalLinkProvider } from '../../providers/external-link/external-link';
 
 import Web3 from 'web3';
 import { SendPage } from '../send/send';
@@ -82,7 +83,8 @@ export class Erc721Page {
   constructor(
     private navParams: NavParams,
     private navCtrl: NavController,
-    private walletProvider: WalletProvider
+    private walletProvider: WalletProvider,
+    private externalLinkProvider: ExternalLinkProvider,
   ) {
     this.wallet = this.navParams.data.wallet;
     this.goldABI = GOLD_TOKEN_ABI;
@@ -165,7 +167,11 @@ export class Erc721Page {
   }
 
   public goToReceive() {
-    alert('Спроси Вадима! Он знает, где достать!!');
+    this.openExternalLink('https://remusgold.com');
+  }
+
+  public openExternalLink(url: string): void {
+    this.externalLinkProvider.open(url);
   }
 
   private getTokenInfo() {

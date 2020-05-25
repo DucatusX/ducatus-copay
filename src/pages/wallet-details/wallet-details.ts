@@ -642,10 +642,7 @@ export class WalletDetailsPage {
 
   public goToErc721Page() {
     if (this.wallet.credentials.walletId) {
-      if (
-        this.profileProvider.getWallet(this.wallet.credentials.walletId)
-          .needsBackup
-      ) {
+      if (this.wallet.needsBackup) {
         this.goToReceivePage();
       } else {
         this.navCtrl.push(Erc721Page, { wallet: this.wallet });
