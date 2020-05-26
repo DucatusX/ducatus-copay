@@ -1,17 +1,23 @@
-import { ProfileProvider, WalletProvider } from '..';
-
 import { Injectable } from '@angular/core';
-// import { InAppBrowserRef } from '../../models/in-app-browser/in-app-browser-ref.model';
+import { PlatformProvider, ProfileProvider, WalletProvider } from '..';
+// import { HttpClient } from '@angular/common/http';
 
 declare const cordova;
 
 @Injectable()
 export class MoonPayProvider {
+  private isAndroid: any;
   constructor(
     private walletProvider: WalletProvider,
     private profileProvider: ProfileProvider,
-    // private iab: InAppBrowserProvider
-  ) { }
+    private platformProvider: PlatformProvider
+    // private httpClient: HttpClient
+  ) {
+    document.addEventListener("deviceready", () => {
+      window.open = cordova.InAppBrowser.open;
+    }, false);
+    this.isAndroid = this.platformProvider.isAndroid;
+  }
 
   private getMoonPayLink(walletId?) {
     let wallet;
@@ -30,7 +36,12 @@ export class MoonPayProvider {
         url += '&currencyCode=' + wallet.coin;
         this.walletProvider.getAddress(wallet, false).then(addr => {
           url += '&walletAddress=' + addr;
+          // this.httpClient.post('https://urlsign.census.cx', { url })
+          //   .toPromise().then((result: { signed_url: string }) => {
+          //   resolve(result.signed_url || url);
+          // }, () => {
           resolve(url);
+          // });
         });
       } else {
         resolve(url);
@@ -43,29 +54,12 @@ export class MoonPayProvider {
     if (!linkPromise) {
       return false;
     }
-    linkPromise.then((link) => {
-      cordova.InAppBrowser.open(link, '_blank', 'location=no,toolbarcolor=#23272A,closebuttoncaption=Сlose,closebuttoncolor=#d8373e,navigationbuttoncolor=#d8373e,fullscreen=no,toolbarposition=bottom,lefttoright=yes');
+
+    linkPromise.then((link: string) => {
+      const location = this.isAndroid ? 'yes' : 'no';
+      window.open(link, '_blank', `location=${location},toolbarcolor=#23272A,closebuttoncaption=Сlose,closebuttoncolor=#d8373e,navigationbuttoncolor=#d8373e,fullscreen=no,toolbarposition=bottom,lefttoright=yes`);
     });
 
     return true;
   }
-
-  // public openMoonPay(walletId?) {
-  //   const linkPromise = this.getMoonPayLink(walletId);
-  //   if (!linkPromise) {
-  //     return false;
-  //   }
-
-  //   return linkPromise.then((link: string) => {
-  //     this.iab
-  //       .createIABInstance(
-  //         'MoonPay',
-  //         'location=yes,toolbarcolor=#000000ff,closebuttoncaption=Сlose,closebuttoncolor=#d8373e,navigationbuttoncolor=#d8373e,fullscreen=no,toolbarposition=top,lefttoright=yes',
-  //         link
-  //       )
-  //       .then((res: InAppBrowserRef) => {
-  //         res.show();
-  //       });
-  //   });
-  // }
 }
