@@ -112,10 +112,6 @@
         <span translate>Export Key</span>
       </button>
 
-      <button *ngIf="!needsBackup && canSign && !isDeletedSeed" ion-item (click)="printPaperWallet()">
-        <span translate>Print Paper wallet</span>
-      </button>
-
       <button *ngIf="!needsBackup && canSign" ion-item (click)="openWalletGroupExtendedPrivateKey()">
         <span translate>Extended Private Key</span>
       </button>
