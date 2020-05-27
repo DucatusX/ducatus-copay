@@ -136,6 +136,7 @@
     "cordova-plugin-compat": "1.2.0",
     "cordova-plugin-customurlscheme-ng": "^8.0.0",
     "cordova-plugin-device": "^2.0.3",
+    "cordova-pdf-generator": "^2.1.1",
     "cordova-plugin-dialogs": "^2.0.2",
     "cordova-plugin-fcm-ng": "^5.1.1",
     "cordova-plugin-file": "^6.0.2",
