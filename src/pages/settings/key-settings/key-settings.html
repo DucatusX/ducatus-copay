@@ -42,7 +42,8 @@
       </button>
 
       <ion-item-divider *ngIf="canSign">{{'Wallets' | translate}}
-        <button class="reorder-option" ion-button item-end clear *ngIf="!showReorder && wallets?.length > 1" (click)="reorder()">
+        <button class="reorder-option" ion-button item-end clear *ngIf="!showReorder && wallets?.length > 1"
+          (click)="reorder()">
           <img src="assets/img/sort.svg">
         </button>
         <button class="reorder-option" ion-button item-end clear *ngIf="showReorder" (click)="reorder()">
@@ -50,7 +51,8 @@
         </button>
       </ion-item-divider>
       <ion-list reorder="{{showReorder}}" (ionItemReorder)="reorderAccounts($event)">
-        <button class="wallets-list" [attr.detail-none]="showReorder ? true : null" ion-item *ngFor="let wallet of wallets" (click)="openWalletSettings(wallet.id)">
+        <button class="wallets-list" [attr.detail-none]="showReorder ? true : null" ion-item
+          *ngFor="let wallet of wallets" (click)="openWalletSettings(wallet.id)">
           <coin-icon [coin]="wallet.coin" [network]="wallet.network" item-left></coin-icon>
           <ion-label>
             <div class="main-label">
@@ -62,7 +64,8 @@
           </ion-note>
         </button>
       </ion-list>
-      <button ion-item detail-none class="create-button" *ngIf="wallets && wallets[0].canAddNewAccount" (click)="goToAddPage()">
+      <button ion-item detail-none class="create-button" *ngIf="wallets && wallets[0].canAddNewAccount"
+        (click)="goToAddPage()">
         {{'Create a new wallet' | translate }}
       </button>
 
@@ -82,14 +85,16 @@
         <label-tip type="info">
           <span label-tip-title translate>Password Not Recoverable</span>
           <div label-tip-body>
-            <span translate>This password cannot be recovered. If this password is lost, funds can only be recovered by reimporting your 12-word recovery phrase.</span>
+            <span translate>This password cannot be recovered. If this password is lost, funds can only be recovered by
+              reimporting your 12-word recovery phrase.</span>
             <br>
             <a class="label-tip-link" (click)="openSupportEncryptPassword()" translate>Learn More</a>
           </div>
         </label-tip>
       </div>
 
-      <button ion-item *ngIf="encryptEnabled && derivationStrategy !== 'BIP45'" (click)="openClearEncryptPasswordPage()">
+      <button ion-item *ngIf="encryptEnabled && derivationStrategy !== 'BIP45'"
+        (click)="openClearEncryptPasswordPage()">
         <span translate>Clear Encrypt Password</span>
       </button>
 
@@ -105,6 +110,10 @@
 
       <button *ngIf="!needsBackup && canSign && !isDeletedSeed" ion-item (click)="openQrExport()">
         <span translate>Export Key</span>
+      </button>
+
+      <button *ngIf="!needsBackup && canSign && !isDeletedSeed" ion-item (click)="printPaperWallet()">
+        <span translate>Print Paper wallet</span>
       </button>
 
       <button *ngIf="!needsBackup && canSign" ion-item (click)="openWalletGroupExtendedPrivateKey()">

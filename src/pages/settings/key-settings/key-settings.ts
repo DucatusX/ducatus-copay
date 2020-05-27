@@ -9,6 +9,7 @@ import { ErrorsProvider } from '../../../providers/errors/errors';
 import { ExternalLinkProvider } from '../../../providers/external-link/external-link';
 import { KeyProvider } from '../../../providers/key/key';
 import { Logger } from '../../../providers/logger/logger';
+import { PdfProvider } from '../../../providers/pdf/pdf';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
 
@@ -56,7 +57,8 @@ export class KeySettingsPage {
     private keyProvider: KeyProvider,
     private derivationPathHelperProvider: DerivationPathHelperProvider,
     private modalCtrl: ModalController,
-    private errorsProvider: ErrorsProvider
+    private errorsProvider: ErrorsProvider,
+    private pdfProvider: PdfProvider
   ) {
     this.logger.info('Loaded:  KeySettingsPage');
     this.keyId = this.navParams.data.keyId;
@@ -177,6 +179,15 @@ export class KeySettingsPage {
     this.navCtrl.push(KeyQrExportPage, {
       keyId: this.keyId
     });
+  }
+
+  public printPaperWallet(): void {
+    const params = {
+      'ducatus_address': 'sadsdasdasdasdasd',
+      'email': 'support@ducatus.net'
+    };
+
+    this.pdfProvider.printPaperWallet(params)
   }
 
   public openWalletGroupExtendedPrivateKey(): void {
