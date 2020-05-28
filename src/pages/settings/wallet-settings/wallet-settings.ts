@@ -37,7 +37,10 @@ export class WalletSettingsPage {
   public touchIdPrevValue: boolean;
   public touchIdAvailable: boolean;
   public deleted: boolean = false;
+  public keysEncrypted: boolean;
+  public walletsGroup;
   private config;
+  private keyId;
 
   constructor(
     private profileProvider: ProfileProvider,
@@ -59,9 +62,12 @@ export class WalletSettingsPage {
 
   ionViewWillEnter() {
     this.canSign = this.wallet.canSign;
+    this.keyId = this.navParams.data.keyId;
     this.needsBackup = this.wallet.needsBackup;
     this.hiddenBalance = this.wallet.balanceHidden;
     this.encryptEnabled = this.wallet.isPrivKeyEncrypted;
+    this.walletsGroup = this.profileProvider.getWalletGroup(this.keyId);
+    this.keysEncrypted = this.walletsGroup.isPrivKeyEncrypted;
 
     this.checkBiometricIdAvailable();
 
@@ -192,10 +198,58 @@ export class WalletSettingsPage {
     });
   }
 
+  public generateQrKey() {
+    return new Promise((resolve) => {
+      this.keyProvider
+        .handleEncryptedWallet(this.keyId)
+        .then((password: string) => {
+          const keys = this.keyProvider.get(this.keyId, password);
+          this.keysEncrypted = false;
+
+          if (!keys || !keys.mnemonic) {
+            const err = this.translate.instant('Exporting via QR not supported for this wallet');
+            const title = this.translate.instant('Error');
+            this.logger.debug(title, err);
+            // this.showErrorInfoSheet(err, title);
+            return;
+          }
+
+          const mnemonicHasPassphrase = this.keyProvider.mnemonicHasPassphrase(this.keyId);
+          this.logger.debug('QR code generated. mnemonicHasPassphrase: ' + mnemonicHasPassphrase);
+          const code = '1|' + keys.mnemonic + '|null|null|' + mnemonicHasPassphrase + '|null';
+          console.log('generateQrKey', code)
+
+          resolve(code);
+        })
+    });
+  }
+
+  public getAddress() {
+    return new Promise((resolve) => {
+      this.walletProvider.getAddress(this.wallet, false).then(address => {
+        this.logger.debug('get address: ' + address);
+        resolve(address);
+      });
+    });
+  }
+
   public printPaperWallet(): void {
-    this.pdfProvider.printPaperWallet('LsYgkGZZX2tvJYmb87RYwC3KdSwLtVpeiF');
-    // this.walletProvider.getAddress(this.wallet, false).then(addr => {
-    //   this.pdfProvider.printPaperWallet(addr)
-    // });
+    const qrKey = this.generateQrKey();
+    const walletAddress = this.getAddress();
+
+    if (!qrKey && !walletAddress) {
+      this.logger.debug('must have qrKey and address: ' + qrKey, walletAddress);
+      return;
+    }
+
+    const params = {
+      key_qr: qrKey,
+      wallet_address: walletAddress
+    }
+
+    this.logger.debug('key_qr and wallet_address' + qrKey, walletAddress);
+    console.log('key_qr and wallet_address' + params.key_qr, params.wallet_address);
+
+    // this.pdfProvider.printPaperWallet('paperWallet', params);
   }
 }
