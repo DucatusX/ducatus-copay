@@ -198,58 +198,72 @@ export class WalletSettingsPage {
     });
   }
 
-  public generateQrKey() {
-    return new Promise((resolve) => {
-      this.keyProvider
-        .handleEncryptedWallet(this.keyId)
-        .then((password: string) => {
-          const keys = this.keyProvider.get(this.keyId, password);
-          this.keysEncrypted = false;
+  private generateQrKey() {
+    return this.keyProvider
+      .handleEncryptedWallet(this.keyId)
+      .then((password: string) => {
+        const keys = this.keyProvider.get(this.keyId, password);
+        this.keysEncrypted = false;
 
-          if (!keys || !keys.mnemonic) {
-            const err = this.translate.instant('Exporting via QR not supported for this wallet');
-            const title = this.translate.instant('Error');
-            this.logger.debug(title, err);
-            // this.showErrorInfoSheet(err, title);
-            return;
-          }
+        if (!keys || !keys.mnemonic) {
+          const err = this.translate.instant('Exporting via QR not supported for this wallet');
+          const title = this.translate.instant('Error');
+          this.logger.debug(title, err);
+          // this.showErrorInfoSheet(err, title);
+          return false;
+        }
 
-          const mnemonicHasPassphrase = this.keyProvider.mnemonicHasPassphrase(this.keyId);
-          this.logger.debug('QR code generated. mnemonicHasPassphrase: ' + mnemonicHasPassphrase);
-          const code = '1|' + keys.mnemonic + '|null|null|' + mnemonicHasPassphrase + '|null';
-          console.log('generateQrKey', code)
+        const mnemonicHasPassphrase = this.keyProvider.mnemonicHasPassphrase(this.keyId);
+        this.logger.debug('QR code generated. mnemonicHasPassphrase: ' + mnemonicHasPassphrase);
+        const code = '1|' + keys.mnemonic + '|null|null|' + mnemonicHasPassphrase + '|null';
+        console.log('generateQrKey', code)
 
-          resolve(code);
-        })
-    });
+        return {
+          key: 'key',
+          value: code
+        }
+      })
   }
 
-  public getAddress() {
-    return new Promise((resolve) => {
-      this.walletProvider.getAddress(this.wallet, false).then(address => {
-        this.logger.debug('get address: ' + address);
-        resolve(address);
-      });
+  private getAddress() {
+    return this.walletProvider.getAddress(this.wallet, false).then((address) => {
+      return {
+        key: 'address',
+        value: address
+      }
     });
   }
 
   public printPaperWallet(): void {
+
     const qrKey = this.generateQrKey();
     const walletAddress = this.getAddress();
 
-    if (!qrKey && !walletAddress) {
-      this.logger.debug('must have qrKey and address: ' + qrKey, walletAddress);
-      return;
-    }
+    Promise.all([qrKey, walletAddress]).then((result) => {
+      const res = {};
+      result.forEach((resItem: {key: string, value: string}) => {
+        res[resItem.key] = resItem.value;
+      });
+      return res
+    }).then((res: any) => {
+      const qrKey = res.key;
+      const walletAddress = res.address;
+      if (!qrKey && !walletAddress) {
+        this.logger.debug('must have qrKey and address: ' + qrKey, walletAddress);
+        return;
+      }
 
-    const params = {
-      key_qr: qrKey,
-      wallet_address: walletAddress
-    }
+      const params = {
+        key_qr: qrKey,
+        wallet_address: walletAddress
+      }
 
-    this.logger.debug('key_qr and wallet_address' + qrKey, walletAddress);
-    console.log('key_qr and wallet_address' + params.key_qr, params.wallet_address);
+      this.logger.debug('key_qr and wallet_address' + qrKey, walletAddress);
+      console.log('key_qr and wallet_address' + params.key_qr, params.wallet_address);
 
-    // this.pdfProvider.printPaperWallet('paperWallet', params);
+      this.pdfProvider.printPaperWallet('paperWallet', params);
+    });
+
+
   }
 }
