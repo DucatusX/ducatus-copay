@@ -133,36 +133,36 @@ export class WalletProvider {
       this.persistenceProvider.getKeys().then(keys => {
         const allKeys = keys
           ? keys
-              .filter(k => !k.xPrivKeyEncrypted)
-              .map(key => {
-                const currentXPrivKey = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
-                  key.xPrivKey
-                ).toObject();
-                const credentialsData = { ...parsedFile };
-                credentialsData.useLegacyCoinType = undefined;
-                credentialsData.useLegacyPurpose = undefined;
-                if (currentXPrivKey.network === 'restore') {
-                  currentXPrivKey.network = 'livenet';
-                  currentXPrivKey.xprivkey = undefined;
-                  currentXPrivKey.checksum = undefined;
-                  const newXPrivKey = this.bwcProvider.Client.Ducatuscore.HDPrivateKey.fromObject(
-                    currentXPrivKey
-                  );
-                  key.xPrivKey = newXPrivKey.toString();
-                }
-
-                const recoveryKey = Key.fromObj(key);
-                const recoveryCredentials = recoveryKey.createCredentials(
-                  parsedFile.passphrase,
-                  credentialsData
+            .filter(k => !k.xPrivKeyEncrypted)
+            .map(key => {
+              const currentXPrivKey = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
+                key.xPrivKey
+              ).toObject();
+              const credentialsData = { ...parsedFile };
+              credentialsData.useLegacyCoinType = undefined;
+              credentialsData.useLegacyPurpose = undefined;
+              if (currentXPrivKey.network === 'restore') {
+                currentXPrivKey.network = 'livenet';
+                currentXPrivKey.xprivkey = undefined;
+                currentXPrivKey.checksum = undefined;
+                const newXPrivKey = this.bwcProvider.Client.Ducatuscore.HDPrivateKey.fromObject(
+                  currentXPrivKey
                 );
-                return {
-                  key: recoveryKey,
-                  keyId: recoveryCredentials.keyId,
-                  xPubKey: recoveryCredentials.xPubKey,
-                  copayerId: recoveryCredentials.copayerId
-                };
-              })
+                key.xPrivKey = newXPrivKey.toString();
+              }
+
+              const recoveryKey = Key.fromObj(key);
+              const recoveryCredentials = recoveryKey.createCredentials(
+                parsedFile.passphrase,
+                credentialsData
+              );
+              return {
+                key: recoveryKey,
+                keyId: recoveryCredentials.keyId,
+                xPubKey: recoveryCredentials.xPubKey,
+                copayerId: recoveryCredentials.copayerId
+              };
+            })
           : [];
         resolve(allKeys);
       });
@@ -543,10 +543,10 @@ export class WalletProvider {
                 ) {
                   this.logger.debug(
                     'Retrying update... ' +
-                      walletId +
-                      ' Try:' +
-                      tries +
-                      ' until:',
+                    walletId +
+                    ' Try:' +
+                    tries +
+                    ' until:',
                     opts.until
                   );
                   return setTimeout(() => {
@@ -585,7 +585,7 @@ export class WalletProvider {
       if (WalletProvider.statusUpdateOnProgress[wallet.id] && !opts.until) {
         this.logger.info(
           '!! Status update already on progress for: ' +
-            wallet.credentials.walletName
+          wallet.credentials.walletName
         );
         return reject('INPROGRESS');
       }
@@ -621,7 +621,7 @@ export class WalletProvider {
   }
 
   public getAddressView(coin: Coin, network: string, address: string): string {
-    if (coin != 'bch' && coin != 'duc') return address;
+    if (coin != 'bch') return address;
     const protoAddr = this.getProtoAddress(coin, network, address);
     return protoAddr;
   }
@@ -798,7 +798,7 @@ export class WalletProvider {
       const LIMIT = 100;
       let requestLimit = FIRST_LIMIT;
       const walletId = wallet.credentials.walletId;
-      WalletProvider.progressFn[walletId] = progressFn || (() => {});
+      WalletProvider.progressFn[walletId] = progressFn || (() => { });
       let foundLimitTx: any = [];
 
       const fixTxsUnit = (txs): void => {
@@ -878,11 +878,11 @@ export class WalletProvider {
                   skip = skip + requestLimit;
                   this.logger.debug(
                     'Syncing TXs for:' +
-                      walletId +
-                      '. Got:' +
-                      newTxs.length +
-                      ' Skip:' +
-                      skip,
+                    walletId +
+                    '. Got:' +
+                    newTxs.length +
+                    ' Skip:' +
+                    skip,
                     ' EndingTxid:',
                     endingTxid,
                     ' Continue:',
@@ -904,7 +904,7 @@ export class WalletProvider {
                   if (!shouldContinue) {
                     this.logger.debug(
                       'Finished Sync: New / soft confirmed Txs: ' +
-                        newTxs.length
+                      newTxs.length
                     );
                     return resolve(newTxs);
                   }
@@ -1009,9 +1009,9 @@ export class WalletProvider {
                     .then(() => {
                       this.logger.debug(
                         'History sync & saved for ' +
-                          wallet.id +
-                          ' Txs: ' +
-                          newHistory.length
+                        wallet.id +
+                        ' Txs: ' +
+                        newHistory.length
                       );
 
                       return resolve();
@@ -1633,8 +1633,8 @@ export class WalletProvider {
             err && err.message
               ? err.message
               : this.translate.instant(
-                  'The payment was created but could not be completed. Please try again from home screen'
-                );
+                'The payment was created but could not be completed. Please try again from home screen'
+              );
           this.logger.error('Sign error: ' + msg);
           this.events.publish('Local/TxAction', {
             walletId: wallet.id,
@@ -1752,16 +1752,16 @@ export class WalletProvider {
 
       return resolve(
         info.type +
-          '|' +
-          info.data +
-          '|' +
-          wallet.credentials.network.toLowerCase() +
-          '|' +
-          derivationPath +
-          '|' +
-          mnemonicHasPassphrase +
-          '|' +
-          wallet.coin
+        '|' +
+        info.data +
+        '|' +
+        wallet.credentials.network.toLowerCase() +
+        '|' +
+        derivationPath +
+        '|' +
+        mnemonicHasPassphrase +
+        '|' +
+        wallet.coin
       );
     });
   }

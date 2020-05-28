@@ -53,6 +53,7 @@ import {
   MoonPayProvider,
   OnGoingProcessProvider,
   PayproProvider,
+  PdfProvider,
   PersistenceProvider,
   PlatformProvider,
   PopupProvider,
@@ -159,7 +160,8 @@ import {
     PersistenceProvider,
     File,
     CardPhasesProvider,
-    MoonPayProvider
+    MoonPayProvider,
+    PdfProvider
   ]
 })
-export class ProvidersModule {}
+export class ProvidersModule { }

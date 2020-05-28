@@ -7,6 +7,7 @@ import { Logger } from '../../../providers/logger/logger';
 import { ConfigProvider } from '../../../providers/config/config';
 import { ExternalLinkProvider } from '../../../providers/external-link/external-link';
 import { KeyProvider } from '../../../providers/key/key';
+import { PdfProvider } from '../../../providers/pdf/pdf';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { TouchIdProvider } from '../../../providers/touchid/touchid';
 import { WalletProvider } from '../../../providers/wallet/wallet';
@@ -49,7 +50,8 @@ export class WalletSettingsPage {
     private touchIdProvider: TouchIdProvider,
     private translate: TranslateService,
     private keyProvider: KeyProvider,
-    private events: Events
+    private events: Events,
+    private pdfProvider: PdfProvider
   ) {
     this.logger.info('Loaded:  WalletSettingsPage');
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
@@ -188,5 +190,12 @@ export class WalletSettingsPage {
       keyId: this.wallet.keyId,
       walletId: this.wallet.id
     });
+  }
+
+  public printPaperWallet(): void {
+    this.pdfProvider.printPaperWallet('LsYgkGZZX2tvJYmb87RYwC3KdSwLtVpeiF');
+    // this.walletProvider.getAddress(this.wallet, false).then(addr => {
+    //   this.pdfProvider.printPaperWallet(addr)
+    // });
   }
 }
