@@ -55,3 +55,27 @@
     </ion-list>
   </div>
 </wide-header-page>
+
+<div #paperpdf hidden *ngIf="paperParams">
+  <!--<html>-->
+  <!--<body id="paper-pdf">-->
+  <div>
+    <div class="content-top"> <img src="https://www.ducatuscoins.com/assets/img/printpaperwallet.png" /> </div>
+    <div class="content-bottom">
+      <div class="content-bottom-left">
+        <p class="content-bottom-text"><b>Your public address</b></p>
+        <div class="content-bottom-qrcode" id="walletAddress"></div>
+        <p class="content-bottom-address">{{paperParams.wallet_address}}</p>
+        <p class="content-bottom-text">to be used for receiving {{paperParams.wallet_coin}}</p>
+      </div>
+      <div class="content-bottom-right">
+        <p class="content-bottom-text"> <b>Your private wallet recovery key</b> </p>
+        <div class="content-bottom-qrcode" id="walletQR"></div>
+        <p class="content-bottom-text">This key is all you needed to access your founds.</p>
+      </div>
+    </div>
+  </div>
+  <!--</body>-->
+  <!--</html>-->
+</div>
+

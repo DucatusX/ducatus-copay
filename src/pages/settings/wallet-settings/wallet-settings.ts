@@ -1,7 +1,8 @@
-import { Component, NgModule } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Events, NavController, NavParams } from 'ionic-angular';
 import { Logger } from '../../../providers/logger/logger';
+import * as QRCode from 'qrcode-svg';
 
 // providers
 import { ConfigProvider } from '../../../providers/config/config';
@@ -24,20 +25,16 @@ import { WalletInformationPage } from './wallet-settings-advanced/wallet-informa
 import { WalletServiceUrlPage } from './wallet-settings-advanced/wallet-service-url/wallet-service-url';
 import { WalletTransactionHistoryPage } from './wallet-settings-advanced/wallet-transaction-history/wallet-transaction-history';
 
-// components
-import { PaperPdfComponent } from '../../../components/pdf-template/paper/paper';
-
-@NgModule({
-  declarations: [
-    PaperPdfComponent
-  ]
-})
+import { pdfParams } from './pdf-params';
 
 @Component({
   selector: 'page-wallet-settings',
   templateUrl: 'wallet-settings.html'
 })
 export class WalletSettingsPage {
+
+  @ViewChild('paperpdf', {read: ElementRef}) paperpdf: ElementRef;
+
   public showDuplicateWallet: boolean;
   public wallet;
   public canSign: boolean;
@@ -52,6 +49,7 @@ export class WalletSettingsPage {
   public walletsGroup;
   private config;
   private keyId;
+  public paperParams: any;
 
   constructor(
     private profileProvider: ProfileProvider,
@@ -66,8 +64,7 @@ export class WalletSettingsPage {
     private keyProvider: KeyProvider,
     private events: Events,
     private pdfProvider: PdfProvider,
-    private actionSheetProvider: ActionSheetProvider,
-    public paperpdf: PaperPdfComponent
+    private actionSheetProvider: ActionSheetProvider
   ) {
     this.logger.info('Loaded:  WalletSettingsPage');
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
@@ -287,15 +284,40 @@ export class WalletSettingsPage {
         return;
       }
 
-      const params = {
+      this.paperParams = {
         key_qr: qrKey,
         wallet_address: walletAddress,
         wallet_coin: this.wallet.coin,
-      }
+        svgAddress: new QRCode({
+          content: walletAddress,
+          join: true,
+          container: 'svg-viewbox',
+          padding: 3,
+          ecl: "L",
+        }).svg(),
+        svgKey: new QRCode({
+          content: qrKey,
+          join: true,
+          container: 'svg-viewbox',
+          padding: 3,
+          ecl: "L",
+        }).svg()
+      };
 
-      this.paperpdf.makePdf(params);
-      // this.pdfProvider.makePdf('paperWallet', params);
+      setTimeout(() => {
+        const nativeDOM = this.paperpdf.nativeElement;
+        nativeDOM.querySelector('#walletAddress').innerHTML = this.paperParams.svgAddress;
+        nativeDOM.querySelector('#walletQR').innerHTML = this.paperParams.svgKey;
+        this.pdfProvider.makePdf(
+          '<html>' + pdfParams.mobileStyle + '<body id="paper-pdf">' +
+          nativeDOM.innerHTML +
+          '</body></html>'
+        );
+      });
+
     });
 
   }
 }
+
+
