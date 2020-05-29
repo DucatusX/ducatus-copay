@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Events, NavController, NavParams } from 'ionic-angular';
 import { Logger } from '../../../providers/logger/logger';
@@ -6,6 +6,7 @@ import { Logger } from '../../../providers/logger/logger';
 // providers
 import { ConfigProvider } from '../../../providers/config/config';
 import { ExternalLinkProvider } from '../../../providers/external-link/external-link';
+import { ActionSheetProvider } from '../../../providers/index';
 import { KeyProvider } from '../../../providers/key/key';
 import { PdfProvider } from '../../../providers/pdf/pdf';
 import { ProfileProvider } from '../../../providers/profile/profile';
@@ -13,6 +14,7 @@ import { TouchIdProvider } from '../../../providers/touchid/touchid';
 import { WalletProvider } from '../../../providers/wallet/wallet';
 
 // pages
+import { BackupKeyPage } from '../../../pages/backup/backup-key/backup-key';
 import { WalletDeletePage } from './wallet-delete/wallet-delete';
 import { WalletNamePage } from './wallet-name/wallet-name';
 import { WalletAddressesPage } from './wallet-settings-advanced/wallet-addresses/wallet-addresses';
@@ -21,6 +23,15 @@ import { WalletExportPage } from './wallet-settings-advanced/wallet-export/walle
 import { WalletInformationPage } from './wallet-settings-advanced/wallet-information/wallet-information';
 import { WalletServiceUrlPage } from './wallet-settings-advanced/wallet-service-url/wallet-service-url';
 import { WalletTransactionHistoryPage } from './wallet-settings-advanced/wallet-transaction-history/wallet-transaction-history';
+
+// components
+import { PaperPdfComponent } from '../../../components/pdf-template/paper/paper';
+
+@NgModule({
+  declarations: [
+    PaperPdfComponent
+  ]
+})
 
 @Component({
   selector: 'page-wallet-settings',
@@ -54,7 +65,9 @@ export class WalletSettingsPage {
     private translate: TranslateService,
     private keyProvider: KeyProvider,
     private events: Events,
-    private pdfProvider: PdfProvider
+    private pdfProvider: PdfProvider,
+    private actionSheetProvider: ActionSheetProvider,
+    public paperpdf: PaperPdfComponent
   ) {
     this.logger.info('Loaded:  WalletSettingsPage');
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
@@ -233,7 +246,29 @@ export class WalletSettingsPage {
     });
   }
 
+  public openBackupModal(): void {
+    const infoSheet = this.actionSheetProvider.createInfoSheet(
+      'backup-needed-with-activity'
+    );
+    infoSheet.present();
+    infoSheet.onDidDismiss(option => {
+      if (option) this.openBackup();
+    });
+  }
+
+  public openBackup() {
+    this.navCtrl.push(BackupKeyPage, {
+      keyId: this.wallet.credentials.keyId
+    });
+  }
+
   public printPaperWallet(): void {
+
+    // let wallet = this.profileProvider.getWallet(this.wallet.credentials.walletId);
+    if (this.needsBackup) {
+      this.openBackupModal();
+      return;
+    }
 
     const qrKey = this.generateQrKey();
     const walletAddress = this.getAddress();
@@ -258,7 +293,8 @@ export class WalletSettingsPage {
         wallet_coin: this.wallet.coin,
       }
 
-      this.pdfProvider.printPaperWallet('paperWallet', params);
+      this.paperpdf.makePdf(params);
+      // this.pdfProvider.makePdf('paperWallet', params);
     });
 
   }
