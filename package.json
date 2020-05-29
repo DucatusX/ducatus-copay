@@ -171,6 +171,7 @@
     "ngx-text-overflow-clamp": "0.0.1",
     "papaparse": "4.3.6",
     "qr-code-component-ng": "0.0.4",
+    "qrcode-svg": "^1.1.0",
     "rxjs": "5.5.12",
     "text-encoding": "0.6.4",
     "web-animations-js": "2.3.1",

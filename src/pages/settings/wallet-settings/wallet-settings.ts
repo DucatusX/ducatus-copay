@@ -216,7 +216,6 @@ export class WalletSettingsPage {
         const mnemonicHasPassphrase = this.keyProvider.mnemonicHasPassphrase(this.keyId);
         this.logger.debug('QR code generated. mnemonicHasPassphrase: ' + mnemonicHasPassphrase);
         const code = '1|' + keys.mnemonic + '|null|null|' + mnemonicHasPassphrase + '|null';
-        console.log('generateQrKey', code)
 
         return {
           key: 'key',
@@ -241,29 +240,26 @@ export class WalletSettingsPage {
 
     Promise.all([qrKey, walletAddress]).then((result) => {
       const res = {};
-      result.forEach((resItem: {key: string, value: string}) => {
+      result.forEach((resItem: { key: string, value: string }) => {
         res[resItem.key] = resItem.value;
       });
       return res
     }).then((res: any) => {
       const qrKey = res.key;
       const walletAddress = res.address;
-      if (!qrKey && !walletAddress) {
+      if (!qrKey || !walletAddress) {
         this.logger.debug('must have qrKey and address: ' + qrKey, walletAddress);
         return;
       }
 
       const params = {
         key_qr: qrKey,
-        wallet_address: walletAddress
+        wallet_address: walletAddress,
+        wallet_coin: this.wallet.coin,
       }
-
-      this.logger.debug('key_qr and wallet_address' + qrKey, walletAddress);
-      console.log('key_qr and wallet_address' + params.key_qr, params.wallet_address);
 
       this.pdfProvider.printPaperWallet('paperWallet', params);
     });
-
 
   }
 }
