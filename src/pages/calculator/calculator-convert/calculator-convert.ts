@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'page-cards',
-  templateUrl: 'calculator-convert.html',
-  styleUrls: ['../calculator.scss']
+  selector: 'page-calculator-convert',
+  templateUrl: 'calculator-convert.html'
 })
 export class CalculatorConvertPage {
   constructor() { }
