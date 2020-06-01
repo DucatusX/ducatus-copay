@@ -21,7 +21,7 @@
           <ion-item class="calculator-select">
             <ion-select interface="popover" formControlName="CalculatorGroupGetCoin"
               [(ngModel)]="CalculatorGroupForm.value.CalculatorGroupGetCoin" (ionChange)="changeCoin('Get')">
-              <ion-option *ngFor="let item of convertCoins" [value]="item.name">{{ item.name }}</ion-option>
+              <ion-option *ngFor="let item of convertGetCoins" [value]="item">{{ item }}</ion-option>
             </ion-select>
           </ion-item>
 
