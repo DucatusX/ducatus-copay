@@ -10,7 +10,8 @@
       <form [formGroup]="walletGroupNameForm">
         <ion-item>
           <ion-label stacked>{{'Name' | translate}}</ion-label>
-          <ion-input type="text" formControlName="walletGroupName" [value]="walletGroupNameForm.value.walletGroupName" required></ion-input>
+          <ion-input type="text" formControlName="walletGroupName" [value]="walletGroupNameForm.value.walletGroupName"
+            required></ion-input>
         </ion-item>
         <button ion-button class="button-standard" (click)="save()" [disabled]="!walletGroupNameForm.valid">
           {{'Save' | translate}}

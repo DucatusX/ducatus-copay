@@ -15,6 +15,7 @@ import { RateProvider } from '../../providers/rate/rate';
 // import { TabProvider } from '../../providers/tab/tab';
 import { WalletProvider } from '../../providers/wallet/wallet';
 
+import { CalculatorPage } from '../calculator/calculator';
 import { CardsPage } from '../cards/cards';
 import { HomePage } from '../home/home';
 import { SettingsPage } from '../settings/settings';
@@ -308,4 +309,5 @@ export class TabsPage {
   walletsRoot = WalletsPage;
   cardsRoot = CardsPage;
   settingsRoot = SettingsPage;
+  calculatorRoot = CalculatorPage;
 }

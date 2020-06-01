@@ -1,7 +1,48 @@
-.page-calculator {
-  h1 {
+.calculator {
+  &-page {
+    padding: 21px;
+  }
+
+  &-input {
+    border-radius: 5px;
+  }
+
+  &-heading {
+    font-weight: 500;
     font-size: 25px;
-    font-weight: 100;
-    letter-spacing: 2px;
+    line-height: 29px;
+    color: #000000;
+    margin-bottom: 25px;
+  }
+
+  &-text {
+    background: none;
+    margin-bottom: 10px !important;
+    padding-left: 0px !important;
+
+    .label {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 17px;
+      color: #000000;
+      mix-blend-mode: normal;
+      opacity: 0.5;
+    }
+  }
+
+  &-form {
+    &-group {
+      position: relative;
+    }
+  }
+
+  &-select {
+    position: absolute;
+    top: 15px;
+    width: 160px;
+    right: 10px;
+    background-color: #F7F3EB;
+    border-radius: 5px;
+    height: 45px;
   }
 }

@@ -1,7 +1,60 @@
-<wide-header-page title="{{'Calcualator' | translate}}">
-  <div page-content>
+<wide-header-page>
+  <div page-content class="calculator-page">
 
-    <h1>Hello this is calculator page</h1>
+    <ion-list class="calculator-list bp-list">
+
+      <div class="calculator-explanation">
+        <div class="calculator-heading" translate>Calculator</div>
+      </div>
+
+      <form [formGroup]="CalculatorGroupForm">
+
+        <div class="calculator-form-group">
+
+          <ion-item class="calculator-input">
+            <ion-label stacked>{{'Get' | translate}}</ion-label>
+            <ion-input type="text" formControlName="CalculatorGroupGet"
+              [value]="CalculatorGroupForm.value.CalculatorGroupGet" required>
+            </ion-input>
+          </ion-item>
+
+          <ion-item class="calculator-select">
+            <ion-select interface="popover" formControlName="CalculatorGroupGetCoin"
+              [(ngModel)]="CalculatorGroupForm.value.CalculatorGroupGetCoin" (ionChange)="changeCoin('Get')">
+              <ion-option *ngFor="let item of convertCoins" [value]="item.name">{{ item.name }}</ion-option>
+            </ion-select>
+          </ion-item>
+
+        </div>
+
+        <ion-item class="calculator-text">
+          <ion-label stacked>1 {{ coinInfo[formCoins.get.name] }} = 0,1 {{ coinInfo[formCoins.send] }}</ion-label>
+        </ion-item>
+
+        <div class="calculator-form-group">
+
+          <ion-item class="calculator-input">
+            <ion-label stacked>{{'Send' | translate}}</ion-label>
+            <ion-input type="text" formControlName="CalculatorGroupSend"
+              [value]="CalculatorGroupForm.value.CalculatorGroupSend" required>
+            </ion-input>
+          </ion-item>
+
+          <ion-item class="calculator-select">
+            <ion-select interface="popover" formControlName="CalculatorGroupSendCoin"
+              [(ngModel)]="CalculatorGroupForm.value.CalculatorGroupSendCoin" (ionChange)="changeCoin('Send')">
+              <ion-option *ngFor="let item of formCoins.get.items" [value]="item">{{ item }}</ion-option>
+            </ion-select>
+          </ion-item>
+
+        </div>
+
+        <button ion-button class="button-standard" (click)="save()" [disabled]="!CalculatorGroupForm.valid">
+          {{'Convert' | translate}}
+        </button>
+      </form>
+
+    </ion-list>
 
   </div>
 </wide-header-page>
