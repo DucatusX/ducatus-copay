@@ -48,6 +48,10 @@ export class CalculatorPage {
   public changeCoin(type) {
     if (type == 'Get') {
       this.formCoins.get = convertCoins[this.CalculatorGroupForm.value.CalculatorGroupGetCoin];
+      this.formCoins.send = this.formCoins.get.items[0];
+    }
+    if (type == 'Get') {
+      this.formCoins.send = this.formCoins.get.items[this.CalculatorGroupForm.value.CalculatorGroupSendCoin];
     }
   }
 }
