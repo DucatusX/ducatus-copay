@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+// import html2canvas from 'html2canvas';
+// import jsPDF from 'jspdf';
 import { Logger } from '../../providers/logger/logger';
 import { PlatformProvider } from '../../providers/platform/platform';
 
@@ -10,11 +10,11 @@ declare const cordova;
 export class PdfProvider {
   public isCordova: boolean;
   public filename = "ducatusWallet";
-  private optionsDesktop = {
-    allowTaint: true,
-    useCORS: false,
-    scale: 1
-  };
+  // private optionsDesktop = {
+  //   allowTaint: true,
+  //   useCORS: false,
+  //   scale: 1
+  // };
   private optionsMobile = {
     documentSize: 'A4',
     landscape: "portrait",
@@ -27,7 +27,7 @@ export class PdfProvider {
     private platformProvider: PlatformProvider
   ) { this.isCordova = this.platformProvider.isCordova; }
 
-  public makePdf(template, filename?, optMobile?, optDesktop?) {
+  public makePdf(template, filename?, optMobile?) {
 
     if (filename) this.filename = filename + '.pdf';
 
@@ -40,12 +40,12 @@ export class PdfProvider {
       });
     } else {
       this.logger.warn('making pdf for web or other platforms');
-      html2canvas(template, optDesktop || this.optionsDesktop).then((canvas) => {
-        let img = canvas.toDataURL("image/png");
-        let pdf = new jsPDF();
-        pdf.addImage(img, 'PNG', 7, 20, 195, 105);
-        pdf.save((this.filename || 'ducatus') + '.pdf');
-      });
+      // html2canvas(template, optDesktop || this.optionsDesktop).then((canvas) => {
+      //   let img = canvas.toDataURL("image/png");
+      //   let pdf = new jsPDF();
+      //   pdf.addImage(img, 'PNG', 7, 20, 195, 105);
+      //   pdf.save((this.filename || 'ducatus') + '.pdf');
+      // });
     }
 
   }

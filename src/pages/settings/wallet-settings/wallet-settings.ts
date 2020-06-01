@@ -9,6 +9,7 @@ import { ExternalLinkProvider } from '../../../providers/external-link/external-
 import { ActionSheetProvider } from '../../../providers/index';
 import { KeyProvider } from '../../../providers/key/key';
 import { PdfProvider } from '../../../providers/pdf/pdf';
+import { PlatformProvider } from '../../../providers/platform/platform';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { TouchIdProvider } from '../../../providers/touchid/touchid';
 import { WalletProvider } from '../../../providers/wallet/wallet';
@@ -43,6 +44,7 @@ export class WalletSettingsPage {
   public touchIdEnabled: boolean;
   public touchIdPrevValue: boolean;
   public touchIdAvailable: boolean;
+  public isCordova: boolean;
   public deleted: boolean = false;
   public keysEncrypted: boolean;
   public walletsGroup;
@@ -63,10 +65,12 @@ export class WalletSettingsPage {
     private keyProvider: KeyProvider,
     private events: Events,
     private pdfProvider: PdfProvider,
-    private actionSheetProvider: ActionSheetProvider
+    private actionSheetProvider: ActionSheetProvider,
+    private platformProvider: PlatformProvider
   ) {
     this.logger.info('Loaded:  WalletSettingsPage');
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
+    this.isCordova = this.platformProvider.isCordova;
   }
 
   ionViewWillEnter() {
