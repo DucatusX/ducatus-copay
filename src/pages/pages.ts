@@ -8,6 +8,9 @@ import { JoinWalletPage } from '../pages/add/join-wallet/join-wallet';
 import { SelectCurrencyPage } from '../pages/add/select-currency/select-currency';
 import { BackupGamePage } from '../pages/backup/backup-game/backup-game';
 import { BackupKeyPage } from '../pages/backup/backup-key/backup-key';
+import { CalculatorPage } from '../pages/calculator/calculator';
+import { CalculatorConvertPage } from '../pages/calculator/calculator-convert/calculator-convert';
+import { CalculatorSendPage } from '../pages/calculator/calculator-send/calculator-send';
 import { SendFeedbackPage } from '../pages/feedback/send-feedback/send-feedback';
 import { FinishModalPage } from '../pages/finish/finish';
 import { IntegrationsPage } from '../pages/integrations/integrations';
@@ -173,6 +176,9 @@ export const PAGES = [
   JoinWalletPage,
   BackupGamePage,
   BackupKeyPage,
+  CalculatorPage,
+  CalculatorConvertPage,
+  CalculatorSendPage,
   ConfirmPage,
   MultiSendPage,
   TransferToModalPage,
