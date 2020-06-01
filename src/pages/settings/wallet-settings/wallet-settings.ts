@@ -291,24 +291,14 @@ export class WalletSettingsPage {
         wallet_coin: this.wallet.coin
       };
 
-      const nativeDOM = this.paperpdf.nativeElement;
-
-      this.pdfProvider.makePdf(
-        '<html>' + pdfParams.mobileStyle + '<body id="paper-pdf">' +
-        nativeDOM.innerHTML +
-        '</body></html>'
-      );
-
-      // setTimeout(() => {
-      //   nativeDOM.querySelector('#walletAddress').innerHTML = this.paperParams.svgAddress;
-      //   nativeDOM.querySelector('#walletQR').innerHTML = this.paperParams.svgKey;
-      //   this.pdfProvider.makePdf(
-      //     '<html>' + pdfParams.mobileStyle + '<body id="paper-pdf">' +
-      //     nativeDOM.innerHTML +
-      //     '</body></html>'
-      //   );
-      // });
-
+      setTimeout(() => {
+        const nativeDOM = this.paperpdf.nativeElement;
+        this.pdfProvider.makePdf(
+          '<html>' + pdfParams.mobileStyle + '<body id="paper-pdf">' +
+          nativeDOM.innerHTML +
+          '</body></html>'
+        );
+      });
     });
 
   }
