@@ -2,7 +2,6 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Events, NavController, NavParams } from 'ionic-angular';
 import { Logger } from '../../../providers/logger/logger';
-import * as QRCode from 'qrcode-svg';
 
 // providers
 import { ConfigProvider } from '../../../providers/config/config';
@@ -33,7 +32,7 @@ import { pdfParams } from './pdf-params';
 })
 export class WalletSettingsPage {
 
-  @ViewChild('paperpdf', {read: ElementRef}) paperpdf: ElementRef;
+  @ViewChild('paperpdf', { read: ElementRef }) paperpdf: ElementRef;
 
   public showDuplicateWallet: boolean;
   public wallet;
@@ -260,8 +259,6 @@ export class WalletSettingsPage {
   }
 
   public printPaperWallet(): void {
-
-    // let wallet = this.profileProvider.getWallet(this.wallet.credentials.walletId);
     if (this.needsBackup) {
       this.openBackupModal();
       return;
@@ -287,33 +284,26 @@ export class WalletSettingsPage {
       this.paperParams = {
         key_qr: qrKey,
         wallet_address: walletAddress,
-        wallet_coin: this.wallet.coin,
-        svgAddress: new QRCode({
-          content: walletAddress,
-          join: true,
-          container: 'svg-viewbox',
-          padding: 3,
-          ecl: "L",
-        }).svg(),
-        svgKey: new QRCode({
-          content: qrKey,
-          join: true,
-          container: 'svg-viewbox',
-          padding: 3,
-          ecl: "L",
-        }).svg()
+        wallet_coin: this.wallet.coin
       };
 
-      setTimeout(() => {
-        const nativeDOM = this.paperpdf.nativeElement;
-        nativeDOM.querySelector('#walletAddress').innerHTML = this.paperParams.svgAddress;
-        nativeDOM.querySelector('#walletQR').innerHTML = this.paperParams.svgKey;
-        this.pdfProvider.makePdf(
-          '<html>' + pdfParams.mobileStyle + '<body id="paper-pdf">' +
-          nativeDOM.innerHTML +
-          '</body></html>'
-        );
-      });
+      const nativeDOM = this.paperpdf.nativeElement;
+
+      this.pdfProvider.makePdf(
+        '<html>' + pdfParams.mobileStyle + '<body id="paper-pdf">' +
+        nativeDOM.innerHTML +
+        '</body></html>'
+      );
+
+      // setTimeout(() => {
+      //   nativeDOM.querySelector('#walletAddress').innerHTML = this.paperParams.svgAddress;
+      //   nativeDOM.querySelector('#walletQR').innerHTML = this.paperParams.svgKey;
+      //   this.pdfProvider.makePdf(
+      //     '<html>' + pdfParams.mobileStyle + '<body id="paper-pdf">' +
+      //     nativeDOM.innerHTML +
+      //     '</body></html>'
+      //   );
+      // });
 
     });
 
