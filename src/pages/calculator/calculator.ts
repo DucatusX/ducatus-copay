@@ -10,11 +10,22 @@ import { coinInfo, convertCoins, convertGetCoins } from './calculator-parameters
 })
 export class CalculatorPage {
 
-  public CalculatorGroup;
   public CalculatorGroupForm: FormGroup;
   public formCoins: any = [];
-  public coinInfo: any;
+  public coin_info: any;
   public convertGetCoins: any;
+  public lastChange = 'Get';
+
+  public rates: any = {
+    DUC: {
+      ETH: 0.00046189,
+      BTC: 0.00001040,
+      DUCX: 0.10000000
+    },
+    DUCX: {
+      DUC: 10.00000000
+    }
+  };
 
   constructor(
     // private navCtrl: NavController,
@@ -24,23 +35,23 @@ export class CalculatorPage {
 
     this.formCoins.get = convertCoins['DUC']; // DUC
     this.formCoins.send = this.formCoins.get.items[0]; // DUCX
-    this.coinInfo = coinInfo;
+    this.coin_info = coinInfo;
     this.convertGetCoins = convertGetCoins;
 
     this.CalculatorGroupForm = this.formBuilder.group({
-      CalculatorGroupSend: [
+      CalculatorGroupGet: [
         '1',
         Validators.compose([Validators.minLength(1), Validators.required])
       ],
-      CalculatorGroupGet: [
+      CalculatorGroupSend: [
         '0,1',
         Validators.compose([Validators.minLength(3), Validators.required])
       ],
       CalculatorGroupGetCoin: [
-        ''
+        this.formCoins.get.name,
       ],
       CalculatorGroupSendCoin: [
-        ''
+        this.formCoins.send
       ]
     });
   }
@@ -49,9 +60,29 @@ export class CalculatorPage {
     if (type == 'Get') {
       this.formCoins.get = convertCoins[this.CalculatorGroupForm.value.CalculatorGroupGetCoin];
       this.formCoins.send = this.formCoins.get.items[0];
+      this.CalculatorGroupForm.value.CalculatorGroupGetCoin = this.formCoins.get.name;
+      this.CalculatorGroupForm.value.CalculatorGroupSendCoin = this.formCoins.send;
     }
+    if (type == 'Send') {
+      this.formCoins.send = this.CalculatorGroupForm.value.CalculatorGroupSendCoin;
+    }
+
+    this.changeAmount(this.lastChange, true);
+  }
+
+  public changeAmount(type, change?) {
+
+    console.log(this.lastChange)
+
+    if (!change) {
+      this.lastChange = type;
+    }
+
     if (type == 'Get') {
-      this.formCoins.send = this.formCoins.get.items[this.CalculatorGroupForm.value.CalculatorGroupSendCoin];
+      this.CalculatorGroupForm.value.CalculatorGroupSend = this.CalculatorGroupForm.value.CalculatorGroupGet * this.rates[this.formCoins.get.name][this.formCoins.send];
+    }
+    if (type == 'Send') {
+      this.CalculatorGroupForm.value.CalculatorGroupGet = this.CalculatorGroupForm.value.CalculatorGroupSend / this.rates[this.formCoins.get.name][this.formCoins.send];
     }
   }
 }
