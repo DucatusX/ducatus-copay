@@ -13,8 +13,9 @@
 
           <ion-item class="calculator-input">
             <ion-label stacked>{{'Get' | translate}}</ion-label>
-            <ion-input type="text" formControlName="CalculatorGroupGet"
-              [value]="CalculatorGroupForm.value.CalculatorGroupGet" (ionChange)="changeAmount('Get')" required>
+            <ion-input type="number" formControlName="CalculatorGroupGet"
+              [value]="CalculatorGroupForm.value.CalculatorGroupGet" (click)="selectInputType('Get')"
+              (ionChange)="changeAmount('Get')" required>
             </ion-input>
           </ion-item>
 
@@ -36,8 +37,9 @@
 
           <ion-item class="calculator-input">
             <ion-label stacked>{{'Send' | translate}}</ion-label>
-            <ion-input type="text" formControlName="CalculatorGroupSend"
-              [value]="CalculatorGroupForm.value.CalculatorGroupSend" (ionChange)="changeAmount('Send')" required>
+            <ion-input type="number" formControlName="CalculatorGroupSend"
+              [value]="CalculatorGroupForm.value.CalculatorGroupSend" (click)="selectInputType('Send')"
+              (ionChange)="changeAmount('Send')" required>
             </ion-input>
           </ion-item>
 
@@ -50,7 +52,7 @@
 
         </div>
 
-        <button ion-button class="button-standard calculator-button" (click)="save()"
+        <button ion-button class="button-standard calculator-button" (click)="goToConvertPage()"
           [disabled]="!CalculatorGroupForm.valid">
           {{'Convert' | translate}}
         </button>
