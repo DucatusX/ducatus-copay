@@ -1,6 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { PlatformProvider, ProfileProvider, WalletProvider } from '..';
-// import { HttpClient } from '@angular/common/http';
 
 declare const cordova;
 
@@ -10,8 +10,8 @@ export class MoonPayProvider {
   constructor(
     private walletProvider: WalletProvider,
     private profileProvider: ProfileProvider,
-    private platformProvider: PlatformProvider
-    // private httpClient: HttpClient
+    private platformProvider: PlatformProvider,
+    private httpClient: HttpClient
   ) {
     document.addEventListener("deviceready", () => {
       window.open = cordova.InAppBrowser.open;
@@ -29,19 +29,19 @@ export class MoonPayProvider {
       }
     }
 
-    const api_key: string = 'pk_test_h7x0He1BR6K8IQVndW0mFJ27p9ccsb';
+    const api_key: string = 'pk_live_xJ1ocB4wKvg4CKAnFYVU55AQdp6G0';
     let url: string = 'https://buy-staging.moonpay.io?apiKey=' + api_key;
     return new Promise(resolve => {
       if (walletId) {
         url += '&currencyCode=' + wallet.coin;
         this.walletProvider.getAddress(wallet, false).then(addr => {
           url += '&walletAddress=' + addr;
-          // this.httpClient.post('https://urlsign.census.cx', { url })
-          //   .toPromise().then((result: { signed_url: string }) => {
-          //   resolve(result.signed_url || url);
-          // }, () => {
-          resolve(url);
-          // });
+          this.httpClient.post('https://moonpay.ducatuscoins.com/', { url })
+            .toPromise().then((result: { signed_url: string }) => {
+            resolve(result.signed_url || url);
+          }, () => {
+            resolve(url);
+          });
         });
       } else {
         resolve(url);
