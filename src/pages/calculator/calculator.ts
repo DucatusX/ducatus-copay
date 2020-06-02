@@ -1,8 +1,12 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-// import { NavController, NavParams } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 
+import { CalculatorConvertPage } from './calculator-convert/calculator-convert';
 import { coinInfo, convertCoins, convertGetCoins } from './calculator-parameters';
+
+const fixNumber = x => ((x.toString().includes('.')) ? (x.toString().split('.').pop().length) : (0));
 
 @Component({
   selector: 'page-calculator',
@@ -14,7 +18,7 @@ export class CalculatorPage {
   public formCoins: any = [];
   public coin_info: any;
   public convertGetCoins: any;
-  public lastChange = 'Get';
+  public lastChange: any;
 
   public rates: any = {
     DUC: {
@@ -28,11 +32,10 @@ export class CalculatorPage {
   };
 
   constructor(
-    // private navCtrl: NavController,
-    // private navParams: NavParams,
+    private navCtrl: NavController,
     private formBuilder: FormBuilder,
+    private httpClient: HttpClient
   ) {
-
     this.formCoins.get = convertCoins['DUC']; // DUC
     this.formCoins.send = this.formCoins.get.items[0]; // DUCX
     this.coin_info = coinInfo;
@@ -40,12 +43,12 @@ export class CalculatorPage {
 
     this.CalculatorGroupForm = this.formBuilder.group({
       CalculatorGroupGet: [
-        '1',
+        1,
         Validators.compose([Validators.minLength(1), Validators.required])
       ],
       CalculatorGroupSend: [
-        '0,1',
-        Validators.compose([Validators.minLength(3), Validators.required])
+        0.1,
+        Validators.compose([Validators.minLength(1), Validators.required])
       ],
       CalculatorGroupGetCoin: [
         this.formCoins.get.name,
@@ -54,6 +57,11 @@ export class CalculatorPage {
         this.formCoins.send
       ]
     });
+
+    this.httpClient.get('https://www.ducatuscoins.com/api/v2/rates')
+      .toPromise().then((result: { res_rates: any }) => {
+        console.log('rates:', result);
+      }, (err) => { console.log('get rates: ', err) });
   }
 
   public changeCoin(type) {
@@ -67,22 +75,34 @@ export class CalculatorPage {
       this.formCoins.send = this.CalculatorGroupForm.value.CalculatorGroupSendCoin;
     }
 
-    this.changeAmount(this.lastChange, true);
+    this.changeAmount(this.lastChange);
   }
 
-  public changeAmount(type, change?) {
+  public selectInputType(type) {
+    this.lastChange = type;
+  }
 
-    console.log(this.lastChange)
+  public changeAmount(type) {
+    const rate = this.rates[this.formCoins.get.name][this.formCoins.send];
 
-    if (!change) {
-      this.lastChange = type;
+    if (type === 'Get' && this.lastChange === 'Get') {
+      const chNumber = this.CalculatorGroupForm.value.CalculatorGroupGet * rate;
+      const fix = fixNumber(chNumber);
+      this.CalculatorGroupForm.value.CalculatorGroupSend = fix === 0 ? chNumber : chNumber.toFixed(fix);
     }
+    if (type === 'Send' && this.lastChange === 'Send') {
+      const chNumber = this.CalculatorGroupForm.value.CalculatorGroupSend / rate;
+      const fix = fixNumber(chNumber);
+      this.CalculatorGroupForm.value.CalculatorGroupGet = fix === 0 ? chNumber : chNumber.toFixed(fix);
+    }
+  }
 
-    if (type == 'Get') {
-      this.CalculatorGroupForm.value.CalculatorGroupSend = this.CalculatorGroupForm.value.CalculatorGroupGet * this.rates[this.formCoins.get.name][this.formCoins.send];
-    }
-    if (type == 'Send') {
-      this.CalculatorGroupForm.value.CalculatorGroupGet = this.CalculatorGroupForm.value.CalculatorGroupSend / this.rates[this.formCoins.get.name][this.formCoins.send];
-    }
+  public goToConvertPage() {
+    this.navCtrl.push(CalculatorConvertPage, {
+      get: this.formCoins.get.name,
+      send: this.formCoins.send,
+      amountGet: this.CalculatorGroupForm.value.CalculatorGroupGet,
+      amountSend: this.CalculatorGroupForm.value.CalculatorGroupSend
+    });
   }
 }
