@@ -30,7 +30,7 @@ export class MoonPayProvider {
     }
 
     const api_key: string = 'pk_live_xJ1ocB4wKvg4CKAnFYVU55AQdp6G0';
-    let url: string = 'https://buy-staging.moonpay.io?apiKey=' + api_key;
+    let url: string = 'https://buy.moonpay.io?apiKey=' + api_key;
     return new Promise(resolve => {
       if (walletId) {
         url += '&currencyCode=' + wallet.coin;
