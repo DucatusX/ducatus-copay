@@ -58,7 +58,7 @@ export class CalculatorPage {
       ]
     });
 
-    this.httpClient.get('https://www.ducatuscoins.com/api/v2/rates')
+    this.httpClient.get('https://www.ducatuscoins.com/api/v1/rates')
       .toPromise().then((result: { res_rates: any }) => {
         console.log('rates:', result);
       }, (err) => { console.log('get rates: ', err) });
