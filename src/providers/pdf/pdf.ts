@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+// import html2canvas from 'html2canvas';
+// import jsPDF from 'jspdf';
 
 import { Logger } from '../../providers/logger/logger';
 import { PlatformProvider } from '../../providers/platform/platform';
@@ -37,22 +37,22 @@ export class PdfProvider {
       .catch((error) => this.logger.warn('error:', error));
   }
 
-  private createWebPDF(template, filename?, optMobile?) {
+  private createWebPDF(/*template, filename?, optMobile?*/) {
 
-    const iframe = document.createElement('iframe');
-    iframe.style.width = '796px';
-    iframe.style.height = '0';
-    document.getElementsByTagName('body')[0].appendChild(iframe);
-
-    iframe.contentWindow.document.write(template);
-
-    if (filename) this.filename = filename + '.pdf';
-    html2canvas(iframe.contentDocument.getElementsByTagName('html')[0], optMobile || this.optionsMobile).then((canvas) => {
-      let img = canvas.toDataURL("image/png");
-      let pdf = new jsPDF();
-      pdf.addImage(img, 'PNG', 0, 0);
-      pdf.save((this.filename || 'ducatus') + '.pdf');
-    });
+    // const iframe = document.createElement('iframe');
+    // iframe.style.width = '796px';
+    // iframe.style.height = '0';
+    // document.getElementsByTagName('body')[0].appendChild(iframe);
+    //
+    // iframe.contentWindow.document.write(template);
+    //
+    // if (filename) this.filename = filename + '.pdf';
+    // html2canvas(iframe.contentDocument.getElementsByTagName('html')[0], optMobile || this.optionsMobile).then((canvas) => {
+    //   let img = canvas.toDataURL("image/png");
+    //   let pdf = new jsPDF();
+    //   pdf.addImage(img, 'PNG', 0, 0);
+    //   pdf.save((this.filename || 'ducatus') + '.pdf');
+    // });
   }
 
 }
