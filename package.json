@@ -2,7 +2,7 @@
   "name": "walnew",
   "description": "A Secure DucatusCoin Wallet",
   "author": "BitPay",
-  "version": "2.2.3",
+  "version": "2.3.0",
   "keywords": [
     "ducatus",
     "bitcoin",
@@ -25,11 +25,11 @@
   "homepage": "https://ducatus.io",
   "license": "MIT",
   "repository": {
-    "url": "git://github.com/dimanok87/ducatus-copay.git",
+    "url": "git://github.com/DUCATUS-revival/ducatus-copay",
     "type": "git"
   },
   "bugs": {
-    "url": "https://github.com/dimanok87/ducatus-copay/issues"
+    "url": "https://github.com/DUCATUS-revival/ducatus-copay/issues"
   },
   "scripts": {
     "postinstall": "npm run env:dev && npm run prompt",
