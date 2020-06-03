@@ -59,6 +59,7 @@ export class ConfirmPage {
 
   public tx;
   public wallet;
+  public token;
   public wallets;
   public noWalletMessage: string;
   public criticalError: boolean;
@@ -128,6 +129,7 @@ export class ConfirmPage {
     protected appProvider: AppProvider,
     private iabCardProvider: IABCardProvider
   ) {
+    this.token = this.navParams.data.token;
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
     this.fromWalletDetails = this.navParams.data.fromWalletDetails;
     this.fromCoinbase = this.navParams.data.fromCoinbase;
@@ -968,6 +970,30 @@ export class ConfirmPage {
         .getAddress(this.wallet, false)
         .then(address => {
           txp.from = address;
+
+          if (this.token && this.token.type === 'erc721') {
+
+            txp.tokenAddress = this.token.base.address;
+            txp.tokenId = this.token.selected.tokenId;
+
+            for (const output of txp.outputs) {
+              if (!output.data) {
+                output.data = this.bwcProvider
+                  .getCore()
+                  .Transactions.get({ chain: 'ERC721' })
+                  .encodeData({
+                    recipients: [{
+                      address: output.toAddress,
+                      amount: output.amount
+                    }],
+                    from: address,
+                    tokenId: this.token.selected.tokenId,
+                    tokenAddress: tx.tokenAddress
+                  });
+              }
+            }
+          }
+
           this.walletProvider
             .createTx(wallet, txp)
             .then(ctxp => {

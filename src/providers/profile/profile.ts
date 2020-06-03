@@ -25,12 +25,10 @@ import { ReplaceParametersProvider } from '../replace-parameters/replace-paramet
 import { TxFormatProvider } from '../tx-format/tx-format';
 import { WalletOptions, WalletProvider } from '../wallet/wallet';
 
-
-
 // models
 import { Profile } from '../../models/profile/profile.model';
 
-
+import { Deriver } from 'crypto-ducatus-wallet-core';
 
 interface WalletGroups {
   [keyId: string]: {
@@ -87,6 +85,16 @@ export class ProfileProvider {
       this.newBwsEvent(n, wallet);
     }, 10000);
 
+    // xpub6C8byPoebe5qhmkucDusW2TXpG8vwPYDeyCiyA9YqvcepfNEiSPbJu6sx8a9b483uhYkb9CN98XbNTT43Yctao7BM2Q85GYkSKDMLnEFUVS
+
+    const address = Deriver.deriveAddress(
+      'DUC',
+      'mainnet',
+      'xpub6C8byPoebe5qhmkucDusW2TXpG8vwPYDeyCiyA9YqvcepfNEiSPbJu6sx8a9b483uhYkb9CN98XbNTT43Yctao7BM2Q85GYkSKDMLnEFUVS',
+      0,
+      false
+    );
+    console.log(address);
 
     // let addressesText = '';
     // window.onload = () => {
@@ -218,12 +226,6 @@ export class ProfileProvider {
     //   }
     //
     // };
-
-
-
-
-
-
   }
 
   private trySetName(wallet: any, i: number = 0): any {
@@ -626,7 +628,9 @@ export class ProfileProvider {
         wallet.n == 1 &&
         wallet.credentials.addressType == 'P2PKH' &&
         derivationStrategy == 'BIP44' &&
-        (chain == 'btc' || (chain == 'bch' && coinCode == "145'") || (chain == 'duc' && coinCode == "0'"))
+        (chain == 'btc' ||
+          (chain == 'bch' && coinCode == "145'") ||
+          (chain == 'duc' && coinCode == "0'"))
       ) {
         return true;
       }
@@ -634,7 +638,9 @@ export class ProfileProvider {
         wallet.n > 1 &&
         wallet.credentials.addressType == 'P2SH' &&
         derivationStrategy == 'BIP48' &&
-        (chain == 'btc' || (chain == 'bch' && coinCode == "145'") || (chain == 'duc' && coinCode == "0'"))
+        (chain == 'btc' ||
+          (chain == 'bch' && coinCode == "145'") ||
+          (chain == 'duc' && coinCode == "0'"))
       ) {
         return true;
       }

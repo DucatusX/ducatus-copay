@@ -26,12 +26,12 @@ import { ShapeshiftPage } from '../integrations/shapeshift/shapeshift';
 import { SimplexPage } from '../integrations/simplex/simplex';
 import { PaperWalletPage } from '../paper-wallet/paper-wallet';
 import { ScanPage } from '../scan/scan';
-import { AmountPage } from '../send/amount/amount';
-import { ConfirmPage } from '../send/confirm/confirm';
-import { SelectInputsPage } from '../send/select-inputs/select-inputs';
 import { AddressbookAddPage } from '../settings/addressbook/add/add';
 import { WalletDetailsPage } from '../wallet-details/wallet-details';
+import { AmountPage } from './amount/amount';
+import { ConfirmPage } from './confirm/confirm';
 import { MultiSendPage } from './multi-send/multi-send';
+import { SelectInputsPage } from './select-inputs/select-inputs';
 
 @Component({
   selector: 'page-send',
@@ -39,6 +39,7 @@ import { MultiSendPage } from './multi-send/multi-send';
 })
 export class SendPage {
   public wallet: any;
+  public token: any;
   public search: string = '';
   public hasWallets: boolean;
   public invalidAddress: boolean;
@@ -87,6 +88,8 @@ export class SendPage {
     private errorsProvider: ErrorsProvider
   ) {
     this.wallet = this.navParams.data.wallet;
+    this.token = this.navParams.data.token || false;
+
     this.events.subscribe('Local/AddressScan', this.updateAddressHandler);
     this.events.subscribe('SendPageRedir', this.SendPageRedirEventHandler);
   }
@@ -112,6 +115,7 @@ export class SendPage {
   private SendPageRedirEventHandler: any = nextView => {
     nextView.params.fromWalletDetails = true;
     nextView.params.walletId = this.wallet.credentials.walletId;
+    nextView.params.token = this.token;
     this.navCtrl.push(this.pageMap[nextView.name], nextView.params);
   };
 
@@ -124,7 +128,8 @@ export class SendPage {
     return (
       this.wallet &&
       this.wallet.cachedStatus &&
-      !this.wallet.cachedStatus.totalBalanceSat
+      !this.wallet.cachedStatus.totalBalanceSat &&
+      !this.token
     );
   }
 
@@ -151,11 +156,12 @@ export class SendPage {
         data,
         this.wallet.network
       );
-      const chain = this.currencyProvider.getChain(this.wallet.coin).toLowerCase();
+      const chain = this.currencyProvider
+        .getChain(this.wallet.coin)
+        .toLowerCase();
       const testCoin = chain === 'ducx' ? 'eth' : chain;
       isValid =
-        testCoin == addrData.coin &&
-        addrData.network == this.wallet.network;
+        testCoin == addrData.coin && addrData.network == this.wallet.network;
     }
 
     if (isValid) {

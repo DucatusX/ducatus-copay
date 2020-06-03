@@ -1,3 +1,4 @@
+page-erc-721,
 page-coinbase-account,
 page-wallet-details {
   $wallet-details-primary-color: #862633;
@@ -129,7 +130,10 @@ page-wallet-details {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    padding: 0 1.4rem 6.5rem 1.4rem;
+    padding: 0 1.4rem 1.4rem 1.4rem;
+    &:last-child {
+      padding-bottom: 6.5rem;
+    }
     .button-standard {
       min-height: 50px;
       width: 48%;

@@ -38,7 +38,7 @@ import {
   FeeProvider,
   File,
   FilterProvider,
-  GiftCardProvider,
+  // GiftCardProvider,
   HomeIntegrationsProvider,
   HttpRequestsProvider,
   IABCardProvider,
@@ -50,8 +50,10 @@ import {
   LanguageProvider,
   LaunchReview,
   Logger,
+  MoonPayProvider,
   OnGoingProcessProvider,
   PayproProvider,
+  PdfProvider,
   PersistenceProvider,
   PlatformProvider,
   PopupProvider,
@@ -115,7 +117,7 @@ import {
     IABCardProvider,
     InAppBrowserProvider,
     FeeProvider,
-    GiftCardProvider,
+    // GiftCardProvider,
     IncomingDataProvider,
     InvoiceProvider,
     KeyProvider,
@@ -157,7 +159,9 @@ import {
     DecimalPipe,
     PersistenceProvider,
     File,
-    CardPhasesProvider
+    CardPhasesProvider,
+    MoonPayProvider,
+    PdfProvider
   ]
 })
-export class ProvidersModule {}
+export class ProvidersModule { }

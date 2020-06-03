@@ -27,7 +27,7 @@ import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
 // Pages
 import {
   ActionSheetProvider,
-  GiftCardProvider,
+  // GiftCardProvider,
   IABCardProvider
 } from '../../../providers';
 import { getActivationFee } from '../../../providers/gift-card/gift-card';
@@ -86,8 +86,8 @@ export class AmountPage {
   public toWalletId: string;
   private _id: string;
   public requestingAmount: boolean;
-  public wallet;
-  any;
+  public wallet: any;
+  public token: any;
 
   public cardName: string;
   public cardConfig: CardConfig;
@@ -101,7 +101,7 @@ export class AmountPage {
     private actionSheetProvider: ActionSheetProvider,
     private configProvider: ConfigProvider,
     private filterProvider: FilterProvider,
-    private giftCardProvider: GiftCardProvider,
+    // private giftCardProvider: GiftCardProvider,
     private currencyProvider: CurrencyProvider,
     private logger: Logger,
     private navParams: NavParams,
@@ -160,6 +160,7 @@ export class AmountPage {
 
     // Use only with ShapeShift and Coinbase Withdraw
     this.toWalletId = this.navParams.data.toWalletId;
+    this.token = this.navParams.data.token;
 
     this.cardName = this.navParams.get('cardName');
   }
@@ -173,9 +174,14 @@ export class AmountPage {
     };
     this.setAvailableUnits();
     this.updateUnitUI();
-    this.cardConfig =
-      this.cardName &&
-      (await this.giftCardProvider.getCardConfig(this.cardName));
+    // this.cardConfig =
+    // this.cardName;
+    //  && (await this.giftCardProvider.getCardConfig(this.cardName));
+
+    if (this.token) {
+      this.navCtrl.pop();
+      this.finish(true);
+    }
   }
 
   ionViewWillEnter() {
@@ -543,7 +549,7 @@ export class AmountPage {
   }
 
   public finish(skipActivationFeeAlert: boolean = false): void {
-    if (!this.allowSend) return;
+    if (!this.allowSend && !this.token) return;
     let unit = this.availableUnits[this.unitIndex];
     let _amount = this.evaluate(this.format(this.expression));
     let coin = unit.id;
@@ -601,6 +607,9 @@ export class AmountPage {
       if (this.wallet.credentials.token) {
         data.tokenAddress = this.wallet.credentials.token.address;
       }
+    }
+    if (this.token) {
+      data.token = this.token;
     }
 
     if (this.destinationTag) {

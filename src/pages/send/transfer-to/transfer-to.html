@@ -31,7 +31,7 @@
           <span>{{ walletsByKey[0].walletGroupName }}</span>
         </div>
         <div *ngFor="let wallet of walletsByKey">
-          <wallet-item-content [wallet]="wallet" (click)="close(wallet)"></wallet-item-content>
+          <wallet-item-content [wallet]="wallet" (click)="close(wallet, token)"></wallet-item-content>
         </div>
       </div>
     </ion-list>

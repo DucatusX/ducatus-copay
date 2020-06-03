@@ -7,15 +7,16 @@ import {
 } from '@angular/animations';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { SocialSharing } from '@ionic-native/social-sharing';
-import { Events, NavController, NavParams } from 'ionic-angular';
-import { take } from 'rxjs/operators';
+// import { Events, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
+// import { take } from 'rxjs/operators';
 import {
   ActionSheetProvider,
   InfoSheetType
 } from '../../../../providers/action-sheet/action-sheet';
 import { ConfettiProvider } from '../../../../providers/confetti/confetti';
 import { ExternalLinkProvider } from '../../../../providers/external-link/external-link';
-import { GiftCardProvider } from '../../../../providers/gift-card/gift-card';
+// import { GiftCardProvider } from '../../../../providers/gift-card/gift-card';
 import {
   CardConfig,
   ClaimCodeType,
@@ -58,10 +59,10 @@ export class CardDetailsPage {
     private actionSheetProvider: ActionSheetProvider,
     private confettiProvider: ConfettiProvider,
     private externalLinkProvider: ExternalLinkProvider,
-    private giftCardProvider: GiftCardProvider,
+    // private giftCardProvider: GiftCardProvider,
     private nav: NavController,
     public navParams: NavParams,
-    private events: Events,
+    // private events: Events,
     private socialSharing: SocialSharing,
     private platformProvider: PlatformProvider
   ) {}
@@ -70,12 +71,12 @@ export class CardDetailsPage {
     this.card = this.navParams.get('card');
     this.barcodeData = this.card.barcodeData || this.card.claimCode;
     this.barcodeFormat = getBarcodeFormat(this.card.barcodeFormat);
-    this.cardConfig = await this.giftCardProvider.getCardConfig(this.card.name);
-    this.updateGiftCard();
+    // this.cardConfig = await this.giftCardProvider.getCardConfig(this.card.name);
+    // this.updateGiftCard();
   }
 
   ionViewWillEnter() {
-    this.events.subscribe('bwsEvent', this.bwsEventHandler);
+    // this.events.subscribe('bwsEvent', this.bwsEventHandler);
     this.navParams.get('showConfetti') && this.showConfetti();
   }
 
@@ -84,24 +85,24 @@ export class CardDetailsPage {
   }
 
   ionViewWillLeave() {
-    this.events.unsubscribe('bwsEvent', this.bwsEventHandler);
+    // this.events.unsubscribe('bwsEvent', this.bwsEventHandler);
   }
 
-  private bwsEventHandler: any = (_, type: string) => {
-    if (type == 'NewBlock') {
-      this.updateGiftCard();
-    }
-  };
+  // private bwsEventHandler: any = (_, type: string) => {
+  //   if (type == 'NewBlock') {
+  //     this.updateGiftCard();
+  //   }
+  // };
 
-  updateGiftCard() {
-    this.giftCardProvider
-      .updatePendingGiftCards([this.card])
-      .pipe(take(1))
-      .subscribe(card => (this.card = card));
-  }
+  // updateGiftCard() {
+  //   this.giftCardProvider
+  //     .updatePendingGiftCards([this.card])
+  //     .pipe(take(1))
+  //     .subscribe(card => (this.card = card));
+  // }
 
   doRefresh(refresher) {
-    this.updateGiftCard();
+    // this.updateGiftCard();
     setTimeout(() => {
       refresher.complete();
     }, 2000);
@@ -133,28 +134,28 @@ export class CardDetailsPage {
     );
   }
 
-  async archive() {
-    await this.giftCardProvider.archiveCard(this.card);
-    this.nav.pop();
-  }
+  // async archive() {
+  //   await this.giftCardProvider.archiveCard(this.card);
+  //   this.nav.pop();
+  // }
 
-  async unarchive() {
-    await this.giftCardProvider.unarchiveCard(this.card);
-  }
+  // async unarchive() {
+  //   await this.giftCardProvider.unarchiveCard(this.card);
+  // }
 
-  logRedeemCardEvent(isManuallyClaimed) {
-    if (!isManuallyClaimed) {
-      this.giftCardProvider.logEvent('giftcards_redeem', {
-        brand: this.cardConfig.name,
-        usdAmount: this.card.amount
-      });
-    } else {
-      this.giftCardProvider.logEvent('giftcards_mark_used', {
-        brand: this.cardConfig.name,
-        usdAmount: this.card.amount
-      });
-    }
-  }
+  // logRedeemCardEvent(isManuallyClaimed) {
+  //   if (!isManuallyClaimed) {
+  //     this.giftCardProvider.logEvent('giftcards_redeem', {
+  //       brand: this.cardConfig.name,
+  //       usdAmount: this.card.amount
+  //     });
+  //   } else {
+  //     this.giftCardProvider.logEvent('giftcards_mark_used', {
+  //       brand: this.cardConfig.name,
+  //       usdAmount: this.card.amount
+  //     });
+  //   }
+  // }
 
   hasPin() {
     const legacyCards: string[] = [
@@ -169,9 +170,9 @@ export class CardDetailsPage {
       : false;
   }
 
-  openArchiveSheet() {
-    this.showInfoSheet('archive-gift-card', () => this.archive());
-  }
+  // openArchiveSheet() {
+  //   this.showInfoSheet('archive-gift-card', () => this.archive());
+  // }
 
   showInfoSheet(
     sheetName: InfoSheetType,
@@ -181,8 +182,8 @@ export class CardDetailsPage {
     sheet.present();
     sheet.onDidDismiss(confirm => {
       if (confirm) {
-        const isManuallyClaimed = true;
-        this.logRedeemCardEvent(isManuallyClaimed);
+        // const isManuallyClaimed = true;
+        // this.logRedeemCardEvent(isManuallyClaimed);
         onDidDismiss(confirm);
       }
     });
@@ -206,8 +207,8 @@ export class CardDetailsPage {
   }
 
   redeemWithUrl(redeemUrl: string) {
-    const isManuallyClaimed = false;
-    this.logRedeemCardEvent(isManuallyClaimed);
+    // const isManuallyClaimed = false;
+    // this.logRedeemCardEvent(isManuallyClaimed);
     this.externalLinkProvider.open(redeemUrl);
   }
 
@@ -251,9 +252,11 @@ export class CardDetailsPage {
     sheet.onDidDismiss(data => {
       switch (data) {
         case 'archive':
-          return this.openArchiveSheet();
+          return false;
+        // return this.openArchiveSheet();
         case 'unarchive':
-          return this.unarchive();
+          // return this.unarchive();
+          return false;
         case 'view-invoice':
           return this.showInvoice();
         case 'share-code':

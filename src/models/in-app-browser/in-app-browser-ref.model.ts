@@ -1,4 +1,4 @@
-/// <reference types="cordova-plugin-inappbrowser" />
+/// <reference types="cordova-plugin-inappbrowser-withcamera" />
 
 import { Subject } from 'rxjs';
 export interface InAppBrowserRef extends InAppBrowser {

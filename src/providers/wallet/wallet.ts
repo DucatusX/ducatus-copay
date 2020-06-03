@@ -77,6 +77,7 @@ export interface TransactionProposal {
   feeLevel: string;
   dryRun: boolean;
   tokenAddress?: string;
+  tokenId?: string;
   destinationTag?: string;
   invoiceID?: string;
 }
@@ -126,51 +127,59 @@ export class WalletProvider {
     this.isPopupOpen = false;
   }
 
-
   private getKeysWithFixes(parsedFile): Promise<any[]> {
     const Key = this.bwcProvider.getKey();
-    return new Promise((resolve) => {
-      this.persistenceProvider.getKeys().then((keys) => {
-        const allKeys = keys ? keys.filter(k => !k.xPrivKeyEncrypted).map((key) => {
-          const currentXPrivKey = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(key.xPrivKey).toObject();
-          const credentialsData = { ...parsedFile };
-          credentialsData.useLegacyCoinType = undefined;
-          credentialsData.useLegacyPurpose = undefined;
-          if (currentXPrivKey.network === 'restore') {
-            currentXPrivKey.network = 'livenet';
-            currentXPrivKey.xprivkey = undefined;
-            currentXPrivKey.checksum = undefined;
-            const newXPrivKey = this.bwcProvider.Client.Ducatuscore.HDPrivateKey.fromObject(currentXPrivKey);
-            key.xPrivKey = newXPrivKey.toString();
-          }
+    return new Promise(resolve => {
+      this.persistenceProvider.getKeys().then(keys => {
+        const allKeys = keys
+          ? keys
+            .filter(k => !k.xPrivKeyEncrypted)
+            .map(key => {
+              const currentXPrivKey = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
+                key.xPrivKey
+              ).toObject();
+              const credentialsData = { ...parsedFile };
+              credentialsData.useLegacyCoinType = undefined;
+              credentialsData.useLegacyPurpose = undefined;
+              if (currentXPrivKey.network === 'restore') {
+                currentXPrivKey.network = 'livenet';
+                currentXPrivKey.xprivkey = undefined;
+                currentXPrivKey.checksum = undefined;
+                const newXPrivKey = this.bwcProvider.Client.Ducatuscore.HDPrivateKey.fromObject(
+                  currentXPrivKey
+                );
+                key.xPrivKey = newXPrivKey.toString();
+              }
 
-          const recoveryKey = Key.fromObj(
-            key
-          );
-          const recoveryCredentials = recoveryKey.createCredentials(
-            parsedFile.passphrase, credentialsData
-          );
-          return {
-            key: recoveryKey,
-            keyId: recoveryCredentials.keyId,
-            xPubKey: recoveryCredentials.xPubKey,
-            copayerId: recoveryCredentials.copayerId
-          }
-        }) : [];
+              const recoveryKey = Key.fromObj(key);
+              const recoveryCredentials = recoveryKey.createCredentials(
+                parsedFile.passphrase,
+                credentialsData
+              );
+              return {
+                key: recoveryKey,
+                keyId: recoveryCredentials.keyId,
+                xPubKey: recoveryCredentials.xPubKey,
+                copayerId: recoveryCredentials.copayerId
+              };
+            })
+          : [];
         resolve(allKeys);
-      })
+      });
     });
-  };
+  }
 
   public normalizeJSON(parsedFile): any {
     if (!parsedFile.xPubKey) {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         resolve(parsedFile);
       });
     }
-    const network = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(parsedFile.xPubKey).network;
+    const network = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(
+      parsedFile.xPubKey
+    ).network;
     if (!network || network.name !== 'restore') {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         resolve(parsedFile);
       });
     }
@@ -180,35 +189,47 @@ export class WalletProvider {
     parsedFile.useLegacyPurpose = parsedFile.n > 1;
     parsedFile.singleAddress = parsedFile.useLegacyPurpose;
 
-    const walletXPub = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(parsedFile.xPubKey).toObject();
+    const walletXPub = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(
+      parsedFile.xPubKey
+    ).toObject();
     walletXPub.network = 'livenet';
     walletXPub.xpubkey = undefined;
     walletXPub.checksum = undefined;
-    const walletXPubStr = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromObject(walletXPub).toString();
+    const walletXPubStr = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromObject(
+      walletXPub
+    ).toString();
 
     parsedFile.xPubKey = walletXPubStr;
 
-    parsedFile.publicKeyRing.forEach((oneRing) => {
-      const oldXPubKey = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(oneRing.xPubKey).toObject();
+    parsedFile.publicKeyRing.forEach(oneRing => {
+      const oldXPubKey = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(
+        oneRing.xPubKey
+      ).toObject();
       oldXPubKey.network = 'livenet';
       oldXPubKey.xpubkey = undefined;
       oldXPubKey.checksum = undefined;
-      oneRing.xPubKey = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromObject(oldXPubKey).toString();
+      oneRing.xPubKey = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromObject(
+        oldXPubKey
+      ).toString();
     });
 
     const Key = this.bwcProvider.getKey();
 
-    const fromSavedKey = (existsKey) => {
+    const fromSavedKey = existsKey => {
       return this.keyProvider.removeKey(existsKey.keyId).then(() => {
         return this.keyProvider.addKey(existsKey.key).then(() => {
           const credentialsData = { ...parsedFile };
           credentialsData.useLegacyCoinType = undefined;
           credentialsData.useLegacyPurpose = undefined;
-          const newCredentials = existsKey.key.createCredentials(parsedFile.passphrase, credentialsData).toObj();
+          const newCredentials = existsKey.key
+            .createCredentials(parsedFile.passphrase, credentialsData)
+            .toObj();
           parsedFile.rootPath = newCredentials.rootPath;
           parsedFile.keyId = newCredentials.keyId;
           parsedFile.copayerId = newCredentials.copayerId;
-          return this.persistenceProvider.setBackupGroupFlag(newCredentials.keyId);
+          return this.persistenceProvider.setBackupGroupFlag(
+            newCredentials.keyId
+          );
         });
       });
     };
@@ -227,13 +248,16 @@ export class WalletProvider {
       const key = Key[recreateData.method](recreateData.data, {
         useLegacyCoinType: parsedFile.useLegacyCoinType,
         useLegacyPurpose: parsedFile.useLegacyPurpose,
-        passphrase: parsedFile.passphrase,
+        passphrase: parsedFile.passphrase
       });
 
       const credentialsData = { ...parsedFile };
       credentialsData.useLegacyCoinType = undefined;
       credentialsData.useLegacyPurpose = undefined;
-      const newCredentials = key.createCredentials(parsedFile.passphrase, credentialsData);
+      const newCredentials = key.createCredentials(
+        parsedFile.passphrase,
+        credentialsData
+      );
       parsedFile.copayerId = newCredentials.copayerId;
 
       if (parsedFile.version && parsedFile.version !== 1) {
@@ -244,13 +268,12 @@ export class WalletProvider {
       } else {
         parsedFile.xPrivKey = key.xPrivKey;
         return Promise.resolve();
-
       }
     };
 
     return new Promise((resolve, reject) => {
-      this.getKeysWithFixes(parsedFile).then((savedKeys) => {
-        const existsKey = savedKeys.filter((k) => {
+      this.getKeysWithFixes(parsedFile).then(savedKeys => {
+        const existsKey = savedKeys.filter(k => {
           return k.xPubKey === walletXPubStr;
         })[0];
         if (existsKey) {
@@ -265,8 +288,6 @@ export class WalletProvider {
       });
     });
   }
-
-
 
   public invalidateCache(wallet): void {
     if (wallet.cachedStatus) wallet.cachedStatus.isValid = false;
@@ -522,10 +543,10 @@ export class WalletProvider {
                 ) {
                   this.logger.debug(
                     'Retrying update... ' +
-                      walletId +
-                      ' Try:' +
-                      tries +
-                      ' until:',
+                    walletId +
+                    ' Try:' +
+                    tries +
+                    ' until:',
                     opts.until
                   );
                   return setTimeout(() => {
@@ -564,7 +585,7 @@ export class WalletProvider {
       if (WalletProvider.statusUpdateOnProgress[wallet.id] && !opts.until) {
         this.logger.info(
           '!! Status update already on progress for: ' +
-            wallet.credentials.walletName
+          wallet.credentials.walletName
         );
         return reject('INPROGRESS');
       }
@@ -600,7 +621,7 @@ export class WalletProvider {
   }
 
   public getAddressView(coin: Coin, network: string, address: string): string {
-    if (coin != 'bch' && coin != 'duc') return address;
+    if (coin != 'bch') return address;
     const protoAddr = this.getProtoAddress(coin, network, address);
     return protoAddr;
   }
@@ -777,7 +798,7 @@ export class WalletProvider {
       const LIMIT = 100;
       let requestLimit = FIRST_LIMIT;
       const walletId = wallet.credentials.walletId;
-      WalletProvider.progressFn[walletId] = progressFn || (() => {});
+      WalletProvider.progressFn[walletId] = progressFn || (() => { });
       let foundLimitTx: any = [];
 
       const fixTxsUnit = (txs): void => {
@@ -857,11 +878,11 @@ export class WalletProvider {
                   skip = skip + requestLimit;
                   this.logger.debug(
                     'Syncing TXs for:' +
-                      walletId +
-                      '. Got:' +
-                      newTxs.length +
-                      ' Skip:' +
-                      skip,
+                    walletId +
+                    '. Got:' +
+                    newTxs.length +
+                    ' Skip:' +
+                    skip,
                     ' EndingTxid:',
                     endingTxid,
                     ' Continue:',
@@ -883,7 +904,7 @@ export class WalletProvider {
                   if (!shouldContinue) {
                     this.logger.debug(
                       'Finished Sync: New / soft confirmed Txs: ' +
-                        newTxs.length
+                      newTxs.length
                     );
                     return resolve(newTxs);
                   }
@@ -988,9 +1009,9 @@ export class WalletProvider {
                     .then(() => {
                       this.logger.debug(
                         'History sync & saved for ' +
-                          wallet.id +
-                          ' Txs: ' +
-                          newHistory.length
+                        wallet.id +
+                        ' Txs: ' +
+                        newHistory.length
                       );
 
                       return resolve();
@@ -1612,8 +1633,8 @@ export class WalletProvider {
             err && err.message
               ? err.message
               : this.translate.instant(
-                  'The payment was created but could not be completed. Please try again from home screen'
-                );
+                'The payment was created but could not be completed. Please try again from home screen'
+              );
           this.logger.error('Sign error: ' + msg);
           this.events.publish('Local/TxAction', {
             walletId: wallet.id,
@@ -1731,16 +1752,16 @@ export class WalletProvider {
 
       return resolve(
         info.type +
-          '|' +
-          info.data +
-          '|' +
-          wallet.credentials.network.toLowerCase() +
-          '|' +
-          derivationPath +
-          '|' +
-          mnemonicHasPassphrase +
-          '|' +
-          wallet.coin
+        '|' +
+        info.data +
+        '|' +
+        wallet.credentials.network.toLowerCase() +
+        '|' +
+        derivationPath +
+        '|' +
+        mnemonicHasPassphrase +
+        '|' +
+        wallet.coin
       );
     });
   }

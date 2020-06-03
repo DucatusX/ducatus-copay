@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MarkdownComponent } from 'ngx-markdown';
-import { GiftCardProvider } from '../../../../providers/gift-card/gift-card';
+// import { GiftCardProvider } from '../../../../providers/gift-card/gift-card';
 import { CardConfig } from '../../../../providers/gift-card/gift-card.types';
 
 @Component({
@@ -17,10 +17,11 @@ export class CardTermsComponent implements OnInit {
   @Input()
   cardName: string;
 
-  constructor(private giftCardProvider: GiftCardProvider) {}
+  constructor() // private giftCardProvider: GiftCardProvider
+  {}
 
   async ngOnInit() {
-    this.cardConfig = await this.giftCardProvider.getCardConfig(this.cardName);
+    // this.cardConfig = await this.giftCardProvider.getCardConfig(this.cardName);
     const terms = this.cardConfig.terms;
     this.cardTerms =
       terms &&
