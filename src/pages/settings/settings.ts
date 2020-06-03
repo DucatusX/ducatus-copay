@@ -29,7 +29,7 @@ import { TouchIdProvider } from '../../providers/touchid/touchid';
 import { AddPage } from '../add/add';
 import { BitPaySettingsPage } from '../integrations/bitpay-card/bitpay-settings/bitpay-settings';
 import { CoinbaseSettingsPage } from '../integrations/coinbase/coinbase-settings/coinbase-settings';
-import { GiftCardsSettingsPage } from '../integrations/gift-cards/gift-cards-settings/gift-cards-settings';
+// import { GiftCardsSettingsPage } from '../integrations/gift-cards/gift-cards-settings/gift-cards-settings';
 import { ShapeshiftSettingsPage } from '../integrations/shapeshift/shapeshift-settings/shapeshift-settings';
 import { SimplexSettingsPage } from '../integrations/simplex/simplex-settings/simplex-settings';
 import { PinModalPage } from '../pin/pin-modal/pin-modal';
@@ -265,9 +265,9 @@ export class SettingsPage {
       case 'simplex':
         this.navCtrl.push(SimplexSettingsPage);
         break;
-      case 'giftcards':
-        this.navCtrl.push(GiftCardsSettingsPage);
-        break;
+      // case 'giftcards':
+      //   this.navCtrl.push(GiftCardsSettingsPage);
+      //   break;
     }
   }
 
@@ -289,9 +289,9 @@ export class SettingsPage {
     });
   }
 
-  public openGiftCardsSettings() {
-    this.navCtrl.push(GiftCardsSettingsPage);
-  }
+  // public openGiftCardsSettings() {
+  //   this.navCtrl.push(GiftCardsSettingsPage);
+  // }
 
   public openHelpExternalLink(): void {
     const url = 'https://ducatus.net/';
