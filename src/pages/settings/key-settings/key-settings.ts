@@ -205,7 +205,7 @@ export class KeySettingsPage {
 
   openWalletSettings(id) {
     if (this.showReorder) return;
-    this.navCtrl.push(WalletSettingsPage, { walletId: id });
+    this.navCtrl.push(WalletSettingsPage, { walletId: id, keyId: this.keyId });
   }
 
   public reorder(): void {

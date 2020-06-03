@@ -20,9 +20,9 @@ import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { CurrencyProvider } from '../../providers/currency/currency';
 import { ErrorsProvider } from '../../providers/errors/errors';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
-import { GiftCardProvider } from '../../providers/gift-card/gift-card';
+// import { GiftCardProvider } from '../../providers/gift-card/gift-card';
 import { CardConfigMap } from '../../providers/gift-card/gift-card.types';
-import { ActionSheetProvider } from '../../providers/index';
+import { ActionSheetProvider, MoonPayProvider } from '../../providers/index';
 import { Logger } from '../../providers/logger/logger';
 import { OnGoingProcessProvider } from '../../providers/on-going-process/on-going-process';
 import { PlatformProvider } from '../../providers/platform/platform';
@@ -36,10 +36,10 @@ import { SendPage } from '../../pages/send/send';
 import { WalletAddressesPage } from '../../pages/settings/wallet-settings/wallet-settings-advanced/wallet-addresses/wallet-addresses';
 import { TxDetailsModal } from '../../pages/tx-details/tx-details';
 import { ProposalsNotificationsPage } from '../../pages/wallets/proposals-notifications/proposals-notifications';
+import { Erc721Page } from '../erc-721/erc-721';
 import { AmountPage } from '../send/amount/amount';
 import { SearchTxModalPage } from './search-tx-modal/search-tx-modal';
 import { WalletBalanceModal } from './wallet-balance/wallet-balance';
-import { Erc721Page } from '../erc-721/erc-721';
 
 const HISTORY_SHOW_LIMIT = 10;
 const MIN_UPDATE_TIME = 2000;
@@ -89,7 +89,7 @@ export class WalletDetailsPage {
     private walletProvider: WalletProvider,
     private addressbookProvider: AddressBookProvider,
     private events: Events,
-    public giftCardProvider: GiftCardProvider,
+    // public giftCardProvider: GiftCardProvider,
     private logger: Logger,
     private timeProvider: TimeProvider,
     private translate: TranslateService,
@@ -104,7 +104,8 @@ export class WalletDetailsPage {
     private statusBar: StatusBar,
     private socialSharing: SocialSharing,
     private bwcErrorProvider: BwcErrorProvider,
-    private errorsProvider: ErrorsProvider
+    private errorsProvider: ErrorsProvider,
+    private moonPayProvider: MoonPayProvider
   ) {
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.isCordova = this.platformProvider.isCordova;
@@ -112,7 +113,7 @@ export class WalletDetailsPage {
 
   async ionViewDidLoad() {
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
-    this.supportedCards = this.giftCardProvider.getSupportedCardMap();
+    // this.supportedCards = this.giftCardProvider.getSupportedCardMap();
 
     // Getting info from cache
     if (this.navParams.data.clearCache) {
@@ -231,6 +232,12 @@ export class WalletDetailsPage {
           });
         }
       });
+  }
+
+  public openMoonPay() {
+    if (!this.moonPayProvider.openMoonPay(this.wallet.credentials.walletId)) {
+      this.goToReceivePage();
+    }
   }
 
   public isUtxoCoin(): boolean {
@@ -633,11 +640,14 @@ export class WalletDetailsPage {
     });
   }
 
-
   public goToErc721Page() {
-    this.navCtrl.push(Erc721Page, {
-      wallet: this.wallet
-    });
+    if (this.wallet.credentials.walletId) {
+      if (this.wallet.needsBackup) {
+        this.goToReceivePage();
+      } else {
+        this.navCtrl.push(Erc721Page, { wallet: this.wallet });
+      }
+    }
   }
 
   public goToSendPage() {

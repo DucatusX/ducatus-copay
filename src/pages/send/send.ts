@@ -26,12 +26,12 @@ import { ShapeshiftPage } from '../integrations/shapeshift/shapeshift';
 import { SimplexPage } from '../integrations/simplex/simplex';
 import { PaperWalletPage } from '../paper-wallet/paper-wallet';
 import { ScanPage } from '../scan/scan';
-import { AmountPage } from './amount/amount';
-import { ConfirmPage } from './confirm/confirm';
-import { SelectInputsPage } from './select-inputs/select-inputs';
 import { AddressbookAddPage } from '../settings/addressbook/add/add';
 import { WalletDetailsPage } from '../wallet-details/wallet-details';
+import { AmountPage } from './amount/amount';
+import { ConfirmPage } from './confirm/confirm';
 import { MultiSendPage } from './multi-send/multi-send';
+import { SelectInputsPage } from './select-inputs/select-inputs';
 
 @Component({
   selector: 'page-send',
@@ -128,7 +128,8 @@ export class SendPage {
     return (
       this.wallet &&
       this.wallet.cachedStatus &&
-      !this.wallet.cachedStatus.totalBalanceSat && !this.token
+      !this.wallet.cachedStatus.totalBalanceSat &&
+      !this.token
     );
   }
 
@@ -155,11 +156,12 @@ export class SendPage {
         data,
         this.wallet.network
       );
-      const chain = this.currencyProvider.getChain(this.wallet.coin).toLowerCase();
+      const chain = this.currencyProvider
+        .getChain(this.wallet.coin)
+        .toLowerCase();
       const testCoin = chain === 'ducx' ? 'eth' : chain;
       isValid =
-        testCoin == addrData.coin &&
-        addrData.network == this.wallet.network;
+        testCoin == addrData.coin && addrData.network == this.wallet.network;
     }
 
     if (isValid) {

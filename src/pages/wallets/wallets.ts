@@ -25,6 +25,7 @@ import { WalletDetailsPage } from '../wallet-details/wallet-details';
 import { ProposalsNotificationsPage } from './proposals-notifications/proposals-notifications';
 
 // Providers
+import { MoonPayProvider } from '../../providers';
 import { ActionSheetProvider } from '../../providers/action-sheet/action-sheet';
 import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { ClipboardProvider } from '../../providers/clipboard/clipboard';
@@ -103,7 +104,8 @@ export class WalletsPage {
     private simplexProvider: SimplexProvider,
     private modalCtrl: ModalController,
     private actionSheetProvider: ActionSheetProvider,
-    private coinbaseProvider: CoinbaseProvider
+    private coinbaseProvider: CoinbaseProvider,
+    private moonPayProvider: MoonPayProvider
   ) {
     this.slideDown = false;
     this.isBlur = false;
@@ -421,6 +423,10 @@ export class WalletsPage {
       .catch(err => {
         this.logger.warn('Paste from clipboard: ', err);
       });
+  }
+
+  public openMoonPay() {
+    this.moonPayProvider.openMoonPay();
   }
 
   public hideClipboardCard() {

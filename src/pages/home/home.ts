@@ -1,24 +1,29 @@
 import { Component, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Events/*, ModalController, */, NavController, Slides } from 'ionic-angular';
+import {
+  Events /*, ModalController, */,
+  NavController,
+  Slides
+} from 'ionic-angular';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { IntegrationsPage } from '../../pages/integrations/integrations';
 import { SimplexPage } from '../../pages/integrations/simplex/simplex';
 import { SimplexBuyPage } from '../../pages/integrations/simplex/simplex-buy/simplex-buy';
-import { FormatCurrencyPipe } from '../../pipes/format-currency';
+// import { FormatCurrencyPipe } from '../../pipes/format-currency';
 import {
   AppProvider,
   ExternalLinkProvider,
   FeedbackProvider,
-  GiftCardProvider,
+  // GiftCardProvider,
   Logger,
+  MoonPayProvider,
   PersistenceProvider,
   SimplexProvider
 } from '../../providers';
 import { AnalyticsProvider } from '../../providers/analytics/analytics';
 import { ConfigProvider } from '../../providers/config/config';
-import { hasVisibleDiscount } from '../../providers/gift-card/gift-card';
+// import { hasVisibleDiscount } from '../../providers/gift-card/gift-card';
 import { CardConfig } from '../../providers/gift-card/gift-card.types';
 import { HomeIntegrationsProvider } from '../../providers/home-integrations/home-integrations';
 import { PlatformProvider } from '../../providers/platform/platform';
@@ -26,7 +31,7 @@ import { ReleaseProvider } from '../../providers/release/release';
 import { BitPayCardIntroPage } from '../integrations/bitpay-card/bitpay-card-intro/bitpay-card-intro';
 import { PhaseOneCardIntro } from '../integrations/bitpay-card/bitpay-card-phases/phase-one/phase-one-intro-page/phase-one-intro-page';
 import { CoinbasePage } from '../integrations/coinbase/coinbase';
-import { BuyCardPage } from '../integrations/gift-cards/buy-card/buy-card';
+// import { BuyCardPage } from '../integrations/gift-cards/buy-card/buy-card';
 import { CardCatalogPage } from '../integrations/gift-cards/card-catalog/card-catalog';
 // import { NewDesignTourPage } from '../new-design-tour/new-design-tour';
 
@@ -83,9 +88,9 @@ export class HomePage {
     private analyticsProvider: AnalyticsProvider,
     private appProvider: AppProvider,
     private externalLinkProvider: ExternalLinkProvider,
-    private formatCurrencyPipe: FormatCurrencyPipe,
+    // private formatCurrencyPipe: FormatCurrencyPipe,
     private navCtrl: NavController,
-    private giftCardProvider: GiftCardProvider,
+    // private giftCardProvider: GiftCardProvider,
     private simplexProvider: SimplexProvider,
     private feedbackProvider: FeedbackProvider,
     private homeIntegrationsProvider: HomeIntegrationsProvider,
@@ -94,7 +99,8 @@ export class HomePage {
     private configProvider: ConfigProvider,
     private events: Events,
     private releaseProvider: ReleaseProvider,
-    private platformProvider: PlatformProvider
+    private platformProvider: PlatformProvider,
+    private moonPayProvider: MoonPayProvider
   ) {
     this.logger.info('Loaded: HomePage');
     this.subscribeEvents();
@@ -116,9 +122,9 @@ export class HomePage {
     if (this.platformProvider.isElectron) this.checkNewRelease();
     this.showCoinbase = !!config.showIntegration['coinbase'];
     this.setIntegrations();
-    this.fetchAdvertisements();
-    await this.setDiscountedCard();
-    this.fetchDiscountAdvertisements();
+    // this.fetchAdvertisements();
+    // await this.setDiscountedCard();
+    // this.fetchDiscountAdvertisements();
   }
 
   ionViewDidLoad() {
@@ -142,6 +148,10 @@ export class HomePage {
         imgSrc: 'assets/img/icon-merch-dir.svg',
         dismissible: true
       });
+  }
+
+  public openMoonPay() {
+    this.moonPayProvider.openMoonPay();
   }
 
   private getCachedTotalBalance() {
@@ -301,56 +311,56 @@ export class HomePage {
       });
   }
 
-  private async setDiscountedCard(): Promise<void> {
-    this.discountedCard = await this.getDiscountedCard();
-    this.discountedCard && this.addGiftCardDiscount(this.discountedCard);
-  }
+  // private async setDiscountedCard(): Promise<void> {
+  //   this.discountedCard = await this.getDiscountedCard();
+  //   this.discountedCard && this.addGiftCardDiscount(this.discountedCard);
+  // }
 
-  private async getDiscountedCard(): Promise<CardConfig> {
-    const availableCards = await this.giftCardProvider.getAvailableCards();
-    const discountedCard = availableCards.find(cardConfig =>
-      hasVisibleDiscount(cardConfig)
-    );
-    return discountedCard;
-  }
+  // private async getDiscountedCard(): Promise<CardConfig> {
+  //   const availableCards = await this.giftCardProvider.getAvailableCards();
+  //   const discountedCard = availableCards.find(cardConfig =>
+  //     hasVisibleDiscount(cardConfig)
+  //   );
+  //   return discountedCard;
+  // }
 
-  private addGiftCardDiscount(discountedCard: CardConfig) {
-    const discount = discountedCard.discounts[0];
-    const discountText =
-      discount.type === 'flatrate'
-        ? `${this.formatCurrencyPipe.transform(
-            discount.amount,
-            discountedCard.currency,
-            'minimal'
-          )}`
-        : `${discount.amount}%`;
-    const advertisementName = getGiftCardAdvertisementName(discountedCard);
-    const alreadyVisible = this.advertisements.find(
-      a => a.name === advertisementName
-    );
-    !alreadyVisible &&
-      this.advertisements.unshift({
-        name: advertisementName,
-        title: `${discountText} off ${discountedCard.displayName}`,
-        body: `Save ${discountText} off ${
-          discountedCard.displayName
-        } gift cards. Limited time offer.`,
-        app: 'bitpay',
-        linkText: 'Buy Now',
-        link: BuyCardPage,
-        linkParams: { cardConfig: discountedCard },
-        dismissible: true,
-        imgSrc: discountedCard.icon
-      });
-  }
+  // private addGiftCardDiscount(discountedCard: CardConfig) {
+  //   const discount = discountedCard.discounts[0];
+  //   const discountText =
+  //     discount.type === 'flatrate'
+  //       ? `${this.formatCurrencyPipe.transform(
+  //           discount.amount,
+  //           discountedCard.currency,
+  //           'minimal'
+  //         )}`
+  //       : `${discount.amount}%`;
+  //   const advertisementName = getGiftCardAdvertisementName(discountedCard);
+  //   const alreadyVisible = this.advertisements.find(
+  //     a => a.name === advertisementName
+  //   );
+  //   !alreadyVisible &&
+  //     this.advertisements.unshift({
+  //       name: advertisementName,
+  //       title: `${discountText} off ${discountedCard.displayName}`,
+  //       body: `Save ${discountText} off ${
+  //         discountedCard.displayName
+  //       } gift cards. Limited time offer.`,
+  //       app: 'bitpay',
+  //       linkText: 'Buy Now',
+  //       link: BuyCardPage,
+  //       linkParams: { cardConfig: discountedCard },
+  //       dismissible: true,
+  //       imgSrc: discountedCard.icon
+  //     });
+  // }
 
-  private async fetchGiftCardDiscount() {
-    const availableCards = await this.giftCardProvider.getAvailableCards();
-    const discountedCard = availableCards.find(cardConfig =>
-      hasVisibleDiscount(cardConfig)
-    );
-    discountedCard && this.addGiftCardDiscount(discountedCard);
-  }
+  // private async fetchGiftCardDiscount() {
+  //   const availableCards = await this.giftCardProvider.getAvailableCards();
+  //   const discountedCard = availableCards.find(cardConfig =>
+  //     hasVisibleDiscount(cardConfig)
+  //   );
+  //   discountedCard && this.addGiftCardDiscount(discountedCard);
+  // }
 
   public doRefresh(refresher): void {
     this.fetchAdvertisements();
@@ -402,10 +412,10 @@ export class HomePage {
     this.externalLinkProvider.open(url);
   }
 
-  private async fetchDiscountAdvertisements(): Promise<void> {
-    await this.fetchGiftCardDiscount();
-    this.logPresentedWithGiftCardDiscountEvent();
-  }
+  // private async fetchDiscountAdvertisements(): Promise<void> {
+  // await this.fetchGiftCardDiscount();
+  // this.logPresentedWithGiftCardDiscountEvent();
+  // }
 
   private fetchAdvertisements(): void {
     this.advertisements.forEach(advertisement => {
@@ -432,21 +442,21 @@ export class HomePage {
     });
   }
 
-  logPresentedWithGiftCardDiscountEvent() {
-    const giftCardDiscount = this.advertisements.find(a =>
-      a.name.includes('gift-card-discount')
-    );
-    const isCurrentSlide = !this.slides || this.slides.getActiveIndex() === 0;
-    giftCardDiscount &&
-      isCurrentSlide &&
-      this.giftCardProvider.logEvent(
-        'presentedWithGiftCardDiscount',
-        this.giftCardProvider.getDiscountEventParams(
-          this.discountedCard,
-          'Home Tab Advertisement'
-        )
-      );
-  }
+  // logPresentedWithGiftCardDiscountEvent() {
+  //   const giftCardDiscount = this.advertisements.find(a =>
+  //     a.name.includes('gift-card-discount')
+  //   );
+  //   const isCurrentSlide = !this.slides || this.slides.getActiveIndex() === 0;
+  //   giftCardDiscount &&
+  //     isCurrentSlide &&
+  //     this.giftCardProvider.logEvent(
+  //       'presentedWithGiftCardDiscount',
+  //       this.giftCardProvider.getDiscountEventParams(
+  //         this.discountedCard,
+  //         'Home Tab Advertisement'
+  //       )
+  //     );
+  // }
 
   public dismissAdvertisement(advertisement): void {
     this.logger.debug(`Advertisement: ${advertisement.name} dismissed`);
@@ -468,15 +478,15 @@ export class HomePage {
     } else {
       this.navCtrl.push(page, params);
     }
-    if (page === BuyCardPage) {
-      this.giftCardProvider.logEvent(
-        'clickedGiftCardDiscount',
-        this.giftCardProvider.getDiscountEventParams(
-          params.cardConfig,
-          'Home Tab Advertisement'
-        )
-      );
-    }
+    // if (page === BuyCardPage) {
+    //   this.giftCardProvider.logEvent(
+    //     'clickedGiftCardDiscount',
+    //     this.giftCardProvider.getDiscountEventParams(
+    //       params.cardConfig,
+    //       'Home Tab Advertisement'
+    //     )
+    //   );
+    // }
   }
 
   public goToShop() {
@@ -594,8 +604,8 @@ export class HomePage {
   }
 }
 
-function getGiftCardAdvertisementName(discountedCard: CardConfig): string {
-  return `${discountedCard.discounts[0].code}-${
-    discountedCard.name
-  }-gift-card-discount`;
-}
+// function getGiftCardAdvertisementName(discountedCard: CardConfig): string {
+//   return `${discountedCard.discounts[0].code}-${
+//     discountedCard.name
+//   }-gift-card-discount`;
+// }

@@ -23,8 +23,10 @@ body {
 .scroll-content {
   background-color: color($colors, blank);
 }
+
 // all content without menu
 ion-content.add-bottom-safe-area {
+
   .fixed-content,
   .scroll-content {
     padding-bottom: 0;
@@ -36,6 +38,7 @@ ion-content.add-bottom-safe-area {
 // expandable views
 ion-content.add-padding-bottom,
 .add-padding-bottom ion-content {
+
   .fixed-content,
   .scroll-content {
     padding-bottom: 120px;
@@ -45,6 +48,7 @@ ion-content.add-padding-bottom,
 }
 
 ion-title.bp-title {
+
   .toolbar-title.toolbar-title-md,
   .toolbar-title.toolbar-title-ios {
     font-weight: 700 !important;
@@ -79,6 +83,7 @@ ion-label {
 ion-header.bp-header .toolbar {
   ion-title {
     padding: 0;
+
     .toolbar-title.toolbar-title-md,
     .toolbar-title.toolbar-title-ios {
       font-size: 18px;
@@ -86,6 +91,7 @@ ion-header.bp-header .toolbar {
     }
   }
 }
+
 .wide-header__title {
   color: #a8a8a8;
   font-size: 18px;
@@ -104,9 +110,11 @@ ion-header.bp-header .toolbar {
   background-color: rgba(155, 163, 174, 0.2);
   color: #d8d8d8;
   box-shadow: none;
+
   &.button-ios {
     margin: 0;
   }
+
   &.button-md.activated,
   &.button-ios.activated {
     background-color: rgba(155, 163, 174, 0.2);
@@ -121,6 +129,7 @@ ion-header.bp-header .toolbar {
   background-color: transparent !important;
   margin-right: 5px;
   color: #434d5a;
+
   &.activated,
   &:hover:not(.disable-hover) {
     color: #434d5a;
@@ -190,6 +199,7 @@ ion-spinner * {
   .back-button-md {
     min-width: 41px;
   }
+
   .back-button {
     margin-left: 10px;
     height: 41px;
@@ -198,12 +208,15 @@ ion-spinner * {
     background-color: rgba(155, 163, 174, 0.12);
     color: #d8d8d8;
     box-shadow: none;
+
     .back-button-icon-md {
       padding: 0px 0px 32px 4px;
+
       &::before {
         font-size: 14px;
       }
     }
+
     .back-button-icon-ios {
       margin: 2px 2px 0px 0px;
     }
@@ -234,6 +247,7 @@ ion-spinner * {
   height: $icon-dim;
   width: $icon-dim;
   margin-right: 16px;
+
   &.disabled {
     background-color: color($colors, grey);
   }
@@ -451,6 +465,7 @@ ion-searchbar {
   background: white;
   box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.1);
   padding-bottom: 10px;
+
   .searchbar-input-container {
     input.searchbar-input {
       background: #f8f8f8;
@@ -504,6 +519,7 @@ ion-app,
   &:hover,
   &:focus,
   &:active {
+
     &.button-md,
     &.button-ios {
       background-color: #ededed;
@@ -514,6 +530,7 @@ ion-app,
 
   &:active,
   &.activated {
+
     &.button-md,
     &.button-ios {
       background-color: $feather;
@@ -605,7 +622,7 @@ ion-alert .alert-message {
       padding: 5px;
     }
 
-    .aclass > img {
+    .aclass>img {
       filter: grayscale(100%);
       height: 100%;
       width: 100%;
@@ -614,6 +631,7 @@ ion-alert .alert-message {
 
   .bp-qr-card {
     width: 100%;
+
     img {
       height: auto;
       width: 100%;
@@ -703,6 +721,7 @@ page-bitpay-card,
     &.title-ios {
       padding: 0 70px 1px;
     }
+
     .toolbar-title {
       opacity: 0.7;
       font-weight: 600;
@@ -757,6 +776,7 @@ page-bitpay-card,
 
 .tabbar {
   height: 10vh;
+
   .tabs-md &,
   .tabs-ios & {
     background: white;
@@ -787,30 +807,24 @@ ion-tabs {
     // Workaround to prevent tabs from disappearing when activated
     position: absolute;
     display: none;
-    content: url('../assets/img/tab-icons/tab-home-active.svg')
-      url('../assets/img/tab-icons/tab-wallets-active.svg')
-      url('../assets/img/tab-icons/tab-cards-active.svg')
-      url('../assets/img/tab-icons/tab-settings-active.svg');
+    content: url('../assets/img/tab-icons/tab-home-active.svg') url('../assets/img/tab-icons/tab-wallets-active.svg') url('../assets/img/tab-icons/tab-cards-active.svg') url('../assets/img/tab-icons/tab-settings-active.svg');
   }
+
   .tab-badge {
     font-family: 'Roboto';
   }
 }
 
-$home-active: url('../assets/img/tab-icons/tab-home-active.svg') no-repeat 50%
-  50%;
+$home-active: url('../assets/img/tab-icons/tab-home-active.svg') no-repeat 50% 50%;
 $home-inactive: url('../assets/img/tab-icons/tab-home.svg') no-repeat 50% 50%;
-$wallets-active: url('../assets/img/tab-icons/tab-wallets-active.svg') no-repeat
-  50% 50%;
-$wallets-inactive: url('../assets/img/tab-icons/tab-wallets.svg') no-repeat 50%
-  50%;
-$cards-active: url('../assets/img/tab-icons/tab-cards-active.svg') no-repeat 50%
-  50%;
+$wallets-active: url('../assets/img/tab-icons/tab-wallets-active.svg') no-repeat 50% 50%;
+$wallets-inactive: url('../assets/img/tab-icons/tab-wallets.svg') no-repeat 50% 50%;
+$cards-active: url('../assets/img/tab-icons/tab-cards-active.svg') no-repeat 50% 50%;
 $cards-inactive: url('../assets/img/tab-icons/tab-cards.svg') no-repeat 50% 50%;
-$settings-active: url('../assets/img/tab-icons/tab-settings-active.svg')
-  no-repeat 50% 50%;
-$settings-inactive: url('../assets/img/tab-icons/tab-settings.svg') no-repeat
-  50% 50%;
+$settings-active: url('../assets/img/tab-icons/tab-settings-active.svg') no-repeat 50% 50%;
+$settings-inactive: url('../assets/img/tab-icons/tab-settings.svg') no-repeat 50% 50%;
+$buy-active: url('../assets/img/tab-icons/tab-buy-active.svg') no-repeat 50% 50%;
+$buy-inactive: url('../assets/img/tab-icons/tab-buy.svg') no-repeat 50% 50%;
 
 ion-icon {
   &[class*='tab-'] {
@@ -824,30 +838,49 @@ ion-icon {
   &[class*='tab-home'] {
     background: $home-inactive;
     background-size: contain;
+
     .tab-button[aria-selected='true'] & {
       background: $home-active;
       background-size: contain;
     }
   }
+
   &[class*='tab-wallets'] {
     background: $wallets-inactive;
     background-size: contain;
+
     .tab-button[aria-selected='true'] & {
       background: $wallets-active;
       background-size: contain;
     }
   }
+
   &[class*='tab-cards'] {
     background: $cards-inactive;
     background-size: contain;
+
     .tab-button[aria-selected='true'] & {
       background: $cards-active;
       background-size: contain;
     }
   }
+
+  &[class*='tab-buy'] {
+    background: $buy-inactive;
+    background-size: contain;
+    opacity: 0.4;
+
+    .tab-button[aria-selected='true'] & {
+      background: $buy-active;
+      background-size: contain;
+      opacity: 1;
+    }
+  }
+
   &[class*='tab-settings'] {
     background: $settings-inactive;
     background-size: contain;
+
     .tab-button[aria-selected='true'] & {
       background: $settings-active;
       background-size: contain;
@@ -863,5 +896,5 @@ ion-icon {
 }
 
 .checkbox-icon {
-  border-color: color($colors, primary)!important;
+  border-color: color($colors, primary) !important;
 }

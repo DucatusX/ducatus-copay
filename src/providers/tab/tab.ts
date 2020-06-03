@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BitPayCardProvider } from '../bitpay-card/bitpay-card';
-import { GiftCardProvider } from '../gift-card/gift-card';
+// import { GiftCardProvider } from '../gift-card/gift-card';
 import { GiftCard } from '../gift-card/gift-card.types';
 
 @Injectable()
@@ -9,9 +9,9 @@ export class TabProvider {
   activeGiftCardsPromise: Promise<GiftCard[]>;
 
   constructor(
-    private bitPayCardProvider: BitPayCardProvider,
-    private giftCardProvider: GiftCardProvider
-  ) {}
+    private bitPayCardProvider: BitPayCardProvider
+  ) // private giftCardProvider: GiftCardProvider
+  {}
 
   prefetchBitpayCardItems(): Promise<any> {
     this.bitpayCardItemsPromise = this.bitPayCardProvider.get({
@@ -20,15 +20,15 @@ export class TabProvider {
     return this.bitpayCardItemsPromise;
   }
 
-  prefetchGiftCards(): Promise<GiftCard[]> {
-    this.activeGiftCardsPromise = this.giftCardProvider.getActiveCards();
-    return this.activeGiftCardsPromise;
-  }
+  // prefetchGiftCards(): Promise<GiftCard[]> {
+  //   this.activeGiftCardsPromise = this.giftCardProvider.getActiveCards();
+  //   return this.activeGiftCardsPromise;
+  // }
 
-  prefetchCards(): Promise<[any, GiftCard[]]> {
-    return Promise.all([
-      this.prefetchBitpayCardItems(),
-      this.prefetchGiftCards()
-    ]);
-  }
+  // prefetchCards(): Promise<[any, GiftCard[]]> {
+  //   return Promise.all([
+  //     this.prefetchBitpayCardItems(),
+  //     this.prefetchGiftCards()
+  //   ]);
+  // }
 }

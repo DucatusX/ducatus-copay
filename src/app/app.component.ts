@@ -18,7 +18,7 @@ import { Observable, Subscription } from 'rxjs';
 import {
   BitPayIdProvider,
   BitPayProvider,
-  GiftCardProvider,
+  // GiftCardProvider,
   IABCardProvider,
   InAppBrowserProvider,
   PersistenceProvider
@@ -31,7 +31,7 @@ import { EmailNotificationsProvider } from '../providers/email-notifications/ema
 import { IncomingDataProvider } from '../providers/incoming-data/incoming-data';
 import { KeyProvider } from '../providers/key/key';
 import { Logger } from '../providers/logger/logger';
-import { Network } from '../providers/persistence/persistence';
+// import { Network } from '../providers/persistence/persistence';
 import { PlatformProvider } from '../providers/platform/platform';
 import { PopupProvider } from '../providers/popup/popup';
 import { ProfileProvider } from '../providers/profile/profile';
@@ -41,7 +41,7 @@ import { SimplexProvider } from '../providers/simplex/simplex';
 import { TouchIdProvider } from '../providers/touchid/touchid';
 
 // Pages
-import { CARD_IAB_CONFIG } from '../constants';
+// import { CARD_IAB_CONFIG } from '../constants';
 import { AddWalletPage } from '../pages/add-wallet/add-wallet';
 import { CopayersPage } from '../pages/add/copayers/copayers';
 import { ImportWalletPage } from '../pages/add/import-wallet/import-wallet';
@@ -116,7 +116,7 @@ export class CopayApp {
     private appProvider: AppProvider,
     private profile: ProfileProvider,
     private configProvider: ConfigProvider,
-    private giftCardProvider: GiftCardProvider,
+    // private giftCardProvider: GiftCardProvider,
     private imageLoaderConfig: ImageLoaderConfig,
     private modalCtrl: ModalController,
     private coinbaseProvider: CoinbaseProvider,
@@ -188,14 +188,14 @@ export class CopayApp {
 
     this.logger.info(
       'Platform ready (' +
-        readySource +
-        '): ' +
-        this.appProvider.info.nameCase +
-        ' - v' +
-        this.appProvider.info.version +
-        ' #' +
-        this.appProvider.info.commitHash +
-        deviceInfo
+      readySource +
+      '): ' +
+      this.appProvider.info.nameCase +
+      ' - v' +
+      this.appProvider.info.version +
+      ' #' +
+      this.appProvider.info.commitHash +
+      deviceInfo
     );
 
     if (this.platform.is('cordova')) {
@@ -204,15 +204,15 @@ export class CopayApp {
       // Set User-Agent
       this.userAgent.set(
         this.appProvider.info.name +
-          ' ' +
-          this.appProvider.info.version +
-          ' (' +
-          this.device.platform +
-          ' ' +
-          this.device.version +
-          ' - ' +
-          this.device.model +
-          ')'
+        ' ' +
+        this.appProvider.info.version +
+        ' (' +
+        this.device.platform +
+        ' ' +
+        this.device.version +
+        ' - ' +
+        this.device.model +
+        ')'
       );
 
       // Set to portrait
@@ -286,10 +286,10 @@ export class CopayApp {
         this.logger.error('Error loading keys: ', err);
       });
 
-    let [token, cards]: any = await Promise.all([
-      this.persistenceProvider.getBitPayIdPairingToken(Network[this.NETWORK]),
-      this.persistenceProvider.getBitpayDebitCards(Network[this.NETWORK])
-    ]);
+    // let [token, cards]: any = await Promise.all([
+    //   this.persistenceProvider.getBitPayIdPairingToken(Network[this.NETWORK]),
+    //   this.persistenceProvider.getBitpayDebitCards(Network[this.NETWORK])
+    // ]);
 
     if (this.platformProvider.isCordova) {
       const host =
@@ -298,22 +298,22 @@ export class CopayApp {
       // preloading the view
 
       setTimeout(() => {
-        this.iab
-          .createIABInstance(
-            'card',
-            CARD_IAB_CONFIG,
-            `https://${host}/wallet-card?context=bpa`,
-            `(() => {
-              sessionStorage.setItem('isPaired', ${!!token}); 
-              sessionStorage.setItem('cards', ${JSON.stringify(
-                JSON.stringify(cards)
-              )});
-              })()`
-          )
-          .then(ref => {
-            this.cardIAB_Ref = ref;
-            this.iabCardProvider.init();
-          });
+        // this.iab
+        //   .createIABInstance(
+        //     'card',
+        //     CARD_IAB_CONFIG,
+        //     `https://${host}/wallet-card?context=bpa`,
+        //     `(() => {
+        //       sessionStorage.setItem('isPaired', ${!!token});
+        //       sessionStorage.setItem('cards', ${JSON.stringify(
+        //         JSON.stringify(cards)
+        //       )});
+        //       })()`
+        //   )
+        //   .then(ref => {
+        //     this.cardIAB_Ref = ref;
+        //     this.iabCardProvider.init();
+        //   });
       });
     }
   }
@@ -403,8 +403,8 @@ export class CopayApp {
 
   private registerIntegrations(): void {
     // Gift Cards
-    if (this.appProvider.info._enabledExtensions.giftcards)
-      this.giftCardProvider.register();
+    // if (this.appProvider.info._enabledExtensions.giftcards)
+    //   this.giftCardProvider.register();
 
     // ShapeShift
     if (this.appProvider.info._enabledExtensions.shapeshift) {

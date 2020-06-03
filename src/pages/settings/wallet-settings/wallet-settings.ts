@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Events, NavController, NavParams } from 'ionic-angular';
 import { Logger } from '../../../providers/logger/logger';
@@ -6,12 +6,16 @@ import { Logger } from '../../../providers/logger/logger';
 // providers
 import { ConfigProvider } from '../../../providers/config/config';
 import { ExternalLinkProvider } from '../../../providers/external-link/external-link';
+import { ActionSheetProvider } from '../../../providers/index';
 import { KeyProvider } from '../../../providers/key/key';
+import { PdfProvider } from '../../../providers/pdf/pdf';
+import { PlatformProvider } from '../../../providers/platform/platform';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { TouchIdProvider } from '../../../providers/touchid/touchid';
 import { WalletProvider } from '../../../providers/wallet/wallet';
 
 // pages
+import { BackupKeyPage } from '../../../pages/backup/backup-key/backup-key';
 import { WalletDeletePage } from './wallet-delete/wallet-delete';
 import { WalletNamePage } from './wallet-name/wallet-name';
 import { WalletAddressesPage } from './wallet-settings-advanced/wallet-addresses/wallet-addresses';
@@ -21,11 +25,16 @@ import { WalletInformationPage } from './wallet-settings-advanced/wallet-informa
 import { WalletServiceUrlPage } from './wallet-settings-advanced/wallet-service-url/wallet-service-url';
 import { WalletTransactionHistoryPage } from './wallet-settings-advanced/wallet-transaction-history/wallet-transaction-history';
 
+import { pdfParams } from './pdf-params';
+
 @Component({
   selector: 'page-wallet-settings',
   templateUrl: 'wallet-settings.html'
 })
 export class WalletSettingsPage {
+
+  @ViewChild('paperpdf', { read: ElementRef }) paperpdf: ElementRef;
+
   public showDuplicateWallet: boolean;
   public wallet;
   public canSign: boolean;
@@ -35,8 +44,13 @@ export class WalletSettingsPage {
   public touchIdEnabled: boolean;
   public touchIdPrevValue: boolean;
   public touchIdAvailable: boolean;
+  public isCordova: boolean;
   public deleted: boolean = false;
+  public keysEncrypted: boolean;
+  public walletsGroup;
   private config;
+  private keyId;
+  public paperParams: any;
 
   constructor(
     private profileProvider: ProfileProvider,
@@ -49,17 +63,24 @@ export class WalletSettingsPage {
     private touchIdProvider: TouchIdProvider,
     private translate: TranslateService,
     private keyProvider: KeyProvider,
-    private events: Events
+    private events: Events,
+    private pdfProvider: PdfProvider,
+    private actionSheetProvider: ActionSheetProvider,
+    private platformProvider: PlatformProvider
   ) {
     this.logger.info('Loaded:  WalletSettingsPage');
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
+    this.isCordova = this.platformProvider.isCordova;
   }
 
   ionViewWillEnter() {
     this.canSign = this.wallet.canSign;
+    this.keyId = this.navParams.data.keyId;
     this.needsBackup = this.wallet.needsBackup;
     this.hiddenBalance = this.wallet.balanceHidden;
     this.encryptEnabled = this.wallet.isPrivKeyEncrypted;
+    this.walletsGroup = this.profileProvider.getWalletGroup(this.keyId);
+    this.keysEncrypted = this.walletsGroup.isPrivKeyEncrypted;
 
     this.checkBiometricIdAvailable();
 
@@ -189,4 +210,98 @@ export class WalletSettingsPage {
       walletId: this.wallet.id
     });
   }
+
+  private generateQrKey() {
+    return this.keyProvider
+      .handleEncryptedWallet(this.keyId)
+      .then((password: string) => {
+        const keys = this.keyProvider.get(this.keyId, password);
+        this.keysEncrypted = false;
+
+        if (!keys || !keys.mnemonic) {
+          const err = this.translate.instant('Exporting via QR not supported for this wallet');
+          const title = this.translate.instant('Error');
+          this.logger.debug(title, err);
+          // this.showErrorInfoSheet(err, title);
+          return false;
+        }
+
+        const mnemonicHasPassphrase = this.keyProvider.mnemonicHasPassphrase(this.keyId);
+        this.logger.debug('QR code generated. mnemonicHasPassphrase: ' + mnemonicHasPassphrase);
+        const code = '1|' + keys.mnemonic + '|null|null|' + mnemonicHasPassphrase + '|null';
+
+        return {
+          key: 'key',
+          value: code
+        }
+      })
+  }
+
+  private getAddress() {
+    return this.walletProvider.getAddress(this.wallet, false).then((address) => {
+      return {
+        key: 'address',
+        value: address
+      }
+    });
+  }
+
+  public openBackupModal(): void {
+    const infoSheet = this.actionSheetProvider.createInfoSheet(
+      'backup-needed-with-activity'
+    );
+    infoSheet.present();
+    infoSheet.onDidDismiss(option => {
+      if (option) this.openBackup();
+    });
+  }
+
+  public openBackup() {
+    this.navCtrl.push(BackupKeyPage, {
+      keyId: this.wallet.credentials.keyId
+    });
+  }
+
+  public printPaperWallet(): void {
+    if (this.needsBackup) {
+      this.openBackupModal();
+      return;
+    }
+
+    const qrKey = this.generateQrKey();
+    const walletAddress = this.getAddress();
+
+    Promise.all([qrKey, walletAddress]).then((result) => {
+      const res = {};
+      result.forEach((resItem: { key: string, value: string }) => {
+        res[resItem.key] = resItem.value;
+      });
+      return res
+    }).then((res: any) => {
+      const qrKey = res.key;
+      const walletAddress = res.address;
+      if (!qrKey || !walletAddress) {
+        this.logger.debug('must have qrKey and address: ' + qrKey, walletAddress);
+        return;
+      }
+
+      this.paperParams = {
+        key_qr: qrKey,
+        wallet_address: walletAddress,
+        wallet_coin: this.wallet.coin
+      };
+
+      setTimeout(() => {
+        const nativeDOM = this.paperpdf.nativeElement;
+        this.pdfProvider.makePdf(
+          '<html>' + pdfParams.mobileStyle + '<body id="paper-pdf">' +
+          nativeDOM.innerHTML +
+          '</body></html>'
+        );
+      });
+    });
+
+  }
 }
+
+

@@ -1,13 +1,14 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController } from 'ionic-angular';
+// import { NavController } from 'ionic-angular';
 
-import { BuyCardPage } from '../buy-card/buy-card';
+// import { BuyCardPage } from '../buy-card/buy-card';
 
 import { TranslateService } from '@ngx-translate/core';
-import { ActionSheetProvider, PlatformProvider } from '../../../../providers';
+// import { ActionSheetProvider, PlatformProvider } from '../../../../providers';
+import { PlatformProvider } from '../../../../providers';
 import {
   getDisplayNameSortValue,
-  GiftCardProvider,
+  // GiftCardProvider,
   hasVisibleDiscount
 } from '../../../../providers/gift-card/gift-card';
 import { CardConfig } from '../../../../providers/gift-card/gift-card.types';
@@ -29,10 +30,10 @@ export class CardCatalogPage extends WideHeaderPage {
   wideHeaderPage: WideHeaderPage;
 
   constructor(
-    private actionSheetProvider: ActionSheetProvider,
-    public giftCardProvider: GiftCardProvider,
+    // private actionSheetProvider: ActionSheetProvider,
+    // public giftCardProvider: GiftCardProvider,
     platormProvider: PlatformProvider,
-    private navCtrl: NavController,
+    // private navCtrl: NavController,
     private translate: TranslateService
   ) {
     super(platormProvider);
@@ -43,26 +44,26 @@ export class CardCatalogPage extends WideHeaderPage {
   }
 
   ionViewWillEnter() {
-    this.giftCardProvider
-      .getAvailableCards()
-      .then(allCards => {
-        this.cardConfigMap = allCards
-          .sort(sortByFeaturedAndAlphabetically)
-          .reduce(
-            (map, cardConfig) => ({ ...map, [cardConfig.name]: cardConfig }),
-            {}
-          );
-        this.allCards = allCards;
-        this.updateCardList();
-      })
-      .catch(_ => {
-        this.showError();
-        return [] as CardConfig[];
-      });
+    // this.giftCardProvider
+    //   .getAvailableCards()
+    //   .then(allCards => {
+    //     this.cardConfigMap = allCards
+    //       .sort(sortByFeaturedAndAlphabetically)
+    //       .reduce(
+    //         (map, cardConfig) => ({ ...map, [cardConfig.name]: cardConfig }),
+    //         {}
+    //       );
+    //     this.allCards = allCards;
+    //     this.updateCardList();
+    //   })
+    //   .catch(_ => {
+    //     this.showError();
+    //     return [] as CardConfig[];
+    //   });
   }
 
   ionViewDidEnter() {
-    this.logGiftCardCatalogHomeView();
+    // this.logGiftCardCatalogHomeView();
   }
 
   onSearch(query: string) {
@@ -94,52 +95,51 @@ export class CardCatalogPage extends WideHeaderPage {
     );
   }
 
-  buyCard(cardConfig: CardConfig) {
-    this.logGiftCardBrandView(cardConfig);
+  // buyCard(cardConfig: CardConfig) {
+  //   this.logGiftCardBrandView(cardConfig);
 
-    this.navCtrl.push(BuyCardPage, { cardConfig });
-    if (this.hasPercentageDiscount(cardConfig)) {
-      this.logDiscountClick(cardConfig);
-    }
-  }
+  //   this.navCtrl.push(BuyCardPage, { cardConfig });
+  //   if (this.hasPercentageDiscount(cardConfig)) {
+  //     this.logDiscountClick(cardConfig);
+  //   }
+  // }
 
-  logGiftCardCatalogHomeView() {
-    this.giftCardProvider.logEvent('giftcards_view_home', {});
-  }
+  // logGiftCardCatalogHomeView() {
+  // this.giftCardProvider.logEvent('giftcards_view_home', {});
+  // }
 
-  logGiftCardBrandView(cardConfig: CardConfig) {
-    this.giftCardProvider.logEvent('giftcards_view_brand', {
-      brand: cardConfig.name
-    });
+  // logGiftCardBrandView(cardConfig: CardConfig) {
+  // this.giftCardProvider.logEvent('giftcards_view_brand', {
+  //   brand: cardConfig.name
+  // });
+  // this.giftCardProvider.logEvent('view_item', {
+  //   items: [
+  //     {
+  //       brand: cardConfig.name,
+  //       category: 'giftCards'
+  //     }
+  //   ]
+  // });
+  // }
 
-    this.giftCardProvider.logEvent('view_item', {
-      items: [
-        {
-          brand: cardConfig.name,
-          category: 'giftCards'
-        }
-      ]
-    });
-  }
-
-  logDiscountClick(cardConfig: CardConfig) {
-    this.giftCardProvider.logEvent(
-      'clickedGiftCardDiscount',
-      this.giftCardProvider.getDiscountEventParams(cardConfig, 'Gift Card List')
-    );
-  }
+  // logDiscountClick(cardConfig: CardConfig) {
+  // this.giftCardProvider.logEvent(
+  //   'clickedGiftCardDiscount',
+  //   this.giftCardProvider.getDiscountEventParams(cardConfig, 'Gift Card List')
+  // );
+  // }
 
   hasPercentageDiscount(cardConfig: CardConfig) {
     return hasVisibleDiscount(cardConfig);
   }
 
-  private showError() {
-    const errorInfoSheet = this.actionSheetProvider.createInfoSheet(
-      'gift-cards-unavailable'
-    );
-    errorInfoSheet.present();
-    errorInfoSheet.onDidDismiss(() => this.navCtrl.pop());
-  }
+  // private showError() {
+  //   const errorInfoSheet = this.actionSheetProvider.createInfoSheet(
+  //     'gift-cards-unavailable'
+  //   );
+  //   errorInfoSheet.present();
+  //   errorInfoSheet.onDidDismiss(() => this.navCtrl.pop());
+  // }
 }
 
 export function isCardInSearchResults(c: CardConfig, search: string = '') {

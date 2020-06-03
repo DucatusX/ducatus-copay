@@ -12,6 +12,7 @@ export class InAppBrowserProvider {
   // add new refs here
   refs: {
     card?: InAppBrowserRef;
+    MoonPay?: InAppBrowserRef;
   } = {};
 
   constructor(
@@ -61,8 +62,10 @@ export class InAppBrowserProvider {
         }
       });
 
-      ref.addEventListener('loaderror', () => {
-        this.logger.debug(`InAppBrowserProvider -> ${refName} load error`);
+      ref.addEventListener('loaderror', err => {
+        this.logger.debug(
+          `InAppBrowserProvider -> ${refName} ${JSON.stringify(err)} load error`
+        );
         ref.error = true;
         ref.show = () => {
           this.actionSheetProvider
