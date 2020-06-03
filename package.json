@@ -25,7 +25,7 @@
   "homepage": "https://ducatus.io",
   "license": "MIT",
   "repository": {
-    "url": "git://github.com/DUCATUS-revival/ducatus-copay",
+    "url": "git://github.com/DUCATUS-revival/ducatus-copay.git",
     "type": "git"
   },
   "bugs": {
@@ -233,7 +233,8 @@
       "cordova-plugin-x-toast": {},
       "cordova-plugin-x-socialsharing": {
         "PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
-        "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly."
+        "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
+        "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
       },
       "cordova-plugin-qrscanner": {},
       "cordova-plugin-touch-id": {
