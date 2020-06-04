@@ -71,32 +71,29 @@ export class CalculatorConvertPage {
       )
     );
 
-    const coinswallet = this.walletsGroups.map((keyID) => {
-      return keyID.filter(wallet => wallet.coin === this.formCoins.get.toLowerCase())
+    let coinswallet = [];
+    this.walletsGroups.forEach((keyID) => {
+      coinswallet = _.concat(coinswallet, keyID.filter(wallet => wallet.coin === this.formCoins.get.toLowerCase()))
     });
 
     this.walletsGet = coinswallet.map(wallet => {
-      wallet.map(infoWallet => {
-
-        this.walletProvider.getAddress(infoWallet, false).then(address => {
-          console.log(address);
-          return address;
-        }).catch(err => {
-          console.log(err);
-        });
-
+      return this.walletProvider.getAddress(wallet, false).then(address => {
+        return {
+          wallet,
+          address
+        };
+      }).catch(err => {
+        console.log(err);
       });
     });
 
+
     Promise.all(this.walletsGet).then((result) => {
-      console.log(result);
-      console.log(this.walletsGet);
+      this.wallets = result.filter(res => res);
+      console.log(this.wallets);
     });
 
-    // this.wallets = this.profileProvider.getWalletsFromGroup({
-    //   keyId: this.keyId,
-    //   showHidden: true
-    // });
+
   }
 
 
