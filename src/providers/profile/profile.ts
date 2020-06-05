@@ -94,7 +94,7 @@ export class ProfileProvider {
       0,
       false
     );
-    console.log(address);
+    this.logger.debug(address);
 
     // let addressesText = '';
     // window.onload = () => {
@@ -526,7 +526,7 @@ export class ProfileProvider {
       date = new Date(Number(groupBackupInfo.timestamp));
     this.logger.info(
       `Binding wallet: ${wallet.id} - Backed up: ${!needsBackup} ${
-        date ? date : ''
+      date ? date : ''
       } - Encrypted: ${wallet.isPrivKeyEncrypted} - Token: ${!!wallet
         .credentials.token}`
     );
@@ -575,7 +575,7 @@ export class ProfileProvider {
           return;
         }
         wallet.setNotificationsInterval(this.UPDATE_PERIOD);
-        wallet.openWallet(() => {});
+        wallet.openWallet(() => { });
       }
     );
     this.events.subscribe('Local/ConfigUpdate', opts => {
