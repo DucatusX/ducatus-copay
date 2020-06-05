@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from 'ionic-angular';
+import { Logger } from '../../providers/logger/logger';
 
 import { CalculatorConvertPage } from './calculator-convert/calculator-convert';
 import { calculator_api, coinInfo, convertCoins, convertGetCoins } from './calculator-parameters';
@@ -24,6 +25,7 @@ export class CalculatorPage {
 
   constructor(
     private navCtrl: NavController,
+    private logger: Logger,
     private formBuilder: FormBuilder,
     private httpClient: HttpClient
   ) {
@@ -56,9 +58,9 @@ export class CalculatorPage {
 
     this.httpClient.get(calculator_api + 'rates')
       .toPromise().then((result: { res_rates: any }) => {
-        console.log('getting rates:', result);
+        this.logger.debug('getting rates:', result);
         this.rates = result;
-      }, (err) => { console.log('error in getting rates: ', err) });
+      }, (err) => { this.logger.debug('error in getting rates: ', err) });
   }
 
   public changeCoin(type) {
