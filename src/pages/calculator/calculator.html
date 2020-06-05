@@ -13,13 +13,17 @@
 
           <ion-item class="calculator-input">
             <ion-label stacked>{{'Get' | translate}}</ion-label>
-            <ion-input type="number" formControlName="CalculatorGroupGet"
+            <ion-input [disabled]="!rates" type="number" formControlName="CalculatorGroupGet"
               [value]="CalculatorGroupForm.value.CalculatorGroupGet" (click)="selectInputType('Get')"
               (ionChange)="changeAmount('Get')" required>
             </ion-input>
           </ion-item>
 
-          <ion-item class="calculator-select">
+          <ion-item class="calculator-select calculator-loading-select" *ngIf="!rates">
+            <ion-spinner name="dots"></ion-spinner>
+          </ion-item>
+
+          <ion-item class="calculator-select" *ngIf="rates">
             <ion-select class="calculator-select-ion" interface="popover" formControlName="CalculatorGroupGetCoin"
               [(ngModel)]="CalculatorGroupForm.value.CalculatorGroupGetCoin" (ionChange)="changeCoin('Get')">
               <ion-option *ngFor="let item of convertGetCoins" [value]="item"> {{ item }}</ion-option>
@@ -28,8 +32,13 @@
 
         </div>
 
-        <ion-item class="calculator-text">
-          <ion-label stacked>1 {{ coin_info[formCoins.get.name] }} = {{ rates[formCoins.get.name][formCoins.send] }}
+        <ion-item class="calculator-text" *ngIf="!rates">
+          <ion-spinner name="dots"></ion-spinner>
+        </ion-item>
+
+        <ion-item class="calculator-text" *ngIf="rates">
+          <ion-label stacked>1 {{ coin_info[formCoins.get.name] }} =
+            {{ rates[formCoins.get.name][formCoins.send] }}
             {{ coin_info[formCoins.send] }}</ion-label>
         </ion-item>
 
@@ -37,13 +46,17 @@
 
           <ion-item class="calculator-input">
             <ion-label stacked>{{'Send' | translate}}</ion-label>
-            <ion-input type="number" formControlName="CalculatorGroupSend"
+            <ion-input [disabled]="!rates" type="number" formControlName="CalculatorGroupSend"
               [value]="CalculatorGroupForm.value.CalculatorGroupSend" (click)="selectInputType('Send')"
               (ionChange)="changeAmount('Send')" required>
             </ion-input>
           </ion-item>
 
-          <ion-item class="calculator-select">
+          <ion-item class="calculator-select calculator-loading-select" *ngIf="!rates">
+            <ion-spinner name="dots"></ion-spinner>
+          </ion-item>
+
+          <ion-item class="calculator-select" *ngIf="rates">
             <ion-select class="calculator-select-ion" interface="popover" formControlName="CalculatorGroupSendCoin"
               [(ngModel)]="CalculatorGroupForm.value.CalculatorGroupSendCoin" (ionChange)="changeCoin('Send')">
               <ion-option *ngFor="let item of formCoins.get.items" [value]="item">{{ item }}</ion-option>
@@ -53,7 +66,7 @@
         </div>
 
         <button ion-button class="button-standard calculator-button" (click)="goToConvertPage()"
-          [disabled]="!CalculatorGroupForm.valid">
+          [disabled]="!CalculatorGroupForm.valid && !rates">
           {{'Convert' | translate}}
         </button>
       </form>

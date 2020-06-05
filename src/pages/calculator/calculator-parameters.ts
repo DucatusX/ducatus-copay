@@ -11,3 +11,5 @@ export const coinInfo = {
   ETH: 'Etherium',
   BTC: 'Bitcoin'
 }
+
+export const calculator_api = 'https://www.ducatuscoins.com/api/v1/';
