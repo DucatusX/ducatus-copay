@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavController, NavParams } from 'ionic-angular';
+import { Events, NavController, NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
 
-import { coinInfo } from '../calculator-parameters';
-import { CalculatorSendPage } from '../calculator-send/calculator-send';
+// import { ConfirmPage } from '../../send/confirm/confirm';
+import { SendPage } from '../../../pages/send/send';
+import { calculator_api, coinInfo } from '../calculator-parameters';
 
 @Component({
   selector: 'page-calculator-convert',
@@ -18,18 +19,16 @@ export class CalculatorConvertPage {
   public ConvertGroupForm: FormGroup;
   public formCoins: any = [];
   public coinInfo = coinInfo;
-  private addressesRandom = [
-    '0x50CA353D42312f412C833a4a3FdfB594daC61FA3',
-    '0xeb70207E8e28003f442aaCA0C165C0c25F02D6ce',
-    '0x0110d4825E4a13e814210332d48d22616C6Fa18F',
-    '0xcFf3077DcAaCAc7AA390c4dD3dC6b6BAF55f33fD'
-  ];
+
   public walletsGroups: any[];
-  public walletsGet;
-  public wallets;
+  public walletsChecker: boolean = false;
+  public walletsInfoGet;
+  public walletsInfoSend;
+  public addresses: any;
 
   constructor(
     private navCtrl: NavController,
+    private events: Events,
     private navParams: NavParams,
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
@@ -71,39 +70,45 @@ export class CalculatorConvertPage {
       )
     );
 
-    let coinswallet = [];
-    this.walletsGroups.forEach((keyID) => {
-      coinswallet = _.concat(coinswallet, keyID.filter(wallet => wallet.coin === this.formCoins.get.toLowerCase()))
+    let walletsGet = this.getWalletsInfo(this.formCoins.get);
+    let walletsSend = this.getWalletsInfo(this.formCoins.send);
+
+    Promise.all([walletsGet, walletsSend]).then((results) => {
+      this.walletsInfoGet = results[0];
+      this.walletsInfoSend = results[1];
+      this.walletsChecker = true;
     });
-
-    this.walletsGet = coinswallet.map(wallet => {
-      return this.walletProvider.getAddress(wallet, false).then(address => {
-        return {
-          wallet,
-          address
-        };
-      }).catch(err => {
-        console.log(err);
-      });
-    });
-
-
-    Promise.all(this.walletsGet).then((result) => {
-      this.wallets = result.filter(res => res);
-      console.log(this.wallets);
-    });
-
-
   }
 
+  private getWalletsInfo(coin) {
+    let coins = [];
+    let wallets = [];
+    let walletsRes = [];
+
+    this.walletsGroups.forEach((keyID) => {
+      coins = _.concat(coins, keyID.filter(wallet => wallet.coin === coin.toLowerCase()))
+    });
+
+    wallets = coins.map(wallet => {
+      return this.walletProvider.getAddress(wallet, false).then(address => {
+        return { wallet, address };
+      })
+    });
+
+    wallets.map(res => {
+      res.then(result => { walletsRes.push(result) });
+    });
+
+    return walletsRes;
+  }
 
   public changeAddress(type) {
     if (type == 'Get') {
-      this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput = this.addressesRandom[this.ConvertGroupForm.value.ConvertFormGroupAddressGet];
+      this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput = this.ConvertGroupForm.value.ConvertFormGroupAddressGet;
       this.setAddress(this.formCoins.get);
     }
     if (type == 'Send') {
-      this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput = this.addressesRandom[this.ConvertGroupForm.value.ConvertFormGroupAddressSend];
+      this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput = this.ConvertGroupForm.value.ConvertFormGroupAddressSend;
     }
   }
 
@@ -111,21 +116,20 @@ export class CalculatorConvertPage {
     const address = this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput;
     if (type === 'DUC') {
       if (address.length === 34 && ['L', 'l', 'M', 'm'].includes(address.substring(0, 1))) {
-        this.checkDucAddress(address).then((result) => {
-          if (result) {
-            this.getAddresses();
-            console.log('address result', result);
-          }
-        }).catch(err => { console.log('something went wrong...', err); })
+
+        this.getAddresses();
+        // this.checkDucAddress(address).then((result) => {
+        //   if (result) {
+        //     console.log('address result', result);
+        //     this.getAddresses();
+        //   }
+        // }).catch(err => { console.log('something went wrong...', err); })
       }
     }
 
     if (type === 'DUCX') {
       if (address.length === 42) {
-        const reg = /0x[0-9a-fA-F]{40}/;
-        if (!reg.test(address)) { return; }
-        // if (($.trim(address) == '') || ($.trim(address).length < 15)) { return; }
-        else { this.getAddresses(); }
+        this.getAddresses();
       }
     }
   }
@@ -133,27 +137,80 @@ export class CalculatorConvertPage {
   public getAddresses() {
     this.getExchange(this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput, this.formCoins.get).then((result) => {
       console.log('got addresses:', result)
+      this.addresses = result;
     }).catch(err => { console.log('cant get addresses: ', err) })
   }
 
   public getExchange(address: string, currency: string) {
-    return this.httpClient.post(`exchange/`, {
+    return this.httpClient.post(calculator_api + 'exchange/', {
       to_address: address,
       to_currency: currency
     }).toPromise();
   }
 
   public checkDucAddress(address: string) {
-    return this.httpClient.post(`exchange/`, {
+    return this.httpClient.post(calculator_api + 'validate_ducatus_address/', {
       to_address: address
     }).toPromise();
   }
 
   public goToSendPage() {
-    this.navCtrl.push(CalculatorSendPage, {
-      get: this.formCoins.get.name,
-      send: this.formCoins.send
+
+    console.log(this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput, this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput, this.addresses[this.formCoins.send.toLowerCase() + '_address'])
+    let info = this.walletsInfoSend.map(infoWallet => { if (infoWallet.address === this.ConvertGroupForm.value.ConvertFormGroupAddressSend) return infoWallet.wallet; });
+    console.log(info[0], info[0].coin, info[0].credentials);
+
+    // const data = {
+    //   amount: this.formCoins.send,
+    //   network: info[0].network,
+    //   coin: info[0].coin,
+    //   speedUpTx: true,
+    //   toAddress: this.addresses[this.formCoins.send.toLowerCase() + '_address'],
+    //   walletId: info[0].credentials.walletId,
+    //   fromWalletDetails: true,
+    //   // txid: tx.txid,
+    //   recipientType: 'wallet',
+    //   name: info[0].name
+    // };
+
+
+    const stateParams = {
+      amount: this.formCoins.send,
+      network: info[0].network,
+      coin: info[0].coin,
+      speedUpTx: true,
+      toAddress: this.addresses[this.formCoins.send.toLowerCase() + '_address'],
+      walletId: info[0].credentials.walletId,
+      fromWalletDetails: true,
+      // txid: tx.txid,
+      recipientType: 'wallet',
+      name: info[0].name
+    };
+
+    const nextView = {
+      name: 'ConfirmPage',
+      params: stateParams
+    };
+
+    this.navCtrl.push(SendPage, {
+      wallet: info[0],
     });
+
+    this.events.publish('SendPageRedir', nextView);
+
+    // this.navCtrl.push(ConfirmPage, {
+    //   amount: this.formCoins.send,
+    //   network: info[0].network,
+    //   coin: info[0].coin,
+    //   speedUpTx: true,
+    //   toAddress: this.addresses[this.formCoins.send.toLowerCase() + '_address'],
+    //   walletId: info[0].credentials.walletId,
+    //   fromWalletDetails: true,
+    //   // txid: tx.txid,
+    //   recipientType: 'wallet',
+    //   name: info[0].name
+    // });
+
   }
 }
 

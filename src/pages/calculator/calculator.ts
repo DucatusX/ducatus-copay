@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from 'ionic-angular';
 
 import { CalculatorConvertPage } from './calculator-convert/calculator-convert';
-import { coinInfo, convertCoins, convertGetCoins } from './calculator-parameters';
+import { calculator_api, coinInfo, convertCoins, convertGetCoins } from './calculator-parameters';
 
 const fixNumber = x => ((x.toString().includes('.')) ? (x.toString().split('.').pop().length) : (0));
 
@@ -18,18 +18,9 @@ export class CalculatorPage {
   public formCoins: any = [];
   public coin_info: any;
   public convertGetCoins: any;
-  public lastChange: any;
+  public lastChange: any = 'Get';
 
-  public rates: any = {
-    DUC: {
-      ETH: 0.00046189,
-      BTC: 0.00001040,
-      DUCX: 0.10000000
-    },
-    DUCX: {
-      DUC: 10.00000000
-    }
-  };
+  public rates: any;
 
   constructor(
     private navCtrl: NavController,
@@ -43,11 +34,11 @@ export class CalculatorPage {
 
     this.CalculatorGroupForm = this.formBuilder.group({
       CalculatorGroupGet: [
-        1,
+        0,
         Validators.compose([Validators.minLength(1), Validators.required])
       ],
       CalculatorGroupSend: [
-        0.1,
+        0,
         Validators.compose([Validators.minLength(1), Validators.required])
       ],
       CalculatorGroupGetCoin: [
@@ -58,10 +49,16 @@ export class CalculatorPage {
       ]
     });
 
-    this.httpClient.get('https://www.ducatuscoins.com/api/v1/rates')
+  }
+
+  ionViewWillEnter() {
+    this.rates = null;
+
+    this.httpClient.get(calculator_api + 'rates')
       .toPromise().then((result: { res_rates: any }) => {
-        console.log('rates:', result);
-      }, (err) => { console.log('get rates: ', err) });
+        console.log('getting rates:', result);
+        this.rates = result;
+      }, (err) => { console.log('error in getting rates: ', err) });
   }
 
   public changeCoin(type) {

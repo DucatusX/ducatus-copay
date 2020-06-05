@@ -61,13 +61,13 @@
               </ion-input>
             </ion-item>
 
-            <ion-item class="calculator-convert-select">
-              <ion-select formControlName="ConvertFormGroupAddressGet" (ionChange)="changeAddress('Get')"
-                [(ngModel)]="ConvertGroupForm.value.ConvertFormGroupAddressGet">
-                <ion-option [value]="0">0x50CA353D42312f412C833a4a3FdfB594daC61FA3</ion-option>
-                <ion-option [value]="1">0xeb70207E8e28003f442aaCA0C165C0c25F02D6ce</ion-option>
-                <ion-option [value]="2">0x0110d4825E4a13e814210332d48d22616C6Fa18F</ion-option>
-                <ion-option [value]="3">0xcFf3077DcAaCAc7AA390c4dD3dC6b6BAF55f33fD</ion-option>
+            <ion-item *ngIf="walletsChecker" class="calculator-convert-select">
+              <ion-select interface="action-sheet" formControlName="ConvertFormGroupAddressGet"
+                (ionChange)="changeAddress('Get')" [(ngModel)]="ConvertGroupForm.value.ConvertFormGroupAddressGet">
+                <ion-option *ngFor="let item of walletsInfoGet" [value]="item.address">
+                  {{ item.wallet.walletGroupName }}:
+                  {{ item.address }}
+                  ({{ item.wallet.coin }})</ion-option>
               </ion-select>
             </ion-item>
 
@@ -88,13 +88,13 @@
               </ion-input>
             </ion-item>
 
-            <ion-item class="calculator-convert-select">
-              <ion-select formControlName="ConvertFormGroupAddressSend" (ionChange)="changeAddress('Send')"
-                [(ngModel)]="ConvertGroupForm.value.ConvertFormGroupAddressSend">
-                <ion-option [value]="1">0xeb70207E8e28003f442aaCA0C165C0c25F02D6ce</ion-option>
-                <ion-option [value]="0">0x50CA353D42312f412C833a4a3FdfB594daC61FA3</ion-option>
-                <ion-option [value]="3">0xcFf3077DcAaCAc7AA390c4dD3dC6b6BAF55f33fD</ion-option>
-                <ion-option [value]="2">0x0110d4825E4a13e814210332d48d22616C6Fa18F</ion-option>
+            <ion-item *ngIf="walletsChecker" class="calculator-convert-select">
+              <ion-select interface="action-sheet" formControlName="ConvertFormGroupAddressSend"
+                (ionChange)="changeAddress('Send')" [(ngModel)]="ConvertGroupForm.value.ConvertFormGroupAddressSend">
+                <ion-option *ngFor="let item of walletsInfoSend" [value]="item.address">
+                  {{ item.wallet.walletGroupName }}:
+                  {{ item.address }}
+                  ({{ item.wallet.coin }})</ion-option>
               </ion-select>
             </ion-item>
 
@@ -102,7 +102,7 @@
 
         </div>
 
-        <button ion-button class="button-standard calculator-button" (click)="send()"
+        <button ion-button class="button-standard calculator-button" (click)="goToSendPage()"
           [disabled]="!ConvertGroupForm.valid">
           {{'Send' | translate}}
         </button>

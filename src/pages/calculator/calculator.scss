@@ -7,6 +7,16 @@
     border-radius: 5px;
   }
 
+  &-loading {
+    &-select {
+      .label {
+        display: flex !important;
+        justify-content: center !important;
+        margin: 0 !important;
+      }
+    }
+  }
+
   &-heading {
     font-weight: 500;
     font-size: 25px;
@@ -130,6 +140,10 @@
 
       .select-text {
         display: none;
+      }
+
+      .select-icon {
+        width: 14px !important;
       }
     }
   }
