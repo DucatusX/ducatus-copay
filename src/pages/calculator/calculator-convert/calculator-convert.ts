@@ -158,6 +158,8 @@ export class CalculatorConvertPage {
     let info = this.walletsInfoSend.map(infoWallet => { if (infoWallet.address === this.ConvertGroupForm.value.ConvertFormGroupAddressSend) return infoWallet.wallet; });
     this.logger.debug(info[0]);
 
+    console.log(this.formCoins.amountSend);
+
     const stateParams = {
       amount: this.formCoins.amountSend,
       network: info[0].network,
@@ -165,11 +167,13 @@ export class CalculatorConvertPage {
       // speedUpTx: false,
       toAddress: this.addresses[this.formCoins.send.toLowerCase() + '_address'],
       walletId: info[0].credentials.walletId,
-      // fromWalletDetails: true,
+      fromWalletDetails: true,
       // txid: tx.txid,
-      recipientType: 'wallet',
+      // recipientType: 'wallet',
       name: info[0].name
     };
+
+    this.logger.debug(stateParams)
 
     const nextView = {
       name: 'ConfirmPage',
