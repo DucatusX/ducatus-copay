@@ -32,6 +32,7 @@ export class CalculatorConvertPage {
   constructor(
     // private navCtrl: NavController,
     // private events: Events,
+    private logger: Logger,
     private navParams: NavParams,
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
