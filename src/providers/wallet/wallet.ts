@@ -620,8 +620,8 @@ export class WalletProvider {
     });
   }
 
-  public getAddressView(coin: Coin, network: string, address: string): string {
-    if (coin != 'bch') return address;
+  public getAddressView(coin: Coin, network: string, address: string, forcePrefix?): string {
+    if (coin != 'bch' && !forcePrefix) return address;
     const protoAddr = this.getProtoAddress(coin, network, address);
     return protoAddr;
   }
