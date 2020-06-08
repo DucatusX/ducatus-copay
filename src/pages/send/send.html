@@ -5,7 +5,7 @@
     </button>
   </ion-buttons>
   <div page-content>
-    <div class="prompt-user-fullscreen-container" *ngIf="!shouldShowZeroState()">
+    <div class="prompt-user-fullscreen-container" *ngIf="shouldShowZeroState()">
       <div>
         <div class="prompt-user">
           <div class="title-icon larger-icon">
@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <div *ngIf="shouldShowZeroState()">
+    <div *ngIf="!shouldShowZeroState()">
       <div *ngIf="hasWallets">
         <div class="send-header-wrapper">
           <ion-item class="search-wrapper" [ngClass]="{'invalid': invalidAddress && search != ''}">
