@@ -124,26 +124,31 @@
     &-select {
       position: absolute;
       top: 0;
-      width: 30px;
+      width: 70px;
       right: 0;
-      padding-left: 0px !important;
+      // padding-left: 0px !important;
       border-radius: 4px;
 
-      .item-inner {
-        padding-right: 0px !important;
+      ion-select {
+            max-width: 100% !important;
       }
 
-      .select-md {
-        padding: 16px 0px;
-        width: 100%;
-      }
+      // .item-inner {
+      //   padding-right: 0px !important;
+      // }
+
+      // .select-md {
+      //   padding: 16px 0px !important;
+      //   width: 100% !important;
+      // }
 
       .select-text {
         display: none;
       }
 
       .select-icon {
-        width: 14px !important;
+        width: 20px !important;
+        height: 20px !important;
       }
     }
   }
