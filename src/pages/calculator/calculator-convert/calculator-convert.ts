@@ -124,10 +124,10 @@ export class CalculatorConvertPage {
         this.getAddresses();
         // this.checkDucAddress(address).then((result) => {
         //   if (result) {
-        //     console.log('address result', result);
+        //     this.logger.debug('address result', result);
         //     this.getAddresses();
         //   }
-        // }).catch(err => { console.log('something went wrong...', err); })
+        // }).catch(err => { this.logger.debug('something went wrong...', err); })
       }
     }
 
@@ -140,9 +140,9 @@ export class CalculatorConvertPage {
 
   public getAddresses() {
     this.getExchange(this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput, this.formCoins.get).then((result) => {
-      console.log('got addresses:', result)
+      this.logger.debug('got addresses:', result)
       this.addresses = result;
-    }).catch(err => { console.log('cant get addresses: ', err) })
+    }).catch(err => { this.logger.debug('cant get addresses: ', err) })
   }
 
   public getExchange(address: string, currency: string) {
@@ -170,10 +170,6 @@ export class CalculatorConvertPage {
     this.wallet = info[0];
 
     const redirStringParams = 'ducatus:' + addressView + '?amount=' + this.formCoins.amountSend;
-
-    this.navCtrl.push(SendPage, {
-      wallet: this.wallet
-    });
     const redirParms = {
       activePage: 'ScanPage',
       walletId: this.wallet.id
