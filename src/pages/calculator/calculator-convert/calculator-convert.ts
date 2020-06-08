@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
 import { Logger } from '../../../providers/logger/logger';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
 
-import { SendPage } from '../../../pages/send/send';
+
 import { IncomingDataProvider } from '../../../providers';
+import { Logger } from '../../../providers/logger/logger';
 import { calculator_api, coinInfo } from '../calculator-parameters';
 
 @Component({
@@ -38,8 +39,7 @@ export class CalculatorConvertPage {
     private httpClient: HttpClient,
     private walletProvider: WalletProvider,
     private profileProvider: ProfileProvider,
-    private incomingDataProvider: IncomingDataProvider,
-    private navCtrl: NavController,
+    private incomingDataProvider: IncomingDataProvider
   ) {
     this.formCoins.get = this.navParams.data.get;
     this.formCoins.send = this.navParams.data.send;
@@ -167,8 +167,10 @@ export class CalculatorConvertPage {
     const addressView = this.walletProvider.getAddressView(
       info[0].coin,
       info[0].network,
-      this.addresses[this.formCoins.send.toLowerCase() + '_address']
+      this.addresses[this.formCoins.send.toLowerCase() + '_address'],
+      true
     );
+
     this.wallet = info[0];
 
     const redirStringParams = 'ducatus:' + addressView + '?amount=' + this.formCoins.amountSend;
