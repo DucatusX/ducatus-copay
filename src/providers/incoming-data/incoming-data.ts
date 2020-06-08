@@ -18,11 +18,13 @@ export interface RedirParams {
   amount?: string;
   coin?: Coin;
   fromHomeCard?: boolean;
+  walletId?: number;
 }
 
 @Injectable()
 export class IncomingDataProvider {
   private activePage: string;
+  private walletId: number | false;
 
   constructor(
     private actionSheetProvider: ActionSheetProvider,
@@ -705,8 +707,11 @@ export class IncomingDataProvider {
   }
 
   public redir(data: string, redirParams?: RedirParams): boolean {
-    if (redirParams && redirParams.activePage)
+    if (redirParams && redirParams.activePage) {
       this.activePage = redirParams.activePage;
+      this.walletId = redirParams.walletId ? redirParams.walletId : false;
+    }
+
 
     //  Handling of a bitpay invoice url
     if (this.isValidBitPayInvoice(data)) {
@@ -1122,7 +1127,8 @@ export class IncomingDataProvider {
         description: message,
         coin,
         requiredFeeRate,
-        destinationTag
+        destinationTag,
+        walletId: this.walletId
       };
       let nextView = {
         name: 'ConfirmPage',

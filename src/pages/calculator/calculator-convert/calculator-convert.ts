@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Events, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
 
-// import { ConfirmPage } from '../../send/confirm/confirm';
 import { SendPage } from '../../../pages/send/send';
+import { IncomingDataProvider } from '../../../providers';
 import { calculator_api, coinInfo } from '../calculator-parameters';
 
 @Component({
@@ -26,14 +26,18 @@ export class CalculatorConvertPage {
   public walletsInfoSend;
   public addresses: any;
 
+  public wallet: any;
+
   constructor(
-    private navCtrl: NavController,
-    private events: Events,
+    // private navCtrl: NavController,
+    // private events: Events,
     private navParams: NavParams,
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
     private walletProvider: WalletProvider,
-    private profileProvider: ProfileProvider
+    private profileProvider: ProfileProvider,
+    private incomingDataProvider: IncomingDataProvider,
+    private navCtrl: NavController,
   ) {
     this.formCoins.get = this.navParams.data.get;
     this.formCoins.send = this.navParams.data.send;
@@ -156,61 +160,25 @@ export class CalculatorConvertPage {
 
   public goToSendPage() {
 
-    console.log(this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput, this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput, this.addresses[this.formCoins.send.toLowerCase() + '_address'])
     let info = this.walletsInfoSend.map(infoWallet => { if (infoWallet.address === this.ConvertGroupForm.value.ConvertFormGroupAddressSend) return infoWallet.wallet; });
-    console.log(info[0], info[0].coin, info[0].credentials);
 
-    // const data = {
-    //   amount: this.formCoins.send,
-    //   network: info[0].network,
-    //   coin: info[0].coin,
-    //   speedUpTx: true,
-    //   toAddress: this.addresses[this.formCoins.send.toLowerCase() + '_address'],
-    //   walletId: info[0].credentials.walletId,
-    //   fromWalletDetails: true,
-    //   // txid: tx.txid,
-    //   recipientType: 'wallet',
-    //   name: info[0].name
-    // };
+    const addressView = this.walletProvider.getAddressView(
+      info[0].coin,
+      info[0].network,
+      this.addresses[this.formCoins.send.toLowerCase() + '_address']
+    );
+    this.wallet = info[0];
 
-
-    const stateParams = {
-      amount: this.formCoins.send,
-      network: info[0].network,
-      coin: info[0].coin,
-      speedUpTx: true,
-      toAddress: this.addresses[this.formCoins.send.toLowerCase() + '_address'],
-      walletId: info[0].credentials.walletId,
-      fromWalletDetails: true,
-      // txid: tx.txid,
-      recipientType: 'wallet',
-      name: info[0].name
-    };
-
-    const nextView = {
-      name: 'ConfirmPage',
-      params: stateParams
-    };
+    const redirStringParams = 'ducatus:' + addressView + '?amount=' + this.formCoins.amountSend;
 
     this.navCtrl.push(SendPage, {
-      wallet: info[0],
+      wallet: this.wallet
     });
-
-    this.events.publish('SendPageRedir', nextView);
-
-    // this.navCtrl.push(ConfirmPage, {
-    //   amount: this.formCoins.send,
-    //   network: info[0].network,
-    //   coin: info[0].coin,
-    //   speedUpTx: true,
-    //   toAddress: this.addresses[this.formCoins.send.toLowerCase() + '_address'],
-    //   walletId: info[0].credentials.walletId,
-    //   fromWalletDetails: true,
-    //   // txid: tx.txid,
-    //   recipientType: 'wallet',
-    //   name: info[0].name
-    // });
-
+    const redirParms = {
+      activePage: 'ScanPage',
+      walletId: this.wallet.id
+    };
+    this.incomingDataProvider.redir(redirStringParams, redirParms);
   }
 }
 
