@@ -7,7 +7,7 @@ import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
 
 
-import { IncomingDataProvider } from '../../../providers';
+import { IncomingDataProvider, TxFormatProvider } from '../../../providers';
 import { Logger } from '../../../providers/logger/logger';
 import { calculator_api, coinInfo } from '../calculator-parameters';
 
@@ -39,6 +39,7 @@ export class CalculatorConvertPage {
     private profileProvider: ProfileProvider,
     private incomingDataProvider: IncomingDataProvider,
     private logger: Logger,
+    private txFormatProvider: TxFormatProvider
   ) {
     this.formCoins.get = this.navParams.data.get;
     this.formCoins.send = this.navParams.data.send;
@@ -153,31 +154,31 @@ export class CalculatorConvertPage {
     }).toPromise();
   }
 
-  public checkDucAddress(address: string) {
-    return this.httpClient.post(calculator_api + 'validate_ducatus_address/', {
-      to_address: address
-    }).toPromise();
-  }
-
   public goToSendPage() {
 
-    let info = this.walletsInfoSend.map(infoWallet => { if (infoWallet.address === this.ConvertGroupForm.value.ConvertFormGroupAddressSend) return infoWallet.wallet; });
+    this.wallet = this.walletsInfoSend.find(infoWallet => {
+        return infoWallet.address === this.ConvertGroupForm.value.ConvertFormGroupAddressSend;
+    }).wallet;
 
     const addressView = this.walletProvider.getAddressView(
-      info[0].coin,
-      info[0].network,
+      this.wallet.coin,
+      this.wallet.network,
       this.addresses[this.formCoins.send.toLowerCase() + '_address'],
       true
     );
 
-    this.wallet = info[0];
+    const parsedAmount = this.txFormatProvider.parseAmount(
+      this.wallet.coin.toLowerCase(),
+      this.formCoins.amountSend,
+      this.wallet.coin.toUpperCase()
+    );
 
-    const redirStringParams = addressView + '?amount=' + this.formCoins.amountSend;
     const redirParms = {
       activePage: 'ScanPage',
-      walletId: this.wallet.id
+      walletId: this.wallet.id,
+      amount: parsedAmount.amountSat
     };
-    this.incomingDataProvider.redir(redirStringParams, redirParms);
+    this.incomingDataProvider.redir(addressView, redirParms);
   }
 }
 
