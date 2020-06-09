@@ -29,6 +29,7 @@ export class PdfProvider {
   }
 
   private createCordovaPDF(template, imgData?, filename?, optMobile?) {
+    imgData ? null : null;
     if (filename) this.filename = filename + '.pdf';
     this.logger.warn('making pdf for mobile platforms');
     cordova.plugins.pdf.fromData(template, optMobile || this.optionsMobile)
@@ -37,6 +38,7 @@ export class PdfProvider {
   }
 
   private createWebPDF(template?, imgData?, filename?) {
+    template ? null : null;
     if (filename) this.filename = filename + '.pdf';
 
     // console.log(imgData);
