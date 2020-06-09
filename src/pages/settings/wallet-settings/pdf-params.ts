@@ -4,11 +4,13 @@ export const pdfParams = {
         body {
           margin: 0;
         }
+        .paper-pdf-desktop {
+          width: 1000px
+        }
         .content-top img {
-          height:300px
+          height:352px
         }
         .content-bottom {
-          box-sizing: border-box; 
           background-color: #fff;
           max-height: 270px;
           min-height: 270px;
@@ -21,28 +23,21 @@ export const pdfParams = {
           justify-content: center;
           border:10px solid #c3b59b
         }
-        .content-bottom svg, .content-bottom img {
-          width:120px;
-          height:120px
-        }
         .content-bottom-left {
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          padding: 20px 15px 20px 30px;
-          box-sizing: border-box;
           min-width: 50%;
           width: 50%;
           border-right: 5px solid #c3b59b;
-          min-height: 270px
+          min-height: 270px;
         }
         .content-bottom-right {
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          padding: 20px 30px 20px 15px;
           min-width: 50%;
           width: 50%;
           border-left: 5px solid #c3b59b;
@@ -71,15 +66,18 @@ export const pdfParams = {
           margin-bottom: 0;
           width: 320px
         }
+
         .content-bottom-qrcode {
-          border: 10px solid #f5eddd;
-          border-radius: 5px; 
-          width: 120px; 
-          height: 120px;
+          width: 130px;
+          height: 130px;
         }
-        svg,img {
-          min-width:100%;
-          min-height:100%
+
+        .content-bottom-qrcode svg,
+        .content-bottom-qrcode img {
+          width:100%;
+          height:100%;
+          border: 10px solid #f5eddd;
+          border-radius: 5px;
         }
       </style>`
 };

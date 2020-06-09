@@ -32,7 +32,6 @@ page-wallet-settings {
 }
 
 .paper-pdf-desktop {
-  // max-width: 1684px;
   width: 1000px;
 
   .content-top img {
@@ -53,18 +52,12 @@ page-wallet-settings {
     justify-content: center;
     border: 10px solid #c3b59b
   }
-  // .content-bottom svg, .content-bottom img {
-  //   width:120px;
-  //   height:120px
-  // }
   .content-bottom-left {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    // padding: 20px 15px 20px 30px;
     box-sizing: border-box;
-    // min-width: 50%;
     width: 50%;
     border-right: 5px solid #c3b59b;
     min-height: 270px
@@ -78,7 +71,7 @@ page-wallet-settings {
     min-width: 50%;
     width: 50%;
     border-left: 5px solid #c3b59b;
-    min-height: 270px
+    min-height: 270px;
   }
   .content-bottom-text {
     color: #8f3534;
