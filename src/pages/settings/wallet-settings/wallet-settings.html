@@ -31,7 +31,7 @@
       <button ion-item (click)="openWalletInformation()">
         <span translate>Information</span>
       </button>
-      <button *ngIf="isCordova" ion-item (click)="printPaperWallet()">
+      <button ion-item (click)="printPaperWallet()">
         <span translate>Print Paper wallet</span>
       </button>
       <button ion-item (click)="openWalletAddresses()">
@@ -56,11 +56,14 @@
   </div>
 </wide-header-page>
 
-<div #paperpdf hidden *ngIf="paperParams">
+<div #paperpdf style="display: none !important;" class="paper-pdf-desktop-wrap" *ngIf="paperParams">
   <!--<html>-->
   <!--<body id="paper-pdf">-->
   <div class="paper-pdf-desktop" id="paper-pdf-desktop">
-    <div class="content-top"> <img src="https://www.ducatuscoins.com/assets/img/printpaperwallet.png" /> </div>
+    <div class="content-top">
+      <img *ngIf="isCordova" src="https://www.ducatuscoins.com/assets/img/printpaperwallet.png" />
+      <img *ngIf="!isCordova" src="assets/img/printpaperwallet.png" />
+    </div>
     <div class="content-bottom">
       <div class="content-bottom-left">
         <p class="content-bottom-text"><b>Your public address</b></p>
@@ -81,6 +84,7 @@
       </div>
     </div>
   </div>
+
   <!--</body>-->
   <!--</html>-->
 </div>

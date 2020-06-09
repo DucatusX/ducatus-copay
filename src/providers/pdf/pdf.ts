@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 
-// import html2canvas from 'html2canvas';
-import domtoimage from 'dom-to-image';
-// import jsPDF from 'jspdf';
+import jsPDF from 'jspdf';
 
 import { Logger } from '../../providers/logger/logger';
 import { PlatformProvider } from '../../providers/platform/platform';
@@ -30,7 +28,7 @@ export class PdfProvider {
     this.makePdf = this.isCordova ? this.createCordovaPDF : this.createWebPDF;
   }
 
-  private createCordovaPDF(template, filename?, optMobile?) {
+  private createCordovaPDF(template, imgData?, filename?, optMobile?) {
     if (filename) this.filename = filename + '.pdf';
     this.logger.warn('making pdf for mobile platforms');
     cordova.plugins.pdf.fromData(template, optMobile || this.optionsMobile)
@@ -38,45 +36,22 @@ export class PdfProvider {
       .catch((error) => this.logger.warn('error:', error));
   }
 
-  private createWebPDF(template) {
-    // console.log(template);
+  private createWebPDF(template?, imgData?, filename?) {
+    if (filename) this.filename = filename + '.pdf';
 
-    template = template.slice(6);
-    template = template.substring(0, template.length - 6);
+    // console.log(imgData);
 
-    // console.log(template);
+    var img = new Image();
+    img.src = imgData;
 
-    var pdfTemplate = document.createElement("html");
-    pdfTemplate.innerHTML = template;
+    img.onload = () => {
+      var doc = img.width > img.height ? new jsPDF('l', 'px', [img.width, img.height]) : new jsPDF('p', 'px', [img.width, img.height]);
 
-    console.log(pdfTemplate);
-    console.log(pdfTemplate.querySelector("#paper-pdf-desktop"));
-    // console.log(pdfTemplate.getElementsByClassName("paper-pdf-desktop")[0].cloneNode(true));
+      var width = doc.internal.pageSize.getWidth();
+      var height = doc.internal.pageSize.getHeight();
 
-    // domtoimage.toBlob(pdfTemplate.querySelector('#paper-pdf-desktop'))
-    domtoimage.toSvg(pdfTemplate.querySelector('#paper-pdf-desktop'))
-      .then(function (dataUrl) {
-        console.log(dataUrl)
-        var img = new Image();
-        img.src = dataUrl;
-        document.body.appendChild(img);
-        console.log(img);
-      });
-
-    // const iframe = document.createElement('iframe');
-    // iframe.style.width = '796px';
-    // iframe.style.height = '0';
-    // document.getElementsByTagName('body')[0].appendChild(iframe);
-
-    // iframe.contentWindow.document.write(template);
-
-    // if (filename) this.filename = filename + '.pdf';
-    // html2canvas(iframe.contentDocument.getElementsByTagName('html')[0], opt || this.optionsMobile).then((canvas) => {
-    //   let img = canvas.toDataURL("image/png");
-    //   let pdf = new jsPDF();
-    //   pdf.addImage(img, 'PNG', 0, 0);
-    //   pdf.save((this.filename || 'ducatus') + '.pdf');
-    // });
+      doc.addImage(img, 'PNG', 10, 10, width, height);
+      doc.save(this.filename + '.pdf');
+    };
   }
-
 }

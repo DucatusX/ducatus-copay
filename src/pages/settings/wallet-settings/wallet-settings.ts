@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import html2canvas from 'html2canvas';
 import { Events, NavController, NavParams } from 'ionic-angular';
 import { Logger } from '../../../providers/logger/logger';
 
@@ -32,8 +33,7 @@ import { pdfParams } from './pdf-params';
   templateUrl: 'wallet-settings.html'
 })
 export class WalletSettingsPage {
-
-  @ViewChild('paperpdf', { read: ElementRef }) paperpdf: ElementRef;
+  @ViewChild('paperpdf') paperpdf: ElementRef;
 
   public showDuplicateWallet: boolean;
   public wallet;
@@ -293,11 +293,22 @@ export class WalletSettingsPage {
 
       setTimeout(() => {
         const nativeDOM = this.paperpdf.nativeElement;
-        this.pdfProvider.makePdf(
-          '<html>' + pdfParams.mobileStyle + '<body id="paper-pdf">' +
-          nativeDOM.innerHTML +
-          '</body></html>'
-        );
+        let imgData;
+
+        nativeDOM.style.display = 'block';
+
+        html2canvas(nativeDOM, { width: 1000 }).then(canvas => {
+          nativeDOM.style.display = 'none !important';
+          imgData = canvas.toDataURL('image/png');
+          this.paperParams = null;
+
+          this.pdfProvider.makePdf(
+            '<html>' + pdfParams.mobileStyle + '<body id="paper-pdf">' +
+            nativeDOM.innerHTML +
+            '</body></html>', imgData
+          );
+
+        });
       });
     });
 
