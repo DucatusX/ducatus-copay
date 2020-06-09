@@ -3,10 +3,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
-import { Logger } from '../../../providers/logger/logger';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
-
 
 import { IncomingDataProvider, TxFormatProvider } from '../../../providers';
 import { Logger } from '../../../providers/logger/logger';
@@ -31,15 +29,14 @@ export class CalculatorConvertPage {
   public wallet: any;
 
   constructor(
-    // private navCtrl: NavController,
-    // private events: Events,
-    private logger: Logger,
     private navParams: NavParams,
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
     private walletProvider: WalletProvider,
     private profileProvider: ProfileProvider,
-    private incomingDataProvider: IncomingDataProvider
+    private incomingDataProvider: IncomingDataProvider,
+    private logger: Logger,
+    private txFormatProvider: TxFormatProvider
   ) {
     this.formCoins.get = this.navParams.data.get;
     this.formCoins.send = this.navParams.data.send;
@@ -173,11 +170,6 @@ export class CalculatorConvertPage {
       this.wallet.coin.toUpperCase()
     );
 
-    const redirStringParams = 'ducatus:' + addressView + '?amount=' + this.formCoins.amountSend;
-
-    this.navCtrl.push(SendPage, {
-      wallet: this.wallet
-    });
     const redirParms = {
       activePage: 'ScanPage',
       walletId: this.wallet.id,
@@ -186,4 +178,3 @@ export class CalculatorConvertPage {
     this.incomingDataProvider.redir(addressView, redirParms);
   }
 }
-
