@@ -182,7 +182,7 @@ export class SendPage {
     return false;
   }
 
-  private redir() {
+  public redir() {
     this.incomingDataProvider.redir(this.search, {
       activePage: 'SendPage',
       amount: this.navParams.data.amount,
@@ -256,9 +256,9 @@ export class SendPage {
                 true
               );
             }
-          } else {
-            this.redir();
-          }
+          } //else {
+          //this.redir();
+          //}
         } catch (err) {
           this.invalidAddress = true;
           this.logger.warn(err);
@@ -268,7 +268,10 @@ export class SendPage {
         _.indexOf(this.validDataTypeMap, parsedData.type) != -1
       ) {
         const isValid = this.checkCoinAndNetwork(this.search);
-        if (isValid) this.redir();
+        if (isValid) {
+          this.invalidAddress = false;
+          //this.redir();
+        }
       } else if (parsedData && parsedData.type == 'BitPayCard') {
         // this.close();
         this.incomingDataProvider.redir(this.search, {

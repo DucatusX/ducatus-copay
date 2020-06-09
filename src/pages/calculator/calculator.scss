@@ -1,0 +1,145 @@
+.calculator {
+  &-page {
+    padding: 21px;
+  }
+
+  &-input {
+    border-radius: 5px;
+  }
+
+  &-loading {
+    &-select {
+      .label {
+        display: flex !important;
+        justify-content: center !important;
+        margin: 0 !important;
+      }
+    }
+  }
+
+  &-heading {
+    font-weight: 500;
+    font-size: 25px;
+    line-height: 29px;
+    color: #000000;
+    margin-bottom: 25px;
+  }
+
+  &-text {
+    background: none;
+    margin-bottom: 10px !important;
+    padding-left: 0px !important;
+
+    .label {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 17px;
+      color: #000000;
+      mix-blend-mode: normal;
+      opacity: 0.5;
+    }
+  }
+
+  &-form {
+    &-group {
+      position: relative;
+    }
+  }
+
+  &-select {
+    position: absolute;
+    top: 15px;
+    width: 100px;
+    right: 10px;
+    background-color: #F7F3EB;
+    border-radius: 5px;
+    height: 45px;
+    padding-left: 5px !important;
+
+    &-ion {
+      max-width: 100%;
+    }
+  }
+
+  &-button {
+    max-width: 100%;
+    width: 100%;
+    margin-top: 25px;
+  }
+
+  &-convert {
+    &-type {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 15px;
+
+      &-send,
+      &-get {
+        background: #FFFFFF;
+        border-radius: 4px;
+        padding: 8px 10px;
+        font-weight: normal;
+        font-size: 13px;
+        line-height: 16px;
+        color: #862633;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0px 5px;
+
+        span {
+          color: #000000;
+        }
+
+        .item-img {
+          margin: 0px 10px;
+        }
+      }
+    }
+
+    &-group {
+      position: relative;
+      border-radius: 4px;
+    }
+
+    &-label {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 17px;
+      color: #000000;
+      opacity: 0.5;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    &-input {
+      background: #fff;
+      border-radius: 4px;
+      padding-left: 5px !important;
+    }
+
+    &-select {
+      position: absolute;
+      top: 0;
+      width: 70px;
+      right: 0;
+      border-radius: 4px;
+
+      ion-select {
+            max-width: 100% !important;
+      }
+
+      .select-text {
+        display: none;
+      }
+
+      .select-icon {
+        width: 20px !important;
+        height: 20px !important;
+      }
+    }
+  }
+}

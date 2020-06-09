@@ -18,11 +18,13 @@ export interface RedirParams {
   amount?: string;
   coin?: Coin;
   fromHomeCard?: boolean;
+  walletId?: number;
 }
 
 @Injectable()
 export class IncomingDataProvider {
   private activePage: string;
+  private walletId: number | false;
 
   constructor(
     private actionSheetProvider: ActionSheetProvider,
@@ -108,6 +110,11 @@ export class IncomingDataProvider {
   private isValidDucatusUri(data: string): boolean {
     data = this.sanitizeUri(data);
     return !!this.bwcProvider.getDucatuscore().URI.isValid(data);
+  }
+
+  private isValidDucatusXUri(data: string): boolean {
+    data = this.sanitizeUri(data);
+    return !!this.bwcProvider.getCore().Validation.validateUri('DUCX', data);
   }
 
   private isValidEthereumUri(data: string): boolean {
@@ -390,6 +397,31 @@ export class IncomingDataProvider {
     else this.goSend(address, amount, message, coin);
   }
 
+  private handleDucatusXUri(data: string, redirParams?: RedirParams): void {
+    this.logger.debug('Incoming-data: DucatusX URI');
+    let amountFromRedirParams =
+      redirParams && redirParams.amount ? redirParams.amount : '';
+    const coin = Coin.DUCX;
+    const value = /[\?\&]value=(\d+([\,\.]\d+)?)/i;
+    const gasPrice = /[\?\&]gasPrice=(\d+([\,\.]\d+)?)/i;
+    let parsedAmount;
+    let requiredFeeParam;
+    if (value.exec(data)) {
+      parsedAmount = value.exec(data)[1];
+    }
+    if (gasPrice.exec(data)) {
+      requiredFeeParam = gasPrice.exec(data)[1];
+    }
+    const address = this.extractAddress(data);
+    const message = '';
+    const amount = parsedAmount || amountFromRedirParams;
+    if (amount) {
+      this.goSend(address, amount, message, coin, requiredFeeParam);
+    } else {
+      this.handleDucatusXAddress(address, redirParams);
+    }
+  }
+
   private handleEthereumUri(data: string, redirParams?: RedirParams): void {
     this.logger.debug('Incoming-data: Ethereum URI');
     let amountFromRedirParams =
@@ -539,6 +571,22 @@ export class IncomingDataProvider {
       this.showMenu({
         data,
         type: 'ducatusAddress',
+        coin
+      });
+    } else if (redirParams && redirParams.amount) {
+      this.goSend(data, redirParams.amount, '', coin);
+    } else {
+      this.goToAmountPage(data, coin);
+    }
+  }
+
+  private handleDucatusXAddress(data: string, redirParams?: RedirParams): void {
+    this.logger.debug('Incoming-data: DucatusX address');
+    const coin = Coin.DUCX;
+    if (redirParams && redirParams.activePage === 'ScanPage') {
+      this.showMenu({
+        data,
+        type: 'ducatusxAddress',
         coin
       });
     } else if (redirParams && redirParams.amount) {
@@ -705,8 +753,11 @@ export class IncomingDataProvider {
   }
 
   public redir(data: string, redirParams?: RedirParams): boolean {
-    if (redirParams && redirParams.activePage)
+    if (redirParams && redirParams.activePage) {
       this.activePage = redirParams.activePage;
+      this.walletId = redirParams.walletId ? redirParams.walletId : false;
+    }
+
 
     //  Handling of a bitpay invoice url
     if (this.isValidBitPayInvoice(data)) {
@@ -736,6 +787,11 @@ export class IncomingDataProvider {
       // Ethereum URI
     } else if (this.isValidEthereumUri(data)) {
       this.handleEthereumUri(data, redirParams);
+      return true;
+
+      // DucatusX URI
+    } else if (this.isValidDucatusXUri(data)) {
+      this.handleDucatusXUri(data, redirParams);
       return true;
 
       // Ripple URI
@@ -1122,7 +1178,8 @@ export class IncomingDataProvider {
         description: message,
         coin,
         requiredFeeRate,
-        destinationTag
+        destinationTag,
+        walletId: this.walletId
       };
       let nextView = {
         name: 'ConfirmPage',
