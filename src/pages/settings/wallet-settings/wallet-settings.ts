@@ -348,7 +348,7 @@ export class WalletSettingsPage {
               var binaryArray = utf8.buffer;
               var blob = new Blob([binaryArray], { type: 'application/pdf' });
 
-              this.file.writeFile(this.file.dataDirectory, 'ducatus-wallet.pdf', blob, { replace: true }).then(fileEntry => {
+              this.file.writeFile(this.file.dataDirectory, 'ducatus-wallet.pdf', blob, { replace: true }).then(() => {
                 cordova.plugins.fileOpener2.open(this.file.dataDirectory + 'ducatus-wallet.pdf', 'application/pdf');
                 this.clickPrintPapaerWallet = false;
               })
