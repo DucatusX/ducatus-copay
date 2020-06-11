@@ -34,6 +34,7 @@ import { CopayApp } from './app.component';
 import { PAGES } from './../pages/pages';
 
 /* Pipes */
+import { File } from '@ionic-native/file';
 import { FiatToUnitPipe } from '../pipes/fiatToUnit';
 import { FormatCurrencyPipe } from '../pipes/format-currency';
 import { KeysPipe } from '../pipes/keys';
@@ -142,10 +143,11 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
       provide: ErrorHandler,
       useClass: IonicErrorHandler
     },
-    FormatCurrencyPipe
+    FormatCurrencyPipe,
+    File
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
-  constructor(public config: Config) {}
+  constructor(public config: Config) { }
 }
