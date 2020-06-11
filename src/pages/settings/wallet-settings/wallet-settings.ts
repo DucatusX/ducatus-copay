@@ -5,7 +5,8 @@ import { Events, NavController, NavParams } from 'ionic-angular';
 import { Logger } from '../../../providers/logger/logger';
 
 import { File } from '@ionic-native/file';
-import { FileOpener } from '@ionic-native/file-opener';
+// import { FileOpener } from '@ionic-native/file-opener/ngx';
+// import { FileOpenerOriginal } from '@ionic-native/file-opener';
 import pdfMake from 'pdfmake/build/pdfmake.js';
 
 // providers
@@ -30,7 +31,9 @@ import { WalletInformationPage } from './wallet-settings-advanced/wallet-informa
 import { WalletServiceUrlPage } from './wallet-settings-advanced/wallet-service-url/wallet-service-url';
 import { WalletTransactionHistoryPage } from './wallet-settings-advanced/wallet-transaction-history/wallet-transaction-history';
 
-// import { pdfParams } from './pdf-params';
+import { headerImgBase } from './pdf-params';
+
+declare const cordova;
 
 @Component({
   selector: 'page-wallet-settings',
@@ -52,6 +55,7 @@ export class WalletSettingsPage {
   public deleted: boolean = false;
   public keysEncrypted: boolean;
   public walletsGroup;
+  public clickPrintPapaerWallet: boolean = false;
   private config;
   private keyId;
   public paperParams: any;
@@ -275,6 +279,8 @@ export class WalletSettingsPage {
       return;
     }
 
+    this.clickPrintPapaerWallet = true;
+
     const qrKey = this.generateQrKey();
     const walletAddress = this.getAddress();
 
@@ -306,61 +312,8 @@ export class WalletSettingsPage {
           nativeDOM.style.display = 'none !important';
           var data = canvas.toDataURL();
 
-          this.pdfObj = pdfMake.createPdf({
-            content: [{
-              image: data,
-              width: 1000,
-            }],
-            pageMargins: [10, 10, 10, 10],
-            pageSize: {
-              width: 1020,
-              height: 'auto'
-            },
-          })
-
-          this.logger.debug(this.pdfObj);
-
           if (!this.isCordova) {
-
-            this.pdfObj.getBlob((blob) => {
-              this.logger.debug('DEVICE !!!!');
-              this.logger.debug(blob);
-            });
-
-            this.pdfObj.getBuffer((buffer) => {
-              this.logger.debug('TEST FOR DEVICE IN WEB !!!!');
-              this.logger.debug(buffer);
-              this.logger.debug(buffer["data"]);
-              // var utf8 = new Uint8Array(buffer);
-              // var binaryArray = utf8.buffer;
-              var blob = new Blob([buffer], { type: 'application/pdf' });
-              this.logger.debug(blob);
-
-              // let binaryLen = buffer["data"].length;
-              // let bytes = new Uint8Array(binaryLen);
-              // for (let i = 0; i < binaryLen; i++) {
-              //   let ascii = buffer["data"].charCodeAt(i);
-              //   bytes[i] = ascii;
-              // }
-              //
-              // let blob = new Blob([bytes], { type: "application/pdf" });
-              //
-              // this.logger.debug(blob);
-              //
-              let link = document.createElement('a');
-
-              link.href = window.URL.createObjectURL(blob);
-              link.download = 'pdf_test.pdf';
-
-              link.click();
-            });
-
-
-            // this.logger.debug('WEB WORK !!!!');
-            // this.pdfObj.download("ducatus-wallet.pdf");
-          }
-          else {
-            pdfMake.createPdf({
+            this.pdfObj = pdfMake.createPdf({
               content: [{
                 image: data,
                 width: 1000,
@@ -370,170 +323,41 @@ export class WalletSettingsPage {
                 width: 1020,
                 height: 'auto'
               },
-            }).getBuffer((buffer) => {
-              this.logger.debug('DEVICE !!!!');
-              this.logger.debug(buffer);
+            })
+            this.pdfObj.download("ducatus-wallet.pdf");
+            this.clickPrintPapaerWallet = false;
+          }
+          else {
+            this.pdfObj = pdfMake.createPdf({
+              content: [{
+                image: headerImgBase,
+                width: 1000,
+              }, {
+                image: data,
+                width: 1000,
+              }],
+              pageMargins: [10, 10, 10, 10],
+              pageSize: {
+                width: 1020,
+                height: 'auto'
+              },
+            })
 
+            this.pdfObj.getBuffer((buffer) => {
               var utf8 = new Uint8Array(buffer);
               var binaryArray = utf8.buffer;
               var blob = new Blob([binaryArray], { type: 'application/pdf' });
 
-              this.logger.debug(blob);
-
-              this.file.writeFile(this.file.dataDirectory, 'ducatus-wallet.pdf', blob, { replace: true }).then(() => {
-                this.logger.debug('DEVICE write to file');
-                FileOpener.open(this.file.dataDirectory + 'ducatus-wallet.pdf', 'application/pdf');
+              this.file.writeFile(this.file.dataDirectory, 'ducatus-wallet.pdf', blob, { replace: true }).then(fileEntry => {
+                cordova.plugins.fileOpener2.open(this.file.dataDirectory + 'ducatus-wallet.pdf', 'application/pdf');
+                this.clickPrintPapaerWallet = false;
               })
             });
           }
-
           this.paperParams = null;
         });
-
-        // html2canvas(nativeDOM, { width: 1000 }, {
-        //   onrendered(canvas) {
-        //     nativeDOM.style.display = 'none !important';
-        //     var data = canvas.toDataURL();
-        //     var docDefinition = {
-        //       content: [{
-        //         image: data,
-        //         width: 1000,
-        //       }]
-        //     };
-
-        //     let objPdf = pdfMake.createPdf(docDefinition);
-        //     this.logger.debug('WEB WORK !!!!');
-        //     this.logger.debug(objPdf);
-        //     objPdf.download("ducatus-wallet.pdf");
-
-        //     // this.pdfObj = pdfMake.createPdf(docDefinition);
-
-        //     if (this.isCordova) {
-        //       let objPdf = pdfMake.createPdf(docDefinition);
-        //       this.logger.debug('WEB WORK !!!!');
-        //       this.logger.debug(objPdf);
-        //       objPdf.download("ducatus-wallet.pdf");
-        //     }
-        //     else {
-        //       pdfMake.createPdf(docDefinition).getBuffer((buffer) => {
-        //         var blob = new Blob([buffer], { type: 'application/pdf' });
-
-        //         // Save the PDF to the data Directory of our App
-        //         this.file.writeFile(this.file.dataDirectory, 'ducatus-wallet.pdf', blob, { replace: true }).then(() => {
-        //           // Open the PDf with the correct OS tools
-        //           this.fileOpener.open(this.file.dataDirectory + 'ducatus-wallet.pdf', 'application/pdf');
-        //         })
-        //       });
-        //     }
-
-        //     this.paperParams = null;
-        //   }
-        // });
-
-        // html2canvas(nativeDOM, { width: 1000 }).then(canvas => {
-
-        // });
-
-        // html2canvas(nativeDOM, { width: 1000 }).then(canvas => {
-        //   nativeDOM.style.display = 'none !important';
-        //   imgData = canvas.toDataURL('image/png');
-        //   this.logger.debug('HTML2CANVAS WORK !!!!');
-
-        //   if (this.isCordova) {
-        //     this.logger.debug('WEB WORK !!!!');
-        //     this.downloadLink.nativeElement.href = imgData;
-        //     this.downloadLink.nativeElement.download = 'ducatus-wallet.png';
-        //     this.downloadLink.nativeElement.click();
-        //   }
-        //   else {
-        //     this.logger.debug('IOS WORK !!!!');
-
-        //     // cordova.fileTransfer.upload(imgData, '<api endpoint>', {
-        //     //   fileKey: 'file',
-        //     //   fileName: 'name.jpg',
-        //     //   headers: {}
-        //     // })
-        //     //   .then((data) => {
-        //     //     this.logger.debug('Saved image to gallery ', data)
-        //     //   }, (err) => {
-        //     //     this.logger.debug('Error saving image to gallery ', err)
-        //     //   })
-
-        //     cordova.base64ToGallery.base64ToGallery(imgData, { prefix: "_img", mediaScanner: true }).then(
-        //       res => this.logger.debug('Saved image to gallery ', res),
-        //       err => this.logger.debug('Error saving image to gallery ', err)
-        //     );
-        //   }
-
-        //   this.paperParams = null;
-
-        //   // this.pdfProvider.makePdf(
-        //   //   '<html>' + pdfParams.mobileStyle + '<body id="paper-pdf">' +
-        //   //   nativeDOM.innerHTML +
-        //   //   '</body></html>', imgData
-        //   // );
-
-        // });
       });
     });
 
   }
-
-  // public generateBlob(infoToBlob) {
-
-  // }
-
-  // public printPaperWallet(): void {
-  //   if (this.needsBackup) {
-  //     this.openBackupModal();
-  //     return;
-  //   }
-
-  //   const qrKey = this.generateQrKey();
-  //   const walletAddress = this.getAddress();
-
-  //   Promise.all([qrKey, walletAddress]).then((result) => {
-  //     const res = {};
-  //     result.forEach((resItem: { key: string, value: string }) => {
-  //       res[resItem.key] = resItem.value;
-  //     });
-  //     return res
-  //   }).then((res: any) => {
-  //     const qrKey = res.key;
-  //     const walletAddress = res.address;
-  //     if (!qrKey || !walletAddress) {
-  //       this.logger.debug('must have qrKey and address: ' + qrKey, walletAddress);
-  //       return;
-  //     }
-
-  //     this.paperParams = {
-  //       key_qr: qrKey,
-  //       wallet_address: walletAddress,
-  //       wallet_coin: this.wallet.coin
-  //     };
-
-  //     setTimeout(() => {
-  //       const nativeDOM = this.paperpdf.nativeElement;
-  //       let imgData;
-
-  //       nativeDOM.style.display = 'block';
-
-  //       html2canvas(nativeDOM, { width: 1000 }).then(canvas => {
-  //         nativeDOM.style.display = 'none !important';
-  //         imgData = canvas.toDataURL('image/png');
-  //         this.paperParams = null;
-
-  //         this.pdfProvider.makePdf(
-  //           '<html>' + pdfParams.mobileStyle + '<body id="paper-pdf">' +
-  //           nativeDOM.innerHTML +
-  //           '</body></html>', imgData
-  //         );
-
-  //       });
-  //     });
-  //   });
-
-  // }
 }
-
-
