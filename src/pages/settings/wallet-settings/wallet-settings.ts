@@ -333,19 +333,20 @@ export class WalletSettingsPage {
               this.logger.debug(buffer["data"]);
               // var utf8 = new Uint8Array(buffer);
               // var binaryArray = utf8.buffer;
-              // var blob = new Blob([binaryArray], { type: 'application/pdf' });
-
-              let binaryLen = buffer["data"].length;
-              let bytes = new Uint8Array(binaryLen);
-              for (let i = 0; i < binaryLen; i++) {
-                let ascii = buffer["data"].charCodeAt(i);
-                bytes[i] = ascii;
-              }
-
-              let blob = new Blob([bytes], { type: "application/pdf" });
-
+              var blob = new Blob([buffer], { type: 'application/pdf' });
               this.logger.debug(blob);
 
+              // let binaryLen = buffer["data"].length;
+              // let bytes = new Uint8Array(binaryLen);
+              // for (let i = 0; i < binaryLen; i++) {
+              //   let ascii = buffer["data"].charCodeAt(i);
+              //   bytes[i] = ascii;
+              // }
+              //
+              // let blob = new Blob([bytes], { type: "application/pdf" });
+              //
+              // this.logger.debug(blob);
+              //
               let link = document.createElement('a');
 
               link.href = window.URL.createObjectURL(blob);
@@ -355,8 +356,8 @@ export class WalletSettingsPage {
             });
 
 
-            this.logger.debug('WEB WORK !!!!');
-            this.pdfObj.download("ducatus-wallet.pdf");
+            // this.logger.debug('WEB WORK !!!!');
+            // this.pdfObj.download("ducatus-wallet.pdf");
           }
           else {
             pdfMake.createPdf({
