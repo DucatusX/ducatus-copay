@@ -2352,6 +2352,9 @@ msgstr "Selling Bitcoin..."
 msgid "Send"
 msgstr "Send"
 
+msgid "Get"
+msgstr "Get"
+
 msgid "Send Feedback"
 msgstr "Send Feedback"
 

@@ -28,6 +28,7 @@ export class CalculatorConvertPage {
   public addresses: any;
   public typeOpenAddressList: any;
   public sendLength: number = 0;
+  public sendFirstAddress: any;
 
   public wallet: any;
 
@@ -77,7 +78,6 @@ export class CalculatorConvertPage {
     Promise.all([walletsGet, walletsSend]).then((results) => {
       this.walletsInfoGet = results[0];
       this.walletsInfoSend = results[1];
-      // if (this.sendLength === 1) this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput = this.walletsInfoSend[0].address;
       this.walletsChecker = true;
     });
   }
@@ -98,9 +98,22 @@ export class CalculatorConvertPage {
     });
 
     wallets.map(res => {
-      res.then(result => { walletsRes.push(result) });
+      res.then(result => {
+        walletsRes.push(result);
+        if (this.sendLength === 1 && type == 'send') {
+          addressToSend = result.address;
+        }
+      });
       if (type == 'send') this.sendLength++;
     });
+
+    if (type == 'send' && this.sendLength === 1) {
+      wallets.map(res => {
+        res.then(result => {
+          this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput = result.address;
+        });
+      });
+    }
 
     return walletsRes;
   }

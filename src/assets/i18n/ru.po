@@ -2094,6 +2094,9 @@ msgstr "Продажа биткойн..."
 msgid "Send"
 msgstr "Отправить"
 
+msgid "Get"
+msgstr "Получить"
+
 msgid "Send Feedback"
 msgstr ""
 
