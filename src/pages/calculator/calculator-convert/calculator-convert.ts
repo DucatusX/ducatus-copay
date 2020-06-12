@@ -98,20 +98,13 @@ export class CalculatorConvertPage {
     });
 
     wallets.map(res => {
-      res.then(result => {
-        walletsRes.push(result);
-        if (this.sendLength === 1 && type == 'send') {
-          addressToSend = result.address;
-        }
-      });
+      res.then(result => { walletsRes.push(result) });
       if (type == 'send') this.sendLength++;
     });
 
     if (type == 'send' && this.sendLength === 1) {
       wallets.map(res => {
-        res.then(result => {
-          this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput = result.address;
-        });
+        res.then(result => { this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput = result.address; });
       });
     }
 
