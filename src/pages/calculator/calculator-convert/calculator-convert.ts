@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
+import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
 
@@ -25,6 +26,7 @@ export class CalculatorConvertPage {
   public walletsInfoGet;
   public walletsInfoSend;
   public addresses: any;
+  public typeOpenAddressList: any;
 
   public wallet: any;
 
@@ -36,6 +38,7 @@ export class CalculatorConvertPage {
     private profileProvider: ProfileProvider,
     private incomingDataProvider: IncomingDataProvider,
     private logger: Logger,
+    private actionSheetProvider: ActionSheetProvider,
     private txFormatProvider: TxFormatProvider
   ) {
     this.formCoins.get = this.navParams.data.get;
@@ -51,13 +54,13 @@ export class CalculatorConvertPage {
       ConvertFormGroupAddressSendInput: [
         '',
         Validators.compose([Validators.minLength(1), Validators.required])
-      ],
-      ConvertFormGroupAddressGet: [
-        ''
-      ],
-      ConvertFormGroupAddressSend: [
-        ''
       ]
+      // ConvertFormGroupAddressGet: [
+      //   ''
+      // ],
+      // ConvertFormGroupAddressSend: [
+      //   ''
+      // ]
     });
   }
 
@@ -115,6 +118,27 @@ export class CalculatorConvertPage {
     }
   }
 
+  public openAddressList(wallets, type?) {
+
+    this.typeOpenAddressList = type;
+
+    const infoSheet = this.actionSheetProvider.createInfoSheet(
+      'convertor-address', { wallet: wallets }
+    );
+    infoSheet.present();
+    infoSheet.onDidDismiss(option => {
+      if (option) {
+        if (type == 'Get') {
+          this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput = option;
+          this.setAddress(this.formCoins.get);
+        }
+        if (type == 'Send') {
+          this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput = option;
+        }
+      }
+    });
+  }
+
   public setAddress(type) {
     const address = this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput;
     if (type === 'DUC') {
@@ -139,7 +163,6 @@ export class CalculatorConvertPage {
 
   public getAddresses() {
     this.getExchange(this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput, this.formCoins.get).then((result) => {
-      this.logger.debug('got addresses:', result)
       this.addresses = result;
     }).catch(err => { this.logger.debug('cant get addresses: ', err) })
   }
@@ -154,7 +177,7 @@ export class CalculatorConvertPage {
   public goToSendPage() {
 
     this.wallet = this.walletsInfoSend.find(infoWallet => {
-      return infoWallet.address === this.ConvertGroupForm.value.ConvertFormGroupAddressSend;
+      return infoWallet.address === this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput;
     }).wallet;
 
     const addressView = this.walletProvider.getAddressView(
