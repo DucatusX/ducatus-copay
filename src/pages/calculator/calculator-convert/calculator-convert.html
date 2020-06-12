@@ -62,13 +62,18 @@
             </ion-item>
 
             <ion-item *ngIf="walletsChecker" class="calculator-convert-select">
+
+              <span (click)="openAddressList(walletsInfoGet, 'Get')">
+                <ion-icon name="arrow-dropdown"></ion-icon>
+              </span>
+              <!--
               <ion-select interface="action-sheet" formControlName="ConvertFormGroupAddressGet"
                 (ionChange)="changeAddress('Get')" [(ngModel)]="ConvertGroupForm.value.ConvertFormGroupAddressGet">
                 <ion-option *ngFor="let item of walletsInfoGet" [value]="item.address">
                   {{ item.wallet.walletGroupName }}:
                   {{ item.address }}
                   ({{ item.wallet.coin }})</ion-option>
-              </ion-select>
+              </ion-select> -->
             </ion-item>
 
           </div>
@@ -89,13 +94,18 @@
             </ion-item>
 
             <ion-item *ngIf="walletsChecker" class="calculator-convert-select">
-              <ion-select interface="action-sheet" formControlName="ConvertFormGroupAddressSend"
+
+              <span (click)="openAddressList(walletsInfoSend,'Send')">
+                <ion-icon name="arrow-dropdown"></ion-icon>
+              </span>
+
+              <!-- <ion-select interface="action-sheet" formControlName="ConvertFormGroupAddressSend"
                 (ionChange)="changeAddress('Send')" [(ngModel)]="ConvertGroupForm.value.ConvertFormGroupAddressSend">
                 <ion-option *ngFor="let item of walletsInfoSend" [value]="item.address">
                   {{ item.wallet.walletGroupName }}:
                   {{ item.address }}
                   ({{ item.wallet.coin }})</ion-option>
-              </ion-select>
+              </ion-select> -->
             </ion-item>
 
           </div>

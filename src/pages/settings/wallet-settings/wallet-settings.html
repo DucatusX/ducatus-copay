@@ -31,9 +31,13 @@
       <button ion-item (click)="openWalletInformation()">
         <span translate>Information</span>
       </button>
-      <button ion-item (click)="printPaperWallet()">
+      <button *ngIf="!clickPrintPapaerWallet" ion-item (click)="printPaperWallet()">
         <span translate>Print Paper wallet</span>
       </button>
+      <ion-item class="loading-button-settings" *ngIf="clickPrintPapaerWallet">
+        <span translate>Print Paper wallet</span>
+        <ion-spinner name="bubbles"></ion-spinner>
+      </ion-item>
       <button ion-item (click)="openWalletAddresses()">
         <span translate>Addresses</span>
       </button>
@@ -56,15 +60,16 @@
   </div>
 </wide-header-page>
 
-<div #paperpdf style="display: none !important;" class="paper-pdf-desktop-wrap" *ngIf="paperParams">
+<div #paperpdf style="display: none !important;" class="paper-pdf-desktop-wrap">
   <!--<html>-->
   <!--<body id="paper-pdf">-->
   <div class="paper-pdf-desktop" id="paper-pdf-desktop">
     <div class="content-top">
-      <img *ngIf="isCordova" src="https://www.ducatuscoins.com/assets/img/printpaperwallet.png" />
+      <!-- <img src="https://www.ducatuscoins.com/assets/img/printpaperwallet.png" /> -->
+      <!-- <img *ngIf="isCordova" src="https://www.ducatuscoins.com/assets/img/printpaperwallet.png" /> -->
       <img *ngIf="!isCordova" src="assets/img/printpaperwallet.png" />
     </div>
-    <div class="content-bottom">
+    <div class="content-bottom" *ngIf="paperParams">
       <div class="content-bottom-left">
         <p class="content-bottom-text"><b>Your public address</b></p>
         <div class="content-bottom-qrcode">

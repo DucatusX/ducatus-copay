@@ -4,12 +4,17 @@ import html2canvas from 'html2canvas';
 import { Events, NavController, NavParams } from 'ionic-angular';
 import { Logger } from '../../../providers/logger/logger';
 
+import { File } from '@ionic-native/file';
+// import { FileOpener } from '@ionic-native/file-opener/ngx';
+// import { FileOpenerOriginal } from '@ionic-native/file-opener';
+import pdfMake from 'pdfmake/build/pdfmake.js';
+
 // providers
 import { ConfigProvider } from '../../../providers/config/config';
 import { ExternalLinkProvider } from '../../../providers/external-link/external-link';
 import { ActionSheetProvider } from '../../../providers/index';
 import { KeyProvider } from '../../../providers/key/key';
-import { PdfProvider } from '../../../providers/pdf/pdf';
+// import { PdfProvider } from '../../../providers/pdf/pdf';
 import { PlatformProvider } from '../../../providers/platform/platform';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { TouchIdProvider } from '../../../providers/touchid/touchid';
@@ -26,7 +31,9 @@ import { WalletInformationPage } from './wallet-settings-advanced/wallet-informa
 import { WalletServiceUrlPage } from './wallet-settings-advanced/wallet-service-url/wallet-service-url';
 import { WalletTransactionHistoryPage } from './wallet-settings-advanced/wallet-transaction-history/wallet-transaction-history';
 
-import { pdfParams } from './pdf-params';
+import { headerImgBase } from './pdf-params';
+
+declare const cordova;
 
 @Component({
   selector: 'page-wallet-settings',
@@ -48,9 +55,11 @@ export class WalletSettingsPage {
   public deleted: boolean = false;
   public keysEncrypted: boolean;
   public walletsGroup;
+  public clickPrintPapaerWallet: boolean = false;
   private config;
   private keyId;
   public paperParams: any;
+  private pdfObj = null;
 
   constructor(
     private profileProvider: ProfileProvider,
@@ -64,7 +73,9 @@ export class WalletSettingsPage {
     private translate: TranslateService,
     private keyProvider: KeyProvider,
     private events: Events,
-    private pdfProvider: PdfProvider,
+    private file: File,
+    // private fileOpener: FileOpener,
+    // private pdfProvider: PdfProvider,
     private actionSheetProvider: ActionSheetProvider,
     private platformProvider: PlatformProvider
   ) {
@@ -268,6 +279,8 @@ export class WalletSettingsPage {
       return;
     }
 
+    this.clickPrintPapaerWallet = true;
+
     const qrKey = this.generateQrKey();
     const walletAddress = this.getAddress();
 
@@ -293,26 +306,58 @@ export class WalletSettingsPage {
 
       setTimeout(() => {
         const nativeDOM = this.paperpdf.nativeElement;
-        let imgData;
-
         nativeDOM.style.display = 'block';
 
         html2canvas(nativeDOM, { width: 1000 }).then(canvas => {
           nativeDOM.style.display = 'none !important';
-          imgData = canvas.toDataURL('image/png');
+          var data = canvas.toDataURL();
+
+          if (!this.isCordova) {
+            this.pdfObj = pdfMake.createPdf({
+              content: [{
+                image: data,
+                width: 1000,
+              }],
+              pageMargins: [10, 10, 10, 10],
+              pageSize: {
+                width: 1020,
+                height: 'auto'
+              },
+            })
+            this.pdfObj.download("ducatus-wallet.pdf");
+            this.clickPrintPapaerWallet = false;
+          }
+          else {
+            this.pdfObj = pdfMake.createPdf({
+              content: [{
+                image: headerImgBase,
+                width: 1000,
+              }, {
+                image: data,
+                width: 1000,
+              }],
+              pageMargins: [10, 10, 10, 10],
+              pageSize: {
+                width: 1020,
+                height: 'auto'
+              },
+            })
+
+            this.pdfObj.getBuffer((buffer) => {
+              var utf8 = new Uint8Array(buffer);
+              var binaryArray = utf8.buffer;
+              var blob = new Blob([binaryArray], { type: 'application/pdf' });
+
+              this.file.writeFile(this.file.dataDirectory, 'ducatus-wallet.pdf', blob, { replace: true }).then(() => {
+                cordova.plugins.fileOpener2.open(this.file.dataDirectory + 'ducatus-wallet.pdf', 'application/pdf');
+                this.clickPrintPapaerWallet = false;
+              })
+            });
+          }
           this.paperParams = null;
-
-          this.pdfProvider.makePdf(
-            '<html>' + pdfParams.mobileStyle + '<body id="paper-pdf">' +
-            nativeDOM.innerHTML +
-            '</body></html>', imgData
-          );
-
         });
       });
     });
 
   }
 }
-
-

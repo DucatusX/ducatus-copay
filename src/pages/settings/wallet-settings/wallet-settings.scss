@@ -1,4 +1,17 @@
 page-wallet-settings {
+
+  .loading-button-settings {
+    ion-label {
+      display: flex;
+      align-items: center;
+      color: gray;
+    }
+
+    ion-spinner {
+      margin-left: 15px;
+    }
+  }
+
   .assertive {
     color: color($colors, danger);
 
@@ -41,9 +54,9 @@ page-wallet-settings {
   .content-bottom {
     box-sizing: border-box;
     background-color: #fff;
-    max-height: 270px;
-    min-height: 270px;
-    height: 270px;
+    max-height: 350px;
+    min-height: 350px;
+    height: 350px;
     width: 100%;
     display: flex;
     align-items: center;
@@ -60,7 +73,7 @@ page-wallet-settings {
     box-sizing: border-box;
     width: 50%;
     border-right: 5px solid #c3b59b;
-    min-height: 270px
+    min-height: 350px
   }
   .content-bottom-right {
     display: flex;
@@ -71,7 +84,7 @@ page-wallet-settings {
     min-width: 50%;
     width: 50%;
     border-left: 5px solid #c3b59b;
-    min-height: 270px;
+    min-height: 350px;
   }
   .content-bottom-text {
     color: #8f3534;
@@ -81,7 +94,7 @@ page-wallet-settings {
     text-align: center
   }
   .content-bottom-right .content-bottom-text {
-    width:300px
+    width: 300px;
   }
   .content-bottom-address {
     background-color: #e6e7e8;
@@ -97,8 +110,8 @@ page-wallet-settings {
     width: 320px
   }
   .content-bottom-qrcode {
-    width: 130px;
-    height: 130px;
+    width: 140px;
+    height: 140px;
 
       svg,img {
         width:100%;
