@@ -27,6 +27,7 @@ export class CalculatorConvertPage {
   public walletsInfoSend;
   public addresses: any;
   public typeOpenAddressList: any;
+  public sendLength: number = 0;
 
   public wallet: any;
 
@@ -55,12 +56,6 @@ export class CalculatorConvertPage {
         '',
         Validators.compose([Validators.minLength(1), Validators.required])
       ]
-      // ConvertFormGroupAddressGet: [
-      //   ''
-      // ],
-      // ConvertFormGroupAddressSend: [
-      //   ''
-      // ]
     });
   }
 
@@ -77,16 +72,17 @@ export class CalculatorConvertPage {
     );
 
     let walletsGet = this.getWalletsInfo(this.formCoins.get);
-    let walletsSend = this.getWalletsInfo(this.formCoins.send);
+    let walletsSend = this.getWalletsInfo(this.formCoins.send, 'send');
 
     Promise.all([walletsGet, walletsSend]).then((results) => {
       this.walletsInfoGet = results[0];
       this.walletsInfoSend = results[1];
+      // if (this.sendLength === 1) this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput = this.walletsInfoSend[0].address;
       this.walletsChecker = true;
     });
   }
 
-  private getWalletsInfo(coin) {
+  private getWalletsInfo(coin, type?) {
     let coins = [];
     let wallets = [];
     let walletsRes = [];
@@ -103,6 +99,7 @@ export class CalculatorConvertPage {
 
     wallets.map(res => {
       res.then(result => { walletsRes.push(result) });
+      if (type == 'send') this.sendLength++;
     });
 
     return walletsRes;
@@ -143,14 +140,7 @@ export class CalculatorConvertPage {
     const address = this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput;
     if (type === 'DUC') {
       if (address.length === 34 && ['L', 'l', 'M', 'm'].includes(address.substring(0, 1))) {
-
         this.getAddresses();
-        // this.checkDucAddress(address).then((result) => {
-        //   if (result) {
-        //     this.logger.debug('address result', result);
-        //     this.getAddresses();
-        //   }
-        // }).catch(err => { this.logger.debug('something went wrong...', err); })
       }
     }
 
