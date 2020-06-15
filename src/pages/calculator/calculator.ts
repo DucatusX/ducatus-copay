@@ -64,13 +64,15 @@ export class CalculatorPage {
   }
 
   public changeCoin(type) {
-    if (type == 'Get') {
+    if (type === 'Get') {
       this.formCoins.get = convertCoins[this.CalculatorGroupForm.value.CalculatorGroupGetCoin];
       this.formCoins.send = this.formCoins.get.items[0];
+
+      // console.log(this.formCoins.send);
       this.CalculatorGroupForm.value.CalculatorGroupGetCoin = this.formCoins.get.name;
-      this.CalculatorGroupForm.value.CalculatorGroupSendCoin = this.formCoins.send;
+      // this.CalculatorGroupForm.value.CalculatorGroupSendCoin = this.formCoins.send;
     }
-    if (type == 'Send') {
+    if (type === 'Send') {
       this.formCoins.send = this.CalculatorGroupForm.value.CalculatorGroupSendCoin;
     }
 
@@ -83,6 +85,8 @@ export class CalculatorPage {
 
   public changeAmount(type) {
     const rate = this.rates[this.formCoins.get.name][this.formCoins.send];
+
+    this.CalculatorGroupForm.value.CalculatorGroupSendCoin = this.formCoins.send;
 
     if (type === 'Get' && this.lastChange === 'Get') {
       const chNumber = this.CalculatorGroupForm.value.CalculatorGroupGet * rate;
