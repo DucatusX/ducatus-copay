@@ -1,7 +1,40 @@
-<ion-tabs #tabs>
-  <ion-tab [root]="homeRoot" tabIcon="tab-home"></ion-tab>
-  <ion-tab [root]="walletsRoot" tabIcon="tab-wallets"></ion-tab>
-  <ion-tab [root]="calculatorRoot" tabIcon="tab-calculator"></ion-tab>
-  <ion-tab (ionSelect)="openMoonPay()" tabIcon="tab-buy"></ion-tab>
-  <ion-tab [root]="settingsRoot" tabIcon="tab-settings"></ion-tab>
+<ion-tabs #tabs [ngClass]="{ 'child-tabs-opened': isWallets }">
+  <ion-tab
+    (ionSelect)="isWallets = false"
+    [root]="homeRoot"
+    tabIcon="tab-home"
+  ></ion-tab>
+  <ion-tab
+    (ionSelect)="openWalletsTab()"
+    [root]="walletsRoot"
+    tabIcon="tab-wallets"
+  ></ion-tab>
+  <ion-tab
+    (ionSelect)="isWallets = false"
+    [root]="settingsRoot"
+    tabIcon="tab-settings"
+  ></ion-tab>
+</ion-tabs>
+
+<ion-tabs
+  #childtabs
+  id="childTabs"
+  [ngClass]="{ 'child-tabs-closed': !isWallets, 'child-tabs-show': isWallets }"
+>
+  <ion-tab
+    [root]="walletsRoot"
+    tabTitle="Wallets"
+    tabIcon="tab-wallets"
+  ></ion-tab>
+  <ion-tab
+    [root]="calculatorRoot"
+    tabTitle="Swap"
+    tabIcon="tab-calculator"
+  ></ion-tab>
+  <ion-tab
+    (ionSelect)="openMoonPay()"
+    tabTitle="Buy"
+    tabIcon="tab-buy"
+  ></ion-tab>
+  <ion-tab [root]="voucherRoot" tabTitle="Voucher" tabIcon="person"></ion-tab>
 </ion-tabs>

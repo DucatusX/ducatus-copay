@@ -19,6 +19,7 @@ import { CalculatorPage } from '../calculator/calculator';
 import { CardsPage } from '../cards/cards';
 import { HomePage } from '../home/home';
 import { SettingsPage } from '../settings/settings';
+import { VoucherPage } from '../voucher/voucher';
 import { WalletsPage } from '../wallets/wallets';
 
 import * as _ from 'lodash';
@@ -29,8 +30,12 @@ import * as moment from 'moment';
 })
 export class TabsPage {
   appName: string;
+
   @ViewChild('tabs')
   tabs;
+
+  @ViewChild('childtabs')
+  childtabs;
 
   public txpsN: number;
   public cardNotificationBadgeText;
@@ -38,6 +43,8 @@ export class TabsPage {
   private totalBalanceAlternativeIsoCode = 'USD';
   private averagePrice = 0;
   private lastDayRatesArray;
+  public isWallets = true;
+  public childTabBarElement;
 
   constructor(
     private appProvider: AppProvider,
@@ -77,11 +84,17 @@ export class TabsPage {
   }
 
   ngOnInit() {
-    // this.tabProvider.prefetchCards().then(data => {
-    //   // [0] BitPay Cards
-    //   // [1] Gift Cards
-    //   this.events.publish('Local/FetchCards', data[0]);
-    // });
+    setTimeout(() => {
+      this.childTabBarElement = document.querySelector(
+        '#childTabs .tabbar.show-tabbar'
+      );
+      this.childTabBarElement.style.bottom = '60px';
+
+      this.childTabBarElement = document.querySelector(
+        '#childTabs .tabbar.show-tabbar a'
+      );
+      this.childTabBarElement.style.display = 'none';
+    }, 1000);
   }
 
   disableCardNotificationBadge() {
@@ -298,6 +311,7 @@ export class TabsPage {
   }
 
   ionViewDidLoad() {
+    this.childtabs.select(0);
     this.tabs.select(1);
   }
 
@@ -305,9 +319,15 @@ export class TabsPage {
     this.moonPayProvider.openMoonPay();
   }
 
+  public openWalletsTab() {
+    this.childtabs.select(0);
+    this.isWallets = true;
+  }
+
   homeRoot = HomePage;
   walletsRoot = WalletsPage;
   cardsRoot = CardsPage;
   settingsRoot = SettingsPage;
   calculatorRoot = CalculatorPage;
+  voucherRoot = VoucherPage;
 }

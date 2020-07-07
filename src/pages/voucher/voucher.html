@@ -1,0 +1,204 @@
+<ion-header class="bp-header">
+  <ion-navbar>
+    <ion-title>
+      <div
+        [reveal-at-scroll-pos]="expandableHeader.headerHeight"
+        [scrollArea]="scrollArea"
+      >
+        {{ 'Voucher' | translate }}
+      </div>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content #scrollArea>
+  <div class="wrapper">
+    <expandable-header
+      [scrollArea]="scrollArea"
+      [fadeFactor]="5"
+      [disableFade]="true"
+      #expandableHeader
+    >
+      <ion-toolbar class="wide-header__title">
+        <expandable-header-primary>
+          {{ 'Voucher' | translate }}
+        </expandable-header-primary>
+      </ion-toolbar>
+    </expandable-header>
+
+    <ion-list class="voucher-list">
+      <ion-item class="voucher-item">
+        <ion-label class="voucher-item-inner">
+          <div class="voucher-item-info">
+            <span class="voucher-item-title">270 DUC</span>
+            <span class="voucher-item-date">07.07.2020</span>
+          </div>
+          <div class="voucher-item-info">
+            <span ion-button class="voucher-item-button">WITHDRAW</span>
+          </div>
+        </ion-label>
+      </ion-item>
+
+      <ion-item class="voucher-item">
+        <ion-label class="voucher-item-inner">
+          <div class="voucher-item-info">
+            <span class="voucher-item-title">270 DUC</span>
+            <span class="voucher-item-date">07.07.2020</span>
+          </div>
+          <div class="voucher-item-info">
+            <span ion-button class="voucher-item-button">WITHDRAW</span>
+            <span class="voucher-item-text">Available in 2 days</span>
+          </div>
+        </ion-label>
+      </ion-item>
+
+      <ion-item class="voucher-item">
+        <ion-label class="voucher-item-inner">
+          <div class="voucher-item-info">
+            <span class="voucher-item-title">270 DUC</span>
+            <span class="voucher-item-date">07.07.2020</span>
+          </div>
+          <div class="voucher-item-info">
+            <span ion-button class="voucher-item-button">WITHDRAW</span>
+            <span class="voucher-item-text">Available in 2 days</span>
+          </div>
+        </ion-label>
+      </ion-item>
+
+      <ion-item class="voucher-item">
+        <ion-label class="voucher-item-inner">
+          <div class="voucher-item-info">
+            <span class="voucher-item-title">270 DUC</span>
+            <span class="voucher-item-date">07.07.2020</span>
+          </div>
+          <div class="voucher-item-info">
+            <span ion-button class="voucher-item-button">WITHDRAW</span>
+          </div>
+        </ion-label>
+      </ion-item>
+
+      <ion-item class="voucher-item">
+        <ion-label class="voucher-item-inner">
+          <div class="voucher-item-info">
+            <span class="voucher-item-title">270 DUC</span>
+            <span class="voucher-item-date">07.07.2020</span>
+          </div>
+          <div class="voucher-item-info">
+            <span ion-button class="voucher-item-button">WITHDRAW</span>
+            <span class="voucher-item-text">Available in 2 days</span>
+          </div>
+        </ion-label>
+      </ion-item>
+
+      <ion-item class="voucher-item">
+        <ion-label class="voucher-item-inner">
+          <div class="voucher-item-info">
+            <span class="voucher-item-title">270 DUC</span>
+            <span class="voucher-item-date">07.07.2020</span>
+          </div>
+          <div class="voucher-item-info">
+            <span ion-button class="voucher-item-button">WITHDRAW</span>
+            <span class="voucher-item-text">Available in 2 days</span>
+          </div>
+        </ion-label>
+      </ion-item>
+
+      <ion-item class="voucher-item">
+        <ion-label class="voucher-item-inner">
+          <div class="voucher-item-info">
+            <span class="voucher-item-title">270 DUC</span>
+            <span class="voucher-item-date">07.07.2020</span>
+          </div>
+          <div class="voucher-item-info">
+            <span ion-button class="voucher-item-button">WITHDRAW</span>
+            <span class="voucher-item-text">Available in 2 days</span>
+          </div>
+        </ion-label>
+      </ion-item>
+
+      <ion-item class="voucher-item">
+        <ion-label class="voucher-item-inner">
+          <div class="voucher-item-info">
+            <span class="voucher-item-title">270 DUC</span>
+            <span class="voucher-item-date">07.07.2020</span>
+          </div>
+          <div class="voucher-item-info">
+            <span ion-button class="voucher-item-button">WITHDRAW</span>
+            <span class="voucher-item-text">Available in 2 days</span>
+          </div>
+        </ion-label>
+      </ion-item>
+
+      <ion-item class="voucher-item">
+        <ion-label class="voucher-item-inner">
+          <div class="voucher-item-info">
+            <span class="voucher-item-title">270 DUC</span>
+            <span class="voucher-item-date">07.07.2020</span>
+          </div>
+          <div class="voucher-item-info">
+            <span ion-button class="voucher-item-button">WITHDRAW</span>
+            <span class="voucher-item-text">Available in 2 days</span>
+          </div>
+        </ion-label>
+      </ion-item>
+
+      <ion-item class="voucher-item">
+        <ion-label class="voucher-item-inner">
+          <div class="voucher-item-info">
+            <span class="voucher-item-title">270 DUC</span>
+            <span class="voucher-item-date">07.07.2020</span>
+          </div>
+          <div class="voucher-item-info">
+            <span ion-button class="voucher-item-button">WITHDRAW</span>
+            <span class="voucher-item-text">Available in 2 days</span>
+          </div>
+        </ion-label>
+      </ion-item>
+
+      <div class="voucher-add">
+        <span
+          ion-button
+          (click)="goToVoucehrAddPage()"
+          class="voucher-add-button icon icon__add"
+          >New Voucher</span
+        >
+      </div>
+
+      <!--
+        <div class="control-container" ion-fixed>
+          <button class="census-scan-button" (click)="openMoonPay()">
+            <span class="census-scan-button_icon">
+              <img src="assets/img/tangem/icons/buy-crypto.svg" />
+            </span>
+
+            <span class="census-scan-button_text" translate>Buy</span>
+          </button>
+          <button class="census-scan-button">
+            <span class="census-scan-button_icon">
+              <img src="assets/img/tangem/earn-icon.svg" />
+            </span>
+
+            <span class="census-scan-button_text" translate>Swap</span>
+          </button>
+          <button class="census-scan-button">
+            <span class="census-scan-button_icon">
+              <img src="assets/img/tangem/earn-icon.svg" />
+            </span>
+
+            <span class="census-scan-button_text" translate>Deposit</span>
+          </button>
+          <button
+            class="census-scan-button"
+            (click)="goToLink('https://www.census.cx/products/census-black-red-bitcoin-card')"
+          >
+            <span class="census-scan-button_icon">
+              <img src="assets/img/tangem/buy-card.svg" />
+            </span>
+
+            <span class="census-scan-button_text" translate>Voucher</span>
+          </button>
+        </div>
+      -->
+    </ion-list>
+  </div>
+</ion-content>

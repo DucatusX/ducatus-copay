@@ -10,7 +10,6 @@ import { BackupGamePage } from '../pages/backup/backup-game/backup-game';
 import { BackupKeyPage } from '../pages/backup/backup-key/backup-key';
 import { CalculatorPage } from '../pages/calculator/calculator';
 import { CalculatorConvertPage } from '../pages/calculator/calculator-convert/calculator-convert';
-import { CalculatorSendPage } from '../pages/calculator/calculator-send/calculator-send';
 import { SendFeedbackPage } from '../pages/feedback/send-feedback/send-feedback';
 import { FinishModalPage } from '../pages/finish/finish';
 import { IntegrationsPage } from '../pages/integrations/integrations';
@@ -23,6 +22,8 @@ import { SlideToAcceptPage } from '../pages/slide-to-accept/slide-to-accept';
 import { TabsPage } from '../pages/tabs/tabs';
 import { TxDetailsModal } from '../pages/tx-details/tx-details';
 import { TxpDetailsPage } from '../pages/txp-details/txp-details';
+import { VoucherAddPage } from '../pages/voucher/add/add';
+import { VoucherPage } from '../pages/voucher/voucher';
 import { SearchTxModalPage } from '../pages/wallet-details/search-tx-modal/search-tx-modal';
 import { WalletBalanceModal } from '../pages/wallet-details/wallet-balance/wallet-balance';
 import { WalletDetailsPage } from '../pages/wallet-details/wallet-details';
@@ -140,7 +141,7 @@ import { WideHeaderPage } from './templates/wide-header-page/wide-header-page';
 import { CardCatalogPage } from './integrations/gift-cards/card-catalog/card-catalog';
 import { GIFT_CARD_PAGES } from './integrations/gift-cards/gift-cards';
 
-import { Erc721Page } from './erc-721/erc-721'
+import { Erc721Page } from './erc-721/erc-721';
 
 export const PAGES = [
   AddPage,
@@ -178,7 +179,6 @@ export const PAGES = [
   BackupKeyPage,
   CalculatorPage,
   CalculatorConvertPage,
-  CalculatorSendPage,
   ConfirmPage,
   MultiSendPage,
   TransferToModalPage,
@@ -247,6 +247,8 @@ export const PAGES = [
   WalletMnemonicRecoverPage,
   WalletBalanceModal,
   WideHeaderPage,
+  VoucherPage,
+  VoucherAddPage,
   CardItemPage,
   CoinSelectorPage,
   SlideToAcceptPage,
