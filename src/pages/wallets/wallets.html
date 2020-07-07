@@ -256,17 +256,56 @@
     <div *ngIf="isCordova && wallets && wallets[0]" class="margin-helper"></div>
   </div>
 
-  <!--
-    <div class="tabs tabs-icon-top">
-      <a class="tab-item tab-item-active" href="#/tab/home"
-        ><i class="icon ion-grid"></i>Dashboard</a
+  <div class="control-container" ion-fixed>
+    <div class="scan-buttons">
+      <button
+        *ngIf="wallets && wallets[0]"
+        ion-button
+        ion-fixed
+        class="scan-button"
+        (click)="scan()"
       >
-      <a class="tab-item" href="#/tab/facts"
-        ><i class="icon ion-beaker"></i>Facts</a
-      >
-      <a class="tab-item" href="#/tab/facts2"
-        ><i class="icon ion-funnel"></i>More Facts</a
-      >
+        <ion-avatar item-start> <img src="assets/img/scan.svg" /> </ion-avatar>
+        <div translate>Scan</div>
+      </button>
     </div>
-  -->
+    <div class="ducatus-scan-buttons" *ngIf="wallets && wallets[0]">
+      <button class="ducatus-scan-button" (click)="openMoonPay()">
+        <span class="ducatus-scan-button_icon">
+          <img src="assets/img/tab-icons/tab-buy.svg" />
+        </span>
+        <span class="ducatus-scan-button_icon_active">
+          <img src="assets/img/tab-icons/tab-buy-active.svg" />
+        </span>
+        <span class="ducatus-scan-button_text" translate>Buy</span>
+      </button>
+      <button class="ducatus-scan-button" (click)="openSwap()">
+        <span class="ducatus-scan-button_icon">
+          <img src="assets/img/tab-icons/tab-swap.svg" />
+        </span>
+        <span class="ducatus-scan-button_icon_active">
+          <img src="assets/img/tab-icons/tab-swap-active.svg" />
+        </span>
+        <span class="ducatus-scan-button_text" translate>Swap</span>
+      </button>
+      <button class="ducatus-scan-button">
+        <span class="ducatus-scan-button_icon">
+          <img src="assets/img/tab-icons/tab-deposits.svg" />
+        </span>
+        <span class="ducatus-scan-button_icon_active">
+          <img src="assets/img/tab-icons/tab-deposits-active.svg" />
+        </span>
+        <span class="ducatus-scan-button_text" translate>Deposits</span>
+      </button>
+      <button class="ducatus-scan-button" (click)="openVoucher()">
+        <span class="ducatus-scan-button_icon">
+          <img src="assets/img/tab-icons/tab-voucher.svg" />
+        </span>
+        <span class="ducatus-scan-button_icon_active">
+          <img src="assets/img/tab-icons/tab-voucher-active.svg" />
+        </span>
+        <span class="ducatus-scan-button_text" translate>Voucher</span>
+      </button>
+    </div>
+  </div>
 </ion-content>

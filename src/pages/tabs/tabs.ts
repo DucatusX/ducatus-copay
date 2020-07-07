@@ -19,7 +19,6 @@ import { CalculatorPage } from '../calculator/calculator';
 import { CardsPage } from '../cards/cards';
 import { HomePage } from '../home/home';
 import { SettingsPage } from '../settings/settings';
-import { VoucherPage } from '../voucher/voucher';
 import { WalletsPage } from '../wallets/wallets';
 
 import * as _ from 'lodash';
@@ -33,9 +32,6 @@ export class TabsPage {
 
   @ViewChild('tabs')
   tabs;
-
-  @ViewChild('childtabs')
-  childtabs;
 
   public txpsN: number;
   public cardNotificationBadgeText;
@@ -81,20 +77,6 @@ export class TabsPage {
           });
       }
     });
-  }
-
-  ngOnInit() {
-    setTimeout(() => {
-      this.childTabBarElement = document.querySelector(
-        '#childTabs .tabbar.show-tabbar'
-      );
-      this.childTabBarElement.style.bottom = '60px';
-
-      this.childTabBarElement = document.querySelector(
-        '#childTabs .tabbar.show-tabbar a'
-      );
-      this.childTabBarElement.style.display = 'none';
-    }, 1000);
   }
 
   disableCardNotificationBadge() {
@@ -311,7 +293,6 @@ export class TabsPage {
   }
 
   ionViewDidLoad() {
-    this.childtabs.select(0);
     this.tabs.select(1);
   }
 
@@ -319,15 +300,9 @@ export class TabsPage {
     this.moonPayProvider.openMoonPay();
   }
 
-  public openWalletsTab() {
-    this.childtabs.select(0);
-    this.isWallets = true;
-  }
-
   homeRoot = HomePage;
   walletsRoot = WalletsPage;
   cardsRoot = CardsPage;
   settingsRoot = SettingsPage;
   calculatorRoot = CalculatorPage;
-  voucherRoot = VoucherPage;
 }

@@ -14,6 +14,7 @@ import { Observable, Subscription } from 'rxjs';
 import { AddPage } from '../add/add';
 import { CopayersPage } from '../add/copayers/copayers';
 import { BackupKeyPage } from '../backup/backup-key/backup-key';
+import { CalculatorPage } from '../calculator/calculator';
 import { CoinbasePage } from '../integrations/coinbase/coinbase';
 import { CoinbaseAccountPage } from '../integrations/coinbase/coinbase-account/coinbase-account';
 import { ShapeshiftPage } from '../integrations/shapeshift/shapeshift';
@@ -22,6 +23,7 @@ import { SimplexBuyPage } from '../integrations/simplex/simplex-buy/simplex-buy'
 import { ScanPage } from '../scan/scan';
 import { SettingsPage } from '../settings/settings';
 import { WalletDetailsPage } from '../wallet-details/wallet-details';
+import { VoucherPage } from './../voucher/voucher';
 import { ProposalsNotificationsPage } from './proposals-notifications/proposals-notifications';
 
 // Providers
@@ -715,4 +717,14 @@ export class WalletsPage {
   public goToCoinbase(): void {
     this.navCtrl.push(CoinbasePage);
   }
+
+  public openSwap() {
+    this.navCtrl.push(CalculatorPage);
+  }
+
+  public openVoucher() {
+    this.navCtrl.push(VoucherPage);
+  }
+
+  voucherRoot = VoucherPage;
 }

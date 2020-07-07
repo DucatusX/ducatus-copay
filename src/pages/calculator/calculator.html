@@ -1,35 +1,48 @@
 <wide-header-page>
   <div page-content class="calculator-page">
-
     <ion-list class="calculator-list bp-list">
-
       <div class="calculator-explanation">
         <div class="calculator-heading" translate>Calculator</div>
       </div>
 
       <form [formGroup]="CalculatorGroupForm">
-
         <div class="calculator-form-group">
-
           <ion-item class="calculator-input">
             <ion-label stacked>{{'Send' | translate}}</ion-label>
-            <ion-input [disabled]="!rates" type="number" formControlName="CalculatorGroupSend"
-              [value]="CalculatorGroupForm.value.CalculatorGroupSend" (click)="selectInputType('Send')"
-              (ionChange)="changeAmount('Send')" required>
+            <ion-input
+              [disabled]="!rates"
+              type="number"
+              formControlName="CalculatorGroupSend"
+              [value]="CalculatorGroupForm.value.CalculatorGroupSend"
+              (click)="selectInputType('Send')"
+              (ionChange)="changeAmount('Send')"
+              required
+            >
             </ion-input>
           </ion-item>
 
-          <ion-item class="calculator-select calculator-loading-select" *ngIf="!rates">
+          <ion-item
+            class="calculator-select calculator-loading-select"
+            *ngIf="!rates"
+          >
             <ion-spinner name="dots"></ion-spinner>
           </ion-item>
 
           <ion-item class="calculator-select" *ngIf="rates">
-            <ion-select class="calculator-select-ion" interface="popover" formControlName="CalculatorGroupSendCoin"
-              [(ngModel)]="CalculatorGroupForm.value.CalculatorGroupSendCoin" (ionChange)="changeCoin('Send')">
-              <ion-option *ngFor="let item of formCoins.get.items" [value]="item">{{ item }}</ion-option>
+            <ion-select
+              class="calculator-select-ion"
+              interface="popover"
+              formControlName="CalculatorGroupSendCoin"
+              [(ngModel)]="CalculatorGroupForm.value.CalculatorGroupSendCoin"
+              (ionChange)="changeCoin('Send')"
+            >
+              <ion-option
+                *ngFor="let item of formCoins.get.items"
+                [value]="item"
+                >{{ item }}</ion-option
+              >
             </ion-select>
           </ion-item>
-
         </div>
 
         <ion-item class="calculator-text" *ngIf="!rates">
@@ -37,41 +50,102 @@
         </ion-item>
 
         <ion-item class="calculator-text" *ngIf="rates">
-          <ion-label stacked>1 {{ coin_info[formCoins.get.name] }} =
-            {{ rates[formCoins.get.name][formCoins.send] }}
-            {{ coin_info[formCoins.send] }}</ion-label>
+          <ion-label stacked
+            >1 {{ coin_info[formCoins.get.name] }} = {{
+            rates[formCoins.get.name][formCoins.send] }} {{
+            coin_info[formCoins.send] }}</ion-label
+          >
         </ion-item>
 
         <div class="calculator-form-group">
-
           <ion-item class="calculator-input">
             <ion-label stacked>{{'Get' | translate}}</ion-label>
-            <ion-input [disabled]="!rates" type="number" formControlName="CalculatorGroupGet"
-              [value]="CalculatorGroupForm.value.CalculatorGroupGet" (click)="selectInputType('Get')"
-              (ionChange)="changeAmount('Get')" required>
+            <ion-input
+              [disabled]="!rates"
+              type="number"
+              formControlName="CalculatorGroupGet"
+              [value]="CalculatorGroupForm.value.CalculatorGroupGet"
+              (click)="selectInputType('Get')"
+              (ionChange)="changeAmount('Get')"
+              required
+            >
             </ion-input>
           </ion-item>
 
-          <ion-item class="calculator-select calculator-loading-select" *ngIf="!rates">
+          <ion-item
+            class="calculator-select calculator-loading-select"
+            *ngIf="!rates"
+          >
             <ion-spinner name="dots"></ion-spinner>
           </ion-item>
 
           <ion-item class="calculator-select" *ngIf="rates">
-            <ion-select class="calculator-select-ion" interface="popover" formControlName="CalculatorGroupGetCoin"
-              [(ngModel)]="CalculatorGroupForm.value.CalculatorGroupGetCoin" (ionChange)="changeCoin('Get')">
-              <ion-option *ngFor="let item of convertGetCoins" [value]="item"> {{ item }}</ion-option>
+            <ion-select
+              class="calculator-select-ion"
+              interface="popover"
+              formControlName="CalculatorGroupGetCoin"
+              [(ngModel)]="CalculatorGroupForm.value.CalculatorGroupGetCoin"
+              (ionChange)="changeCoin('Get')"
+            >
+              <ion-option *ngFor="let item of convertGetCoins" [value]="item">
+                {{ item }}</ion-option
+              >
             </ion-select>
           </ion-item>
-
         </div>
 
-        <button ion-button class="button-standard calculator-button" (click)="goToConvertPage()"
-          [disabled]="!CalculatorGroupForm.valid && !rates">
+        <button
+          ion-button
+          class="button-standard calculator-button"
+          (click)="goToConvertPage()"
+          [disabled]="!CalculatorGroupForm.valid && !rates"
+        >
           {{'Convert' | translate}}
         </button>
       </form>
-
     </ion-list>
-
   </div>
+
+  <!--
+    <div class="control-container" ion-fixed>
+      <div class="ducatus-scan-buttons">
+        <button class="ducatus-scan-button" (click)="openMoonPay()">
+          <span class="ducatus-scan-button_icon">
+            <img src="assets/img/tab-icons/tab-buy.svg" />
+          </span>
+          <span class="ducatus-scan-button_icon_active">
+            <img src="assets/img/tab-icons/tab-buy-active.svg" />
+          </span>
+          <span class="ducatus-scan-button_text" translate>Buy</span>
+        </button>
+        <button class="ducatus-scan-button activated">
+          <span class="ducatus-scan-button_icon">
+            <img src="assets/img/tab-icons/tab-swap.svg" />
+          </span>
+          <span class="ducatus-scan-button_icon_active">
+            <img src="assets/img/tab-icons/tab-swap-active.svg" />
+          </span>
+          <span class="ducatus-scan-button_text" translate>Swap</span>
+        </button>
+        <button class="ducatus-scan-button">
+          <span class="ducatus-scan-button_icon">
+            <img src="assets/img/tab-icons/tab-deposits.svg" />
+          </span>
+          <span class="ducatus-scan-button_icon_active">
+            <img src="assets/img/tab-icons/tab-deposits-active.svg" />
+          </span>
+          <span class="ducatus-scan-button_text" translate>Deposits</span>
+        </button>
+        <button class="ducatus-scan-button" (click)="openVoucher()">
+          <span class="ducatus-scan-button_icon">
+            <img src="assets/img/tab-icons/tab-voucher.svg" />
+          </span>
+          <span class="ducatus-scan-button_icon_active">
+            <img src="assets/img/tab-icons/tab-voucher-active.svg" />
+          </span>
+          <span class="ducatus-scan-button_text" translate>Voucher</span>
+        </button>
+      </div>
+    </div>
+  -->
 </wide-header-page>
