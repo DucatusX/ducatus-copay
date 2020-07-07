@@ -27,14 +27,15 @@
     tabIcon="tab-wallets"
   ></ion-tab>
   <ion-tab
-    [root]="calculatorRoot"
-    tabTitle="Swap"
-    tabIcon="tab-calculator"
-  ></ion-tab>
-  <ion-tab
     (ionSelect)="openMoonPay()"
     tabTitle="Buy"
     tabIcon="tab-buy"
   ></ion-tab>
-  <ion-tab [root]="voucherRoot" tabTitle="Voucher" tabIcon="person"></ion-tab>
+  <ion-tab [root]="calculatorRoot" tabTitle="Swap" tabIcon="tab-swap"></ion-tab>
+  <ion-tab tabTitle="Deposits" tabIcon="tab-deposits"></ion-tab>
+  <ion-tab
+    [root]="voucherRoot"
+    tabTitle="Voucher"
+    tabIcon="tab-voucher"
+  ></ion-tab>
 </ion-tabs>
