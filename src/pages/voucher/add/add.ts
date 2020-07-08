@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController } from 'ionic-angular';
 import _ from 'lodash';
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
-import { Logger } from '../../../providers/logger/logger';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
 
@@ -19,31 +18,9 @@ export class VoucherAddPage {
   public walletsGroups: any[];
   public walletAddresses: any;
   public sendLength: number = 0;
-
-  private modalAnswers = {
-    ok: {
-      title:
-        '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
-      text:
-        'Your $5 voucher successfully activated <br> You will get 100 Ducatus in 15 minutes',
-      button: 'OK'
-    },
-    error: {
-      title:
-        '<img src="./assets/img/icon-attantion.svg" width="42px" height="42px">',
-      text: 'Please check your activation code',
-      button: 'OK'
-    },
-    registated: {
-      title:
-        '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
-      text: 'Your voucher was already registered',
-      button: 'OK'
-    }
-  };
+  public voucherLoading = false;
 
   constructor(
-    private logger: Logger,
     private formBuilder: FormBuilder,
     private profileProvider: ProfileProvider,
     private walletProvider: WalletProvider,
@@ -115,22 +92,61 @@ export class VoucherAddPage {
   }
 
   public openAddressList() {
-    const infoSheet = this.actionSheetProvider.createInfoSheet(
-      'convertor-address',
-      { wallet: this.walletAddresses }
-    );
-    infoSheet.present();
-    infoSheet.onDidDismiss(option => {
-      if (option) {
-        this.VoucherGroup.value.VoucherGroupAddress = option;
-      }
-    });
+    if (!this.voucherLoading) {
+      const infoSheet = this.actionSheetProvider.createInfoSheet(
+        'convertor-address',
+        { wallet: this.walletAddresses }
+      );
+      infoSheet.present();
+      infoSheet.onDidDismiss(option => {
+        if (option) {
+          this.VoucherGroup.value.VoucherGroupAddress = option;
+        }
+      });
+    }
   }
 
-  private showModal(type: string) {
-    const answers = this.modalAnswers[type]
-      ? this.modalAnswers[type]
-      : this.modalAnswers['error'];
+  private showModal(type: string, opt?) {
+    const options = {
+      usd: opt ? opt.usd : '5',
+      duc: opt ? opt.duc : '100',
+      min: opt ? opt.min : '15'
+    };
+
+    const modalAnswers = {
+      ok: {
+        title:
+          '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
+        text: `Your ${
+          options.usd
+        }$ voucher successfully activated <br> You will get ${
+          options.duc
+        } Ducatus in ${options.min} minutes`,
+        button: 'OK'
+      },
+      error: {
+        title:
+          '<img src="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+        text: 'Please check your activation code',
+        button: 'OK'
+      },
+      registated: {
+        title:
+          '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+        text: 'Your voucher was already registered',
+        button: 'OK'
+      },
+      network: {
+        title:
+          '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+        text: 'Something went wrong, try again',
+        button: 'OK'
+      }
+    };
+
+    const answers = modalAnswers[type]
+      ? modalAnswers[type]
+      : modalAnswers['error'];
 
     let alert = this.alertCtrl.create({
       cssClass: 'voucher-alert',
@@ -140,7 +156,11 @@ export class VoucherAddPage {
         {
           text: answers.button,
           handler: () => {
-            this.logger.debug('modal click ok');
+            this.voucherLoading = false;
+            if (type != 'network') {
+              this.VoucherGroup.value.VoucherGroupAddress = '';
+              this.VoucherGroup.value.VoucherGroupCode = '';
+            }
           }
         }
       ]
@@ -150,7 +170,7 @@ export class VoucherAddPage {
 
   private sendCode(address: string, code: string) {
     return this.httpClient
-      .post('http://ducsite.rocknblock.io/api/v3/' + 'transfer/', {
+      .post('https://www.ducatuscoins.com/api/v3/' + 'transfer/', {
         duc_address: address,
         activation_code: code
       })
@@ -158,16 +178,38 @@ export class VoucherAddPage {
   }
 
   public activateVoucher() {
+    this.voucherLoading = true;
+
     this.sendCode(
       this.VoucherGroup.value.VoucherGroupAddress,
       this.VoucherGroup.value.VoucherGroupCode
     )
       .then(res => {
-        console.log(res);
-        this.showModal('ok');
+        const result: any = res;
+
+        this.showModal('ok', {
+          usd: result.usd_amount,
+          duc: result.duc_amount,
+          min: '15'
+        });
       })
       .catch(err => {
-        console.log(err);
+        switch (err.status) {
+          case 403:
+            if (
+              [
+                'This voucher is not active',
+                'Invalid activation code'
+              ].includes(err.error.detail)
+            )
+              this.showModal('error');
+            if (err.error.detail == 'This voucher already used')
+              this.showModal('registated');
+            break;
+          default:
+            this.showModal('network');
+            break;
+        }
       });
   }
 }

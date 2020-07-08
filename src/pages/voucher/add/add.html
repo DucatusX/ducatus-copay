@@ -37,6 +37,7 @@
                 type="text"
                 formControlName="VoucherGroupCode"
                 [value]="VoucherGroup.value.VoucherGroupCode"
+                [disabled]="voucherLoading"
                 required
               >
               </ion-input>
@@ -56,6 +57,7 @@
                 type="text"
                 formControlName="VoucherGroupAddress"
                 [value]="VoucherGroup.value.VoucherGroupAddress"
+                [disabled]="voucherLoading"
                 required
               >
               </ion-input>
@@ -75,9 +77,10 @@
           ion-button
           class="button-standard voucher-item-button voucher-add-page-button"
           (click)="activateVoucher()"
-          [disabled]="!VoucherGroup.valid"
+          [disabled]="!VoucherGroup.valid || voucherLoading"
         >
-          {{'Activate' | translate}}
+          <span *ngIf="!voucherLoading">{{'Activate' | translate}}</span>
+          <ion-spinner *ngIf="voucherLoading" name="bubbles"></ion-spinner>
         </button>
       </form>
     </ion-list>
