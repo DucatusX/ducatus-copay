@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController } from 'ionic-angular';
@@ -6,7 +7,6 @@ import { ActionSheetProvider } from '../../../providers/action-sheet/action-shee
 import { Logger } from '../../../providers/logger/logger';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
-// import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'page-voucher',
@@ -20,13 +20,36 @@ export class VoucherAddPage {
   public walletAddresses: any;
   public sendLength: number = 0;
 
+  private modalAnswers = {
+    ok: {
+      title:
+        '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
+      text:
+        'Your $5 voucher successfully activated <br> You will get 100 Ducatus in 15 minutes',
+      button: 'OK'
+    },
+    error: {
+      title:
+        '<img src="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+      text: 'Please check your activation code',
+      button: 'OK'
+    },
+    registated: {
+      title:
+        '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+      text: 'Your voucher was already registered',
+      button: 'OK'
+    }
+  };
+
   constructor(
     private logger: Logger,
     private formBuilder: FormBuilder,
     private profileProvider: ProfileProvider,
     private walletProvider: WalletProvider,
     private actionSheetProvider: ActionSheetProvider,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private httpClient: HttpClient
   ) {
     this.VoucherGroup = this.formBuilder.group({
       VoucherGroupCode: [
@@ -104,35 +127,18 @@ export class VoucherAddPage {
     });
   }
 
-  public activateVoucher() {
-    const answers = {
-      ok: {
-        title:
-          '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
-        text: 'Please check your activation code',
-        button: 'OK'
-      },
-      error: {
-        title:
-          '<img src="./assets/img/icon-attantion.svg" width="42px" height="42px">',
-        text: 'Please check your activation code',
-        button: 'OK'
-      },
-      registated: {
-        title:
-          '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
-        text: 'Your voucher was already registered',
-        button: 'OK'
-      }
-    };
+  private showModal(type: string) {
+    const answers = this.modalAnswers[type]
+      ? this.modalAnswers[type]
+      : this.modalAnswers['error'];
 
     let alert = this.alertCtrl.create({
       cssClass: 'voucher-alert',
-      title: answers['ok'].title,
-      message: answers['ok'].text,
+      title: answers.title,
+      message: answers.text,
       buttons: [
         {
-          text: answers['ok'].button,
+          text: answers.button,
           handler: () => {
             this.logger.debug('modal click ok');
           }
@@ -140,5 +146,28 @@ export class VoucherAddPage {
       ]
     });
     alert.present();
+  }
+
+  private sendCode(address: string, code: string) {
+    return this.httpClient
+      .post('http://ducsite.rocknblock.io/api/v3/' + 'transfer/', {
+        duc_address: address,
+        activation_code: code
+      })
+      .toPromise();
+  }
+
+  public activateVoucher() {
+    this.sendCode(
+      this.VoucherGroup.value.VoucherGroupAddress,
+      this.VoucherGroup.value.VoucherGroupCode
+    )
+      .then(res => {
+        console.log(res);
+        this.showModal('ok');
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 }
