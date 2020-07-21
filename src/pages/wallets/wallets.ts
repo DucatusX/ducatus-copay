@@ -22,7 +22,7 @@ import { SimplexPage } from '../integrations/simplex/simplex';
 import { SimplexBuyPage } from '../integrations/simplex/simplex-buy/simplex-buy';
 import { ScanPage } from '../scan/scan';
 import { SettingsPage } from '../settings/settings';
-import { VoucherAddPage } from '../voucher/add/add';
+import { VoucherPage } from '../voucher/voucher';
 import { WalletDetailsPage } from '../wallet-details/wallet-details';
 import { ProposalsNotificationsPage } from './proposals-notifications/proposals-notifications';
 
@@ -723,6 +723,6 @@ export class WalletsPage {
   }
 
   public openVoucher() {
-    this.navCtrl.push(VoucherAddPage);
+    this.navCtrl.push(VoucherPage);
   }
 }

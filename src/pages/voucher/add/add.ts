@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
+import { BwcProvider } from '../../../providers/bwc/bwc';
 
 @Component({
   selector: 'page-voucher',
@@ -26,7 +27,8 @@ export class VoucherAddPage {
     private walletProvider: WalletProvider,
     private actionSheetProvider: ActionSheetProvider,
     private alertCtrl: AlertController,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private bwcProvider: BwcProvider
   ) {
     this.VoucherGroup = this.formBuilder.group({
       VoucherGroupCode: [
@@ -60,6 +62,8 @@ export class VoucherAddPage {
     let wallets = [];
     let walletsRes = [];
 
+    console.log(this.walletsGroups);
+
     this.walletsGroups.forEach(keyID => {
       coins = _.concat(
         coins,
@@ -69,7 +73,12 @@ export class VoucherAddPage {
 
     wallets = coins.map(wallet => {
       return this.walletProvider.getAddress(wallet, false).then(address => {
-        return { wallet, address };
+        return {
+          keyId: wallet.keyId,
+          requestPubKey: wallet.credentials.requestPubKey,
+          wallet,
+          address
+        };
       });
     });
 
@@ -86,9 +95,9 @@ export class VoucherAddPage {
           this.VoucherGroup.value.VoucherGroupAddress = result.address;
         });
       });
-    } else {
-      this.walletAddresses = walletsRes;
     }
+
+    this.walletAddresses = walletsRes;
   }
 
   public openAddressList() {
@@ -106,7 +115,7 @@ export class VoucherAddPage {
     }
   }
 
-  private showModal(type: string, opt?) {
+  private showModal(type: string, opt?: any) {
     const options = {
       usd: opt ? opt.usd : '5',
       duc: opt ? opt.duc : '100',
@@ -117,11 +126,7 @@ export class VoucherAddPage {
       ok: {
         title:
           '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
-        text: `Your ${
-          options.usd
-        }$ voucher successfully activated <br> You will get ${
-          options.duc
-        } Ducatus in ${options.min} minutes`,
+        text: `Your ${options.usd}$ voucher successfully activated`,
         button: 'OK'
       },
       error: {
@@ -168,20 +173,43 @@ export class VoucherAddPage {
     alert.present();
   }
 
-  private sendCode(address: string, code: string) {
-    return this.httpClient
-      .post('https://www.ducatuscoins.com/api/v3/' + 'transfer/', {
-        duc_address: address,
-        activation_code: code
-      })
-      .toPromise();
+  private sendCode(
+    wallet_id: string,
+    duc_address: string,
+    duc_public_key: string,
+    activation_code: string
+  ) {
+    return (
+      this.httpClient
+        // .post('https://www.ducatuscoins.com/api/v3/' + 'transfer/', {
+        .post('http://ducsite.rocknblock.io/api/v3/' + 'transfer/', {
+          wallet_id,
+          duc_address,
+          duc_public_key,
+          activation_code
+        })
+        .toPromise()
+    );
   }
 
   public activateVoucher() {
     this.voucherLoading = true;
+    this.walletAddresses;
+
+    const walletToSend = this.walletAddresses.find(
+      t => t.address === this.VoucherGroup.value.VoucherGroupAddress
+    );
+
+    const info = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(
+      walletToSend.wallet.credentials.xPubKey
+    );
+
+    const pubKey = Buffer.from(info._buffers.publicKey).toString('hex');
 
     this.sendCode(
+      walletToSend.keyId,
       this.VoucherGroup.value.VoucherGroupAddress,
+      pubKey,
       this.VoucherGroup.value.VoucherGroupCode
     )
       .then(res => {

@@ -14,9 +14,8 @@ import { VoucherAddPage } from './add/add';
 })
 export class VoucherPage {
   constructor(
-    private navCtrl: NavController
-  ) // private moonPayProvider: MoonPayProvider // private logger: Logger, // private httpClient: HttpClient
-  {}
+    private navCtrl: NavController // private moonPayProvider: MoonPayProvider // private logger: Logger, // private httpClient: HttpClient
+  ) {}
 
   ionViewWillEnter() {}
 
