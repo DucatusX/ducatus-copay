@@ -4,9 +4,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController } from 'ionic-angular';
 import _ from 'lodash';
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
+import { BwcProvider } from '../../../providers/bwc/bwc';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
-import { BwcProvider } from '../../../providers/bwc/bwc';
+import { VOUCHER_URL_REQUEST } from '../params';
 
 @Component({
   selector: 'page-voucher',
@@ -61,8 +62,6 @@ export class VoucherAddPage {
     let coins = [];
     let wallets = [];
     let walletsRes = [];
-
-    console.log(this.walletsGroups);
 
     this.walletsGroups.forEach(keyID => {
       coins = _.concat(
@@ -179,17 +178,14 @@ export class VoucherAddPage {
     duc_public_key: string,
     activation_code: string
   ) {
-    return (
-      this.httpClient
-        // .post('https://www.ducatuscoins.com/api/v3/' + 'transfer/', {
-        .post('http://ducsite.rocknblock.io/api/v3/' + 'transfer/', {
-          wallet_id,
-          duc_address,
-          duc_public_key,
-          activation_code
-        })
-        .toPromise()
-    );
+    return this.httpClient
+      .post(`${VOUCHER_URL_REQUEST}/transfer/`, {
+        wallet_id,
+        duc_address,
+        duc_public_key,
+        activation_code
+      })
+      .toPromise();
   }
 
   public activateVoucher() {
