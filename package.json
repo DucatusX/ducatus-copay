@@ -2,7 +2,7 @@
   "name": "walnew",
   "description": "A Secure DucatusCoin Wallet",
   "author": "BitPay",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "keywords": [
     "ducatus",
     "bitcoin",
@@ -141,7 +141,7 @@
     "cordova-plugin-dialogs": "^2.0.2",
     "cordova-plugin-fcm-ng": "^5.1.1",
     "cordova-plugin-file": "^6.0.2",
-    "cordova-plugin-file-opener2": "3.0.2",
+    "cordova-plugin-file-opener2": "^3.0.2",
     "cordova-plugin-globalization": "^1.11.0",
     "cordova-plugin-inappbrowser-withcamera": "^1.0.6",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
