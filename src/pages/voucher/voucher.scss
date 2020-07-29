@@ -28,7 +28,7 @@
     &-info {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: baseline;
 
       &:nth-child(2) {
         align-items: flex-end;

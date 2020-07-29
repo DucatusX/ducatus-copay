@@ -31,17 +31,17 @@
         <ion-item class="voucher-item" *ngFor="let item of vouchers">
           <ion-label class="voucher-item-inner">
             <div class="voucher-item-info">
-              <span class="voucher-item-title">270 DUC</span>
+              <span class="voucher-item-title">{{ item.duc_amount }} DUC</span>
               <span class="voucher-item-date"
-                >{{ item.freez_date | date:'dd.LL.y' }}</span
+                >{{ item.cltv_details.frozen_at | date:'dd.LL.y' }}</span
               >
             </div>
             <div
               class="voucher-item-info"
-              [ngClass]="{'voucher-item-info-unactive': item.withdraw }"
+              [ngClass]="{'voucher-item-info-unactive': item.cltv_details.withdrawn }"
             >
               <div
-                *ngIf="!item.withdraw"
+                *ngIf="!item.cltv_details.withdrawn"
                 class="voucher-item-info-unactive-button"
               >
                 <img
@@ -50,16 +50,21 @@
                   height="18px"
                 />
                 <span
-                  *ngIf="!item.withdraw"
+                  *ngIf="!item.cltv_details.withdrawn"
                   ion-button
                   class="voucher-item-button"
                   >WITHDRAW</span
                 >
               </div>
-              <span *ngIf="!item.withdraw" class="voucher-item-text"
+              <span
+                *ngIf="!item.cltv_details.withdrawn"
+                class="voucher-item-text"
                 >Available in {{ item.freez_date_count }} days</span
               >
-              <span *ngIf="item.withdraw" ion-button class="voucher-item-button"
+              <span
+                *ngIf="item.cltv_details.withdrawn"
+                ion-button
+                class="voucher-item-button"
                 >WITHDRAW</span
               >
             </div>
@@ -75,6 +80,15 @@
           (click)="goToVoucehrAddPage()"
           class="voucher-add-button icon icon__add"
           >New Voucher</span
+        >
+      </div>
+
+      <div class="voucher-add">
+        <span
+          ion-button
+          (click)="withdrowTrigger(3)"
+          class="voucher-add-button icon icon__add"
+          >test</span
         >
       </div>
     </ion-list>
