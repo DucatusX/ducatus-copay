@@ -40,9 +40,9 @@ export function makeFreeze(wifPrivateKey, options) {
     hashType
   );
 
-  const keyPairAlice0 = bitcoin.ECPair.fromWIF(wifPrivateKey, network);
+  // const keyPairAlice0 = bitcoin.ECPair.fromWIF(wifPrivateKey, network);
 
-  console.log(keyPairAlice0);
+  // console.log(keyPairAlice0);
 
   const inputScriptFirstBranch = bitcoin.payments.p2sh({
     redeem: {
