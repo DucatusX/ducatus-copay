@@ -6,14 +6,21 @@ import { VoucherAddPage } from './add/add';
 
 import _ from 'lodash';
 
-import { Logger, ProfileProvider, WalletProvider } from '../../providers';
+import {
+  IncomingDataProvider,
+  KeyProvider,
+  Logger,
+  ProfileProvider,
+  WalletProvider
+} from '../../providers';
 import { VOUCHER_URL_REQUEST } from './params';
 
-// const bip65 = require('bip65');
-// const bitcoin = require('bitcoinjs-lib');
-const freeze = require('./freeze.js');
-
+// ************** freeze lib **************
 // import * as bitcoin from 'bitcoinjs-lib';
+// import * as bip65 from 'bip65';
+
+// ************** freeze script **************
+import * as freeze from './freeze.js';
 
 @Component({
   selector: 'page-voucher',
@@ -34,7 +41,9 @@ export class VoucherPage {
     private profileProvider: ProfileProvider,
     private walletProvider: WalletProvider,
     private httpClient: HttpClient,
-    private bwcProvider: BwcProvider
+    private incomingDataProvider: IncomingDataProvider,
+    private bwcProvider: BwcProvider,
+    private keyProvider: KeyProvider
   ) {}
 
   ionViewWillEnter() {
@@ -56,9 +65,6 @@ export class VoucherPage {
         if (!walletsResult.includes(res.keyId)) walletsResult.push(res.keyId);
       });
 
-      console.log('wallets', wallets);
-      console.log('walletsResult', walletsResult);
-
       this.httpClient
         .get(
           `${VOUCHER_URL_REQUEST}get_frozen_vouchers/?wallet_ids=${walletsResult}`
@@ -66,7 +72,7 @@ export class VoucherPage {
         .toPromise()
         .then(result => {
           this.vouchers = result as any;
-          this.logger.log('vouchers original:', this.vouchers);
+          this.logger.log('got user vouchers:', this.vouchers);
 
           this.vouchers.map(x => {
             x.freez_date = new Date(x.cltv_details.lock_time * 1000);
@@ -78,7 +84,7 @@ export class VoucherPage {
           });
 
           this.vouchersLoading = false;
-          this.logger.log('vouchers:', this.vouchers);
+          this.logger.log('updated user vouchers:', this.vouchers);
         })
         .catch(err => this.logger.debug(err));
     });
@@ -129,8 +135,23 @@ export class VoucherPage {
   }
 
   public withdrowTrigger(id: number) {
+    // ************** fetch voucher by id **************
+
     this.getVoucher(id).then(res => {
       const voucher: any = res;
+
+      // ************** configurate voucher cltv  **************
+      /**
+       * Data for freeze.js function makeFreeze(privateKey, params)
+       *
+       * @param sending_amount
+       * @param tx_hash
+       * @param user_duc_address
+       * @param vout_number
+       * @param redeem_script
+       * @param lockTime
+       *
+       */
 
       voucher.cltv_details.sending_amount =
         voucher.voucherinput_set[0].amount - voucher.tx_fee;
@@ -138,125 +159,111 @@ export class VoucherPage {
       voucher.cltv_details.user_duc_address = voucher.user_duc_address;
       voucher.cltv_details.vout_number = voucher.voucherinput_set[0].tx_vout;
 
-      console.log(voucher);
+      this.logger.log(
+        'selected voucher with updated cltv_details data',
+        voucher
+      );
 
-      // const hashType = bitcoin.Transaction.SIGHASH_ALL;
-      // const network = bitcoin.networks.bitcoin;
-
-      // network.bip32.public = 0x019da462;
-      // network.bip32.private = 0x019d9cfe;
-      // network.pubKeyHash = 0x31;
-      // network.scriptHash = 0x33;
-      // network.wif = 0xb1;
-
-      // getting privateKey
+      // ************** get selected wallet by wallet address **************
 
       this.getWalletsInfo('duc').then(wallets => {
         wallets.map(res => {
-          let wallet: any;
+          let uWallet: any;
 
-          // const ducatuscore = this.bwcProvider.getDucatuscore();
+          // ************** get wallet API **************
 
-          res.address.then(res1 => {
+          res.address.then(async res1 => {
             if (res1 === voucher.cltv_details.user_duc_address) {
-              wallet = res.wallet;
-              // const walletPublicKey = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(
-              //   wallet.credentials.xPubKey
-              // );
+              uWallet = res.wallet;
+              this.logger.log('user wallet:', uWallet);
 
-              // console.log('walletPublicKey', walletPublicKey);
+              // ************** try to get selected wallet private key **************
 
-              console.log(wallet);
-
-              // let walletPrivKey = this.bwcProvider.Client.Ducatuscore.HDPublicKey(
-              //   wallet.credentials.requestPrivKey
-              // );
-
-              // console.log('walletPrivKey', walletPrivKey);
-              // console.log('walletPrivKey toWIF', walletPrivKey.toWIF());
-
-              freeze.makeFreeze(
-                'TJYbxzCnVf4gyvCBTgAEjk9UhHG2wjTWTE8aoUCd9wwtipZZ53Xw',
-                voucher.cltv_details
+              const pWallet = await this.walletProvider.normalizeJSON(uWallet);
+              this.logger.log(
+                'try to get private key via func normilizeJSON:',
+                pWallet
               );
+
+              // ************** try to get selected wallet password **************
+
+              const password_1 = await this.walletProvider
+                .prepare(uWallet)
+                .then(ps => {
+                  return ps;
+                });
+              this.logger.log(
+                '1. try to get password via walletProvider func prepare',
+                password_1
+              );
+
+              const password_2 = await this.keyProvider
+                .handleEncryptedWallet(uWallet.credentials.keyId)
+                .then((password: string) => {
+                  return password;
+                });
+              this.logger.log(
+                '2: try to get password 2 via keyProvider func handleEncryptedWallet',
+                password_2
+              );
+
+              // ************** trigger freeze script **************
+              /**
+               * params
+               *
+               * @param privateKey
+               * @param voucher.cltv_details
+               */
+
+              const privateKey =
+                'TJYbxzCnVf4gyvCBTgAEjk9UhHG2wjTWTE8aoUCd9wwtipZZ53Xw';
+
+              freeze.makeFreeze(privateKey, voucher.cltv_details);
+
+              // ************** get selected wallet public key **************
+
+              const walletPublicKey = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(
+                uWallet.credentials.xPubKey
+              );
+              this.logger.log('user wallet public key:', walletPublicKey);
+
+              // ************** get selected wallet private key **************
+
+              const walletPrivKey = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
+                uWallet.credentials.requestPrivKey
+              ); // need proceed xPrivKey
+
+              this.logger.log(
+                'wallet private key and that key wif format',
+                walletPrivKey
+              );
+
+              // ************** open send page **************
+
+              const addressView = this.walletProvider.getAddressView(
+                uWallet.coin,
+                uWallet.network,
+                voucher.cltv_details.user_duc_address,
+                true
+              );
+
+              // const parsedAmount = this.txFormatProvider.parseAmount(
+              //   uWallet.coin.toLowerCase(),
+              //   voucher.cltv_details.sending_amount,
+              //   uWallet.coin.toUpperCase()
+              // );
+
+              const redirParms = {
+                activePage: 'ScanPage',
+                walletId: uWallet.id,
+                amount: '1000000000' // amount via voucher or 0?
+              };
+
+              this.incomingDataProvider.redir(addressView, redirParms);
             }
           });
         });
       });
-
-      // const keyPairAlice0 = bitcoin.ECPair.fromWIF(
-      //   'TJW3M7VHfjEu3SoUCmYrg4JDDM6DvqPEDQsaSF3dsjnqN6ViQrp5',
-      //   network
-      // );
-
-      // console.log('keyPairAlice0:', keyPairAlice0);
-
-      // var lockTime = bip65.encode({
-      //   utc: voucher.lock_time
-      // });
-
-      // console.log('lockTime:', lockTime);
-
-      // const txb = new bitcoin.TransactionBuilder(network);
-      // console.log('txb 1:', txb);
-
-      // txb.setVersion(1);
-      // // txb.__TX.version = 1;
-      // txb.setLockTime(lockTime);
-
-      // console.log('txb 2:', txb);
-
-      // // вход, который собираемся потратить, и его vout, последний параметр не трогать
-      // // посмотреть непотраченные входы на адресе можно тут: https://ducapi.rocknblock.io/api/DUC/mainnet/address/
-      // txb.addInput(voucher.tx_hash, voucher.vout_number, 0xfffffffe);
-
-      // console.log('txb 3:', txb);
-
-      // console.log(
-      //   'Buffer.from(voucher.sending_amount).toString("hex"):',
-      //   Buffer.from(voucher.sending_amount).toString('hex'),
-      //   Number(Buffer.from(voucher.sending_amount).toString('hex'))
-      // );
-
-      // // адрес, куда отправить заблокированные монеты и сумма в hex
-      // txb.addOutput(
-      //   voucher.user_duc_address,
-      //   Number(Buffer.from(voucher.sending_amount).toString('hex'))
-      // );
-
-      // console.log('txb 4:', txb);
-
-      // const tx = txb.buildIncomplete();
-
-      // console.log('tx:', tx);
-
-      // console.log(
-      //   'Buffer.from(voucher.sending_amount).toString(hex):',
-      //   Buffer.from(voucher.sending_amount).toString('hex')
-      // );
-
-      // const signatureHash = tx.hashForSignature(
-      //   0,
-      //   Buffer.from(voucher.redeem_script, 'hex'),
-      //   hashType
-      // );
-
-      // console.log('signatureHash:', signatureHash);
-
-      // const inputScriptFirstBranch = bitcoin.payments.p2sh({
-      //   redeem: {
-      //     input: bitcoin.script.compile([
-      //       bitcoin.script.signature.encode(
-      //         keyPairAlice0.sign(signatureHash),
-      //         hashType
-      //       ),
-      //       bitcoin.opcodes.OP_TRUE
-      //     ]),
-      //     output: voucher.redeem_script
-      //   }
-      // }).input;
-
-      // console.log('inputScriptFirstBranch:', inputScriptFirstBranch);
     });
   }
 }
