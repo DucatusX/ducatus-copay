@@ -16,11 +16,12 @@ import {
 import { VOUCHER_URL_REQUEST } from './params';
 
 // ************** freeze lib **************
-// import * as bitcoin from 'bitcoinjs-lib';
-// import * as bip65 from 'bip65';
+import * as bip65 from 'bip65';
+import * as bitcoin from 'bitcoinjs-lib';
+// import { networks, TransactionBuilder } from 'bitcoinjs-lib';
 
 // ************** freeze script **************
-import * as freeze from './freeze.js';
+// import * as freeze from './freeze.js';
 
 @Component({
   selector: 'page-voucher',
@@ -134,6 +135,81 @@ export class VoucherPage {
     this.navCtrl.push(VoucherAddPage);
   }
 
+  private signFreeze(wallet: any, wifPrivateKey: string, data: any) {
+    this.logger.log('sign: wifPrivateKey', wifPrivateKey);
+    this.logger.log('sign: wallet', wallet);
+    this.logger.log('sign: data', data);
+
+    const hashType = bitcoin.Transaction.SIGHASH_ALL;
+    this.logger.log('sign: hashType', hashType);
+
+    const network = bitcoin.networks.bitcoin;
+    network.bip32.private = 0x019d9cfe;
+    network.bip32.public = 0x019da462;
+    network.pubKeyHash = 0x31;
+    network.scriptHash = 0x33;
+    network.wif = 0xb1;
+    this.logger.log('sign: network', network);
+
+    var lockTime = bip65.encode({
+      utc: data.lockTime
+    });
+    this.logger.log('sign: lockTime', lockTime);
+
+    const txb = new bitcoin.TransactionBuilder(network);
+    txb.setVersion(1);
+    txb.setLockTime(lockTime);
+    this.logger.log('sign: txb', txb);
+
+    txb.addInput(data.tx_hash, data.vout_number, 0xfffffffe);
+    this.logger.log('sign: txb.addInput', txb);
+
+    txb.addOutput(data.user_duc_address, data.sending_amount); // Error: <address> has no matching Script
+    this.logger.log('sign: txb.addOutput', txb);
+
+    const tx = txb.buildIncomplete();
+    this.logger.log('sign: tx', tx);
+
+    // this.walletProvider
+    //   .publishAndSign(wallet, tx)
+    //   .then(tx => {
+    //     this.logger.log(tx);
+    //   })
+    //   .catch(err => {
+    //     this.logger.log(err);
+    //   });
+
+    const signatureHash = tx.hashForSignature(
+      0,
+      Buffer.from(data.redeem_script, 'hex'),
+      hashType
+    );
+    this.logger.log('sign: signatureHash', signatureHash);
+
+    const keyPairAlice0 = bitcoin.ECPair.fromWIF(wifPrivateKey, network); // need put user private key
+    this.logger.log('sign: keyPairAlice0', keyPairAlice0);
+
+    const inputScriptFirstBranch = bitcoin.payments.p2sh({
+      redeem: {
+        input: bitcoin.script.compile([
+          bitcoin.script.signature.encode(
+            keyPairAlice0.sign(signatureHash),
+            hashType
+          ),
+          bitcoin.opcodes.OP_TRUE
+        ]),
+        output: Buffer.from(data.redeem_script, 'hex')
+      }
+    }).input;
+    this.logger.log('sign: inputScriptFirstBranch', inputScriptFirstBranch);
+
+    tx.setInputScript(0, inputScriptFirstBranch);
+    this.logger.log('sign: tx.setInputScript', tx);
+
+    this.logger.log('sign: tx.toHex()', tx.toHex());
+    return tx.toHex();
+  }
+
   public withdrowTrigger(id: number) {
     // ************** fetch voucher by id **************
 
@@ -218,7 +294,10 @@ export class VoucherPage {
               const privateKey =
                 'TJYbxzCnVf4gyvCBTgAEjk9UhHG2wjTWTE8aoUCd9wwtipZZ53Xw';
 
-              freeze.makeFreeze(privateKey, voucher.cltv_details);
+              this.signFreeze(uWallet, privateKey, voucher.cltv_details);
+
+              // start from file, to use it run command: node src/pages/voucher/freeze_node.js
+              // freeze.makeFreeze(privateKey, voucher.cltv_details);
 
               // ************** get selected wallet public key **************
 
@@ -231,7 +310,7 @@ export class VoucherPage {
 
               const walletPrivKey = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
                 uWallet.credentials.requestPrivKey
-              ); // need proceed xPrivKey
+              ); // need put xPrivKey
 
               this.logger.log(
                 'wallet private key and that key wif format',
@@ -256,8 +335,8 @@ export class VoucherPage {
               const redirParms = {
                 activePage: 'ScanPage',
                 walletId: uWallet.id,
-                amount: '1000000000' // amount via voucher or 0?
-              };
+                amount: '1000000000'
+              }; // amount via voucher or 0?
 
               this.incomingDataProvider.redir(addressView, redirParms);
             }
