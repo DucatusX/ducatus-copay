@@ -188,7 +188,7 @@ export class VoucherAddPage {
       .toPromise();
   }
 
-  public activateVoucher() {
+  public async activateVoucher() {
     this.voucherLoading = true;
     this.walletAddresses;
 
@@ -200,7 +200,19 @@ export class VoucherAddPage {
       walletToSend.wallet.credentials.xPubKey
     );
 
-    const pubKey = Buffer.from(info._buffers.publicKey).toString('hex');
+    const pubKey = await this.walletProvider
+      .getMainAddresses(walletToSend.wallet, { doNotVerify: false })
+      .then(result => {
+        const address = result.find(t => {
+          return t.address === this.VoucherGroup.value.VoucherGroupAddress;
+        });
+        console.log(address);
+        return info.derive(address.path).publicKey.toString();
+      });
+
+    console.log('pubkey', pubKey);
+
+    // const pubKey = Buffer.from(info._buffers.publicKey).toString('hex');
 
     this.sendCode(
       walletToSend.keyId,
