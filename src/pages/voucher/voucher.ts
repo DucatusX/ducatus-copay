@@ -6,22 +6,12 @@ import { VoucherAddPage } from './add/add';
 
 import _ from 'lodash';
 
-import {
-  IncomingDataProvider,
-  KeyProvider,
-  Logger,
-  ProfileProvider,
-  WalletProvider
-} from '../../providers';
+import { Logger, ProfileProvider, WalletProvider } from '../../providers';
 import { VOUCHER_URL_REQUEST } from './params';
 
 // ************** freeze lib **************
 import * as bip65 from 'bip65';
 import * as bitcoin from 'bitcoinjs-lib';
-// import { networks, TransactionBuilder } from 'bitcoinjs-lib';
-
-// ************** freeze script **************
-// import * as freeze from './freeze.js';
 
 @Component({
   selector: 'page-voucher',
@@ -42,9 +32,7 @@ export class VoucherPage {
     private profileProvider: ProfileProvider,
     private walletProvider: WalletProvider,
     private httpClient: HttpClient,
-    private incomingDataProvider: IncomingDataProvider,
-    private bwcProvider: BwcProvider,
-    private keyProvider: KeyProvider
+    private bwcProvider: BwcProvider
   ) {}
 
   ionViewWillEnter() {
@@ -131,17 +119,23 @@ export class VoucherPage {
       .toPromise();
   }
 
+  private sendTX(raw_tx_hex) {
+    return this.httpClient
+      .post(`${VOUCHER_URL_REQUEST}send_raw_transaction/`, {
+        raw_tx_hex
+      })
+      .toPromise();
+  }
+
   public goToVoucehrAddPage() {
     this.navCtrl.push(VoucherAddPage);
   }
 
-  private signFreeze(wallet: any, wifPrivateKey: string, data: any) {
-    this.logger.log('sign: wifPrivateKey', wifPrivateKey);
+  private async signFreeze(wallet: any, data: any) {
     this.logger.log('sign: wallet', wallet);
     this.logger.log('sign: data', data);
 
     const hashType = bitcoin.Transaction.SIGHASH_ALL;
-    this.logger.log('sign: hashType', hashType);
 
     const network = bitcoin.networks.bitcoin;
     network.bip32.private = 0x019d9cfe;
@@ -149,45 +143,48 @@ export class VoucherPage {
     network.pubKeyHash = 0x31;
     network.scriptHash = 0x33;
     network.wif = 0xb1;
-    this.logger.log('sign: network', network);
 
-    var lockTime = bip65.encode({
-      utc: data.lockTime
-    });
+    var lockTime = bip65.encode({ utc: data.lock_time });
     this.logger.log('sign: lockTime', lockTime);
 
     const txb = new bitcoin.TransactionBuilder(network);
     txb.setVersion(1);
     txb.setLockTime(lockTime);
-    this.logger.log('sign: txb', txb);
-
     txb.addInput(data.tx_hash, data.vout_number, 0xfffffffe);
-    this.logger.log('sign: txb.addInput', txb);
-
-    txb.addOutput(data.user_duc_address, data.sending_amount); // Error: <address> has no matching Script
-    this.logger.log('sign: txb.addOutput', txb);
+    txb.addOutput(data.user_duc_address, data.sending_amount);
 
     const tx = txb.buildIncomplete();
-    this.logger.log('sign: tx', tx);
 
-    // this.walletProvider
-    //   .publishAndSign(wallet, tx)
-    //   .then(tx => {
-    //     this.logger.log(tx);
-    //   })
-    //   .catch(err => {
-    //     this.logger.log(err);
-    //   });
+    const privateWifKey = await this.walletProvider
+      .getKeys(wallet)
+      .then(keys => {
+        return this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
+          keys.xPrivKey
+        ).privateKey.toWIF();
+      })
+      .catch(err => {
+        if (
+          err &&
+          err.message != 'FINGERPRINT_CANCELLED' &&
+          err.message != 'PASSWORD_CANCELLED'
+        ) {
+          err.message == 'WRONG_PASSWORD'
+            ? this.logger.error(
+                'sign: walletProvider getKeys error WRONG_PASSWORD',
+                err
+              )
+            : this.logger.error('sign: walletProvider getKeys error', err);
+        }
+      });
+    this.logger.log('privateWifKey', privateWifKey);
 
     const signatureHash = tx.hashForSignature(
       0,
       Buffer.from(data.redeem_script, 'hex'),
       hashType
     );
-    this.logger.log('sign: signatureHash', signatureHash);
 
-    const keyPairAlice0 = bitcoin.ECPair.fromWIF(wifPrivateKey, network); // need put user private key
-    this.logger.log('sign: keyPairAlice0', keyPairAlice0);
+    const keyPairAlice0 = bitcoin.ECPair.fromWIF(privateWifKey, network);
 
     const inputScriptFirstBranch = bitcoin.payments.p2sh({
       redeem: {
@@ -201,12 +198,8 @@ export class VoucherPage {
         output: Buffer.from(data.redeem_script, 'hex')
       }
     }).input;
-    this.logger.log('sign: inputScriptFirstBranch', inputScriptFirstBranch);
 
     tx.setInputScript(0, inputScriptFirstBranch);
-    this.logger.log('sign: tx.setInputScript', tx);
-
-    this.logger.log('sign: tx.toHex()', tx.toHex());
     return tx.toHex();
   }
 
@@ -218,15 +211,12 @@ export class VoucherPage {
 
       // ************** configurate voucher cltv  **************
       /**
-       * Data for freeze.js function makeFreeze(privateKey, params)
-       *
        * @param sending_amount
        * @param tx_hash
        * @param user_duc_address
        * @param vout_number
        * @param redeem_script
-       * @param lockTime
-       *
+       * @param lock_time
        */
 
       voucher.cltv_details.sending_amount =
@@ -253,92 +243,22 @@ export class VoucherPage {
               uWallet = res.wallet;
               this.logger.log('user wallet:', uWallet);
 
-              // ************** try to get selected wallet private key **************
-
-              const pWallet = await this.walletProvider.normalizeJSON(uWallet);
-              this.logger.log(
-                'try to get private key via func normilizeJSON:',
-                pWallet
-              );
-
-              // ************** try to get selected wallet password **************
-
-              const password_1 = await this.walletProvider
-                .prepare(uWallet)
-                .then(ps => {
-                  return ps;
-                });
-              this.logger.log(
-                '1. try to get password via walletProvider func prepare',
-                password_1
-              );
-
-              const password_2 = await this.keyProvider
-                .handleEncryptedWallet(uWallet.credentials.keyId)
-                .then((password: string) => {
-                  return password;
-                });
-              this.logger.log(
-                '2: try to get password 2 via keyProvider func handleEncryptedWallet',
-                password_2
-              );
-
               // ************** trigger freeze script **************
-              /**
-               * params
-               *
-               * @param privateKey
-               * @param voucher.cltv_details
-               */
 
-              const privateKey =
-                'TJYbxzCnVf4gyvCBTgAEjk9UhHG2wjTWTE8aoUCd9wwtipZZ53Xw';
-
-              this.signFreeze(uWallet, privateKey, voucher.cltv_details);
-
-              // start from file, to use it run command: node src/pages/voucher/freeze_node.js
-              // freeze.makeFreeze(privateKey, voucher.cltv_details);
-
-              // ************** get selected wallet public key **************
-
-              const walletPublicKey = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(
-                uWallet.credentials.xPubKey
-              );
-              this.logger.log('user wallet public key:', walletPublicKey);
-
-              // ************** get selected wallet private key **************
-
-              const walletPrivKey = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
-                uWallet.credentials.requestPrivKey
-              ); // need put xPrivKey
-
-              this.logger.log(
-                'wallet private key and that key wif format',
-                walletPrivKey
+              const txHex = await this.signFreeze(
+                uWallet,
+                voucher.cltv_details
               );
 
-              // ************** open send page **************
+              this.logger.log('freeze transaction hex', txHex);
 
-              const addressView = this.walletProvider.getAddressView(
-                uWallet.coin,
-                uWallet.network,
-                voucher.cltv_details.user_duc_address,
-                true
-              );
-
-              // const parsedAmount = this.txFormatProvider.parseAmount(
-              //   uWallet.coin.toLowerCase(),
-              //   voucher.cltv_details.sending_amount,
-              //   uWallet.coin.toUpperCase()
-              // );
-
-              const redirParms = {
-                activePage: 'ScanPage',
-                walletId: uWallet.id,
-                amount: '1000000000'
-              }; // amount via voucher or 0?
-
-              this.incomingDataProvider.redir(addressView, redirParms);
+              this.sendTX(txHex)
+                .then(res => {
+                  this.logger.log('transaction sended', res);
+                })
+                .catch(err => {
+                  this.logger.error('transaction not sended', err);
+                });
             }
           });
         });
