@@ -4,14 +4,12 @@ import { NavController } from 'ionic-angular';
 import { BwcProvider } from '../../providers/bwc/bwc';
 import { VoucherAddPage } from './add/add';
 
+import * as bip65 from 'bip65';
+import * as bitcoin from 'bitcoinjs-lib';
 import _ from 'lodash';
 
 import { Logger, ProfileProvider, WalletProvider } from '../../providers';
 import { VOUCHER_URL_REQUEST } from './params';
-
-// ************** freeze lib **************
-import * as bip65 from 'bip65';
-import * as bitcoin from 'bitcoinjs-lib';
 
 @Component({
   selector: 'page-voucher',
@@ -20,19 +18,15 @@ import * as bitcoin from 'bitcoinjs-lib';
 export class VoucherPage {
   public vouchersLoading = true;
   public vouchers = [];
-  public keys = [];
-  public wallets: any;
-  public walletsKey = [];
   public walletsGroups: any;
-  public addressHardcode: string;
 
   constructor(
-    private navCtrl: NavController,
     private logger: Logger,
-    private profileProvider: ProfileProvider,
-    private walletProvider: WalletProvider,
+    private navCtrl: NavController,
     private httpClient: HttpClient,
-    private bwcProvider: BwcProvider
+    private bwcProvider: BwcProvider,
+    private profileProvider: ProfileProvider,
+    private walletProvider: WalletProvider
   ) {}
 
   ionViewWillEnter() {
@@ -79,13 +73,30 @@ export class VoucherPage {
     });
   }
 
+  public goToVoucehrAddPage() {
+    this.navCtrl.push(VoucherAddPage);
+  }
+
   private getAddress(wallet) {
     return new Promise(resolve => {
       this.walletProvider.getAddress(wallet, false).then(addr => {
-        this.addressHardcode = addr;
         return resolve(addr);
       });
     });
+  }
+
+  private getVoucher(id) {
+    return this.httpClient
+      .get(`${VOUCHER_URL_REQUEST}get_withdraw_info/?voucher_id=${id}`)
+      .toPromise();
+  }
+
+  private sendTX(raw_tx_hex) {
+    return this.httpClient
+      .post(`${VOUCHER_URL_REQUEST}send_raw_transaction/`, {
+        raw_tx_hex
+      })
+      .toPromise();
   }
 
   private getWalletsInfo(coin): Promise<any> {
@@ -111,24 +122,6 @@ export class VoucherPage {
 
       resolve(wallets);
     });
-  }
-
-  private getVoucher(id) {
-    return this.httpClient
-      .get(`${VOUCHER_URL_REQUEST}get_withdraw_info/?voucher_id=${id}`)
-      .toPromise();
-  }
-
-  private sendTX(raw_tx_hex) {
-    return this.httpClient
-      .post(`${VOUCHER_URL_REQUEST}send_raw_transaction/`, {
-        raw_tx_hex
-      })
-      .toPromise();
-  }
-
-  public goToVoucehrAddPage() {
-    this.navCtrl.push(VoucherAddPage);
   }
 
   private async signFreeze(wallet: any, data: any) {
@@ -184,13 +177,11 @@ export class VoucherPage {
       hashType
     );
 
-    const keyPairAlice0 = bitcoin.ECPair.fromWIF(privateWifKey, network);
-
     const inputScriptFirstBranch = bitcoin.payments.p2sh({
       redeem: {
         input: bitcoin.script.compile([
           bitcoin.script.signature.encode(
-            keyPairAlice0.sign(signatureHash),
+            bitcoin.ECPair.fromWIF(privateWifKey, network).sign(signatureHash),
             hashType
           ),
           bitcoin.opcodes.OP_TRUE
@@ -204,20 +195,8 @@ export class VoucherPage {
   }
 
   public withdrowTrigger(id: number) {
-    // ************** fetch voucher by id **************
-
     this.getVoucher(id).then(res => {
       const voucher: any = res;
-
-      // ************** configurate voucher cltv  **************
-      /**
-       * @param sending_amount
-       * @param tx_hash
-       * @param user_duc_address
-       * @param vout_number
-       * @param redeem_script
-       * @param lock_time
-       */
 
       voucher.cltv_details.sending_amount =
         voucher.voucherinput_set[0].amount - voucher.tx_fee;
@@ -225,28 +204,12 @@ export class VoucherPage {
       voucher.cltv_details.user_duc_address = voucher.user_duc_address;
       voucher.cltv_details.vout_number = voucher.voucherinput_set[0].tx_vout;
 
-      this.logger.log(
-        'selected voucher with updated cltv_details data',
-        voucher
-      );
-
-      // ************** get selected wallet by wallet address **************
-
-      this.getWalletsInfo('duc').then(wallets => {
-        wallets.map(res => {
-          let uWallet: any;
-
-          // ************** get wallet API **************
-
-          res.address.then(async res1 => {
-            if (res1 === voucher.cltv_details.user_duc_address) {
-              uWallet = res.wallet;
-              this.logger.log('user wallet:', uWallet);
-
-              // ************** trigger freeze script **************
-
+      this.getWalletsInfo('duc').then(wallet => {
+        wallet.map((wallet: any) => {
+          wallet.address.then(async (address: string) => {
+            if (address === voucher.cltv_details.user_duc_address) {
               const txHex = await this.signFreeze(
-                uWallet,
+                wallet.wallet,
                 voucher.cltv_details
               );
 
