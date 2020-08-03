@@ -208,18 +208,12 @@ export class VoucherPage {
     return tx.toHex();
   }
 
-  private showModal(type: string, id?: number, opt?: any) {
-    const options = {
-      usd: opt ? opt.usd : '5',
-      duc: opt ? opt.duc : '100',
-      min: opt ? opt.min : '15'
-    };
-
+  private showModal(type: string, id?: number) {
     const modalAnswers = {
       success: {
         title:
           '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
-        text: `Your ${options.usd}$ voucher successfully activated`,
+        text: `Your voucher successfully unfreeze`,
         button: 'OK'
       },
       network: {
