@@ -206,13 +206,8 @@ export class VoucherAddPage {
         const address = result.find(t => {
           return t.address === this.VoucherGroup.value.VoucherGroupAddress;
         });
-        console.log(address);
         return info.derive(address.path).publicKey.toString();
       });
-
-    console.log('pubkey', pubKey);
-
-    // const pubKey = Buffer.from(info._buffers.publicKey).toString('hex');
 
     this.sendCode(
       walletToSend.keyId,

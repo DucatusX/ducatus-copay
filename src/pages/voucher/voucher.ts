@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { AlertController, NavController } from 'ionic-angular';
 import { BwcProvider } from '../../providers/bwc/bwc';
 import { VoucherAddPage } from './add/add';
 
@@ -22,6 +22,7 @@ export class VoucherPage {
 
   constructor(
     private logger: Logger,
+    private alertCtrl: AlertController,
     private navCtrl: NavController,
     private httpClient: HttpClient,
     private bwcProvider: BwcProvider,
@@ -125,11 +126,6 @@ export class VoucherPage {
   }
 
   private async signFreeze(wallet: any, data: any) {
-    this.logger.log('sign: wallet', wallet);
-    this.logger.log('sign: data', data);
-
-    const hashType = bitcoin.Transaction.SIGHASH_ALL;
-
     const network = bitcoin.networks.bitcoin;
     network.bip32.private = 0x019d9cfe;
     network.bip32.public = 0x019da462;
@@ -137,8 +133,8 @@ export class VoucherPage {
     network.scriptHash = 0x33;
     network.wif = 0xb1;
 
+    const hashType = bitcoin.Transaction.SIGHASH_ALL;
     var lockTime = bip65.encode({ utc: data.lock_time });
-    this.logger.log('sign: lockTime', lockTime);
 
     const txb = new bitcoin.TransactionBuilder(network);
     txb.setVersion(1);
@@ -150,10 +146,28 @@ export class VoucherPage {
 
     const privateWifKey = await this.walletProvider
       .getKeys(wallet)
-      .then(keys => {
-        return this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
+      .then(async keys => {
+        const xPrivKey = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
           keys.xPrivKey
-        ).privateKey.toWIF();
+        );
+
+        const derivedPrivKey = xPrivKey.deriveNonCompliantChild(
+          wallet.credentials.rootPath
+        );
+
+        const xpriv = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
+          derivedPrivKey
+        );
+
+        const address = await this.walletProvider
+          .getMainAddresses(wallet, { doNotVerify: false })
+          .then(result => {
+            return result.find(t => {
+              return t.address === data.user_duc_address;
+            });
+          });
+
+        return xpriv.deriveChild(address.path).privateKey.toWIF();
       })
       .catch(err => {
         if (
@@ -194,7 +208,55 @@ export class VoucherPage {
     return tx.toHex();
   }
 
+  private showModal(type: string, id?: number, opt?: any) {
+    const options = {
+      usd: opt ? opt.usd : '5',
+      duc: opt ? opt.duc : '100',
+      min: opt ? opt.min : '15'
+    };
+
+    const modalAnswers = {
+      success: {
+        title:
+          '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
+        text: `Your ${options.usd}$ voucher successfully activated`,
+        button: 'OK'
+      },
+      network: {
+        title:
+          '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+        text: 'Something went wrong, try again',
+        button: 'OK'
+      }
+    };
+
+    const answers = modalAnswers[type]
+      ? modalAnswers[type]
+      : modalAnswers['network'];
+
+    let alert = this.alertCtrl.create({
+      cssClass: 'voucher-alert',
+      title: answers.title,
+      message: answers.text,
+      buttons: [
+        {
+          text: answers.button,
+          handler: () => {
+            this.vouchers.map(t => {
+              if (t.id === id) t.withdrow_check = false;
+            });
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
   public withdrowTrigger(id: number) {
+    this.vouchers.map(t => {
+      if (t.id === id) t.withdrow_check = true;
+    });
+
     this.getVoucher(id).then(res => {
       const voucher: any = res;
 
@@ -218,8 +280,10 @@ export class VoucherPage {
               this.sendTX(txHex)
                 .then(res => {
                   this.logger.log('transaction sended', res);
+                  this.showModal('success', id);
                 })
                 .catch(err => {
+                  this.showModal('network', id);
                   this.logger.error('transaction not sended', err);
                 });
             }

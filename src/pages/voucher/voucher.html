@@ -28,47 +28,60 @@
 
     <ion-list class="voucher-list">
       <div *ngIf="!vouchersLoading">
-        <ion-item class="voucher-item" *ngFor="let item of vouchers">
-          <ion-label class="voucher-item-inner">
-            <div class="voucher-item-info">
-              <span class="voucher-item-title">{{ item.duc_amount }} DUC</span>
-              <span class="voucher-item-date"
-                >{{ item.cltv_details.frozen_at | date:'dd.LL.y' }}</span
-              >
-            </div>
-            <div
-              class="voucher-item-info"
-              [ngClass]="{'voucher-item-info-unactive': item.ready_to_withdraw }"
-            >
-              <div
-                *ngIf="!item.ready_to_withdraw"
-                class="voucher-item-info-unactive-button"
-              >
-                <img
-                  src="./assets/img/icon-lock-brown.svg"
-                  width="14px"
-                  height="18px"
-                />
-                <span
-                  *ngIf="!item.ready_to_withdraw"
-                  ion-button
-                  class="voucher-item-button"
-                  >WITHDRAW</span
+        <div *ngFor="let item of vouchers">
+          <ion-item class="voucher-item" *ngIf="!item.cltv_details.withdraw">
+            <ion-label class="voucher-item-inner">
+              <div class="voucher-item-info">
+                <span class="voucher-item-title"
+                  >{{ item.duc_amount }} DUC</span
+                >
+                <span class="voucher-item-date"
+                  >{{ item.cltv_details.frozen_at | date:'dd.LL.y' }}</span
                 >
               </div>
-              <span *ngIf="!item.ready_to_withdraw" class="voucher-item-text"
-                >Available in {{ item.freez_date_count }} days</span
+              <div
+                class="voucher-item-info"
+                [ngClass]="{'voucher-item-info-unactive': item.ready_to_withdraw }"
               >
-              <span
-                *ngIf="item.ready_to_withdraw"
-                ion-button
-                class="voucher-item-button"
-                (click)="withdrowTrigger(item.id)"
-                >WITHDRAW</span
-              >
-            </div>
-          </ion-label>
-        </ion-item>
+                <div *ngIf="item.withdrow_check">
+                  <span ion-button class="voucher-item-loading">
+                    <ion-spinner name="dots"></ion-spinner>
+                  </span>
+                </div>
+                <div *ngIf="!item.withdrow_check">
+                  <div
+                    *ngIf="!item.ready_to_withdraw"
+                    class="voucher-item-info-unactive-button"
+                  >
+                    <img
+                      src="./assets/img/icon-lock-brown.svg"
+                      width="14px"
+                      height="18px"
+                    />
+                    <span
+                      *ngIf="!item.ready_to_withdraw"
+                      ion-button
+                      class="voucher-item-button"
+                      >WITHDRAW</span
+                    >
+                  </div>
+                  <span
+                    *ngIf="!item.ready_to_withdraw"
+                    class="voucher-item-text"
+                    >Available in {{ item.freez_date_count }} days</span
+                  >
+                  <span
+                    *ngIf="item.ready_to_withdraw"
+                    ion-button
+                    class="voucher-item-button"
+                    (click)="withdrowTrigger(item.id)"
+                    >WITHDRAW</span
+                  >
+                </div>
+              </div>
+            </ion-label>
+          </ion-item>
+        </div>
       </div>
 
       <div *ngIf="vouchersLoading"><ion-spinner name="dots"></ion-spinner></div>

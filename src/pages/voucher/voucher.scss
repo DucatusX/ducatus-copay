@@ -64,6 +64,26 @@
       opacity: 0.85;
     }
 
+    &-loading {
+      background: #f4efe4;
+      border-radius: 33px;
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 16px;
+      text-align: center;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: black;
+      width: 115px;
+      padding: 10px 15px;
+      cursor: pointer;
+      height: 40px;
+
+      &:hover {
+        background-color: #f4efe4 !important;
+      }
+    }
+
     &-button {
       background: #862633;
       border-radius: 33px;
