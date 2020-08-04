@@ -193,18 +193,20 @@ export class VoucherAddPage {
     wallet_id: string,
     duc_address: string,
     duc_public_key: string,
-    activation_code: string
+    activation_code: string,
+    private_path: string
   ) {
     this.logger.log(
       '{VOUCHER_URL_REQUEST}transfer/',
-      `${VOUCHER_URL_REQUEST}transfer/${wallet_id},${duc_address},${duc_public_key},${activation_code}`
+      `${VOUCHER_URL_REQUEST}transfer/${wallet_id},${duc_address},${duc_public_key},${activation_code},${private_path}`
     );
     return this.httpClient
       .post(`${VOUCHER_URL_REQUEST}/transfer/`, {
         wallet_id,
         duc_address,
         duc_public_key,
-        activation_code
+        activation_code,
+        private_path
       })
       .toPromise();
   }
@@ -230,11 +232,22 @@ export class VoucherAddPage {
         return info.derive(address.path).publicKey.toString();
       });
 
+    const addressData = await this.walletProvider
+      .getMainAddresses(walletToSend.wallet, {
+        doNotVerify: false
+      })
+      .then(result => {
+        return result.find(t => {
+          return t.address === this.VoucherGroup.value.VoucherGroupAddress;
+        });
+      });
+
     this.sendCode(
       walletToSend.keyId,
       this.VoucherGroup.value.VoucherGroupAddress,
       pubKey,
-      this.VoucherGroup.value.VoucherGroupCode
+      this.VoucherGroup.value.VoucherGroupCode,
+      addressData.path
     )
       .then(res => {
         const result: any = res;

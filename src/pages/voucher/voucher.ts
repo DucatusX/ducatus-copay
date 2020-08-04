@@ -19,6 +19,7 @@ export class VoucherPage {
   public vouchersLoading = true;
   public vouchers = [];
   public walletsGroups: any;
+  public wallets: any;
 
   constructor(
     private logger: Logger,
@@ -43,6 +44,39 @@ export class VoucherPage {
     );
 
     this.getVouchers();
+    let walletsGet = this.getWalletsInfoAddress('duc');
+
+    Promise.all([walletsGet]).then(results => {
+      this.wallets = results[0];
+      console.log(this.wallets);
+    });
+  }
+
+  private getWalletsInfoAddress(coin) {
+    let coins = [];
+    let wallets = [];
+    let walletsRes = [];
+
+    this.walletsGroups.forEach(keyID => {
+      coins = _.concat(
+        coins,
+        keyID.filter(wallet => wallet.coin === coin.toLowerCase())
+      );
+    });
+
+    wallets = coins.map(wallet => {
+      return this.walletProvider.getAddress(wallet, false).then(address => {
+        return { wallet, address };
+      });
+    });
+
+    wallets.map(res => {
+      res.then(result => {
+        walletsRes.push(result);
+      });
+    });
+
+    return walletsRes;
   }
 
   private getVouchers() {
@@ -142,7 +176,7 @@ export class VoucherPage {
     });
   }
 
-  private async signFreeze(wallet: any, data: any) {
+  private async signFreeze(wallet: any, data: any, addressPath: boolean) {
     const network = bitcoin.networks.bitcoin;
     network.bip32.private = 0x019d9cfe;
     network.bip32.public = 0x019da462;
@@ -176,13 +210,15 @@ export class VoucherPage {
           derivedPrivKey
         );
 
-        const address = await this.walletProvider
-          .getMainAddresses(wallet, { doNotVerify: false })
-          .then(result => {
-            return result.find(t => {
-              return t.address === data.user_duc_address;
-            });
-          });
+        const address = addressPath
+          ? await this.walletProvider
+              .getMainAddresses(wallet, { doNotVerify: false })
+              .then(result => {
+                return result.find(t => {
+                  return t.address === data.user_duc_address;
+                });
+              })
+          : data.private_path;
 
         return xpriv.deriveChild(address.path).privateKey.toWIF();
       })
@@ -292,7 +328,7 @@ export class VoucherPage {
       if (t.id === id) t.withdrow_check = true;
     });
 
-    this.getVoucher(id).then(res => {
+    this.getVoucher(id).then(async res => {
       const voucher: any = res;
 
       voucher.cltv_details.sending_amount =
@@ -301,36 +337,39 @@ export class VoucherPage {
       voucher.cltv_details.user_duc_address = voucher.user_duc_address;
       voucher.cltv_details.vout_number = voucher.voucherinput_set[0].tx_vout;
 
-      this.getWalletsInfo('duc').then(wallet => {
-        wallet.map((wallet: any) => {
-          wallet.address.then(async (address: string) => {
-            if (address === voucher.cltv_details.user_duc_address) {
-              const txHex = await this.signFreeze(
-                wallet.wallet,
-                voucher.cltv_details
-              );
-
-              this.logger.log('freeze transaction hex', txHex);
-
-              this.sendTX(txHex)
-                .then(res => {
-                  this.logger.log('transaction sended', res);
-                  this.showModal('success', id, voucher.duc_amount);
-                })
-                .catch(err => {
-                  err.error.detail === '-27: transaction already in block chain'
-                    ? this.showModal('alreadyActivated', id)
-                    : this.showModal('network', id);
-                  this.logger.error(
-                    'transaction not sended',
-                    err,
-                    err.error.detail
-                  );
-                });
-            }
-          });
-        });
+      const addressFilter = this.wallets.find(t => {
+        return t.address === voucher.cltv_details.user_duc_address;
       });
+
+      console.log('addressFilter', addressFilter);
+
+      const walletToUnfreeze = addressFilter
+        ? addressFilter.wallet
+        : this.wallets.find(t => {
+            return t.wallet.keyId === voucher.wallet_id;
+          }).wallet;
+
+      console.log('walletFilter', walletToUnfreeze);
+
+      const txHex = await this.signFreeze(
+        walletToUnfreeze,
+        voucher.cltv_details,
+        !!addressFilter
+      );
+
+      this.logger.log('freeze transaction hex', txHex);
+
+      this.sendTX(txHex)
+        .then(res => {
+          this.logger.log('transaction sended', res);
+          this.showModal('success', id, voucher.duc_amount);
+        })
+        .catch(err => {
+          err.error.detail === '-27: transaction already in block chain'
+            ? this.showModal('alreadyActivated', id)
+            : this.showModal('network', id);
+          this.logger.error('transaction not sended', err, err.error.detail);
+        });
     });
   }
 }
