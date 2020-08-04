@@ -1,0 +1,236 @@
+.voucher {
+  &-list {
+    padding: 18px;
+    margin-bottom: 100px;
+  }
+
+  &-item {
+    padding: 10px 10px 10px 15px;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    margin-bottom: 10px;
+    width: 100%;
+    height: 88px;
+
+    &-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0;
+      height: 100%;
+    }
+
+    .item-inner {
+      border-bottom: none !important;
+    }
+
+    &-info {
+      display: flex;
+      flex-direction: column;
+      align-items: baseline;
+
+      &:nth-child(2) {
+        align-items: flex-end;
+      }
+
+      &-unactive {
+        &-button {
+          display: flex;
+          align-items: center;
+
+          img {
+            margin-right: 10px;
+          }
+
+          .voucher-item-button {
+            opacity: 0.5;
+          }
+        }
+      }
+    }
+
+    &-title {
+      font-weight: 600;
+      font-size: 16px;
+      color: #862633;
+      margin-bottom: 5px;
+    }
+
+    &-date {
+      margin-top: 5px;
+      font-size: 14px;
+      color: #000000;
+      opacity: 0.85;
+    }
+
+    &-loading {
+      background: #f4efe4;
+      border-radius: 33px;
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 16px;
+      text-align: center;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: black;
+      width: 115px;
+      padding: 10px 15px;
+      cursor: pointer;
+      height: 40px;
+
+      &:hover {
+        background-color: #f4efe4 !important;
+      }
+    }
+
+    &-button {
+      background: #862633;
+      border-radius: 33px;
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 16px;
+      text-align: center;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #ffffff;
+      width: 115px;
+      padding: 10px 15px;
+      cursor: pointer;
+      height: 40px;
+    }
+
+    &-text {
+      font-size: 13px;
+      text-align: right;
+      letter-spacing: 0.5px;
+      color: #862633;
+      margin-top: 7px;
+    }
+  }
+
+  &-add {
+    margin-top: 20px;
+    width: 100%;
+    background-color: transparent;
+
+    &-button {
+      background: #862633;
+      display: block;
+      border-radius: 33px;
+      width: 200px;
+      padding: 15px 20px;
+      margin: 0 auto;
+      font-weight: bold;
+      font-size: 14px;
+      text-align: center;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #ffffff;
+      cursor: pointer;
+      height: 50px;
+    }
+
+    &-page {
+      &-button {
+        min-width: 100%;
+        width: 100%;
+      }
+    }
+
+    &-group {
+      position: relative;
+      border-radius: 4px;
+
+      &-wrap {
+        position: relative;
+        border-radius: 4px;
+        margin-bottom: 30px;
+      }
+    }
+
+    &-label {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 17px;
+      color: #000000;
+      opacity: 0.5;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    &-input {
+      background: #fff;
+      border-radius: 4px;
+      padding-left: 5px !important;
+    }
+
+    &-select {
+      position: absolute;
+      top: 0;
+      width: 40px;
+      right: 0;
+      cursor: pointer;
+      border-radius: 0px 4px 4px 0px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      height: 100%;
+
+      .item-inner {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      .label-md {
+        margin: 0 10px !important;
+        font-size: 25px !important;
+      }
+    }
+  }
+
+  &-alert {
+    .alert-wrapper {
+      max-width: 340px;
+      width: 100%;
+      background: #ffffff;
+      box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      padding: 25px;
+    }
+
+    .alert-head {
+      padding: 0;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .alert-message {
+      padding: 0;
+      margin-bottom: 15px;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 15px;
+      text-align: center;
+      color: #000000;
+    }
+
+    .activated {
+      background-color: #862633b0;
+    }
+
+    .alert-button {
+      background: #862633;
+      border-radius: 33px;
+      color: white;
+      width: 150px;
+      margin: 0 auto;
+
+      .button-inner {
+        justify-content: center;
+      }
+
+      &-group {
+      }
+    }
+  }
+}

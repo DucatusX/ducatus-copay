@@ -29,6 +29,7 @@ import * as moment from 'moment';
 })
 export class TabsPage {
   appName: string;
+
   @ViewChild('tabs')
   tabs;
 
@@ -38,6 +39,8 @@ export class TabsPage {
   private totalBalanceAlternativeIsoCode = 'USD';
   private averagePrice = 0;
   private lastDayRatesArray;
+  public isWallets = true;
+  public childTabBarElement;
 
   constructor(
     private appProvider: AppProvider,
@@ -74,14 +77,6 @@ export class TabsPage {
           });
       }
     });
-  }
-
-  ngOnInit() {
-    // this.tabProvider.prefetchCards().then(data => {
-    //   // [0] BitPay Cards
-    //   // [1] Gift Cards
-    //   this.events.publish('Local/FetchCards', data[0]);
-    // });
   }
 
   disableCardNotificationBadge() {

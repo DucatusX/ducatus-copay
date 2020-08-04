@@ -16,7 +16,6 @@ import { calculator_api, coinInfo } from '../calculator-parameters';
   templateUrl: 'calculator-convert.html'
 })
 export class CalculatorConvertPage {
-
   public ConvertGroupForm: FormGroup;
   public formCoins: any = [];
   public coinInfo = coinInfo;
@@ -75,7 +74,7 @@ export class CalculatorConvertPage {
     let walletsGet = this.getWalletsInfo(this.formCoins.get);
     let walletsSend = this.getWalletsInfo(this.formCoins.send, 'send');
 
-    Promise.all([walletsGet, walletsSend]).then((results) => {
+    Promise.all([walletsGet, walletsSend]).then(results => {
       this.walletsInfoGet = results[0];
       this.walletsInfoSend = results[1];
       this.walletsChecker = true;
@@ -87,24 +86,32 @@ export class CalculatorConvertPage {
     let wallets = [];
     let walletsRes = [];
 
-    this.walletsGroups.forEach((keyID) => {
-      coins = _.concat(coins, keyID.filter(wallet => wallet.coin === coin.toLowerCase()))
+    this.walletsGroups.forEach(keyID => {
+      coins = _.concat(
+        coins,
+        keyID.filter(wallet => wallet.coin === coin.toLowerCase())
+      );
     });
 
     wallets = coins.map(wallet => {
       return this.walletProvider.getAddress(wallet, false).then(address => {
         return { wallet, address };
-      })
+      });
     });
 
     wallets.map(res => {
-      res.then(result => { walletsRes.push(result) });
+      res.then(result => {
+        walletsRes.push(result);
+      });
       if (type == 'send') this.sendLength++;
     });
 
     if (type == 'send' && this.sendLength === 1) {
       wallets.map(res => {
-        res.then(result => { this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput = result.address; });
+        res.then(result => {
+          this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput =
+            result.address;
+        });
       });
     }
 
@@ -122,11 +129,11 @@ export class CalculatorConvertPage {
   }
 
   public openAddressList(wallets, type?) {
-
     this.typeOpenAddressList = type;
 
     const infoSheet = this.actionSheetProvider.createInfoSheet(
-      'convertor-address', { wallet: wallets }
+      'convertor-address',
+      { wallet: wallets }
     );
     infoSheet.present();
     infoSheet.onDidDismiss(option => {
@@ -145,7 +152,10 @@ export class CalculatorConvertPage {
   public setAddress(type) {
     const address = this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput;
     if (type === 'DUC') {
-      if (address.length === 34 && ['L', 'l', 'M', 'm'].includes(address.substring(0, 1))) {
+      if (
+        address.length === 34 &&
+        ['L', 'l', 'M', 'm'].includes(address.substring(0, 1))
+      ) {
         this.getAddresses();
       }
     }
@@ -158,22 +168,33 @@ export class CalculatorConvertPage {
   }
 
   public getAddresses() {
-    this.getExchange(this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput, this.formCoins.get).then((result) => {
-      this.addresses = result;
-    }).catch(err => { this.logger.debug('cant get addresses: ', err) })
+    this.getExchange(
+      this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput,
+      this.formCoins.get
+    )
+      .then(result => {
+        this.addresses = result;
+      })
+      .catch(err => {
+        this.logger.debug('cant get addresses: ', err);
+      });
   }
 
   public getExchange(address: string, currency: string) {
-    return this.httpClient.post(calculator_api + 'exchange/', {
-      to_address: address,
-      to_currency: currency
-    }).toPromise();
+    return this.httpClient
+      .post(calculator_api + 'exchange/', {
+        to_address: address,
+        to_currency: currency
+      })
+      .toPromise();
   }
 
   public goToSendPage() {
-
     this.wallet = this.walletsInfoSend.find(infoWallet => {
-      return infoWallet.address === this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput;
+      return (
+        infoWallet.address ===
+        this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput
+      );
     }).wallet;
 
     const addressView = this.walletProvider.getAddressView(
