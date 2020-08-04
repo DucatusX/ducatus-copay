@@ -32,16 +32,21 @@
     <ion-list class="deposit-list">
       <div *ngIf="!depositsLoading">
         <div *ngFor="let item of deposits">
-          <ion-item class="deposit-item" *ngIf="!item.cltv_details.withdraw">
+          <ion-item
+            class="deposit-item"
+            *ngIf="!item.cltv_details.withdraw && item.depositinput_set.length != 0"
+          >
             <ion-label class="deposit-item-inner">
               <div class="deposit-item-info">
                 <div>
                   <div class="deposit-item-title">
                     {{ item.duc_amount }} DUC
-                    <span class="deposit-item-title-deposit">+15</span>
+                    <span class="deposit-item-title-deposit"
+                      >+{{ item.duc_added }}</span
+                    >
                   </div>
                   <span class="deposit-item-date"
-                    >{{ item.cltv_details.frozen_at | date:'dd.LL.y' }}</span
+                    >{{ item.ended_at_date | date:'dd.LL.y' }}</span
                   >
                 </div>
               </div>
@@ -58,7 +63,7 @@
                   <span
                     *ngIf="!item.ready_to_withdraw"
                     class="deposit-item-percent"
-                    >5%</span
+                    >{{ item.dividends }}%</span
                   >
                   <span
                     *ngIf="item.ready_to_withdraw"

@@ -19,6 +19,7 @@ export class DepositPage {
   public depositsLoading = true;
   public deposits = [];
   public walletsGroups: any;
+  public wallets: any;
 
   constructor(
     private logger: Logger,
@@ -43,6 +44,40 @@ export class DepositPage {
     );
 
     this.getDeposits();
+
+    let walletsGet = this.getWalletsInfoAddress('duc');
+
+    Promise.all([walletsGet]).then(results => {
+      this.wallets = results[0];
+      console.log(this.wallets);
+    });
+  }
+
+  private getWalletsInfoAddress(coin) {
+    let coins = [];
+    let wallets = [];
+    let walletsRes = [];
+
+    this.walletsGroups.forEach(keyID => {
+      coins = _.concat(
+        coins,
+        keyID.filter(wallet => wallet.coin === coin.toLowerCase())
+      );
+    });
+
+    wallets = coins.map(wallet => {
+      return this.walletProvider.getAddress(wallet, false).then(address => {
+        return { wallet, address };
+      });
+    });
+
+    wallets.map(res => {
+      res.then(result => {
+        walletsRes.push(result);
+      });
+    });
+
+    return walletsRes;
   }
 
   private getDeposits() {
@@ -54,20 +89,26 @@ export class DepositPage {
       });
 
       this.logger.log(
-        'get_frozen_vouchers/?wallet_ids=',
-        `${DEPOSIT_URL_REQUEST}get_frozen_vouchers/?wallet_ids=${walletsResult}`
+        'get_deposits/?wallet_ids=',
+        `${DEPOSIT_URL_REQUEST}get_deposits/?wallet_ids=${walletsResult}`
       );
 
       this.httpClient
-        .get(
-          `${DEPOSIT_URL_REQUEST}get_frozen_vouchers/?wallet_ids=${walletsResult}`
-        )
+        .get(`${DEPOSIT_URL_REQUEST}get_deposits/?wallet_ids=${walletsResult}`)
         .toPromise()
         .then(result => {
           this.deposits = result as any;
           this.logger.log('got user vouchers:', this.deposits);
 
           this.deposits.map(x => {
+            if (x.depositinput_set.length != 0) {
+              x.ended_at_date = new Date(x.ended_at * 1000);
+              x.duc_added = (
+                x.duc_amount *
+                (x.dividends / 100) *
+                (x.lock_months / 12)
+              ).toFixed(2);
+            }
             x.freez_date = new Date(x.cltv_details.lock_time * 1000);
             x.freez_date_count = Math.ceil(
               Math.abs(x.freez_date.getTime() - new Date().getTime()) /
@@ -97,21 +138,21 @@ export class DepositPage {
 
   private getDeposit(id) {
     this.logger.log(
-      'get_withdraw_info/?voucher_id=',
-      `${DEPOSIT_URL_REQUEST}get_withdraw_info/?voucher_id=${id}`
+      '/get_deposit_info/?deposit_id=',
+      `${DEPOSIT_URL_REQUEST}get_deposit_info/?deposit_id=${id}`
     );
     return this.httpClient
-      .get(`${DEPOSIT_URL_REQUEST}get_withdraw_info/?voucher_id=${id}`)
+      .get(`${DEPOSIT_URL_REQUEST}get_deposit_info/?deposit_id=${id}`)
       .toPromise();
   }
 
   private sendTX(raw_tx_hex) {
     this.logger.log(
-      'send_raw_transaction/',
-      `${DEPOSIT_URL_REQUEST}send_raw_transaction/${raw_tx_hex}`
+      '/send_deposit_transaction/',
+      `${DEPOSIT_URL_REQUEST}send_deposit_transaction/${raw_tx_hex}`
     );
     return this.httpClient
-      .post(`${DEPOSIT_URL_REQUEST}send_raw_transaction/`, {
+      .post(`${DEPOSIT_URL_REQUEST}send_deposit_transaction/`, {
         raw_tx_hex
       })
       .toPromise();
@@ -142,7 +183,7 @@ export class DepositPage {
     });
   }
 
-  private async signFreeze(wallet: any, data: any) {
+  private async signFreeze(wallet: any, data: any, addressPath: boolean) {
     const network = bitcoin.networks.bitcoin;
     network.bip32.private = 0x019d9cfe;
     network.bip32.public = 0x019da462;
@@ -176,13 +217,15 @@ export class DepositPage {
           derivedPrivKey
         );
 
-        const address = await this.walletProvider
-          .getMainAddresses(wallet, { doNotVerify: false })
-          .then(result => {
-            return result.find(t => {
-              return t.address === data.user_duc_address;
-            });
-          });
+        const address = addressPath
+          ? await this.walletProvider
+              .getMainAddresses(wallet, { doNotVerify: false })
+              .then(result => {
+                return result.find(t => {
+                  return t.address === data.user_duc_address;
+                });
+              })
+          : data.private_path;
 
         return xpriv.deriveChild(address.path).privateKey.toWIF();
       })
@@ -292,45 +335,48 @@ export class DepositPage {
       if (t.id === id) t.withdrow_check = true;
     });
 
-    this.getDeposit(id).then(res => {
+    this.getDeposit(id).then(async res => {
       const deposit: any = res;
 
       deposit.cltv_details.sending_amount =
-        deposit.voucherinput_set[0].amount - deposit.tx_fee;
-      deposit.cltv_details.tx_hash = deposit.voucherinput_set[0].mint_tx_hash;
+        deposit.depositinput_set[0].amount - deposit.tx_fee;
+      deposit.cltv_details.tx_hash = deposit.depositinput_set[0].mint_tx_hash;
       deposit.cltv_details.user_duc_address = deposit.user_duc_address;
-      deposit.cltv_details.vout_number = deposit.voucherinput_set[0].tx_vout;
+      deposit.cltv_details.vout_number = deposit.depositinput_set[0].tx_vout;
 
-      this.getWalletsInfo('duc').then(wallet => {
-        wallet.map((wallet: any) => {
-          wallet.address.then(async (address: string) => {
-            if (address === deposit.cltv_details.user_duc_address) {
-              const txHex = await this.signFreeze(
-                wallet.wallet,
-                deposit.cltv_details
-              );
-
-              this.logger.log('freeze transaction hex', txHex);
-
-              this.sendTX(txHex)
-                .then(res => {
-                  this.logger.log('transaction sended', res);
-                  this.showModal('success', id, deposit.duc_amount);
-                })
-                .catch(err => {
-                  err.error.detail === '-27: transaction already in block chain'
-                    ? this.showModal('alreadyActivated', id)
-                    : this.showModal('network', id);
-                  this.logger.error(
-                    'transaction not sended',
-                    err,
-                    err.error.detail
-                  );
-                });
-            }
-          });
-        });
+      const addressFilter = this.wallets.find(t => {
+        return t.address === deposit.cltv_details.user_duc_address;
       });
+
+      console.log('addressFilter', addressFilter);
+
+      const walletToUnfreeze = addressFilter
+        ? addressFilter.wallet
+        : this.wallets.find(t => {
+            return t.wallet.keyId === deposit.wallet_id;
+          }).wallet;
+
+      console.log('walletFilter', walletToUnfreeze);
+
+      const txHex = await this.signFreeze(
+        walletToUnfreeze,
+        deposit.cltv_details,
+        !!addressFilter
+      );
+
+      this.logger.log('freeze transaction hex', txHex);
+
+      this.sendTX(txHex)
+        .then(res => {
+          this.logger.log('transaction sended', res);
+          this.showModal('success', id, deposit.duc_amount);
+        })
+        .catch(err => {
+          err.error.detail === '-27: transaction already in block chain'
+            ? this.showModal('alreadyActivated', id)
+            : this.showModal('network', id);
+          this.logger.error('transaction not sended', err, err.error.detail);
+        });
     });
   }
 }

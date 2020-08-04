@@ -59,6 +59,8 @@
                 placeholder="Enter amount"
                 type="text"
                 formControlName="Amount"
+                (input)="changeAmount()"
+                [(ngModel)]="amountWallet"
                 [value]="DepositGroup.value.Amount"
               >
               </ion-input>
@@ -71,23 +73,23 @@
           <span class="deposit-add-label"
             >{{'Deposit term (month)' | translate}}</span
           >
-          {{ DepositGroup.value.Month }}
           <ion-row
             class="deposit-group-radio"
             radio-group
             formControlName="Month"
+            [(ngModel)]="depositMonth"
           >
             <ion-item no-lines>
               <ion-label> <ion-icon name="5"></ion-icon> 5</ion-label>
-              <ion-radio value="5"></ion-radio>
+              <ion-radio (click)="uMonth()" value="5"></ion-radio>
             </ion-item>
             <ion-item no-lines>
               <ion-label> <ion-icon name="13"></ion-icon> 13</ion-label>
-              <ion-radio value="13"></ion-radio>
+              <ion-radio (click)="uMonth()" value="13"></ion-radio>
             </ion-item>
             <ion-item no-lines>
-              <ion-label> <ion-icon name="34"></ion-icon> 34 </ion-label>
-              <ion-radio value="34"></ion-radio>
+              <ion-label> <ion-icon name="34"></ion-icon> 34</ion-label>
+              <ion-radio (click)="uMonth()" value="34"></ion-radio>
             </ion-item>
           </ion-row>
         </div>
@@ -96,34 +98,35 @@
           <span class="deposit-add-label"
             >{{'Interest rates (annual)' | translate}}</span
           >
-          {{ DepositGroup.value.Percent }}
           <ion-row
             class="deposit-group-radio"
             radio-group
             formControlName="Percent"
-            (ngModelChange)="setPercent()"
+            [(ngModel)]="depositPercent"
           >
             <ion-item no-lines>
-              <ion-label> <ion-icon name="5"></ion-icon>5%</ion-label>
-              <ion-radio value="5"></ion-radio>
+              <ion-label> <ion-icon name="5"></ion-icon> 5%</ion-label>
+              <ion-radio (click)="uPercent()" value="5"></ion-radio>
             </ion-item>
             <ion-item no-lines>
-              <ion-label> <ion-icon name="8"></ion-icon>8%</ion-label>
-              <ion-radio value="8"></ion-radio>
+              <ion-label> <ion-icon name="8"></ion-icon> 8%</ion-label>
+              <ion-radio (click)="uPercent()" value="8"></ion-radio>
             </ion-item>
             <ion-item no-lines>
-              <ion-label> <ion-icon name="13"></ion-icon>13%</ion-label>
-              <ion-radio value="13"></ion-radio>
+              <ion-label> <ion-icon name="13"></ion-icon> 13%</ion-label>
+              <ion-radio (click)="uPercent()" value="13"></ion-radio>
             </ion-item>
           </ion-row>
         </div>
 
         <div class="deposit-group-btn">
-          <span class="deposit-group-btn-devidends">Dividends 5 Ducatus</span>
+          <span class="deposit-group-btn-devidends"
+            >Dividends {{ amountWithPercent }} Ducatus</span
+          >
           <button
             ion-button
             class="deposit-group-btn-button button-standard deposit-item-button deposit-add-page-button"
-            (click)="activatedeposit()"
+            (click)="generateUserDeposit()"
             [disabled]="!DepositGroup.valid || depositLoading"
           >
             <span *ngIf="!depositLoading">{{'Deposit' | translate}}</span>
