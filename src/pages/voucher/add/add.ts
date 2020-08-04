@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController } from 'ionic-angular';
 import _ from 'lodash';
+import { Logger } from '../../../../src/providers/logger/logger';
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
 import { BwcProvider } from '../../../providers/bwc/bwc';
 import { ProfileProvider } from '../../../providers/profile/profile';
@@ -29,7 +30,8 @@ export class VoucherAddPage {
     private actionSheetProvider: ActionSheetProvider,
     private alertCtrl: AlertController,
     private httpClient: HttpClient,
-    private bwcProvider: BwcProvider
+    private bwcProvider: BwcProvider,
+    private logger: Logger
   ) {
     this.VoucherGroup = this.formBuilder.group({
       VoucherGroupCode: [
@@ -178,6 +180,10 @@ export class VoucherAddPage {
     duc_public_key: string,
     activation_code: string
   ) {
+    this.logger.log(
+      '{VOUCHER_URL_REQUEST}/transfer/',
+      `${VOUCHER_URL_REQUEST}/transfer/${wallet_id},${duc_address},${duc_public_key},${activation_code}`
+    );
     return this.httpClient
       .post(`${VOUCHER_URL_REQUEST}/transfer/`, {
         wallet_id,

@@ -49,6 +49,11 @@ export class VoucherPage {
         if (!walletsResult.includes(res.keyId)) walletsResult.push(res.keyId);
       });
 
+      this.logger.log(
+        'get_frozen_vouchers/?wallet_ids=',
+        `${VOUCHER_URL_REQUEST}get_frozen_vouchers/?wallet_ids=${walletsResult}`
+      );
+
       this.httpClient
         .get(
           `${VOUCHER_URL_REQUEST}get_frozen_vouchers/?wallet_ids=${walletsResult}`
@@ -87,12 +92,20 @@ export class VoucherPage {
   }
 
   private getVoucher(id) {
+    this.logger.log(
+      'get_withdraw_info/?voucher_id=',
+      `${VOUCHER_URL_REQUEST}get_withdraw_info/?voucher_id=${id}`
+    );
     return this.httpClient
       .get(`${VOUCHER_URL_REQUEST}get_withdraw_info/?voucher_id=${id}`)
       .toPromise();
   }
 
   private sendTX(raw_tx_hex) {
+    this.logger.log(
+      'send_raw_transaction/',
+      `${VOUCHER_URL_REQUEST}send_raw_transaction/${raw_tx_hex}`
+    );
     return this.httpClient
       .post(`${VOUCHER_URL_REQUEST}send_raw_transaction/`, {
         raw_tx_hex
@@ -279,6 +292,7 @@ export class VoucherPage {
                 .catch(err => {
                   this.showModal('network', id);
                   this.logger.error('transaction not sended', err);
+                  this.logger.error('transaction not sended', err.error.detail);
                 });
             }
           });
