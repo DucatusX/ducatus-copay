@@ -215,12 +215,14 @@ export class VoucherPage {
               .getMainAddresses(wallet, { doNotVerify: false })
               .then(result => {
                 return result.find(t => {
-                  return t.address === data.user_duc_address;
+                  if (t.address === data.user_duc_address) {
+                    return t.path;
+                  }
                 });
               })
           : data.private_path;
 
-        return xpriv.deriveChild(address.path).privateKey.toWIF();
+        return xpriv.deriveChild(address).privateKey.toWIF();
       })
       .catch(err => {
         if (
