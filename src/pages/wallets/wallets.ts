@@ -15,6 +15,7 @@ import { AddPage } from '../add/add';
 import { CopayersPage } from '../add/copayers/copayers';
 import { BackupKeyPage } from '../backup/backup-key/backup-key';
 import { CalculatorPage } from '../calculator/calculator';
+import { DepositPage } from '../deposit/deposit';
 import { CoinbasePage } from '../integrations/coinbase/coinbase';
 import { CoinbaseAccountPage } from '../integrations/coinbase/coinbase-account/coinbase-account';
 import { ShapeshiftPage } from '../integrations/shapeshift/shapeshift';
@@ -724,5 +725,9 @@ export class WalletsPage {
 
   public openVoucher() {
     this.navCtrl.push(VoucherPage);
+  }
+
+  public openDeposits() {
+    this.navCtrl.push(DepositPage);
   }
 }

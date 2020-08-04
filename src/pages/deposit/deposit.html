@@ -1,0 +1,95 @@
+<ion-header class="bp-header">
+  <ion-navbar>
+    <ion-title>
+      <div
+        [reveal-at-scroll-pos]="expandableHeader.headerHeight"
+        [scrollArea]="scrollArea"
+      >
+        {{ 'Deposits' | translate }}
+      </div>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content #scrollArea>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="wrapper">
+    <expandable-header
+      [scrollArea]="scrollArea"
+      [fadeFactor]="5"
+      [disableFade]="true"
+      #expandableHeader
+    >
+      <ion-toolbar class="wide-header__title">
+        <expandable-header-primary>
+          {{ 'Deposits' | translate }}
+        </expandable-header-primary>
+      </ion-toolbar>
+    </expandable-header>
+
+    <ion-list class="deposit-list">
+      <div *ngIf="!depositsLoading">
+        <div *ngFor="let item of deposits">
+          <ion-item class="deposit-item" *ngIf="!item.cltv_details.withdraw">
+            <ion-label class="deposit-item-inner">
+              <div class="deposit-item-info">
+                <div>
+                  <div class="deposit-item-title">
+                    {{ item.duc_amount }} DUC
+                    <span class="deposit-item-title-deposit">+15</span>
+                  </div>
+                  <span class="deposit-item-date"
+                    >{{ item.cltv_details.frozen_at | date:'dd.LL.y' }}</span
+                  >
+                </div>
+              </div>
+              <div
+                class="deposit-item-info"
+                [ngClass]="{'deposit-item-info-unactive': item.ready_to_withdraw }"
+              >
+                <div *ngIf="item.withdrow_check">
+                  <span ion-button class="deposit-item-loading">
+                    <ion-spinner name="dots"></ion-spinner>
+                  </span>
+                </div>
+                <div *ngIf="!item.withdrow_check">
+                  <span
+                    *ngIf="!item.ready_to_withdraw"
+                    class="deposit-item-percent"
+                    >5%</span
+                  >
+                  <span
+                    *ngIf="item.ready_to_withdraw"
+                    ion-button
+                    class="deposit-item-button"
+                    (click)="withdrowTrigger(item.id)"
+                    >WITHDRAW</span
+                  >
+                </div>
+              </div>
+              <div class="deposit-range-limit" style="width: 60%;"></div>
+            </ion-label>
+          </ion-item>
+        </div>
+      </div>
+
+      <div *ngIf="depositsLoading"><ion-spinner name="dots"></ion-spinner></div>
+
+      <div class="deposit-add">
+        <span
+          ion-button
+          (click)="goToDepositAddPage()"
+          class="deposit-add-button icon icon__add"
+          ><img
+            src="./assets/img/icon-deposit-add-plus.svg"
+            width="21px"
+            height="21px"
+          />
+          Deposit</span
+        >
+      </div>
+    </ion-list>
+  </div>
+</ion-content>

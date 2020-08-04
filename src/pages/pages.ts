@@ -10,6 +10,8 @@ import { BackupGamePage } from '../pages/backup/backup-game/backup-game';
 import { BackupKeyPage } from '../pages/backup/backup-key/backup-key';
 import { CalculatorPage } from '../pages/calculator/calculator';
 import { CalculatorConvertPage } from '../pages/calculator/calculator-convert/calculator-convert';
+import { DepositPage } from '../pages/deposit/deposit';
+import { DepositAddPage } from '../pages/deposit/deposit-add/deposit-add';
 import { SendFeedbackPage } from '../pages/feedback/send-feedback/send-feedback';
 import { FinishModalPage } from '../pages/finish/finish';
 import { IntegrationsPage } from '../pages/integrations/integrations';
@@ -249,9 +251,10 @@ export const PAGES = [
   WideHeaderPage,
   VoucherPage,
   VoucherAddPage,
+  DepositPage,
+  DepositAddPage,
   CardItemPage,
   CoinSelectorPage,
-  SlideToAcceptPage,
-  // Phases: card pages
+  SlideToAcceptPage, // Phases: card pages
   PhaseOneCardIntro
 ];
