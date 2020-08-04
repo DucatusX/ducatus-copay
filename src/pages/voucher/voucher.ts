@@ -236,7 +236,7 @@ export class VoucherPage {
       alreadyActivated: {
         title:
           '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
-        text: `Your voucher already unfreeze`,
+        text: `Please wait, Ducatus is on the way to your wallet`,
         button: 'OK'
       },
       network: {
