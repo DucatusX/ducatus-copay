@@ -210,19 +210,20 @@ export class VoucherPage {
           derivedPrivKey
         );
 
-        const address = addressPath
-          ? await this.walletProvider
-              .getMainAddresses(wallet, { doNotVerify: false })
-              .then(result => {
-                return result.find(t => {
-                  if (t.address === data.user_duc_address) {
-                    return t.path;
-                  }
-                });
-              })
-          : data.private_path;
+        const address = await this.walletProvider
+          .getMainAddresses(wallet, { doNotVerify: false })
+          .then(result => {
+            return result.find(t => {
+              return t.address === data.user_duc_address;
+            });
+          });
 
-        return xpriv.deriveChild(address).privateKey.toWIF();
+        console.log(xpriv.deriveChild(data.private_path).privateKey.toWIF());
+        console.log(xpriv.deriveChild(data.private_path));
+
+        if (addressPath)
+          return xpriv.deriveChild(address.path).privateKey.toWIF();
+        else return xpriv.deriveChild(data.private_path).privateKey.toWIF();
       })
       .catch(err => {
         if (

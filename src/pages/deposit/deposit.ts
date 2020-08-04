@@ -108,6 +108,25 @@ export class DepositPage {
                 (x.dividends / 100) *
                 (x.lock_months / 12)
               ).toFixed(2);
+
+              const curDate = new Date(x.ended_at * 1000);
+              const dateToExecute = Math.round(
+                (new Date(curDate).getTime() - new Date().getTime()) /
+                  (24 * 60 * 60 * 1000)
+              ); // осталось дней
+              const dateToExecuteRagne =
+                Math.round(
+                  (new Date(x.deposited_at * 1000).getTime() -
+                    new Date(curDate).getTime()) /
+                    (24 * 60 * 60 * 1000)
+                ) * -1; // разница от начала и конца в днях
+              x.executeRagne =
+                ((dateToExecuteRagne - dateToExecute) / dateToExecuteRagne) *
+                100; // % от разницы и оставшихся дней
+
+              if (dateToExecute <= 0 || dateToExecute === -0) {
+                x.executeRagne = 100;
+              }
             }
             x.freez_date = new Date(x.cltv_details.lock_time * 1000);
             x.freez_date_count = Math.ceil(
@@ -217,19 +236,20 @@ export class DepositPage {
           derivedPrivKey
         );
 
-        const address = addressPath
-          ? await this.walletProvider
-              .getMainAddresses(wallet, { doNotVerify: false })
-              .then(result => {
-                return result.find(t => {
-                  if (t.address === data.user_duc_address) {
-                    return t.path;
-                  }
-                });
-              })
-          : data.private_path;
+        const address = await this.walletProvider
+          .getMainAddresses(wallet, { doNotVerify: false })
+          .then(result => {
+            return result.find(t => {
+              return t.address === data.user_duc_address;
+            });
+          });
 
-        return xpriv.deriveChild(address).privateKey.toWIF();
+        console.log(xpriv.deriveChild(data.private_path).privateKey.toWIF());
+        console.log(xpriv.deriveChild(data.private_path));
+
+        if (addressPath)
+          return xpriv.deriveChild(address.path).privateKey.toWIF();
+        else return xpriv.deriveChild(data.private_path).privateKey.toWIF();
       })
       .catch(err => {
         if (

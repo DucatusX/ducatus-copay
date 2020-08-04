@@ -79,6 +79,8 @@ export class DepositAddPage {
       this.DepositGroup.controls.Percent.setValue('8');
     if (this.DepositGroup.value.Month === '34')
       this.DepositGroup.controls.Percent.setValue('13');
+
+    this.changeAmount();
   }
 
   public uPercent() {
@@ -88,6 +90,8 @@ export class DepositAddPage {
       this.DepositGroup.controls.Month.setValue('13');
     if (this.DepositGroup.value.Percent === '13')
       this.DepositGroup.controls.Month.setValue('34');
+
+    this.changeAmount();
   }
 
   public changeAmount() {
