@@ -12,6 +12,9 @@
 </ion-header>
 
 <ion-content #scrollArea>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <div class="wrapper">
     <expandable-header
       [scrollArea]="scrollArea"
@@ -48,7 +51,7 @@
                     <ion-spinner name="dots"></ion-spinner>
                   </span>
                 </div>
-                <div *ngIf="!item.withdrow_check">
+                <div *ngIf="!item.withdrow_check" style="text-align: center;">
                   <div
                     *ngIf="!item.ready_to_withdraw"
                     class="voucher-item-info-unactive-button"

@@ -42,6 +42,10 @@ export class VoucherPage {
       )
     );
 
+    this.getVouchers();
+  }
+
+  private getVouchers() {
     this.getWalletsInfo('duc').then(wallets => {
       const walletsResult = [];
 
@@ -257,6 +261,23 @@ export class VoucherPage {
       ]
     });
     alert.present();
+  }
+
+  private debounceGetVouchers = _.debounce(
+    async () => {
+      this.getVouchers();
+    },
+    5000,
+    {
+      leading: true
+    }
+  );
+
+  public doRefresh(refresher): void {
+    this.debounceGetVouchers();
+    setTimeout(() => {
+      refresher.complete();
+    }, 2000);
   }
 
   public withdrowTrigger(id: number) {

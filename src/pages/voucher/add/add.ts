@@ -181,8 +181,8 @@ export class VoucherAddPage {
     activation_code: string
   ) {
     this.logger.log(
-      '{VOUCHER_URL_REQUEST}/transfer/',
-      `${VOUCHER_URL_REQUEST}/transfer/${wallet_id},${duc_address},${duc_public_key},${activation_code}`
+      '{VOUCHER_URL_REQUEST}transfer/',
+      `${VOUCHER_URL_REQUEST}transfer/${wallet_id},${duc_address},${duc_public_key},${activation_code}`
     );
     return this.httpClient
       .post(`${VOUCHER_URL_REQUEST}/transfer/`, {
