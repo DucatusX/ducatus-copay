@@ -233,6 +233,12 @@ export class VoucherPage {
         text: `Your voucher successfully unfreeze`,
         button: 'OK'
       },
+      alreadyActivated: {
+        title:
+          '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
+        text: `Your voucher successfully unfreeze`,
+        button: 'OK'
+      },
       network: {
         title:
           '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
@@ -254,6 +260,7 @@ export class VoucherPage {
           text: answers.button,
           handler: () => {
             this.vouchers.map(t => {
+              this.getVouchers();
               if (t.id === id) t.withdrow_check = false;
             });
           }
@@ -311,6 +318,11 @@ export class VoucherPage {
                   this.showModal('success', id);
                 })
                 .catch(err => {
+                  if (
+                    err.error.detail ===
+                    '-27: transaction already in block chain'
+                  )
+                    this.showModal('alreadyActivated', id);
                   this.showModal('network', id);
                   this.logger.error('transaction not sended', err);
                   this.logger.error('transaction not sended', err.error.detail);
