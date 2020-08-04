@@ -118,16 +118,31 @@ export class VoucherAddPage {
 
   private showModal(type: string, opt?: any) {
     const options = {
-      usd: opt ? opt.usd : '5',
-      duc: opt ? opt.duc : '100',
-      min: opt ? opt.min : '15'
+      usd: opt ? opt.usd : '1',
+      duc: opt ? opt.duc : '20',
+      min: opt ? opt.min : '15',
+      day: opt ? opt.day : '14'
     };
 
     const modalAnswers = {
       ok: {
         title:
           '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
-        text: `Your ${options.usd}$ voucher successfully activated`,
+        text: `Your ${
+          options.usd
+        }$ voucher successfully activated. You will get ${
+          options.duc
+        } Ducatus in ${options.min} minutes`,
+        button: 'OK'
+      },
+      ok_freeze: {
+        title:
+          '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
+        text: `Your $${
+          options.usd
+        } voucher succesfully activated. You can withdraw your ${
+          options.duc
+        } Ducatus after ${options.day} days`,
         button: 'OK'
       },
       error: {
@@ -224,11 +239,17 @@ export class VoucherAddPage {
       .then(res => {
         const result: any = res;
 
-        this.showModal('ok', {
-          usd: result.usd_amount,
-          duc: result.duc_amount,
-          min: '15'
-        });
+        result.lock_days !== 0
+          ? this.showModal('ok_freeze', {
+              usd: result.usd_amount,
+              duc: result.duc_amount,
+              day: result.lock_days
+            })
+          : this.showModal('ok', {
+              usd: result.usd_amount,
+              duc: result.duc_amount,
+              min: '15'
+            });
       })
       .catch(err => {
         switch (err.status) {

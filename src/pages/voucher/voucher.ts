@@ -225,18 +225,18 @@ export class VoucherPage {
     return tx.toHex();
   }
 
-  private showModal(type: string, id?: number) {
+  private showModal(type: string, id?: number, ducAmount?: number) {
     const modalAnswers = {
       success: {
         title:
           '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
-        text: `Your voucher successfully unfreeze`,
+        text: `You will get ${ducAmount || ''} Ducatus in 15 minutes`,
         button: 'OK'
       },
       alreadyActivated: {
         title:
           '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
-        text: `Your voucher successfully unfreeze`,
+        text: `Your voucher already unfreeze`,
         button: 'OK'
       },
       network: {
@@ -315,17 +315,17 @@ export class VoucherPage {
               this.sendTX(txHex)
                 .then(res => {
                   this.logger.log('transaction sended', res);
-                  this.showModal('success', id);
+                  this.showModal('success', id, voucher.duc_amount);
                 })
                 .catch(err => {
-                  if (
-                    err.error.detail ===
-                    '-27: transaction already in block chain'
-                  )
-                    this.showModal('alreadyActivated', id);
-                  this.showModal('network', id);
-                  this.logger.error('transaction not sended', err);
-                  this.logger.error('transaction not sended', err.error.detail);
+                  err.error.detail === '-27: transaction already in block chain'
+                    ? this.showModal('alreadyActivated', id)
+                    : this.showModal('network', id);
+                  this.logger.error(
+                    'transaction not sended',
+                    err,
+                    err.error.detail
+                  );
                 });
             }
           });
