@@ -6,42 +6,53 @@ import _ from 'lodash';
 import { Logger } from '../../../../src/providers/logger/logger';
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
 import { BwcProvider } from '../../../providers/bwc/bwc';
+import { IncomingDataProvider } from '../../../providers/incoming-data/incoming-data';
 import { ProfileProvider } from '../../../providers/profile/profile';
+import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
 import { WalletProvider } from '../../../providers/wallet/wallet';
-import { VOUCHER_URL_REQUEST } from '../params';
+import { DEPOSIT_URL_REQUEST } from '../params';
 
 @Component({
-  selector: 'page-voucher',
-  templateUrl: 'add.html'
+  selector: 'page-deposit-add',
+  templateUrl: 'deposit-add.html'
 })
-export class VoucherAddPage {
-  public VoucherGroup: FormGroup;
+export class DepositAddPage {
+  public DepositGroup: FormGroup;
 
   public wallet: any;
   public walletsGroups: any[];
   public walletAddresses: any;
   public sendLength: number = 0;
-  public voucherLoading = false;
+  public depositLoading = false;
+  public amountWithPercent: any;
+  public amountWallet = 0;
+  public depositMonth = 13;
+  public depositPercent = 8;
+  public maxAmount = 0;
 
   constructor(
     private formBuilder: FormBuilder,
     private profileProvider: ProfileProvider,
     private walletProvider: WalletProvider,
     private actionSheetProvider: ActionSheetProvider,
+    private incomingDataProvider: IncomingDataProvider,
+    private txFormatProvider: TxFormatProvider,
     private alertCtrl: AlertController,
     private httpClient: HttpClient,
     private bwcProvider: BwcProvider,
     private logger: Logger
   ) {
-    this.VoucherGroup = this.formBuilder.group({
-      VoucherGroupCode: [
+    this.DepositGroup = this.formBuilder.group({
+      Amount: [
+        0,
+        Validators.compose([Validators.minLength(1), Validators.required])
+      ],
+      Address: [
         '',
         Validators.compose([Validators.minLength(1), Validators.required])
       ],
-      VoucherGroupAddress: [
-        '',
-        Validators.compose([Validators.minLength(1), Validators.required])
-      ]
+      Month: ['13', Validators.compose([Validators.required])],
+      Percent: ['8', Validators.compose([Validators.required])]
     });
   }
 
@@ -58,6 +69,42 @@ export class VoucherAddPage {
     );
 
     this.getWalletsInfo('duc');
+  }
+
+  public uMonth() {
+    if (this.DepositGroup.value.Month === '5')
+      this.DepositGroup.controls.Percent.setValue('5');
+    if (this.DepositGroup.value.Month === '13')
+      this.DepositGroup.controls.Percent.setValue('8');
+    if (this.DepositGroup.value.Month === '34')
+      this.DepositGroup.controls.Percent.setValue('13');
+
+    this.changeAmount();
+  }
+
+  public uPercent() {
+    if (this.DepositGroup.value.Percent === '5')
+      this.DepositGroup.controls.Month.setValue('5');
+    if (this.DepositGroup.value.Percent === '8')
+      this.DepositGroup.controls.Month.setValue('13');
+    if (this.DepositGroup.value.Percent === '13')
+      this.DepositGroup.controls.Month.setValue('34');
+
+    this.changeAmount();
+  }
+
+  public changeAmount() {
+    const amount = this.DepositGroup.value.Amount
+      ? parseFloat(this.DepositGroup.value.Amount)
+      : 0;
+
+    const amountWithPercentValue = (
+      amount *
+      (parseFloat(this.DepositGroup.value.Percent) / 100) *
+      (parseFloat(this.DepositGroup.value.Month) / 12)
+    ).toFixed(4);
+
+    this.amountWithPercent = amountWithPercentValue;
   }
 
   private getWalletsInfo(coin) {
@@ -93,7 +140,7 @@ export class VoucherAddPage {
     if (this.sendLength === 1) {
       wallets.map(res => {
         res.then(result => {
-          this.VoucherGroup.value.VoucherGroupAddress = result.address;
+          this.DepositGroup.value.Address = result.address;
         });
       });
     }
@@ -102,7 +149,7 @@ export class VoucherAddPage {
   }
 
   public openAddressList() {
-    if (!this.voucherLoading) {
+    if (!this.depositLoading) {
       const infoSheet = this.actionSheetProvider.createInfoSheet(
         'convertor-address',
         { wallet: this.walletAddresses }
@@ -110,53 +157,16 @@ export class VoucherAddPage {
       infoSheet.present();
       infoSheet.onDidDismiss(option => {
         if (option) {
-          this.VoucherGroup.value.VoucherGroupAddress = option;
+          this.DepositGroup.value.Address = option;
+          this.wallet = this.walletAddresses.find(t => t.address === option);
+          this.sendMax();
         }
       });
     }
   }
 
-  private showModal(type: string, opt?: any) {
-    const options = {
-      usd: opt ? opt.usd : '1',
-      duc: opt ? opt.duc : '20',
-      min: opt ? opt.min : '15',
-      day: opt ? opt.day : '14'
-    };
-
+  private showModal(type: string) {
     const modalAnswers = {
-      ok: {
-        title:
-          '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
-        text: `Your ${
-          options.usd
-        }$ voucher successfully activated. You will get ${
-          options.duc
-        } Ducatus in ${options.min} minutes`,
-        button: 'OK'
-      },
-      ok_freeze: {
-        title:
-          '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
-        text: `Your $${
-          options.usd
-        } voucher succesfully activated. You can withdraw your ${
-          options.duc
-        } Ducatus after ${options.day} days`,
-        button: 'OK'
-      },
-      error: {
-        title:
-          '<img src="./assets/img/icon-attantion.svg" width="42px" height="42px">',
-        text: 'Please check your activation code',
-        button: 'OK'
-      },
-      registated: {
-        title:
-          '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
-        text: 'Your voucher was already registered',
-        button: 'OK'
-      },
       network: {
         title:
           '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
@@ -177,10 +187,10 @@ export class VoucherAddPage {
         {
           text: answers.button,
           handler: () => {
-            this.voucherLoading = false;
+            this.depositLoading = false;
             if (type != 'network') {
-              this.VoucherGroup.value.VoucherGroupAddress = '';
-              this.VoucherGroup.value.VoucherGroupCode = '';
+              this.DepositGroup.value.Address = '';
+              this.DepositGroup.value.Amount = '';
             }
           }
         }
@@ -189,34 +199,52 @@ export class VoucherAddPage {
     alert.present();
   }
 
-  private sendCode(
+  private generateDeposit(
     wallet_id: string,
     duc_address: string,
     duc_public_key: string,
-    activation_code: string,
+    lock_months: number,
     private_path: string
   ) {
     this.logger.log(
-      '{VOUCHER_URL_REQUEST}transfer/',
-      `${VOUCHER_URL_REQUEST}transfer/${wallet_id},${duc_address},${duc_public_key},${activation_code},${private_path}`
+      '{DEPOSIT_URL_REQUEST}generate_deposit/',
+      `${DEPOSIT_URL_REQUEST}generate_deposit/${wallet_id},${duc_address},${duc_public_key},${lock_months}`
     );
     return this.httpClient
-      .post(`${VOUCHER_URL_REQUEST}/transfer/`, {
+      .post(`${DEPOSIT_URL_REQUEST}generate_deposit/`, {
         wallet_id,
         duc_address,
         duc_public_key,
-        activation_code,
+        lock_months,
         private_path
       })
       .toPromise();
   }
 
-  public async activateVoucher() {
-    this.voucherLoading = true;
+  public updAmountToMax() {
+    this.DepositGroup.controls.Amount.setValue(this.maxAmount);
+    this.changeAmount();
+  }
+
+  public sendMax() {
+    const { token } = this.wallet.wallet.credentials;
+
+    this.walletProvider
+      .getBalance(this.wallet.wallet, {
+        tokenAddress: token ? token.address : ''
+      })
+      .then(resp => {
+        this.maxAmount = resp.availableAmount / 100000000;
+        this.logger.log('maxAmount', this.maxAmount);
+      });
+  }
+
+  public async generateUserDeposit() {
+    this.depositLoading = true;
     this.walletAddresses;
 
     const walletToSend = this.walletAddresses.find(
-      t => t.address === this.VoucherGroup.value.VoucherGroupAddress
+      t => t.address === this.DepositGroup.value.Address
     );
 
     const info = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(
@@ -227,8 +255,9 @@ export class VoucherAddPage {
       .getMainAddresses(walletToSend.wallet, { doNotVerify: false })
       .then(result => {
         const address = result.find(t => {
-          return t.address === this.VoucherGroup.value.VoucherGroupAddress;
+          return t.address === this.DepositGroup.value.Address;
         });
+
         return info.derive(address.path).publicKey.toString();
       });
 
@@ -238,49 +267,54 @@ export class VoucherAddPage {
       })
       .then(result => {
         return result.find(t => {
-          return t.address === this.VoucherGroup.value.VoucherGroupAddress;
+          return t.address === this.DepositGroup.value.Address;
         });
       });
 
-    this.sendCode(
+    this.logger.log(addressData, addressData);
+
+    console.log(
+      walletToSend,
       walletToSend.walletId,
-      this.VoucherGroup.value.VoucherGroupAddress,
+      walletToSend.wallet.credentials.walletId
+    );
+
+    this.generateDeposit(
+      walletToSend.walletId,
+      this.DepositGroup.value.Address,
       pubKey,
-      this.VoucherGroup.value.VoucherGroupCode,
+      parseFloat(this.DepositGroup.value.Month),
       addressData.path
     )
       .then(res => {
         const result: any = res;
 
-        result.lock_days !== 0
-          ? this.showModal('ok_freeze', {
-              usd: result.usd_amount,
-              duc: result.duc_amount,
-              day: result.lock_days
-            })
-          : this.showModal('ok', {
-              usd: result.usd_amount,
-              duc: result.duc_amount,
-              min: '15'
-            });
+        if (result.cltv_details.locked_duc_address) {
+          const addressView = this.walletProvider.getAddressView(
+            walletToSend.wallet.coin,
+            walletToSend.wallet.network,
+            result.cltv_details.locked_duc_address,
+            true
+          );
+
+          const parsedAmount = this.txFormatProvider.parseAmount(
+            walletToSend.wallet.coin.toLowerCase(),
+            this.DepositGroup.value.Amount,
+            walletToSend.wallet.coin.toUpperCase()
+          );
+
+          const redirParms = {
+            activePage: 'ScanPage',
+            walletId: walletToSend.wallet.id,
+            amount: parsedAmount.amountSat
+          };
+
+          this.incomingDataProvider.redir(addressView, redirParms);
+        }
       })
       .catch(err => {
-        switch (err.status) {
-          case 403:
-            if (
-              [
-                'This voucher is not active',
-                'Invalid activation code'
-              ].includes(err.error.detail)
-            )
-              this.showModal('error');
-            if (err.error.detail == 'This voucher already used')
-              this.showModal('registated');
-            break;
-          default:
-            this.showModal('network');
-            break;
-        }
+        this.showModal('network');
+        this.logger.log(err);
       });
   }
 }

@@ -2,22 +2,22 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { AlertController, NavController } from 'ionic-angular';
 import { BwcProvider } from '../../providers/bwc/bwc';
-import { VoucherAddPage } from './add/add';
+import { DepositAddPage } from './deposit-add/deposit-add';
 
 import * as bip65 from 'bip65';
 import * as bitcoin from 'bitcoinjs-lib';
 import _ from 'lodash';
 
 import { Logger, ProfileProvider, WalletProvider } from '../../providers';
-import { VOUCHER_URL_REQUEST } from './params';
+import { DEPOSIT_URL_REQUEST } from './params';
 
 @Component({
-  selector: 'page-voucher',
-  templateUrl: 'voucher.html'
+  selector: 'page-deposit',
+  templateUrl: 'deposit.html'
 })
-export class VoucherPage {
-  public vouchersLoading = true;
-  public vouchers = [];
+export class DepositPage {
+  public depositsLoading = true;
+  public deposits = [];
   public walletsGroups: any;
   public wallets: any;
 
@@ -43,7 +43,8 @@ export class VoucherPage {
       )
     );
 
-    this.getVouchers();
+    this.getDeposits();
+
     let walletsGet = this.getWalletsInfoAddress('duc');
 
     Promise.all([walletsGet]).then(results => {
@@ -79,7 +80,7 @@ export class VoucherPage {
     return walletsRes;
   }
 
-  private getVouchers() {
+  private getDeposits() {
     this.getWalletsInfo('duc').then(wallets => {
       const walletsResult = [];
 
@@ -89,20 +90,45 @@ export class VoucherPage {
       });
 
       this.logger.log(
-        'get_frozen_vouchers/?wallet_ids=',
-        `${VOUCHER_URL_REQUEST}get_frozen_vouchers/?wallet_ids=${walletsResult}`
+        'get_deposits/?wallet_ids=',
+        `${DEPOSIT_URL_REQUEST}get_deposits/?wallet_ids=${walletsResult}`
       );
 
       this.httpClient
-        .get(
-          `${VOUCHER_URL_REQUEST}get_frozen_vouchers/?wallet_ids=${walletsResult}`
-        )
+        .get(`${DEPOSIT_URL_REQUEST}get_deposits/?wallet_ids=${walletsResult}`)
         .toPromise()
         .then(result => {
-          this.vouchers = result as any;
-          this.logger.log('got user vouchers:', this.vouchers);
+          this.deposits = result as any;
+          this.logger.log('got user vouchers:', this.deposits);
 
-          this.vouchers.map(x => {
+          this.deposits.map(x => {
+            if (x.depositinput_set.length != 0) {
+              x.ended_at_date = new Date(x.ended_at * 1000);
+              x.duc_added = (
+                x.duc_amount *
+                (x.dividends / 100) *
+                (x.lock_months / 12)
+              ).toFixed(2);
+
+              const curDate = new Date(x.ended_at * 1000);
+              const dateToExecute = Math.round(
+                (new Date(curDate).getTime() - new Date().getTime()) /
+                  (24 * 60 * 60 * 1000)
+              );
+              const dateToExecuteRagne =
+                Math.round(
+                  (new Date(x.deposited_at * 1000).getTime() -
+                    new Date(curDate).getTime()) /
+                    (24 * 60 * 60 * 1000)
+                ) * -1;
+              x.executeRagne =
+                ((dateToExecuteRagne - dateToExecute) / dateToExecuteRagne) *
+                100;
+
+              if (dateToExecute <= 0 || dateToExecute === -0) {
+                x.executeRagne = 100;
+              }
+            }
             x.freez_date = new Date(x.cltv_details.lock_time * 1000);
             x.freez_date_count = Math.ceil(
               Math.abs(x.freez_date.getTime() - new Date().getTime()) /
@@ -111,15 +137,15 @@ export class VoucherPage {
             x.withdrow_check = false;
           });
 
-          this.vouchersLoading = false;
-          this.logger.log('updated user vouchers:', this.vouchers);
+          this.depositsLoading = false;
+          this.logger.log('updated user vouchers:', this.deposits);
         })
         .catch(err => this.logger.debug(err));
     });
   }
 
-  public goToVoucehrAddPage() {
-    this.navCtrl.push(VoucherAddPage);
+  public goToDepositAddPage() {
+    this.navCtrl.push(DepositAddPage);
   }
 
   private getAddress(wallet) {
@@ -130,23 +156,23 @@ export class VoucherPage {
     });
   }
 
-  private getVoucher(id) {
+  private getDeposit(id) {
     this.logger.log(
-      'get_withdraw_info/?voucher_id=',
-      `${VOUCHER_URL_REQUEST}get_withdraw_info/?voucher_id=${id}`
+      '/get_deposit_info/?deposit_id=',
+      `${DEPOSIT_URL_REQUEST}get_deposit_info/?deposit_id=${id}`
     );
     return this.httpClient
-      .get(`${VOUCHER_URL_REQUEST}get_withdraw_info/?voucher_id=${id}`)
+      .get(`${DEPOSIT_URL_REQUEST}get_deposit_info/?deposit_id=${id}`)
       .toPromise();
   }
 
   private sendTX(raw_tx_hex) {
     this.logger.log(
-      'send_raw_transaction/',
-      `${VOUCHER_URL_REQUEST}send_raw_transaction/${raw_tx_hex}`
+      '/send_deposit_transaction/',
+      `${DEPOSIT_URL_REQUEST}send_deposit_transaction/${raw_tx_hex}`
     );
     return this.httpClient
-      .post(`${VOUCHER_URL_REQUEST}send_raw_transaction/`, {
+      .post(`${DEPOSIT_URL_REQUEST}send_deposit_transaction/`, {
         raw_tx_hex
       })
       .toPromise();
@@ -219,6 +245,11 @@ export class VoucherPage {
             });
           });
 
+        this.logger.log(
+          xpriv.deriveChild(data.private_path).privateKey.toWIF()
+        );
+        this.logger.log(xpriv.deriveChild(data.private_path));
+
         if (addressPath)
           return xpriv.deriveChild(address.path).privateKey.toWIF();
         else return xpriv.deriveChild(data.private_path).privateKey.toWIF();
@@ -289,15 +320,15 @@ export class VoucherPage {
       : modalAnswers['network'];
 
     let alert = this.alertCtrl.create({
-      cssClass: 'voucher-alert',
+      cssClass: 'deposit-alert',
       title: answers.title,
       message: answers.text,
       buttons: [
         {
           text: answers.button,
           handler: () => {
-            this.vouchers.map(t => {
-              this.getVouchers();
+            this.deposits.map(t => {
+              this.getDeposits();
               if (t.id === id) t.withdrow_check = false;
             });
           }
@@ -307,9 +338,9 @@ export class VoucherPage {
     alert.present();
   }
 
-  private debounceGetVouchers = _.debounce(
+  private debounceGetDeposits = _.debounce(
     async () => {
-      this.getVouchers();
+      this.getDeposits();
     },
     5000,
     {
@@ -318,39 +349,43 @@ export class VoucherPage {
   );
 
   public doRefresh(refresher): void {
-    this.debounceGetVouchers();
+    this.debounceGetDeposits();
     setTimeout(() => {
       refresher.complete();
     }, 2000);
   }
 
   public withdrowTrigger(id: number) {
-    this.vouchers.map(t => {
+    this.deposits.map(t => {
       if (t.id === id) t.withdrow_check = true;
     });
 
-    this.getVoucher(id).then(async res => {
-      const voucher: any = res;
+    this.getDeposit(id).then(async res => {
+      const deposit: any = res;
 
-      voucher.cltv_details.sending_amount =
-        voucher.voucherinput_set[0].amount - voucher.tx_fee;
-      voucher.cltv_details.tx_hash = voucher.voucherinput_set[0].mint_tx_hash;
-      voucher.cltv_details.user_duc_address = voucher.user_duc_address;
-      voucher.cltv_details.vout_number = voucher.voucherinput_set[0].tx_vout;
+      deposit.cltv_details.sending_amount =
+        deposit.depositinput_set[0].amount - deposit.tx_fee;
+      deposit.cltv_details.tx_hash = deposit.depositinput_set[0].mint_tx_hash;
+      deposit.cltv_details.user_duc_address = deposit.user_duc_address;
+      deposit.cltv_details.vout_number = deposit.depositinput_set[0].tx_vout;
 
       const addressFilter = this.wallets.find(t => {
-        return t.address === voucher.cltv_details.user_duc_address;
+        return t.address === deposit.cltv_details.user_duc_address;
       });
+
+      this.logger.log('addressFilter', addressFilter);
 
       const walletToUnfreeze = addressFilter
         ? addressFilter.wallet
         : this.wallets.find(t => {
-            return t.wallet.credentials.walletId === voucher.wallet_id;
+            return t.wallet.credentials.walletId === deposit.wallet_id;
           }).wallet;
+
+      this.logger.log('walletFilter', walletToUnfreeze);
 
       const txHex = await this.signFreeze(
         walletToUnfreeze,
-        voucher.cltv_details,
+        deposit.cltv_details,
         !!addressFilter
       );
 
@@ -359,7 +394,7 @@ export class VoucherPage {
       this.sendTX(txHex)
         .then(res => {
           this.logger.log('transaction sended', res);
-          this.showModal('success', id, voucher.duc_amount);
+          this.showModal('success', id, deposit.duc_amount);
         })
         .catch(err => {
           err.error.detail === '-27: transaction already in block chain'
