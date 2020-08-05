@@ -57,6 +57,13 @@
         border-radius: 30px;
         min-height: 45px !important;
         height: 45px !important;
+        padding: 0 !important;
+
+        .item-inner {
+          margin: 0 !important;
+          margin-left: 10px !important;
+          padding: 0 !important;
+        }
 
         .input-wrapper {
           text-align: center;
