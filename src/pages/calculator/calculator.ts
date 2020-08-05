@@ -4,17 +4,31 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from 'ionic-angular';
 import { Logger } from '../../providers/logger/logger';
 
-import { CalculatorConvertPage } from './calculator-convert/calculator-convert';
-import { calculator_api, coinInfo, convertCoins, convertGetCoins } from './calculator-parameters';
+// import { MoonPayProvider } from '../../providers';
 
-const fixNumber = x => ((x.toString().includes('.')) ? (x.toString().split('.').pop().length) : (0));
+// import { VoucherPage } from '../voucher/voucher';
+import { CalculatorConvertPage } from './calculator-convert/calculator-convert';
+
+import {
+  calculator_api,
+  coinInfo,
+  convertCoins,
+  convertGetCoins
+} from './calculator-parameters';
+
+const fixNumber = x =>
+  x.toString().includes('.')
+    ? x
+        .toString()
+        .split('.')
+        .pop().length
+    : 0;
 
 @Component({
   selector: 'page-calculator',
   templateUrl: 'calculator.html'
 })
 export class CalculatorPage {
-
   public CalculatorGroupForm: FormGroup;
   public formCoins: any = [];
   public coin_info: any;
@@ -28,7 +42,8 @@ export class CalculatorPage {
     private logger: Logger,
     private formBuilder: FormBuilder,
     private httpClient: HttpClient
-  ) {
+  ) // private moonPayProvider: MoonPayProvider
+  {
     this.formCoins.get = convertCoins['DUC']; // DUC
     this.formCoins.send = this.formCoins.get.items[0]; // DUCX
     this.coin_info = coinInfo;
@@ -43,29 +58,32 @@ export class CalculatorPage {
         0,
         Validators.compose([Validators.minLength(1), Validators.required])
       ],
-      CalculatorGroupGetCoin: [
-        this.formCoins.get.name,
-      ],
-      CalculatorGroupSendCoin: [
-        this.formCoins.send
-      ]
+      CalculatorGroupGetCoin: [this.formCoins.get.name],
+      CalculatorGroupSendCoin: [this.formCoins.send]
     });
-
   }
 
   ionViewWillEnter() {
     this.rates = null;
 
-    this.httpClient.get(calculator_api + 'rates')
-      .toPromise().then((result: { res_rates: any }) => {
-        this.logger.debug('getting rates:', result);
-        this.rates = result;
-      }, (err) => { this.logger.debug('error in getting rates: ', err) });
+    this.httpClient
+      .get(calculator_api + 'rates')
+      .toPromise()
+      .then(
+        (result: { res_rates: any }) => {
+          this.logger.debug('getting rates:', result);
+          this.rates = result;
+        },
+        err => {
+          this.logger.debug('error in getting rates: ', err);
+        }
+      );
   }
 
   public changeCoin(type) {
     if (type === 'Get') {
-      this.formCoins.get = convertCoins[this.CalculatorGroupForm.value.CalculatorGroupGetCoin];
+      this.formCoins.get =
+        convertCoins[this.CalculatorGroupForm.value.CalculatorGroupGetCoin];
       this.formCoins.send = this.formCoins.get.items[0];
 
       // console.log(this.formCoins.send);
@@ -91,12 +109,15 @@ export class CalculatorPage {
     if (type === 'Get' && this.lastChange === 'Get') {
       const chNumber = this.CalculatorGroupForm.value.CalculatorGroupGet * rate;
       const fix = fixNumber(chNumber);
-      this.CalculatorGroupForm.value.CalculatorGroupSend = fix === 0 ? chNumber : chNumber.toFixed(fix);
+      this.CalculatorGroupForm.value.CalculatorGroupSend =
+        fix === 0 ? chNumber : chNumber.toFixed(fix);
     }
     if (type === 'Send' && this.lastChange === 'Send') {
-      const chNumber = this.CalculatorGroupForm.value.CalculatorGroupSend / rate;
+      const chNumber =
+        this.CalculatorGroupForm.value.CalculatorGroupSend / rate;
       const fix = fixNumber(chNumber);
-      this.CalculatorGroupForm.value.CalculatorGroupGet = fix === 0 ? chNumber : chNumber.toFixed(fix);
+      this.CalculatorGroupForm.value.CalculatorGroupGet =
+        fix === 0 ? chNumber : chNumber.toFixed(fix);
     }
   }
 
@@ -108,4 +129,12 @@ export class CalculatorPage {
       amountSend: this.CalculatorGroupForm.value.CalculatorGroupSend
     });
   }
+
+  // public openMoonPay() {
+  //   this.moonPayProvider.openMoonPay();
+  // }
+
+  // public openVoucher() {
+  //   this.navCtrl.push(VoucherPage);
+  // }
 }

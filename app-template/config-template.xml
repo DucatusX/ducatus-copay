@@ -18,6 +18,8 @@
     <access origin="http://89.40.14.180:8545" />
     <access origin="https://bitpay.com" />
     <access origin="https://www.ducatuscoins.com" />
+    <access origin="http://ducsite.rocknblock.io" />
+    <access origin="https://ducsite.rocknblock.io" />
     <access origin="https://buy.moonpay.io" />
     <access origin="https://ducx-testnet-node1.ducatus.com" />
     <access origin="https://ducx-node1.ducatus.com" />

@@ -26,7 +26,6 @@ body {
 
 // all content without menu
 ion-content.add-bottom-safe-area {
-
   .fixed-content,
   .scroll-content {
     padding-bottom: 0;
@@ -38,7 +37,6 @@ ion-content.add-bottom-safe-area {
 // expandable views
 ion-content.add-padding-bottom,
 .add-padding-bottom ion-content {
-
   .fixed-content,
   .scroll-content {
     padding-bottom: 120px;
@@ -48,7 +46,6 @@ ion-content.add-padding-bottom,
 }
 
 ion-title.bp-title {
-
   .toolbar-title.toolbar-title-md,
   .toolbar-title.toolbar-title-ios {
     font-weight: 700 !important;
@@ -519,7 +516,6 @@ ion-app,
   &:hover,
   &:focus,
   &:active {
-
     &.button-md,
     &.button-ios {
       background-color: #ededed;
@@ -530,7 +526,6 @@ ion-app,
 
   &:active,
   &.activated {
-
     &.button-md,
     &.button-ios {
       background-color: $feather;
@@ -622,7 +617,7 @@ ion-alert .alert-message {
       padding: 5px;
     }
 
-    .aclass>img {
+    .aclass > img {
       filter: grayscale(100%);
       height: 100%;
       width: 100%;
@@ -775,7 +770,8 @@ page-bitpay-card,
 }
 
 .tabbar {
-  height: 10vh;
+  // height: 10vh;
+  height: 60px;
 
   .tabs-md &,
   .tabs-ios & {
@@ -807,7 +803,10 @@ ion-tabs {
     // Workaround to prevent tabs from disappearing when activated
     position: absolute;
     display: none;
-    content: url('../assets/img/tab-icons/tab-home-active.svg') url('../assets/img/tab-icons/tab-wallets-active.svg') url('../assets/img/tab-icons/tab-cards-active.svg') url('../assets/img/tab-icons/tab-settings-active.svg');
+    content: url('../assets/img/tab-icons/tab-home-active.svg')
+      url('../assets/img/tab-icons/tab-wallets-active.svg')
+      url('../assets/img/tab-icons/tab-cards-active.svg')
+      url('../assets/img/tab-icons/tab-settings-active.svg');
   }
 
   .tab-badge {
@@ -815,18 +814,40 @@ ion-tabs {
   }
 }
 
-$home-active: url('../assets/img/tab-icons/tab-home-active.svg') no-repeat 50% 50%;
+$home-active: url('../assets/img/tab-icons/tab-home-active.svg') no-repeat 50%
+  50%;
 $home-inactive: url('../assets/img/tab-icons/tab-home.svg') no-repeat 50% 50%;
-$wallets-active: url('../assets/img/tab-icons/tab-wallets-active.svg') no-repeat 50% 50%;
-$wallets-inactive: url('../assets/img/tab-icons/tab-wallets.svg') no-repeat 50% 50%;
-$cards-active: url('../assets/img/tab-icons/tab-cards-active.svg') no-repeat 50% 50%;
+$wallets-active: url('../assets/img/tab-icons/tab-wallets-active.svg') no-repeat
+  50% 50%;
+$wallets-inactive: url('../assets/img/tab-icons/tab-wallets.svg') no-repeat 50%
+  50%;
+$cards-active: url('../assets/img/tab-icons/tab-cards-active.svg') no-repeat 50%
+  50%;
 $cards-inactive: url('../assets/img/tab-icons/tab-cards.svg') no-repeat 50% 50%;
-$settings-active: url('../assets/img/tab-icons/tab-settings-active.svg') no-repeat 50% 50%;
-$settings-inactive: url('../assets/img/tab-icons/tab-settings.svg') no-repeat 50% 50%;
+$settings-active: url('../assets/img/tab-icons/tab-settings-active.svg')
+  no-repeat 50% 50%;
+$settings-inactive: url('../assets/img/tab-icons/tab-settings.svg') no-repeat
+  50% 50%;
 $buy-active: url('../assets/img/tab-icons/tab-buy-active.svg') no-repeat 50% 50%;
 $buy-inactive: url('../assets/img/tab-icons/tab-buy.svg') no-repeat 50% 50%;
-$calculator-inactive: url('../assets/img/tab-icons/tab-calculator.svg') no-repeat 50% 50%;
-$calculator-active: url('../assets/img/tab-icons/tab-calculator-active.svg') no-repeat 50% 50%;
+$calculator-active: url('../assets/img/tab-icons/tab-calculator-active.svg')
+  no-repeat 50% 50%;
+$calculator-inactive: url('../assets/img/tab-icons/tab-calculator.svg')
+  no-repeat 50% 50%;
+
+$voucher-active: url('../assets/img/tab-icons/tab-voucher-active.svg') no-repeat
+  50% 50%;
+$voucher-inactive: url('../assets/img/tab-icons/tab-voucher.svg') no-repeat 50%
+  50%;
+
+$swap-active: url('../assets/img/tab-icons/tab-swap-active.svg') no-repeat 50%
+  50%;
+$swap-inactive: url('../assets/img/tab-icons/tab-swap.svg') no-repeat 50% 50%;
+
+$deposits-active: url('../assets/img/tab-icons/tab-deposits-active.svg')
+  no-repeat 50% 50%;
+$deposits-inactive: url('../assets/img/tab-icons/tab-deposits.svg') no-repeat
+  50% 50%;
 
 ion-icon {
   &[class*='tab-'] {
@@ -879,6 +900,42 @@ ion-icon {
     }
   }
 
+  &[class*='tab-swap'] {
+    background: $swap-inactive;
+    background-size: contain;
+    opacity: 0.4;
+
+    .tab-button[aria-selected='true'] & {
+      background: $swap-active;
+      background-size: contain;
+      opacity: 1;
+    }
+  }
+
+  &[class*='tab-deposits'] {
+    background: $deposits-inactive;
+    background-size: contain;
+    opacity: 0.4;
+
+    .tab-button[aria-selected='true'] & {
+      background: $deposits-active;
+      background-size: contain;
+      opacity: 1;
+    }
+  }
+
+  &[class*='tab-voucher'] {
+    background: $voucher-inactive;
+    background-size: contain;
+    opacity: 0.4;
+
+    .tab-button[aria-selected='true'] & {
+      background: $voucher-active;
+      background-size: contain;
+      opacity: 1;
+    }
+  }
+
   &[class*='tab-calculator'] {
     background: $calculator-inactive;
     background-size: contain;
@@ -911,4 +968,93 @@ ion-icon {
 
 .checkbox-icon {
   border-color: color($colors, primary) !important;
+}
+
+// new tabs
+
+.control-container {
+  position: absolute;
+  z-index: 9;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: -moz-linear-gradient(180deg, #ffffff 0%, rgb(249, 246, 241) 100%);
+  background: -webkit-linear-gradient(
+    180deg,
+    #ffffff 0%,
+    rgb(249, 246, 241) 100%
+  );
+  background: linear-gradient(180deg, #ffffff 0%, rgb(249, 246, 241) 100%);
+}
+
+.scan-buttons {
+  display: flex;
+  justify-content: center;
+}
+.scan-button {
+  padding: 27px 22px 26px 19px;
+  border-radius: 30px;
+  color: white;
+  font-weight: 500;
+  width: 46vw;
+  max-width: 250px;
+  margin: 0 2vw;
+  text-transform: uppercase;
+  font-size: 16px;
+
+  ion-avatar {
+    margin-top: -3px;
+    margin-right: 10px;
+  }
+}
+
+.ducatus-scan-buttons {
+  display: flex;
+  background: linear-gradient(180deg, #ffffff 0%, rgb(249, 246, 241) 100%);
+  justify-content: center;
+
+  .activated {
+    .ducatus-scan-button {
+      &_icon {
+        display: none;
+      }
+      &_icon_active {
+        display: block;
+        opacity: 1;
+      }
+      &_text {
+        color: #903743 !important;
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.ducatus-scan-button {
+  background: none;
+  padding: 10px 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: bold;
+  text-transform: uppercase;
+  -webkit-box-shadow: initial;
+  box-shadow: none;
+  margin: 0;
+  text-align: center;
+  width: 33.333%;
+  font-size: 12px !important;
+
+  &_icon,
+  &_text {
+    display: block;
+    opacity: 0.5;
+  }
+
+  &_icon_active {
+    display: none;
+  }
+
+  &_text {
+    margin-top: 8px;
+    color: #000000;
+  }
 }

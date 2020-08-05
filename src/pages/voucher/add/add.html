@@ -1,0 +1,88 @@
+<ion-header class="bp-header">
+  <ion-navbar>
+    <ion-title>
+      <div
+        [reveal-at-scroll-pos]="expandableHeader.headerHeight"
+        [scrollArea]="scrollArea"
+      >
+        {{'Voucher' | translate }}
+      </div>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content #scrollArea>
+  <expandable-header
+    [scrollArea]="scrollArea"
+    [fadeFactor]="5"
+    [disableFade]="true"
+    #expandableHeader
+  >
+    <ion-toolbar class="wide-header__title">
+      <expandable-header-primary></expandable-header-primary>
+    </ion-toolbar>
+  </expandable-header>
+
+  <div page-content class="voucher-page">
+    <ion-list class="voucher-list bp-list">
+      <form [formGroup]="VoucherGroup">
+        <div class="voucher-add-group-wrap">
+          <span class="voucher-add-label"
+            >{{'Enter confirmation code' | translate}}</span
+          >
+          <div class="voucher-add-group">
+            <ion-item class="voucher-add-input">
+              <ion-input
+                placeholder="Enter confirmation code"
+                type="text"
+                formControlName="VoucherGroupCode"
+                [value]="VoucherGroup.value.VoucherGroupCode"
+                [disabled]="voucherLoading"
+                required
+              >
+              </ion-input>
+            </ion-item>
+          </div>
+        </div>
+
+        <div class="voucher-add-group-wrap">
+          <span class="voucher-add-label"
+            >{{'Choose address to send' | translate}}</span
+          >
+
+          <div class="voucher-add-group">
+            <ion-item class="voucher-add-input">
+              <ion-input
+                placeholder="Choose address to send"
+                type="text"
+                formControlName="VoucherGroupAddress"
+                [value]="VoucherGroup.value.VoucherGroupAddress"
+                [disabled]="voucherLoading"
+                required
+              >
+              </ion-input>
+            </ion-item>
+
+            <ion-item
+              *ngIf="walletAddresses"
+              class="voucher-add-select"
+              (click)="openAddressList()"
+            >
+              <ion-icon name="arrow-dropdown"></ion-icon>
+            </ion-item>
+          </div>
+        </div>
+
+        <button
+          ion-button
+          class="button-standard voucher-item-button voucher-add-page-button"
+          (click)="activateVoucher()"
+          [disabled]="!VoucherGroup.valid || voucherLoading"
+        >
+          <span *ngIf="!voucherLoading">{{'Activate' | translate}}</span>
+          <ion-spinner *ngIf="voucherLoading" name="bubbles"></ion-spinner>
+        </button>
+      </form>
+    </ion-list>
+  </div>
+</ion-content>
