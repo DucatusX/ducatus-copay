@@ -33,7 +33,7 @@
       background-color: white;
       border-radius: 100px;
       padding: 10px;
-      max-width: 260px;
+      max-width: 215px;
       align-items: center;
       justify-content: center;
 
@@ -52,7 +52,7 @@
       }
 
       .item {
-        width: 80px;
+        width: 65px;
         background-color: transparent;
         border-radius: 30px;
         min-height: 45px !important;
@@ -61,12 +61,17 @@
 
         .item-inner {
           margin: 0 !important;
-          margin-left: 10px !important;
           padding: 0 !important;
         }
 
         .input-wrapper {
-          text-align: center;
+          min-width: 100%;
+          .label {
+            margin: 0 !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
         }
 
         .radio-icon {
