@@ -75,7 +75,7 @@ export class VoucherAddPage {
     wallets = coins.map(wallet => {
       return this.walletProvider.getAddress(wallet, false).then(address => {
         return {
-          keyId: wallet.keyId,
+          walletId: wallet.credentials.walletId,
           requestPubKey: wallet.credentials.requestPubKey,
           wallet,
           address
@@ -243,7 +243,7 @@ export class VoucherAddPage {
       });
 
     this.sendCode(
-      walletToSend.keyId,
+      walletToSend.walletId,
       this.VoucherGroup.value.VoucherGroupAddress,
       pubKey,
       this.VoucherGroup.value.VoucherGroupCode,

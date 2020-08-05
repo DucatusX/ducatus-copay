@@ -48,7 +48,7 @@ export class VoucherPage {
 
     Promise.all([walletsGet]).then(results => {
       this.wallets = results[0];
-      console.log(this.wallets);
+      this.logger.log(this.wallets);
     });
   }
 
@@ -84,7 +84,8 @@ export class VoucherPage {
       const walletsResult = [];
 
       wallets.map(res => {
-        if (!walletsResult.includes(res.keyId)) walletsResult.push(res.keyId);
+        if (!walletsResult.includes(res.walletId))
+          walletsResult.push(res.walletId);
       });
 
       this.logger.log(
@@ -165,7 +166,7 @@ export class VoucherPage {
 
       wallets = coins.map(wallet => {
         return {
-          keyId: wallet.keyId,
+          walletId: wallet.credentials.walletId,
           requestPubKey: wallet.credentials.requestPubKey,
           wallet,
           address: this.getAddress(wallet)
@@ -217,9 +218,6 @@ export class VoucherPage {
               return t.address === data.user_duc_address;
             });
           });
-
-        console.log(xpriv.deriveChild(data.private_path).privateKey.toWIF());
-        console.log(xpriv.deriveChild(data.private_path));
 
         if (addressPath)
           return xpriv.deriveChild(address.path).privateKey.toWIF();
@@ -344,15 +342,11 @@ export class VoucherPage {
         return t.address === voucher.cltv_details.user_duc_address;
       });
 
-      console.log('addressFilter', addressFilter);
-
       const walletToUnfreeze = addressFilter
         ? addressFilter.wallet
         : this.wallets.find(t => {
-            return t.wallet.keyId === voucher.wallet_id;
+            return t.wallet.credentials.walletId === voucher.wallet_id;
           }).wallet;
-
-      console.log('walletFilter', walletToUnfreeze);
 
       const txHex = await this.signFreeze(
         walletToUnfreeze,

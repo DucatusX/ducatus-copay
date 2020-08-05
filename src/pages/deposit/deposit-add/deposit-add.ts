@@ -122,7 +122,7 @@ export class DepositAddPage {
     wallets = coins.map(wallet => {
       return this.walletProvider.getAddress(wallet, false).then(address => {
         return {
-          keyId: wallet.keyId,
+          walletId: wallet.credentials.walletId,
           requestPubKey: wallet.credentials.requestPubKey,
           wallet,
           address
@@ -273,8 +273,14 @@ export class DepositAddPage {
 
     this.logger.log(addressData, addressData);
 
+    console.log(
+      walletToSend,
+      walletToSend.walletId,
+      walletToSend.wallet.credentials.walletId
+    );
+
     this.generateDeposit(
-      walletToSend.keyId,
+      walletToSend.walletId,
       this.DepositGroup.value.Address,
       pubKey,
       parseFloat(this.DepositGroup.value.Month),

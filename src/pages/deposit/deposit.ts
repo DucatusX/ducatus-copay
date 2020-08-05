@@ -85,7 +85,8 @@ export class DepositPage {
       const walletsResult = [];
 
       wallets.map(res => {
-        if (!walletsResult.includes(res.keyId)) walletsResult.push(res.keyId);
+        if (!walletsResult.includes(res.walletId))
+          walletsResult.push(res.walletId);
       });
 
       this.logger.log(
@@ -191,7 +192,7 @@ export class DepositPage {
 
       wallets = coins.map(wallet => {
         return {
-          keyId: wallet.keyId,
+          walletId: wallet.credentials.walletId,
           requestPubKey: wallet.credentials.requestPubKey,
           wallet,
           address: this.getAddress(wallet)
@@ -377,7 +378,7 @@ export class DepositPage {
       const walletToUnfreeze = addressFilter
         ? addressFilter.wallet
         : this.wallets.find(t => {
-            return t.wallet.keyId === deposit.wallet_id;
+            return t.wallet.credentials.walletId === deposit.wallet_id;
           }).wallet;
 
       this.logger.log('walletFilter', walletToUnfreeze);
