@@ -65,7 +65,9 @@
               >
               </ion-input>
             </ion-item>
-            <div class="deposit-btn-sendmax">Send Max</div>
+            <div (click)="updAmountToMax()" class="deposit-btn-sendmax">
+              {{ 'Send Max' | translate }}
+            </div>
           </div>
         </div>
 
@@ -121,7 +123,7 @@
 
         <div class="deposit-group-btn">
           <span class="deposit-group-btn-devidends"
-            >Dividends {{ amountWithPercent }} Ducatus</span
+            >Dividends {{ amountWithPercent || '0' }} Ducatus</span
           >
           <button
             ion-button

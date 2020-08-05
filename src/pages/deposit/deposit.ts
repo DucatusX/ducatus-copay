@@ -49,7 +49,7 @@ export class DepositPage {
 
     Promise.all([walletsGet]).then(results => {
       this.wallets = results[0];
-      console.log(this.wallets);
+      this.logger.log(this.wallets);
     });
   }
 
@@ -113,16 +113,16 @@ export class DepositPage {
               const dateToExecute = Math.round(
                 (new Date(curDate).getTime() - new Date().getTime()) /
                   (24 * 60 * 60 * 1000)
-              ); // осталось дней
+              );
               const dateToExecuteRagne =
                 Math.round(
                   (new Date(x.deposited_at * 1000).getTime() -
                     new Date(curDate).getTime()) /
                     (24 * 60 * 60 * 1000)
-                ) * -1; // разница от начала и конца в днях
+                ) * -1;
               x.executeRagne =
                 ((dateToExecuteRagne - dateToExecute) / dateToExecuteRagne) *
-                100; // % от разницы и оставшихся дней
+                100;
 
               if (dateToExecute <= 0 || dateToExecute === -0) {
                 x.executeRagne = 100;
@@ -244,8 +244,10 @@ export class DepositPage {
             });
           });
 
-        console.log(xpriv.deriveChild(data.private_path).privateKey.toWIF());
-        console.log(xpriv.deriveChild(data.private_path));
+        this.logger.log(
+          xpriv.deriveChild(data.private_path).privateKey.toWIF()
+        );
+        this.logger.log(xpriv.deriveChild(data.private_path));
 
         if (addressPath)
           return xpriv.deriveChild(address.path).privateKey.toWIF();
@@ -370,7 +372,7 @@ export class DepositPage {
         return t.address === deposit.cltv_details.user_duc_address;
       });
 
-      console.log('addressFilter', addressFilter);
+      this.logger.log('addressFilter', addressFilter);
 
       const walletToUnfreeze = addressFilter
         ? addressFilter.wallet
@@ -378,7 +380,7 @@ export class DepositPage {
             return t.wallet.keyId === deposit.wallet_id;
           }).wallet;
 
-      console.log('walletFilter', walletToUnfreeze);
+      this.logger.log('walletFilter', walletToUnfreeze);
 
       const txHex = await this.signFreeze(
         walletToUnfreeze,

@@ -6,7 +6,6 @@ import _ from 'lodash';
 import { Logger } from '../../../../src/providers/logger/logger';
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
 import { BwcProvider } from '../../../providers/bwc/bwc';
-import { FeeProvider } from '../../../providers/fee/fee';
 import { IncomingDataProvider } from '../../../providers/incoming-data/incoming-data';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
@@ -25,17 +24,17 @@ export class DepositAddPage {
   public walletAddresses: any;
   public sendLength: number = 0;
   public depositLoading = false;
-  public amountWithPercent = 0;
+  public amountWithPercent: any;
   public amountWallet = 0;
   public depositMonth = 13;
   public depositPercent = 8;
+  public maxAmount = 0;
 
   constructor(
     private formBuilder: FormBuilder,
     private profileProvider: ProfileProvider,
     private walletProvider: WalletProvider,
     private actionSheetProvider: ActionSheetProvider,
-    private feeProvider: FeeProvider,
     private incomingDataProvider: IncomingDataProvider,
     private txFormatProvider: TxFormatProvider,
     private alertCtrl: AlertController,
@@ -95,10 +94,17 @@ export class DepositAddPage {
   }
 
   public changeAmount() {
-    this.amountWithPercent =
-      parseFloat(this.DepositGroup.value.Amount) *
+    const amount = this.DepositGroup.value.Amount
+      ? parseFloat(this.DepositGroup.value.Amount)
+      : 0;
+
+    const amountWithPercentValue = (
+      amount *
       (parseFloat(this.DepositGroup.value.Percent) / 100) *
-      (parseFloat(this.DepositGroup.value.Month) / 12);
+      (parseFloat(this.DepositGroup.value.Month) / 12)
+    ).toFixed(4);
+
+    this.amountWithPercent = amountWithPercentValue;
   }
 
   private getWalletsInfo(coin) {
@@ -153,7 +159,7 @@ export class DepositAddPage {
         if (option) {
           this.DepositGroup.value.Address = option;
           this.wallet = this.walletAddresses.find(t => t.address === option);
-          // this.sendMax().then(res => console.log('sendmax', res));
+          this.sendMax();
         }
       });
     }
@@ -215,29 +221,22 @@ export class DepositAddPage {
       .toPromise();
   }
 
+  public updAmountToMax() {
+    this.DepositGroup.controls.Amount.setValue(this.maxAmount);
+    this.changeAmount();
+  }
+
   public sendMax() {
-    return new Promise((resolve, reject) => {
-      this.feeProvider
-        .getFeeRate(
-          this.wallet.coin,
-          this.wallet.network,
-          this.feeProvider.getCoinCurrentFeeLevel(this.wallet.coin)
-        )
-        .then(feeRate => {
-          this.walletProvider
-            .getSendMaxInfo(this.wallet, {
-              feePerKb: feeRate,
-              excludeUnconfirmedUtxos: true, // Do not use unconfirmed UTXOs
-              returnInputs: true
-            })
-            .then(res => {
-              return resolve(res);
-            })
-            .catch(err => {
-              return reject(err);
-            });
-        });
-    });
+    const { token } = this.wallet.wallet.credentials;
+
+    this.walletProvider
+      .getBalance(this.wallet.wallet, {
+        tokenAddress: token ? token.address : ''
+      })
+      .then(resp => {
+        this.maxAmount = resp.availableAmount / 100000000;
+        this.logger.log('maxAmount', this.maxAmount);
+      });
   }
 
   public async generateUserDeposit() {
@@ -272,7 +271,7 @@ export class DepositAddPage {
         });
       });
 
-    console.log(addressData, addressData);
+    this.logger.log(addressData, addressData);
 
     this.generateDeposit(
       walletToSend.keyId,
