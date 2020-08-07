@@ -35,6 +35,7 @@
               <ion-input
                 placeholder="Choose address to send"
                 type="text"
+                [readonly]="true"
                 formControlName="Address"
                 [value]="DepositGroup.value.Address"
               >
@@ -57,7 +58,7 @@
             <ion-item class="deposit-add-input">
               <ion-input
                 placeholder="Enter amount"
-                type="text"
+                type="number"
                 formControlName="Amount"
                 (input)="changeAmount()"
                 [(ngModel)]="amountWallet"

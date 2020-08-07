@@ -44,13 +44,17 @@ export class DepositAddPage {
     private httpClient: HttpClient
   ) {
     this.DepositGroup = this.formBuilder.group({
-      Amount: [
-        0,
-        Validators.compose([Validators.minLength(1), Validators.required])
-      ],
       Address: [
         '',
-        Validators.compose([Validators.minLength(1), Validators.required])
+        Validators.compose([Validators.minLength(34), Validators.required])
+      ],
+      Amount: [
+        '',
+        Validators.compose([
+          Validators.minLength(1),
+          Validators.required,
+          Validators.min(0)
+        ])
       ],
       Month: ['13', Validators.compose([Validators.required])],
       Percent: ['8', Validators.compose([Validators.required])]
@@ -226,7 +230,7 @@ export class DepositAddPage {
             this.DepositGroup.value.Amount = '';
           }
         },
-        enableBackdropDismiss: true
+        enableBackdropDismiss: false
       },
       needbackup: {
         title:
