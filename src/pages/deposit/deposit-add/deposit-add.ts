@@ -1,15 +1,18 @@
+import _ from 'lodash';
+
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController } from 'ionic-angular';
-import _ from 'lodash';
-import { Logger } from '../../../../src/providers/logger/logger';
+import { AlertController, NavController } from 'ionic-angular';
+
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
-import { BwcProvider } from '../../../providers/bwc/bwc';
 import { IncomingDataProvider } from '../../../providers/incoming-data/incoming-data';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
 import { WalletProvider } from '../../../providers/wallet/wallet';
+
+import { BackupKeyPage } from '../../backup/backup-key/backup-key';
+
 import { DEPOSIT_URL_REQUEST } from '../params';
 
 @Component({
@@ -20,7 +23,6 @@ export class DepositAddPage {
   public DepositGroup: FormGroup;
 
   public wallet: any;
-  public walletsGroups: any[];
   public walletAddresses: any;
   public sendLength: number = 0;
   public depositLoading = false;
@@ -38,9 +40,8 @@ export class DepositAddPage {
     private incomingDataProvider: IncomingDataProvider,
     private txFormatProvider: TxFormatProvider,
     private alertCtrl: AlertController,
-    private httpClient: HttpClient,
-    private bwcProvider: BwcProvider,
-    private logger: Logger
+    private navCtrl: NavController,
+    private httpClient: HttpClient
   ) {
     this.DepositGroup = this.formBuilder.group({
       Amount: [
@@ -57,39 +58,45 @@ export class DepositAddPage {
   }
 
   ionViewWillEnter() {
-    const wallets = this.profileProvider.getWallets({ showHidden: true });
+    const wallets = this.profileProvider.getWallets({
+      showHidden: true,
+      backedUp: true
+    });
 
-    this.walletsGroups = _.values(
-      _.groupBy(
-        _.filter(wallets, wallet => {
-          return wallet.keyId != 'read-only';
-        }),
-        'keyId'
-      )
-    );
+    this.walletProvider.getWalletsByCoin(wallets, 'duc').then(res => {
+      const result: any = res;
 
-    this.getWalletsInfo('duc');
+      if (result.count <= 0) this.showModal('needbackup');
+
+      if (result.count === 1)
+        this.DepositGroup.value.Address = result.wallets[0].address;
+
+      this.walletAddresses = result.wallets;
+    });
   }
 
-  public uMonth() {
-    if (this.DepositGroup.value.Month === '5')
-      this.DepositGroup.controls.Percent.setValue('5');
-    if (this.DepositGroup.value.Month === '13')
-      this.DepositGroup.controls.Percent.setValue('8');
-    if (this.DepositGroup.value.Month === '34')
-      this.DepositGroup.controls.Percent.setValue('13');
+  public changePercentAndMoth(type: string) {
+    const tableMP = {
+      '5': '5',
+      '13': '8',
+      '34': '13'
+    };
+
+    type === 'month'
+      ? this.DepositGroup.controls.Percent.setValue(
+          tableMP[this.DepositGroup.controls.Month.value]
+        )
+      : this.DepositGroup.controls.Month.setValue(
+          Object.keys(tableMP).find(
+            key => tableMP[key] === this.DepositGroup.controls.Percent.value
+          )
+        );
 
     this.changeAmount();
   }
 
-  public uPercent() {
-    if (this.DepositGroup.value.Percent === '5')
-      this.DepositGroup.controls.Month.setValue('5');
-    if (this.DepositGroup.value.Percent === '8')
-      this.DepositGroup.controls.Month.setValue('13');
-    if (this.DepositGroup.value.Percent === '13')
-      this.DepositGroup.controls.Month.setValue('34');
-
+  public changeAmountToMax() {
+    this.DepositGroup.controls.Amount.setValue(this.maxAmount);
     this.changeAmount();
   }
 
@@ -107,47 +114,6 @@ export class DepositAddPage {
     this.amountWithPercent = amountWithPercentValue;
   }
 
-  private getWalletsInfo(coin) {
-    let coins = [];
-    let wallets = [];
-    let walletsRes = [];
-
-    this.walletsGroups.forEach(keyID => {
-      coins = _.concat(
-        coins,
-        keyID.filter(wallet => wallet.coin === coin.toLowerCase())
-      );
-    });
-
-    wallets = coins.map(wallet => {
-      return this.walletProvider.getAddress(wallet, false).then(address => {
-        return {
-          walletId: wallet.credentials.walletId,
-          requestPubKey: wallet.credentials.requestPubKey,
-          wallet,
-          address
-        };
-      });
-    });
-
-    wallets.map(res => {
-      res.then(result => {
-        walletsRes.push(result);
-      });
-      this.sendLength++;
-    });
-
-    if (this.sendLength === 1) {
-      wallets.map(res => {
-        res.then(result => {
-          this.DepositGroup.value.Address = result.address;
-        });
-      });
-    }
-
-    this.walletAddresses = walletsRes;
-  }
-
   public openAddressList() {
     if (!this.depositLoading) {
       const infoSheet = this.actionSheetProvider.createInfoSheet(
@@ -158,11 +124,92 @@ export class DepositAddPage {
       infoSheet.onDidDismiss(option => {
         if (option) {
           this.DepositGroup.value.Address = option;
+
           this.wallet = this.walletAddresses.find(t => t.address === option);
           this.sendMax();
+
+          if (this.wallet.needsBackup)
+            this.navCtrl.push(BackupKeyPage, {
+              keyId: this.wallet.keyId
+            });
         }
       });
     }
+  }
+
+  public sendMax() {
+    const { token } = this.wallet.wallet.credentials;
+
+    this.walletProvider
+      .getBalance(this.wallet.wallet, {
+        tokenAddress: token ? token.address : ''
+      })
+      .then(resp => {
+        this.maxAmount = resp.availableAmount / 100000000;
+      });
+  }
+
+  private generateDeposit(
+    wallet_id: string,
+    duc_address: string,
+    duc_public_key: string,
+    lock_months: number,
+    private_path: string
+  ) {
+    return this.httpClient
+      .post(`${DEPOSIT_URL_REQUEST}generate_deposit/`, {
+        wallet_id,
+        duc_address,
+        duc_public_key,
+        lock_months,
+        private_path
+      })
+      .toPromise();
+  }
+
+  public async generateUserDeposit() {
+    this.depositLoading = true;
+
+    this.walletProvider
+      .prepareAdd(this.walletAddresses, this.DepositGroup.value.Address)
+      .then(resPrepare => {
+        const resultPrepare: any = resPrepare;
+
+        this.generateDeposit(
+          resultPrepare.wallet.walletId,
+          this.DepositGroup.value.Address,
+          resultPrepare.pubKey,
+          parseFloat(this.DepositGroup.value.Month),
+          resultPrepare.path
+        )
+          .then(res => {
+            const result: any = res;
+
+            if (result.cltv_details.locked_duc_address) {
+              const addressView = this.walletProvider.getAddressView(
+                resultPrepare.wallet.wallet.coin,
+                resultPrepare.wallet.wallet.network,
+                result.cltv_details.locked_duc_address,
+                true
+              );
+
+              const parsedAmount = this.txFormatProvider.parseAmount(
+                resultPrepare.wallet.wallet.coin.toLowerCase(),
+                this.DepositGroup.value.Amount,
+                resultPrepare.wallet.wallet.coin.toUpperCase()
+              );
+
+              const redirParms = {
+                activePage: 'ScanPage',
+                walletId: resultPrepare.wallet.wallet.id,
+                amount: parsedAmount.amountSat
+              };
+
+              this.incomingDataProvider.redir(addressView, redirParms);
+            }
+          })
+          .catch(() => this.showModal('network'));
+      });
   }
 
   private showModal(type: string) {
@@ -171,7 +218,25 @@ export class DepositAddPage {
         title:
           '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
         text: 'Something went wrong, try again',
-        button: 'OK'
+        button: 'OK',
+        handler: () => {
+          this.depositLoading = false;
+          if (type != 'network') {
+            this.DepositGroup.value.Address = '';
+            this.DepositGroup.value.Amount = '';
+          }
+        },
+        enableBackdropDismiss: true
+      },
+      needbackup: {
+        title:
+          '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+        text: 'Needs Backup',
+        button: 'OK',
+        handler: () => {
+          this.navCtrl.pop();
+        },
+        enableBackdropDismiss: false
       }
     };
 
@@ -186,135 +251,11 @@ export class DepositAddPage {
       buttons: [
         {
           text: answers.button,
-          handler: () => {
-            this.depositLoading = false;
-            if (type != 'network') {
-              this.DepositGroup.value.Address = '';
-              this.DepositGroup.value.Amount = '';
-            }
-          }
+          handler: answers.handler
         }
-      ]
+      ],
+      enableBackdropDismiss: answers.enableBackdropDismiss
     });
     alert.present();
-  }
-
-  private generateDeposit(
-    wallet_id: string,
-    duc_address: string,
-    duc_public_key: string,
-    lock_months: number,
-    private_path: string
-  ) {
-    this.logger.log(
-      '{DEPOSIT_URL_REQUEST}generate_deposit/',
-      `${DEPOSIT_URL_REQUEST}generate_deposit/${wallet_id},${duc_address},${duc_public_key},${lock_months}`
-    );
-    return this.httpClient
-      .post(`${DEPOSIT_URL_REQUEST}generate_deposit/`, {
-        wallet_id,
-        duc_address,
-        duc_public_key,
-        lock_months,
-        private_path
-      })
-      .toPromise();
-  }
-
-  public updAmountToMax() {
-    this.DepositGroup.controls.Amount.setValue(this.maxAmount);
-    this.changeAmount();
-  }
-
-  public sendMax() {
-    const { token } = this.wallet.wallet.credentials;
-
-    this.walletProvider
-      .getBalance(this.wallet.wallet, {
-        tokenAddress: token ? token.address : ''
-      })
-      .then(resp => {
-        this.maxAmount = resp.availableAmount / 100000000;
-        this.logger.log('maxAmount', this.maxAmount);
-      });
-  }
-
-  public async generateUserDeposit() {
-    this.depositLoading = true;
-    this.walletAddresses;
-
-    const walletToSend = this.walletAddresses.find(
-      t => t.address === this.DepositGroup.value.Address
-    );
-
-    const info = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(
-      walletToSend.wallet.credentials.xPubKey
-    );
-
-    const pubKey = await this.walletProvider
-      .getMainAddresses(walletToSend.wallet, { doNotVerify: false })
-      .then(result => {
-        const address = result.find(t => {
-          return t.address === this.DepositGroup.value.Address;
-        });
-
-        return info.derive(address.path).publicKey.toString();
-      });
-
-    const addressData = await this.walletProvider
-      .getMainAddresses(walletToSend.wallet, {
-        doNotVerify: false
-      })
-      .then(result => {
-        return result.find(t => {
-          return t.address === this.DepositGroup.value.Address;
-        });
-      });
-
-    this.logger.log(addressData, addressData);
-
-    console.log(
-      walletToSend,
-      walletToSend.walletId,
-      walletToSend.wallet.credentials.walletId
-    );
-
-    this.generateDeposit(
-      walletToSend.walletId,
-      this.DepositGroup.value.Address,
-      pubKey,
-      parseFloat(this.DepositGroup.value.Month),
-      addressData.path
-    )
-      .then(res => {
-        const result: any = res;
-
-        if (result.cltv_details.locked_duc_address) {
-          const addressView = this.walletProvider.getAddressView(
-            walletToSend.wallet.coin,
-            walletToSend.wallet.network,
-            result.cltv_details.locked_duc_address,
-            true
-          );
-
-          const parsedAmount = this.txFormatProvider.parseAmount(
-            walletToSend.wallet.coin.toLowerCase(),
-            this.DepositGroup.value.Amount,
-            walletToSend.wallet.coin.toUpperCase()
-          );
-
-          const redirParms = {
-            activePage: 'ScanPage',
-            walletId: walletToSend.wallet.id,
-            amount: parsedAmount.amountSat
-          };
-
-          this.incomingDataProvider.redir(addressView, redirParms);
-        }
-      })
-      .catch(err => {
-        this.showModal('network');
-        this.logger.log(err);
-      });
   }
 }

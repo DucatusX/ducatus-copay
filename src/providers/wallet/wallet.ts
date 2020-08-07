@@ -1470,6 +1470,86 @@ export class WalletProvider {
     });
   }
 
+  public prepareAdd(wallets: any[], addressSelect: string) {
+    return new Promise(async resolve => {
+      const walletToSend = wallets.find(
+        (t: { address: string }) => t.address === addressSelect
+      );
+
+      const info = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(
+        walletToSend.wallet.credentials.xPubKey
+      );
+
+      const publicKey = await this.getMainAddresses(walletToSend.wallet, {
+        doNotVerify: false
+      }).then(result => {
+        const address = result.find(t => {
+          return t.address === addressSelect;
+        });
+
+        return info.derive(address.path).publicKey.toString();
+      });
+
+      const addressData = await this.getMainAddresses(walletToSend.wallet, {
+        doNotVerify: false
+      }).then(result => {
+        return result.find(t => {
+          return t.address === addressSelect;
+        });
+      });
+
+      resolve({
+        wallet: walletToSend,
+        pubKey: publicKey,
+        path: addressData.path
+      });
+    });
+  }
+
+  public getWalletsByCoin(wallets: any[], coin: string) {
+    const walletsGroups = _.values(
+      _.groupBy(
+        _.filter(wallets, wallet => {
+          return wallet.keyId != 'read-only';
+        }),
+        'keyId'
+      )
+    );
+
+    return new Promise(resolve => {
+      let coins: any[] = [];
+      let wallets: any[] = [];
+      let walletsRes: any[] = [];
+      let walletsLength: number = 0;
+
+      walletsGroups.forEach(keyID => {
+        coins = _.concat(
+          coins,
+          keyID.filter(wallet => wallet.coin === coin.toLowerCase())
+        );
+      });
+
+      wallets = coins.map(async wallet => {
+        const address = await this.getAddress(wallet, false);
+        return {
+          walletId: wallet.credentials.walletId,
+          requestPubKey: wallet.credentials.requestPubKey,
+          wallet,
+          address
+        };
+      });
+
+      wallets.map(res => {
+        res.then((result: any) => {
+          walletsRes.push(result);
+        });
+        walletsLength++;
+      });
+
+      resolve({ wallets: walletsRes, count: walletsLength });
+    });
+  }
+
   public getMainAddresses(wallet, opts): Promise<any> {
     return new Promise((resolve, reject) => {
       opts = opts || {};
