@@ -105,9 +105,14 @@ export class DepositAddPage {
   }
 
   public changeAmount() {
-    const amount = this.DepositGroup.value.Amount
-      ? parseFloat(this.DepositGroup.value.Amount)
-      : 0;
+    if (parseFloat(this.DepositGroup.value.Amount) < 0)
+      this.DepositGroup.controls.Amount.setValue('0');
+
+    const amount =
+      this.DepositGroup.value.Amount ||
+      parseFloat(this.DepositGroup.value.Amount) > 0
+        ? parseFloat(this.DepositGroup.value.Amount)
+        : 0;
 
     const amountWithPercentValue = (
       amount *
