@@ -79,9 +79,9 @@ export class DepositAddPage {
 
   public changePercentAndMoth(type: string) {
     const tableMP = {
-      '5': '5',
-      '13': '8',
-      '34': '13'
+      '5': '8',
+      '13': '13',
+      '34': '21'
     };
 
     type === 'month'
