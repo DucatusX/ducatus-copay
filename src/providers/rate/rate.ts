@@ -24,7 +24,7 @@ export class RateProvider {
     for (const coin of this.currencyProvider.getAvailableCoins()) {
       this.rateServiceUrl[coin] = env.ratesAPI[coin];
       this.rates[coin] = {
-        USD: coin === 'ducx' ? 0.5 : coin === 'duc' ? 0.05 : 0
+        USD: coin === 'ducx' ? 0.5 : coin === 'duc' ? 0.06 : 0
       };
       this.ratesAvailable[coin] = false;
       this.updateRates(coin);
