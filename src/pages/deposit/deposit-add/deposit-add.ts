@@ -27,7 +27,7 @@ export class DepositAddPage {
   public amountWithPercent: any;
   public amountWallet = 0;
   public depositMonth = 13;
-  public depositPercent = 8;
+  public depositPercent = 13;
   public maxAmount = 0;
 
   constructor(
