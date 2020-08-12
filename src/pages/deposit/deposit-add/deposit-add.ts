@@ -70,9 +70,6 @@ export class DepositAddPage {
 
       if (result.count <= 0) this.showModal('needbackup');
 
-      if (result.count === 1)
-        this.DepositGroup.value.Address = result.wallets[0].address;
-
       this.walletAddresses = result.wallets;
     });
   }

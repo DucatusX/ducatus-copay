@@ -47,11 +47,7 @@ export class VoucherAddPage {
     this.walletProvider.getWalletsByCoin(wallets, 'duc').then(res => {
       const result: any = res;
 
-      if (
-        result.count <= 0 ||
-        (result.count === 1 && result.wallets.length === 0)
-      )
-        this.showModal('needbackup');
+      if (result.count <= 0) this.showModal('needbackup');
 
       this.walletAddresses = result.wallets;
     });
