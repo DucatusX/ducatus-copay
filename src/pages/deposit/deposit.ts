@@ -1,14 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { AlertController, NavController } from 'ionic-angular';
-import { BwcProvider } from '../../providers/bwc/bwc';
 import { DepositAddPage } from './deposit-add/deposit-add';
 
-import * as bip65 from 'bip65';
-import * as bitcoin from 'bitcoinjs-lib';
 import _ from 'lodash';
 
-import { Logger, ProfileProvider, WalletProvider } from '../../providers';
+import { ProfileProvider, WalletProvider } from '../../providers';
 import { DEPOSIT_URL_REQUEST } from './params';
 
 @Component({
@@ -22,11 +19,9 @@ export class DepositPage {
   public wallets: any;
 
   constructor(
-    private logger: Logger,
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private httpClient: HttpClient,
-    private bwcProvider: BwcProvider,
     private profileProvider: ProfileProvider,
     private walletProvider: WalletProvider
   ) {}
@@ -49,7 +44,6 @@ export class DepositPage {
 
     Promise.all([walletsGet]).then(results => {
       this.wallets = results[0];
-      this.logger.log(this.wallets);
     });
   }
 
@@ -89,17 +83,11 @@ export class DepositPage {
           walletsResult.push(res.walletId);
       });
 
-      this.logger.log(
-        'get_deposits/?wallet_ids=',
-        `${DEPOSIT_URL_REQUEST}get_deposits/?wallet_ids=${walletsResult}`
-      );
-
       this.httpClient
         .get(`${DEPOSIT_URL_REQUEST}get_deposits/?wallet_ids=${walletsResult}`)
         .toPromise()
         .then(result => {
           this.deposits = result as any;
-          this.logger.log('got user vouchers:', this.deposits);
 
           this.deposits.map(x => {
             if (x.depositinput_set.length != 0) {
@@ -138,9 +126,7 @@ export class DepositPage {
           });
 
           this.depositsLoading = false;
-          this.logger.log('updated user vouchers:', this.deposits);
-        })
-        .catch(err => this.logger.debug(err));
+        });
     });
   }
 
@@ -157,20 +143,12 @@ export class DepositPage {
   }
 
   private getDeposit(id) {
-    this.logger.log(
-      '/get_deposit_info/?deposit_id=',
-      `${DEPOSIT_URL_REQUEST}get_deposit_info/?deposit_id=${id}`
-    );
     return this.httpClient
       .get(`${DEPOSIT_URL_REQUEST}get_deposit_info/?deposit_id=${id}`)
       .toPromise();
   }
 
   private sendTX(raw_tx_hex) {
-    this.logger.log(
-      '/send_deposit_transaction/',
-      `${DEPOSIT_URL_REQUEST}send_deposit_transaction/${raw_tx_hex}`
-    );
     return this.httpClient
       .post(`${DEPOSIT_URL_REQUEST}send_deposit_transaction/`, {
         raw_tx_hex
@@ -201,96 +179,6 @@ export class DepositPage {
 
       resolve(wallets);
     });
-  }
-
-  private async signFreeze(wallet: any, data: any, addressPath: boolean) {
-    const network = bitcoin.networks.bitcoin;
-    network.bip32.private = 0x019d9cfe;
-    network.bip32.public = 0x019da462;
-    network.pubKeyHash = 0x31;
-    network.scriptHash = 0x33;
-    network.wif = 0xb1;
-
-    const hashType = bitcoin.Transaction.SIGHASH_ALL;
-    var lockTime = bip65.encode({ utc: data.lock_time });
-
-    const txb = new bitcoin.TransactionBuilder(network);
-    txb.setVersion(1);
-    txb.setLockTime(lockTime);
-    txb.addInput(data.tx_hash, data.vout_number, 0xfffffffe);
-    txb.addOutput(data.user_duc_address, data.sending_amount);
-
-    const tx = txb.buildIncomplete();
-
-    const privateWifKey = await this.walletProvider
-      .getKeys(wallet)
-      .then(async keys => {
-        const xPrivKey = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
-          keys.xPrivKey
-        );
-
-        const derivedPrivKey = xPrivKey.deriveNonCompliantChild(
-          wallet.credentials.rootPath
-        );
-
-        const xpriv = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
-          derivedPrivKey
-        );
-
-        const address = await this.walletProvider
-          .getMainAddresses(wallet, { doNotVerify: false })
-          .then(result => {
-            return result.find(t => {
-              return t.address === data.user_duc_address;
-            });
-          });
-
-        this.logger.log(
-          xpriv.deriveChild(data.private_path).privateKey.toWIF()
-        );
-        this.logger.log(xpriv.deriveChild(data.private_path));
-
-        if (addressPath)
-          return xpriv.deriveChild(address.path).privateKey.toWIF();
-        else return xpriv.deriveChild(data.private_path).privateKey.toWIF();
-      })
-      .catch(err => {
-        if (
-          err &&
-          err.message != 'FINGERPRINT_CANCELLED' &&
-          err.message != 'PASSWORD_CANCELLED'
-        ) {
-          err.message == 'WRONG_PASSWORD'
-            ? this.logger.error(
-                'sign: walletProvider getKeys error WRONG_PASSWORD',
-                err
-              )
-            : this.logger.error('sign: walletProvider getKeys error', err);
-        }
-      });
-    this.logger.log('privateWifKey', privateWifKey);
-
-    const signatureHash = tx.hashForSignature(
-      0,
-      Buffer.from(data.redeem_script, 'hex'),
-      hashType
-    );
-
-    const inputScriptFirstBranch = bitcoin.payments.p2sh({
-      redeem: {
-        input: bitcoin.script.compile([
-          bitcoin.script.signature.encode(
-            bitcoin.ECPair.fromWIF(privateWifKey, network).sign(signatureHash),
-            hashType
-          ),
-          bitcoin.opcodes.OP_TRUE
-        ]),
-        output: Buffer.from(data.redeem_script, 'hex')
-      }
-    }).input;
-
-    tx.setInputScript(0, inputScriptFirstBranch);
-    return tx.toHex();
   }
 
   private showModal(type: string, id?: number, ducAmount?: number) {
@@ -373,7 +261,7 @@ export class DepositPage {
         return t.address === deposit.cltv_details.user_duc_address;
       });
 
-      this.logger.log('addressFilter', addressFilter);
+      console.log('addressFilter', addressFilter);
 
       const walletToUnfreeze = addressFilter
         ? addressFilter.wallet
@@ -381,26 +269,26 @@ export class DepositPage {
             return t.wallet.credentials.walletId === deposit.wallet_id;
           }).wallet;
 
-      this.logger.log('walletFilter', walletToUnfreeze);
+      console.log('walletFilter', walletToUnfreeze);
 
-      const txHex = await this.signFreeze(
+      const txHex = await this.walletProvider.signFreeze(
         walletToUnfreeze,
         deposit.cltv_details,
         !!addressFilter
       );
 
-      this.logger.log('freeze transaction hex', txHex);
+      console.log('freeze transaction hex', txHex);
 
       this.sendTX(txHex)
         .then(res => {
-          this.logger.log('transaction sended', res);
+          console.log('transaction sended', res);
           this.showModal('success', id, deposit.duc_amount);
         })
         .catch(err => {
           err.error.detail === '-27: transaction already in block chain'
             ? this.showModal('alreadyActivated', id)
             : this.showModal('network', id);
-          this.logger.error('transaction not sended', err, err.error.detail);
+          console.error('transaction not sended', err, err.error.detail);
         });
     });
   }

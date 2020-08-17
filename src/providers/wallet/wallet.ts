@@ -4,6 +4,9 @@ import { Events } from 'ionic-angular';
 import * as _ from 'lodash';
 import encoding from 'text-encoding';
 
+import * as bip65 from 'bip65';
+import * as bitcoin from 'bitcoinjs-lib';
+
 // Providers
 import { AddressProvider } from '../address/address';
 import { BwcErrorProvider } from '../bwc-error/bwc-error';
@@ -1468,6 +1471,170 @@ export class WalletProvider {
           return reject(err);
         });
     });
+  }
+
+  public prepareAdd(wallets: any[], addressSelect: string) {
+    return new Promise(async resolve => {
+      const walletToSend = wallets.find(
+        (t: { address: string }) => t.address === addressSelect
+      );
+
+      const info = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(
+        walletToSend.wallet.credentials.xPubKey
+      );
+
+      const publicKey = await this.getMainAddresses(walletToSend.wallet, {
+        doNotVerify: false
+      }).then(result => {
+        const address = result.find(t => {
+          return t.address === addressSelect;
+        });
+
+        return info.derive(address.path).publicKey.toString();
+      });
+
+      const addressData = await this.getMainAddresses(walletToSend.wallet, {
+        doNotVerify: false
+      }).then(result => {
+        return result.find(t => {
+          return t.address === addressSelect;
+        });
+      });
+
+      resolve({
+        wallet: walletToSend,
+        pubKey: publicKey,
+        path: addressData.path
+      });
+    });
+  }
+
+  public getWalletsByCoin(wallets: any[], coin: string) {
+    const walletsGroups = _.values(
+      _.groupBy(
+        _.filter(wallets, wallet => {
+          return wallet.keyId != 'read-only';
+        }),
+        'keyId'
+      )
+    );
+
+    return new Promise(resolve => {
+      let coins: any[] = [];
+      let wallets: any[] = [];
+      let walletsRes: any[] = [];
+      let walletsLength: number = 0;
+
+      walletsGroups.forEach(keyID => {
+        coins = _.concat(
+          coins,
+          keyID.filter(wallet => wallet.coin === coin.toLowerCase())
+        );
+      });
+
+      wallets = coins.map(async wallet => {
+        const address = await this.getAddress(wallet, false);
+        return {
+          walletId: wallet.credentials.walletId,
+          requestPubKey: wallet.credentials.requestPubKey,
+          wallet,
+          address
+        };
+      });
+
+      wallets.map(res => {
+        res.then((result: any) => {
+          walletsRes.push(result);
+        });
+        walletsLength++;
+      });
+
+      resolve({ wallets: walletsRes, count: walletsLength });
+    });
+  }
+
+  public async signFreeze(wallet: any, data: any, addressPath: boolean) {
+    const network = bitcoin.networks.bitcoin;
+    network.bip32.private = 0x019d9cfe;
+    network.bip32.public = 0x019da462;
+    network.pubKeyHash = 0x31;
+    network.scriptHash = 0x33;
+    network.wif = 0xb1;
+
+    const hashType = bitcoin.Transaction.SIGHASH_ALL;
+    var lockTime = bip65.encode({ utc: data.lock_time });
+
+    const txb = new bitcoin.TransactionBuilder(network);
+    txb.setVersion(1);
+    txb.setLockTime(lockTime);
+    txb.addInput(data.tx_hash, data.vout_number, 0xfffffffe);
+    txb.addOutput(data.user_duc_address, data.sending_amount);
+
+    const tx = txb.buildIncomplete();
+
+    const privateWifKey = await this.getKeys(wallet)
+      .then(async keys => {
+        const xPrivKey = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
+          keys.xPrivKey
+        );
+
+        const derivedPrivKey = xPrivKey.deriveNonCompliantChild(
+          wallet.credentials.rootPath
+        );
+
+        const xpriv = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
+          derivedPrivKey
+        );
+
+        const address = await this.getMainAddresses(wallet, {
+          doNotVerify: false
+        }).then(result => {
+          return result.find(t => {
+            return t.address === data.user_duc_address;
+          });
+        });
+
+        if (addressPath)
+          return xpriv.deriveChild(address.path).privateKey.toWIF();
+        else return xpriv.deriveChild(data.private_path).privateKey.toWIF();
+      })
+      .catch(err => {
+        if (
+          err &&
+          err.message != 'FINGERPRINT_CANCELLED' &&
+          err.message != 'PASSWORD_CANCELLED'
+        ) {
+          err.message == 'WRONG_PASSWORD'
+            ? this.logger.error(
+                'sign: walletProvider getKeys error WRONG_PASSWORD',
+                err
+              )
+            : this.logger.error('sign: walletProvider getKeys error', err);
+        }
+      });
+    this.logger.log('privateWifKey', privateWifKey);
+
+    const signatureHash = tx.hashForSignature(
+      0,
+      Buffer.from(data.redeem_script, 'hex'),
+      hashType
+    );
+
+    const inputScriptFirstBranch = bitcoin.payments.p2sh({
+      redeem: {
+        input: bitcoin.script.compile([
+          bitcoin.script.signature.encode(
+            bitcoin.ECPair.fromWIF(privateWifKey, network).sign(signatureHash),
+            hashType
+          ),
+          bitcoin.opcodes.OP_TRUE
+        ]),
+        output: Buffer.from(data.redeem_script, 'hex')
+      }
+    }).input;
+
+    tx.setInputScript(0, inputScriptFirstBranch);
+    return tx.toHex();
   }
 
   public getMainAddresses(wallet, opts): Promise<any> {

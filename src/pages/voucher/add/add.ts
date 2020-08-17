@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController } from 'ionic-angular';
-import _ from 'lodash';
-import { Logger } from '../../../../src/providers/logger/logger';
+import { AlertController, NavController } from 'ionic-angular';
+
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
-import { BwcProvider } from '../../../providers/bwc/bwc';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
+
+import { BackupKeyPage } from '../../backup/backup-key/backup-key';
+
 import { VOUCHER_URL_REQUEST } from '../params';
 
 @Component({
@@ -16,12 +17,8 @@ import { VOUCHER_URL_REQUEST } from '../params';
 })
 export class VoucherAddPage {
   public VoucherGroup: FormGroup;
-
-  public wallet: any;
-  public walletsGroups: any[];
-  public walletAddresses: any;
-  public sendLength: number = 0;
   public voucherLoading = false;
+  public walletAddresses: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -30,8 +27,7 @@ export class VoucherAddPage {
     private actionSheetProvider: ActionSheetProvider,
     private alertCtrl: AlertController,
     private httpClient: HttpClient,
-    private bwcProvider: BwcProvider,
-    private logger: Logger
+    private navCtrl: NavController
   ) {
     this.VoucherGroup = this.formBuilder.group({
       VoucherGroupCode: [
@@ -40,7 +36,7 @@ export class VoucherAddPage {
       ],
       VoucherGroupAddress: [
         '',
-        Validators.compose([Validators.minLength(1), Validators.required])
+        Validators.compose([Validators.minLength(34), Validators.required])
       ]
     });
   }
@@ -48,57 +44,13 @@ export class VoucherAddPage {
   ionViewWillEnter() {
     const wallets = this.profileProvider.getWallets({ showHidden: true });
 
-    this.walletsGroups = _.values(
-      _.groupBy(
-        _.filter(wallets, wallet => {
-          return wallet.keyId != 'read-only';
-        }),
-        'keyId'
-      )
-    );
+    this.walletProvider.getWalletsByCoin(wallets, 'duc').then(res => {
+      const result: any = res;
 
-    this.getWalletsInfo('duc');
-  }
+      if (result.count <= 0) this.showModal('needbackup');
 
-  private getWalletsInfo(coin) {
-    let coins = [];
-    let wallets = [];
-    let walletsRes = [];
-
-    this.walletsGroups.forEach(keyID => {
-      coins = _.concat(
-        coins,
-        keyID.filter(wallet => wallet.coin === coin.toLowerCase())
-      );
+      this.walletAddresses = result.wallets;
     });
-
-    wallets = coins.map(wallet => {
-      return this.walletProvider.getAddress(wallet, false).then(address => {
-        return {
-          walletId: wallet.credentials.walletId,
-          requestPubKey: wallet.credentials.requestPubKey,
-          wallet,
-          address
-        };
-      });
-    });
-
-    wallets.map(res => {
-      res.then(result => {
-        walletsRes.push(result);
-      });
-      this.sendLength++;
-    });
-
-    if (this.sendLength === 1) {
-      wallets.map(res => {
-        res.then(result => {
-          this.VoucherGroup.value.VoucherGroupAddress = result.address;
-        });
-      });
-    }
-
-    this.walletAddresses = walletsRes;
   }
 
   public openAddressList() {
@@ -111,6 +63,11 @@ export class VoucherAddPage {
       infoSheet.onDidDismiss(option => {
         if (option) {
           this.VoucherGroup.value.VoucherGroupAddress = option;
+
+          if (option.needsBackup)
+            this.navCtrl.push(BackupKeyPage, {
+              keyId: option.keyId
+            });
         }
       });
     }
@@ -132,8 +89,7 @@ export class VoucherAddPage {
           options.usd
         }$ voucher successfully activated. You will get ${
           options.duc
-        } Ducatus in ${options.min} minutes`,
-        button: 'OK'
+        } Ducatus in ${options.min} minutes`
       },
       ok_freeze: {
         title:
@@ -142,32 +98,49 @@ export class VoucherAddPage {
           options.usd
         } voucher succesfully activated. You can withdraw your ${
           options.duc
-        } Ducatus after ${options.day} days`,
-        button: 'OK'
+        } Ducatus after ${options.day} days`
       },
       error: {
         title:
           '<img src="./assets/img/icon-attantion.svg" width="42px" height="42px">',
-        text: 'Please check your activation code',
-        button: 'OK'
+        text: 'Please check your activation code'
       },
       registated: {
         title:
           '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
-        text: 'Your voucher was already registered',
-        button: 'OK'
+        text: 'Your voucher was already registered'
       },
       network: {
         title:
           '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
-        text: 'Something went wrong, try again',
-        button: 'OK'
+        text: 'Something went wrong, try again'
+      },
+      needbackup: {
+        title:
+          '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+        text: 'Needs Backup',
+        handler: () => {
+          this.navCtrl.pop();
+        }
       }
     };
 
     const answers = modalAnswers[type]
       ? modalAnswers[type]
       : modalAnswers['error'];
+
+    answers.button = 'OK';
+    answers.enableBackdropDismiss = false;
+
+    if (type !== 'needbackup') {
+      answers.handler = () => {
+        this.voucherLoading = false;
+        if (type != 'network') {
+          this.VoucherGroup.value.VoucherGroupAddress = '';
+          this.VoucherGroup.value.VoucherGroupCode = '';
+        }
+      };
+    }
 
     let alert = this.alertCtrl.create({
       cssClass: 'voucher-alert',
@@ -176,13 +149,7 @@ export class VoucherAddPage {
       buttons: [
         {
           text: answers.button,
-          handler: () => {
-            this.voucherLoading = false;
-            if (type != 'network') {
-              this.VoucherGroup.value.VoucherGroupAddress = '';
-              this.VoucherGroup.value.VoucherGroupCode = '';
-            }
-          }
+          handler: answers.handler
         }
       ]
     });
@@ -196,10 +163,6 @@ export class VoucherAddPage {
     activation_code: string,
     private_path: string
   ) {
-    this.logger.log(
-      '{VOUCHER_URL_REQUEST}transfer/',
-      `${VOUCHER_URL_REQUEST}transfer/${wallet_id},${duc_address},${duc_public_key},${activation_code},${private_path}`
-    );
     return this.httpClient
       .post(`${VOUCHER_URL_REQUEST}/transfer/`, {
         wallet_id,
@@ -213,74 +176,55 @@ export class VoucherAddPage {
 
   public async activateVoucher() {
     this.voucherLoading = true;
-    this.walletAddresses;
 
-    const walletToSend = this.walletAddresses.find(
-      t => t.address === this.VoucherGroup.value.VoucherGroupAddress
-    );
+    this.walletProvider
+      .prepareAdd(
+        this.walletAddresses,
+        this.VoucherGroup.value.VoucherGroupAddress
+      )
+      .then(resPrepare => {
+        const resultPrepare: any = resPrepare;
 
-    const info = this.bwcProvider.Client.Ducatuscore.HDPublicKey.fromString(
-      walletToSend.wallet.credentials.xPubKey
-    );
+        this.sendCode(
+          resultPrepare.wallet.walletId,
+          this.VoucherGroup.value.VoucherGroupAddress,
+          resultPrepare.pubKey,
+          this.VoucherGroup.value.VoucherGroupCode,
+          resultPrepare.path
+        )
+          .then(res => {
+            const result: any = res;
 
-    const pubKey = await this.walletProvider
-      .getMainAddresses(walletToSend.wallet, { doNotVerify: false })
-      .then(result => {
-        const address = result.find(t => {
-          return t.address === this.VoucherGroup.value.VoucherGroupAddress;
-        });
-        return info.derive(address.path).publicKey.toString();
-      });
-
-    const addressData = await this.walletProvider
-      .getMainAddresses(walletToSend.wallet, {
-        doNotVerify: false
-      })
-      .then(result => {
-        return result.find(t => {
-          return t.address === this.VoucherGroup.value.VoucherGroupAddress;
-        });
-      });
-
-    this.sendCode(
-      walletToSend.walletId,
-      this.VoucherGroup.value.VoucherGroupAddress,
-      pubKey,
-      this.VoucherGroup.value.VoucherGroupCode,
-      addressData.path
-    )
-      .then(res => {
-        const result: any = res;
-
-        result.lock_days !== 0
-          ? this.showModal('ok_freeze', {
-              usd: result.usd_amount,
-              duc: result.duc_amount,
-              day: result.lock_days
-            })
-          : this.showModal('ok', {
-              usd: result.usd_amount,
-              duc: result.duc_amount,
-              min: '15'
-            });
-      })
-      .catch(err => {
-        switch (err.status) {
-          case 403:
-            if (
-              [
-                'This voucher is not active',
-                'Invalid activation code'
-              ].includes(err.error.detail)
-            )
-              this.showModal('error');
-            if (err.error.detail == 'This voucher already used')
-              this.showModal('registated');
-            break;
-          default:
-            this.showModal('network');
-            break;
-        }
+            result.lock_days !== 0
+              ? this.showModal('ok_freeze', {
+                  usd: result.usd_amount,
+                  duc: result.duc_amount,
+                  day: result.lock_days
+                })
+              : this.showModal('ok', {
+                  usd: result.usd_amount,
+                  duc: result.duc_amount,
+                  min: '15'
+                });
+          })
+          .catch(err => {
+            switch (err.status) {
+              case 403:
+                if (
+                  [
+                    'This voucher is not active',
+                    'Invalid activation code'
+                  ].includes(err.error.detail)
+                )
+                  this.showModal('error');
+                if (err.error.detail == 'This voucher already used')
+                  this.showModal('registated');
+                break;
+              default:
+                this.showModal('network');
+                break;
+            }
+          });
       });
   }
 }
