@@ -1,14 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { AlertController, NavController } from 'ionic-angular';
-import { BwcProvider } from '../../providers/bwc/bwc';
 import { VoucherAddPage } from './add/add';
 
-import * as bip65 from 'bip65';
-import * as bitcoin from 'bitcoinjs-lib';
 import _ from 'lodash';
 
-import { Logger, ProfileProvider, WalletProvider } from '../../providers';
+import { ProfileProvider, WalletProvider } from '../../providers';
 import { VOUCHER_URL_REQUEST } from './params';
 
 @Component({
@@ -22,11 +19,9 @@ export class VoucherPage {
   public wallets: any;
 
   constructor(
-    private logger: Logger,
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private httpClient: HttpClient,
-    private bwcProvider: BwcProvider,
     private profileProvider: ProfileProvider,
     private walletProvider: WalletProvider
   ) {}
@@ -48,7 +43,6 @@ export class VoucherPage {
 
     Promise.all([walletsGet]).then(results => {
       this.wallets = results[0];
-      this.logger.log(this.wallets);
     });
   }
 
@@ -88,11 +82,6 @@ export class VoucherPage {
           walletsResult.push(res.walletId);
       });
 
-      this.logger.log(
-        'get_frozen_vouchers/?wallet_ids=',
-        `${VOUCHER_URL_REQUEST}get_frozen_vouchers/?wallet_ids=${walletsResult}`
-      );
-
       this.httpClient
         .get(
           `${VOUCHER_URL_REQUEST}get_frozen_vouchers/?wallet_ids=${walletsResult}`
@@ -100,7 +89,6 @@ export class VoucherPage {
         .toPromise()
         .then(result => {
           this.vouchers = result as any;
-          this.logger.log('got user vouchers:', this.vouchers);
 
           this.vouchers.map(x => {
             x.freez_date = new Date(x.cltv_details.lock_time * 1000);
@@ -112,9 +100,7 @@ export class VoucherPage {
           });
 
           this.vouchersLoading = false;
-          this.logger.log('updated user vouchers:', this.vouchers);
-        })
-        .catch(err => this.logger.debug(err));
+        });
     });
   }
 
@@ -131,20 +117,12 @@ export class VoucherPage {
   }
 
   private getVoucher(id) {
-    this.logger.log(
-      'get_withdraw_info/?voucher_id=',
-      `${VOUCHER_URL_REQUEST}get_withdraw_info/?voucher_id=${id}`
-    );
     return this.httpClient
       .get(`${VOUCHER_URL_REQUEST}get_withdraw_info/?voucher_id=${id}`)
       .toPromise();
   }
 
   private sendTX(raw_tx_hex) {
-    this.logger.log(
-      'send_raw_transaction/',
-      `${VOUCHER_URL_REQUEST}send_raw_transaction/${raw_tx_hex}`
-    );
     return this.httpClient
       .post(`${VOUCHER_URL_REQUEST}send_raw_transaction/`, {
         raw_tx_hex
@@ -175,91 +153,6 @@ export class VoucherPage {
 
       resolve(wallets);
     });
-  }
-
-  private async signFreeze(wallet: any, data: any, addressPath: boolean) {
-    const network = bitcoin.networks.bitcoin;
-    network.bip32.private = 0x019d9cfe;
-    network.bip32.public = 0x019da462;
-    network.pubKeyHash = 0x31;
-    network.scriptHash = 0x33;
-    network.wif = 0xb1;
-
-    const hashType = bitcoin.Transaction.SIGHASH_ALL;
-    var lockTime = bip65.encode({ utc: data.lock_time });
-
-    const txb = new bitcoin.TransactionBuilder(network);
-    txb.setVersion(1);
-    txb.setLockTime(lockTime);
-    txb.addInput(data.tx_hash, data.vout_number, 0xfffffffe);
-    txb.addOutput(data.user_duc_address, data.sending_amount);
-
-    const tx = txb.buildIncomplete();
-
-    const privateWifKey = await this.walletProvider
-      .getKeys(wallet)
-      .then(async keys => {
-        const xPrivKey = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
-          keys.xPrivKey
-        );
-
-        const derivedPrivKey = xPrivKey.deriveNonCompliantChild(
-          wallet.credentials.rootPath
-        );
-
-        const xpriv = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
-          derivedPrivKey
-        );
-
-        const address = await this.walletProvider
-          .getMainAddresses(wallet, { doNotVerify: false })
-          .then(result => {
-            return result.find(t => {
-              return t.address === data.user_duc_address;
-            });
-          });
-
-        if (addressPath)
-          return xpriv.deriveChild(address.path).privateKey.toWIF();
-        else return xpriv.deriveChild(data.private_path).privateKey.toWIF();
-      })
-      .catch(err => {
-        if (
-          err &&
-          err.message != 'FINGERPRINT_CANCELLED' &&
-          err.message != 'PASSWORD_CANCELLED'
-        ) {
-          err.message == 'WRONG_PASSWORD'
-            ? this.logger.error(
-                'sign: walletProvider getKeys error WRONG_PASSWORD',
-                err
-              )
-            : this.logger.error('sign: walletProvider getKeys error', err);
-        }
-      });
-    this.logger.log('privateWifKey', privateWifKey);
-
-    const signatureHash = tx.hashForSignature(
-      0,
-      Buffer.from(data.redeem_script, 'hex'),
-      hashType
-    );
-
-    const inputScriptFirstBranch = bitcoin.payments.p2sh({
-      redeem: {
-        input: bitcoin.script.compile([
-          bitcoin.script.signature.encode(
-            bitcoin.ECPair.fromWIF(privateWifKey, network).sign(signatureHash),
-            hashType
-          ),
-          bitcoin.opcodes.OP_TRUE
-        ]),
-        output: Buffer.from(data.redeem_script, 'hex')
-      }
-    }).input;
-
-    tx.setInputScript(0, inputScriptFirstBranch);
-    return tx.toHex();
   }
 
   private showModal(type: string, id?: number, ducAmount?: number) {
@@ -302,7 +195,8 @@ export class VoucherPage {
             });
           }
         }
-      ]
+      ],
+      enableBackdropDismiss: false
     });
     alert.present();
   }
@@ -348,24 +242,20 @@ export class VoucherPage {
             return t.wallet.credentials.walletId === voucher.wallet_id;
           }).wallet;
 
-      const txHex = await this.signFreeze(
+      const txHex = await this.walletProvider.signFreeze(
         walletToUnfreeze,
         voucher.cltv_details,
         !!addressFilter
       );
 
-      this.logger.log('freeze transaction hex', txHex);
-
       this.sendTX(txHex)
-        .then(res => {
-          this.logger.log('transaction sended', res);
+        .then(() => {
           this.showModal('success', id, voucher.duc_amount);
         })
         .catch(err => {
           err.error.detail === '-27: transaction already in block chain'
             ? this.showModal('alreadyActivated', id)
             : this.showModal('network', id);
-          this.logger.error('transaction not sended', err, err.error.detail);
         });
     });
   }

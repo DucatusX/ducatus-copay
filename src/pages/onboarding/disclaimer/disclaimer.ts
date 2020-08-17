@@ -53,7 +53,7 @@ export class DisclaimerPage {
   }
 
   openDisclaimer() {
-    let url = 'https://www.ducatuscoins.com/terms-and-conditions.html';
+    let url = 'https://www.ducatuscoins.com/legal';
     let optIn = true;
     let title = null;
     let message = this.translate.instant('View Wallet Terms of Use');
