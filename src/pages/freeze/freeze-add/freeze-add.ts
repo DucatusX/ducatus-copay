@@ -26,8 +26,8 @@ export class FreezeAddPage {
   public freezeLoading = false;
   public amountWithPercent: any;
   public amountWallet = 0;
-  public freezeMonth = 13;
-  public freezePercent = 13;
+  public freezeMonth = 36;
+  public freezePercent = 21;
   public maxAmount = 0;
 
   constructor(
