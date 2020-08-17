@@ -19,6 +19,7 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import { CopayersPage } from '../add/copayers/copayers';
 import { ImportWalletPage } from '../add/import-wallet/import-wallet';
 import { JoinWalletPage } from '../add/join-wallet/join-wallet';
+import { FreezeAddPage } from '../freeze/freeze-add/freeze-add';
 import { BitPayCardIntroPage } from '../integrations/bitpay-card/bitpay-card-intro/bitpay-card-intro';
 import { CoinbasePage } from '../integrations/coinbase/coinbase';
 import { SelectInvoicePage } from '../integrations/invoice/select-invoice/select-invoice';
@@ -322,6 +323,7 @@ export class SendPage {
         this.navCtrl.push(SelectInputsPage, {
           wallet: this.wallet
         });
+      if (option == 'freeze-3years-send') this.navCtrl.push(FreezeAddPage);
     });
   }
 }

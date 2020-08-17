@@ -1,0 +1,132 @@
+<ion-header class="bp-header">
+  <ion-navbar>
+    <ion-title>
+      <div
+        [reveal-at-scroll-pos]="expandableHeader.headerHeight"
+        [scrollArea]="scrollArea"
+      >
+        {{'Send with 3 years freeze' | translate }}
+      </div>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content #scrollArea>
+  <expandable-header
+    [scrollArea]="scrollArea"
+    [fadeFactor]="5"
+    [disableFade]="true"
+    #expandableHeader
+  >
+    <ion-toolbar class="wide-header__title">
+      <expandable-header-primary></expandable-header-primary>
+    </ion-toolbar>
+  </expandable-header>
+
+  <div page-content class="freeze-page">
+    <ion-list class="freeze-list bp-list">
+      <form [formGroup]="FreezeGroup">
+        <div class="freeze-add-group-wrap">
+          <span class="freeze-add-label"
+            >{{'Choose address to send' | translate}}</span
+          >
+          <div class="freeze-add-group">
+            <ion-item class="freeze-add-input">
+              <ion-input
+                placeholder="Choose address to send"
+                type="text"
+                [readonly]="true"
+                formControlName="Address"
+                [value]="FreezeGroup.value.Address"
+              >
+              </ion-input>
+            </ion-item>
+
+            <ion-item
+              *ngIf="walletAddresses"
+              class="freeze-add-select"
+              (click)="openAddressList()"
+            >
+              <ion-icon name="arrow-dropdown"></ion-icon>
+            </ion-item>
+          </div>
+        </div>
+
+        <div class="freeze-add-group-wrap">
+          <span class="freeze-add-label">{{'Amount' | translate}}</span>
+          <div class="freeze-add-group">
+            <ion-item class="freeze-add-input">
+              <ion-input
+                placeholder="Enter amount"
+                type="number"
+                formControlName="Amount"
+                (input)="changeAmount()"
+                [(ngModel)]="amountWallet"
+                [value]="FreezeGroup.value.Amount"
+              >
+              </ion-input>
+            </ion-item>
+            <div (click)="changeAmountToMax()" class="freeze-btn-sendmax">
+              {{ 'Send Max' | translate }}
+            </div>
+          </div>
+        </div>
+
+        <div class="freeze-add-group-wrap">
+          <span class="freeze-add-label"
+            >{{'freeze term (month)' | translate}}</span
+          >
+          <ion-row
+            class="freeze-group-radio"
+            radio-group
+            formControlName="Month"
+            [(ngModel)]="freezeMonth"
+          >
+            <ion-item no-lines>
+              <ion-label> <ion-icon name="34"></ion-icon> 36</ion-label>
+              <ion-radio
+                (click)="changePercentAndMoth('month')"
+                value="36"
+              ></ion-radio>
+            </ion-item>
+          </ion-row>
+        </div>
+
+        <div class="freeze-add-group-wrap">
+          <span class="freeze-add-label"
+            >{{'Interest rates (annual)' | translate}}</span
+          >
+          <ion-row
+            class="freeze-group-radio"
+            radio-group
+            formControlName="Percent"
+            [(ngModel)]="freezePercent"
+          >
+            <ion-item class="freeze-group-radio-item" no-lines>
+              <ion-label> <ion-icon name="21"></ion-icon> 21%</ion-label>
+              <ion-radio
+                (click)="changePercentAndMoth('percent')"
+                value="21"
+              ></ion-radio>
+            </ion-item>
+          </ion-row>
+        </div>
+
+        <div class="freeze-group-btn">
+          <span class="freeze-group-btn-devidends"
+            >Dividends {{ amountWithPercent || '0' }} Ducatus</span
+          >
+          <button
+            ion-button
+            class="freeze-group-btn-button button-standard freeze-item-button freeze-add-page-button"
+            (click)="generateUserFreeze()"
+            [disabled]="!FreezeGroup.valid || freezeLoading"
+          >
+            <span *ngIf="!freezeLoading">{{'freeze' | translate}}</span>
+            <ion-spinner *ngIf="freezeLoading" name="bubbles"></ion-spinner>
+          </button>
+        </div>
+      </form>
+    </ion-list>
+  </div>
+</ion-content>
