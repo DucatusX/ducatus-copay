@@ -27,13 +27,11 @@
     <ion-list class="freeze-list bp-list">
       <form [formGroup]="FreezeGroup">
         <div class="freeze-add-group-wrap">
-          <span class="freeze-add-label"
-            >{{'Choose address to send' | translate}}</span
-          >
+          <span class="freeze-add-label">{{'Sender address' | translate}}</span>
           <div class="freeze-add-group">
             <ion-item class="freeze-add-input">
               <ion-input
-                placeholder="Choose address to send"
+                placeholder="Choose sender address"
                 type="text"
                 [readonly]="true"
                 formControlName="Address"
@@ -53,6 +51,23 @@
         </div>
 
         <div class="freeze-add-group-wrap">
+          <span class="freeze-add-label"
+            >{{'Receiver address' | translate}}</span
+          >
+          <div class="freeze-add-group">
+            <ion-item class="freeze-add-input">
+              <ion-input
+                placeholder="Input receiver address"
+                type="text"
+                formControlName="AddressTo"
+                [value]="FreezeGroup.value.AddressTo"
+              >
+              </ion-input>
+            </ion-item>
+          </div>
+        </div>
+
+        <div class="freeze-add-group-wrap">
           <span class="freeze-add-label">{{'Amount' | translate}}</span>
           <div class="freeze-add-group">
             <ion-item class="freeze-add-input">
@@ -60,7 +75,6 @@
                 placeholder="Enter amount"
                 type="number"
                 formControlName="Amount"
-                (input)="changeAmount()"
                 [(ngModel)]="amountWallet"
                 [value]="FreezeGroup.value.Amount"
               >
@@ -73,49 +87,22 @@
         </div>
 
         <div class="freeze-add-group-wrap">
-          <span class="freeze-add-label"
-            >{{'freeze term (month)' | translate}}</span
-          >
-          <ion-row
-            class="freeze-group-radio"
-            radio-group
-            formControlName="Month"
-            [(ngModel)]="freezeMonth"
-          >
-            <ion-item no-lines>
-              <ion-label> <ion-icon name="34"></ion-icon> 36</ion-label>
-              <ion-radio
-                (click)="changePercentAndMoth('month')"
-                value="36"
-              ></ion-radio>
+          <span class="freeze-add-label">{{'Days' | translate}}</span>
+          <div class="freeze-add-group">
+            <ion-item class="freeze-add-input">
+              <ion-input
+                placeholder="Enter freeze days"
+                type="number"
+                formControlName="Days"
+                [(ngModel)]="freezeDays"
+                [value]="FreezeGroup.value.Days"
+              >
+              </ion-input>
             </ion-item>
-          </ion-row>
-        </div>
-
-        <div class="freeze-add-group-wrap">
-          <span class="freeze-add-label"
-            >{{'Interest rates (annual)' | translate}}</span
-          >
-          <ion-row
-            class="freeze-group-radio"
-            radio-group
-            formControlName="Percent"
-            [(ngModel)]="freezePercent"
-          >
-            <ion-item class="freeze-group-radio-item" no-lines>
-              <ion-label> <ion-icon name="21"></ion-icon> 21%</ion-label>
-              <ion-radio
-                (click)="changePercentAndMoth('percent')"
-                value="21"
-              ></ion-radio>
-            </ion-item>
-          </ion-row>
+          </div>
         </div>
 
         <div class="freeze-group-btn">
-          <span class="freeze-group-btn-devidends"
-            >Dividends {{ amountWithPercent || '0' }} Ducatus</span
-          >
           <button
             ion-button
             class="freeze-group-btn-button button-standard freeze-item-button freeze-add-page-button"

@@ -26,7 +26,8 @@ export class FreezeAddPage {
   public freezeLoading = false;
   public amountWithPercent: any;
   public amountWallet = 0;
-  public freezeMonth = 36;
+  public freezeDays = 0;
+  // public freezeMonth = 36;
   public freezePercent = 21;
   public maxAmount = 0;
 
@@ -46,6 +47,14 @@ export class FreezeAddPage {
         '',
         Validators.compose([Validators.minLength(34), Validators.required])
       ],
+      AddressTo: [
+        '',
+        Validators.compose([
+          Validators.minLength(34),
+          Validators.maxLength(34),
+          Validators.required
+        ])
+      ],
       Amount: [
         '',
         Validators.compose([
@@ -54,8 +63,16 @@ export class FreezeAddPage {
           Validators.min(0)
         ])
       ],
-      Month: ['13', Validators.compose([Validators.required])],
-      Percent: ['8', Validators.compose([Validators.required])]
+      Days: [
+        '',
+        Validators.compose([
+          Validators.minLength(1),
+          Validators.required,
+          Validators.min(0)
+        ])
+      ]
+      // Month: ['13', Validators.compose([Validators.required])],
+      // Percent: ['8', Validators.compose([Validators.required])]
     });
   }
 
@@ -74,47 +91,47 @@ export class FreezeAddPage {
     });
   }
 
-  public changePercentAndMoth(type: string) {
-    const tableMP = {
-      '36': '21'
-    };
+  // public changePercentAndMoth(type: string) {
+  //   const tableMP = {
+  //     '36': '21'
+  //   };
 
-    type === 'month'
-      ? this.FreezeGroup.controls.Percent.setValue(
-          tableMP[this.FreezeGroup.controls.Month.value]
-        )
-      : this.FreezeGroup.controls.Month.setValue(
-          Object.keys(tableMP).find(
-            key => tableMP[key] === this.FreezeGroup.controls.Percent.value
-          )
-        );
+  //   type === 'month'
+  //     ? this.FreezeGroup.controls.Percent.setValue(
+  //         tableMP[this.FreezeGroup.controls.Month.value]
+  //       )
+  //     : this.FreezeGroup.controls.Month.setValue(
+  //         Object.keys(tableMP).find(
+  //           key => tableMP[key] === this.FreezeGroup.controls.Percent.value
+  //         )
+  //       );
 
-    this.changeAmount();
-  }
+  //   this.changeAmount();
+  // }
 
   public changeAmountToMax() {
     this.FreezeGroup.controls.Amount.setValue(this.maxAmount);
-    this.changeAmount();
+    // this.changeAmount();
   }
 
-  public changeAmount() {
-    if (parseFloat(this.FreezeGroup.value.Amount) < 0)
-      this.FreezeGroup.controls.Amount.setValue('0');
+  // public changeAmount() {
+  //   if (parseFloat(this.FreezeGroup.value.Amount) < 0)
+  //     this.FreezeGroup.controls.Amount.setValue('0');
 
-    const amount =
-      this.FreezeGroup.value.Amount ||
-      parseFloat(this.FreezeGroup.value.Amount) > 0
-        ? parseFloat(this.FreezeGroup.value.Amount)
-        : 0;
+  //   const amount =
+  //     this.FreezeGroup.value.Amount ||
+  //     parseFloat(this.FreezeGroup.value.Amount) > 0
+  //       ? parseFloat(this.FreezeGroup.value.Amount)
+  //       : 0;
 
-    const amountWithPercentValue = (
-      amount *
-      (parseFloat(this.FreezeGroup.value.Percent) / 100) *
-      (parseFloat(this.FreezeGroup.value.Month) / 12)
-    ).toFixed(4);
+  //   const amountWithPercentValue = (
+  //     amount *
+  //     (parseFloat(this.FreezeGroup.value.Percent) / 100) *
+  //     (parseFloat(this.FreezeGroup.value.Month) / 12)
+  //   ).toFixed(4);
 
-    this.amountWithPercent = amountWithPercentValue;
-  }
+  //   this.amountWithPercent = amountWithPercentValue;
+  // }
 
   public openAddressList() {
     if (!this.freezeLoading) {
@@ -156,14 +173,16 @@ export class FreezeAddPage {
     duc_address: string,
     receiver_user_public_key: string,
     sender_user_public_key: string,
-    private_path: string
+    lock_days: number,
+    private_path: number
   ) {
     return this.httpClient
-      .post(`${FREEZE_URL_REQUEST}generate_deposit_for_three_years/`, {
+      .post(`${FREEZE_URL_REQUEST}generate_deposit_without_dividends/`, {
         wallet_id,
         duc_address,
         receiver_user_public_key,
         sender_user_public_key,
+        lock_days,
         private_path
       })
       .toPromise();
@@ -177,11 +196,21 @@ export class FreezeAddPage {
       .then(resPrepare => {
         const resultPrepare: any = resPrepare;
 
+        console.log(
+          resultPrepare.wallet.walletId,
+          this.FreezeGroup.value.Address,
+          resultPrepare.pubKey, // receiver_user_public_key
+          resultPrepare.pubKey, // sender_user_public_key
+          Number(this.FreezeGroup.value.Days),
+          resultPrepare.path
+        );
+
         this.generateFreeze(
           resultPrepare.wallet.walletId,
           this.FreezeGroup.value.Address,
           resultPrepare.pubKey, // receiver_user_public_key
           resultPrepare.pubKey, // sender_user_public_key
+          Number(this.FreezeGroup.value.Days),
           resultPrepare.path
         )
           .then(res => {
