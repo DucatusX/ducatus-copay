@@ -173,8 +173,8 @@ export class FreezeAddPage {
     duc_address: string,
     receiver_user_public_key: string,
     sender_user_public_key: string,
-    lock_days: number,
-    private_path: number
+    private_path: number,
+    lock_days: number
   ) {
     return this.httpClient
       .post(`${FREEZE_URL_REQUEST}generate_deposit_without_dividends/`, {
@@ -191,56 +191,70 @@ export class FreezeAddPage {
   public async generateUserFreeze() {
     this.freezeLoading = true;
 
-    this.walletProvider
-      .prepareAdd(this.walletAddresses, this.FreezeGroup.value.Address)
-      .then(resPrepare => {
-        const resultPrepare: any = resPrepare;
+    const addresses = this.walletAddresses;
+    const addressFrom = this.FreezeGroup.value.Address;
+    const addressTo = this.FreezeGroup.value.AddressTo;
+    const days = this.FreezeGroup.value.Days;
 
-        console.log(
-          resultPrepare.wallet.walletId,
-          this.FreezeGroup.value.Address,
-          resultPrepare.pubKey, // receiver_user_public_key
-          resultPrepare.pubKey, // sender_user_public_key
-          Number(this.FreezeGroup.value.Days),
-          resultPrepare.path
-        );
-
-        this.generateFreeze(
-          resultPrepare.wallet.walletId,
-          this.FreezeGroup.value.Address,
-          resultPrepare.pubKey, // receiver_user_public_key
-          resultPrepare.pubKey, // sender_user_public_key
-          Number(this.FreezeGroup.value.Days),
-          resultPrepare.path
-        )
-          .then(res => {
-            const result: any = res;
-
-            if (result.cltv_details.locked_duc_address) {
-              const addressView = this.walletProvider.getAddressView(
-                resultPrepare.wallet.wallet.coin,
-                resultPrepare.wallet.wallet.network,
-                result.cltv_details.locked_duc_address,
-                true
-              );
-
-              const parsedAmount = this.txFormatProvider.parseAmount(
-                resultPrepare.wallet.wallet.coin.toLowerCase(),
-                this.FreezeGroup.value.Amount,
-                resultPrepare.wallet.wallet.coin.toUpperCase()
-              );
-
-              const redirParms = {
-                activePage: 'ScanPage',
-                walletId: resultPrepare.wallet.wallet.id,
-                amount: parsedAmount.amountSat
-              };
-
-              this.incomingDataProvider.redir(addressView, redirParms);
-            }
-          })
-          .catch(() => this.showModal('network'));
+    const receiverAddress = await this.walletProvider
+      .getInfoByAddress(addresses, addressFrom, addressTo)
+      .then(res => {
+        return res;
       });
+
+    console.log('receiverAddress', receiverAddress); // информация об адрессе получателя
+
+    const receiverData = (await this.walletProvider
+      .prepareAddFreeze(receiverAddress.wallet, receiverAddress.address[0])
+      .then(res => {
+        return res;
+      })) as any;
+
+    console.log('receiverData', receiverData); // информация о об адрессе получателя { walletId, pubKey, path }
+
+    const senderData = (await this.walletProvider
+      .prepareAdd(addresses, addressFrom)
+      .then(res => {
+        return res;
+      })) as any;
+
+    console.log('senderData', senderData); // информация о об адрессе получателя { walletId, pubKey, path }
+
+    this.generateFreeze(
+      receiverData.walletId, // wallet id получателя
+      addressTo, // адрес получателя
+      receiverData.pubKey, // публичный ключ получателя
+      senderData.pubKey, // публичный ключ отправителя
+      receiverData.path, // path получателя
+      Number(days) // количество дней заморозки
+    )
+      .then(res => {
+        const result: any = res;
+
+        if (result.cltv_details.locked_duc_address) {
+          const addressView = this.walletProvider.getAddressView(
+            senderData.wallet.wallet.coin,
+            senderData.wallet.wallet.network,
+            result.cltv_details.locked_duc_address,
+            true
+          );
+
+          const parsedAmount = this.txFormatProvider.parseAmount(
+            senderData.wallet.wallet.coin.toLowerCase(),
+            this.FreezeGroup.value.Amount,
+            senderData.wallet.wallet.coin.toUpperCase()
+          );
+
+          const redirParms = {
+            activePage: 'ScanPage',
+            walletId: senderData.wallet.wallet.id,
+            amount: parsedAmount.amountSat
+          };
+
+          this.incomingDataProvider.redir(addressView, redirParms);
+        }
+      })
+      .catch(() => this.showModal('network'));
   }
 
   private showModal(type: string) {
