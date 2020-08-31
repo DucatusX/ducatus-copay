@@ -63,7 +63,9 @@ export class ExchangeRates {
     this.exchangeRatesProvider.getHistoricalRates(this.isoCode).subscribe(
       response => {
         _.forEach(this.coins, (coin, index) => {
-          this.coins[index].historicalRates = response[coin.unitCode] ? response[coin.unitCode].reverse() : [];
+          this.coins[index].historicalRates = response[coin.unitCode]
+            ? response[coin.unitCode].reverse()
+            : [];
           this.updateValues(index);
         });
       },
@@ -99,14 +101,18 @@ export class ExchangeRates {
   }
 
   private updateValues(i: number) {
+    const coinHistoricalRates = this.coins[i].historicalRates[
+      this.coins[i].historicalRates.length - 1
+    ];
 
-    const coinHistoricalRates = this.coins[i].historicalRates[this.coins[i].historicalRates.length - 1];
-
-    this.coins[i].currentPrice = coinHistoricalRates ? coinHistoricalRates.rate : 0;
-    this.coins[i].averagePrice = coinHistoricalRates ?
-      ((this.coins[i].currentPrice - this.coins[i].historicalRates[0].rate) *
-        100) /
-      this.coins[i].historicalRates[0].rate : 0;
+    this.coins[i].currentPrice = coinHistoricalRates
+      ? coinHistoricalRates.rate
+      : 0;
+    this.coins[i].averagePrice = coinHistoricalRates
+      ? ((this.coins[i].currentPrice - this.coins[i].historicalRates[0].rate) *
+          100) /
+        this.coins[i].historicalRates[0].rate
+      : 0;
   }
 
   private setIsoCode() {

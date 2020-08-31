@@ -156,6 +156,50 @@ export class FreezeAddPage {
     }
   }
 
+  public amountChange(event) {
+    // console.log('amountWallet', this.amountWallet);
+    // console.log('event', event, event.length);
+
+    // if (isNaN(event)) {
+    //   event = event.replace(/[^0-9\.]/g, '');
+    //   if (event.split('.').length > 2) event = event.replace(/\.+$/, '');
+    // }
+    // this.amountWallet = event;
+
+    // console.log('event', event);
+    // console.log('amountWallet', this.amountWallet);
+
+    console.log('event', event);
+    console.log('amountWallet', this.amountWallet);
+
+    // this.amountWallet = event
+    //   .replace(/[^.\d]/g, '')
+    //   .replace(/^(\d*\.?)|(\d*)\.?/g, '$1$2');
+
+    // const value = event
+    //   .replace(/[^\d.]/g, '')
+    //   .replace(/\.([.\d]+)$/, (_m, m1) => {
+    //     return '.' + m1.replace(/\./g, '');
+    //   });
+
+    
+
+    if (!isNaN(event)) {
+      if (event.length >= 2) {
+        if (event.charAt(0) === 0 && event.charAt(1) === 0) {
+          this.amountWallet = 0;
+        }
+      }
+    }
+
+    console.log('replace event', event);
+    console.log('replace amountWallet', this.amountWallet);
+
+    if (event.length >= 2) {
+      if (event[0] === '0')
+    }
+  }
+
   public sendMax() {
     const { token } = this.wallet.wallet.credentials;
 

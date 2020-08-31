@@ -156,6 +156,8 @@ export class HomePage {
 
   private getCachedTotalBalance() {
     this.persistenceProvider.getTotalBalance().then(data => {
+      console.log('getCachedTotalBalance data', data);
+
       if (!data) return;
       if (_.isString(data)) {
         data = JSON.parse(data);
