@@ -129,6 +129,19 @@ export class FreezeAddPage {
     );
   }
 
+  public daysChange(_event) {
+    this.freezeDays = Number(
+      this.FreezeGroup.controls['Days'].value.toString().replace(/(\.\d+)+/, '')
+    );
+    this.FreezeGroup.controls['Days'].setValue(
+      Number(
+        this.FreezeGroup.controls['Days'].value
+          .toString()
+          .replace(/(\.\d+)+/, '')
+      )
+    );
+  }
+
   public sendMax() {
     const { token } = this.wallet.wallet.credentials;
 

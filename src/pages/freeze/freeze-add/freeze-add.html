@@ -98,6 +98,7 @@
               <ion-input
                 placeholder="Enter freeze days"
                 type="number"
+                (ionChange)="daysChange($event)"
                 formControlName="Days"
                 [(ngModel)]="freezeDays"
                 [value]="FreezeGroup.value.Days"
