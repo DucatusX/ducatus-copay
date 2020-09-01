@@ -261,15 +261,11 @@ export class DepositPage {
         return t.address === deposit.cltv_details.user_duc_address;
       });
 
-      console.log('addressFilter', addressFilter);
-
       const walletToUnfreeze = addressFilter
         ? addressFilter.wallet
         : this.wallets.find(t => {
             return t.wallet.credentials.walletId === deposit.wallet_id;
           }).wallet;
-
-      console.log('walletFilter', walletToUnfreeze);
 
       const txHex = await this.walletProvider.signFreeze(
         walletToUnfreeze,
@@ -277,18 +273,14 @@ export class DepositPage {
         !!addressFilter
       );
 
-      console.log('freeze transaction hex', txHex);
-
       this.sendTX(txHex)
-        .then(res => {
-          console.log('transaction sended', res);
+        .then(() => {
           this.showModal('success', id, deposit.duc_amount);
         })
         .catch(err => {
           err.error.detail === '-27: transaction already in block chain'
             ? this.showModal('alreadyActivated', id)
             : this.showModal('network', id);
-          console.error('transaction not sended', err, err.error.detail);
         });
     });
   }

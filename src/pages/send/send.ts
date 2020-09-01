@@ -257,9 +257,9 @@ export class SendPage {
                 true
               );
             }
-          } //else {
-          //this.redir();
-          //}
+          } // else {
+          // this.redir();
+          // }
         } catch (err) {
           this.invalidAddress = true;
           this.logger.warn(err);
@@ -271,7 +271,7 @@ export class SendPage {
         const isValid = this.checkCoinAndNetwork(this.search);
         if (isValid) {
           this.invalidAddress = false;
-          //this.redir();
+          // this.redir();
         }
       } else if (parsedData && parsedData.type == 'BitPayCard') {
         // this.close();

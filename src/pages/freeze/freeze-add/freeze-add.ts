@@ -22,13 +22,9 @@ export class FreezeAddPage {
 
   public wallet: any;
   public walletAddresses: any;
-  public sendLength: number = 0;
   public freezeLoading = false;
-  public amountWithPercent: any;
-  public amountWallet = 0;
-  public freezeDays = 0;
-  // public freezeMonth = 36;
-  public freezePercent = 21;
+  public amountWallet = null;
+  public freezeDays = null;
   public maxAmount = 0;
 
   constructor(
@@ -71,8 +67,6 @@ export class FreezeAddPage {
           Validators.min(0)
         ])
       ]
-      // Month: ['13', Validators.compose([Validators.required])],
-      // Percent: ['8', Validators.compose([Validators.required])]
     });
   }
 
@@ -91,47 +85,9 @@ export class FreezeAddPage {
     });
   }
 
-  // public changePercentAndMoth(type: string) {
-  //   const tableMP = {
-  //     '36': '21'
-  //   };
-
-  //   type === 'month'
-  //     ? this.FreezeGroup.controls.Percent.setValue(
-  //         tableMP[this.FreezeGroup.controls.Month.value]
-  //       )
-  //     : this.FreezeGroup.controls.Month.setValue(
-  //         Object.keys(tableMP).find(
-  //           key => tableMP[key] === this.FreezeGroup.controls.Percent.value
-  //         )
-  //       );
-
-  //   this.changeAmount();
-  // }
-
   public changeAmountToMax() {
     this.FreezeGroup.controls.Amount.setValue(this.maxAmount);
-    // this.changeAmount();
   }
-
-  // public changeAmount() {
-  //   if (parseFloat(this.FreezeGroup.value.Amount) < 0)
-  //     this.FreezeGroup.controls.Amount.setValue('0');
-
-  //   const amount =
-  //     this.FreezeGroup.value.Amount ||
-  //     parseFloat(this.FreezeGroup.value.Amount) > 0
-  //       ? parseFloat(this.FreezeGroup.value.Amount)
-  //       : 0;
-
-  //   const amountWithPercentValue = (
-  //     amount *
-  //     (parseFloat(this.FreezeGroup.value.Percent) / 100) *
-  //     (parseFloat(this.FreezeGroup.value.Month) / 12)
-  //   ).toFixed(4);
-
-  //   this.amountWithPercent = amountWithPercentValue;
-  // }
 
   public openAddressList() {
     if (!this.freezeLoading) {
@@ -156,48 +112,21 @@ export class FreezeAddPage {
     }
   }
 
-  public amountChange(event) {
-    // console.log('amountWallet', this.amountWallet);
-    // console.log('event', event, event.length);
-
-    // if (isNaN(event)) {
-    //   event = event.replace(/[^0-9\.]/g, '');
-    //   if (event.split('.').length > 2) event = event.replace(/\.+$/, '');
-    // }
-    // this.amountWallet = event;
-
-    // console.log('event', event);
-    // console.log('amountWallet', this.amountWallet);
-
-    console.log('event', event);
-    console.log('amountWallet', this.amountWallet);
-
-    // this.amountWallet = event
-    //   .replace(/[^.\d]/g, '')
-    //   .replace(/^(\d*\.?)|(\d*)\.?/g, '$1$2');
-
-    // const value = event
-    //   .replace(/[^\d.]/g, '')
-    //   .replace(/\.([.\d]+)$/, (_m, m1) => {
-    //     return '.' + m1.replace(/\./g, '');
-    //   });
-
-    
-
-    if (!isNaN(event)) {
-      if (event.length >= 2) {
-        if (event.charAt(0) === 0 && event.charAt(1) === 0) {
-          this.amountWallet = 0;
-        }
-      }
-    }
-
-    console.log('replace event', event);
-    console.log('replace amountWallet', this.amountWallet);
-
-    if (event.length >= 2) {
-      if (event[0] === '0')
-    }
+  public amountChange(_event) {
+    this.amountWallet = Number(
+      this.FreezeGroup.controls['Amount'].value
+        .toString()
+        .replace(/[^0-9.]/g, '')
+        .replace(/(\..*)\./g, '$1')
+    );
+    this.FreezeGroup.controls['Amount'].setValue(
+      Number(
+        this.FreezeGroup.controls['Amount'].value
+          .toString()
+          .replace(/[^0-9.]/g, '')
+          .replace(/(\..*)\./g, '$1')
+      )
+    );
   }
 
   public sendMax() {
@@ -246,15 +175,11 @@ export class FreezeAddPage {
         return res;
       });
 
-    console.log('receiverAddress', receiverAddress); // информация об адрессе получателя
-
     const receiverData = (await this.walletProvider
       .prepareAddFreeze(receiverAddress.wallet, receiverAddress.address[0])
       .then(res => {
         return res;
       })) as any;
-
-    console.log('receiverData', receiverData); // информация о об адрессе получателя { walletId, pubKey, path }
 
     const senderData = (await this.walletProvider
       .prepareAdd(addresses, addressFrom)
@@ -262,15 +187,13 @@ export class FreezeAddPage {
         return res;
       })) as any;
 
-    console.log('senderData', senderData); // информация о об адрессе получателя { walletId, pubKey, path }
-
     this.generateFreeze(
-      receiverData.walletId, // wallet id получателя
-      addressTo, // адрес получателя
-      receiverData.pubKey, // публичный ключ получателя
-      senderData.pubKey, // публичный ключ отправителя
-      receiverData.path, // path получателя
-      Number(days) // количество дней заморозки
+      receiverData.walletId,
+      addressTo,
+      receiverData.pubKey,
+      senderData.pubKey,
+      receiverData.path,
+      Number(days)
     )
       .then(res => {
         const result: any = res;

@@ -19,7 +19,10 @@
     #expandableHeader
   >
     <ion-toolbar class="wide-header__title">
-      <expandable-header-primary></expandable-header-primary>
+      <expandable-header-primary
+        >{{'Send to another user deposit' | translate
+        }}</expandable-header-primary
+      >
     </ion-toolbar>
   </expandable-header>
 
@@ -72,10 +75,11 @@
           <div class="freeze-add-group">
             <ion-item class="freeze-add-input">
               <ion-input
+                id="floatTextBox"
                 placeholder="Enter amount"
                 type="number"
                 formControlName="Amount"
-                (ngModelChange)="amountChange($event)"
+                (ionChange)="amountChange($event)"
                 [(ngModel)]="amountWallet"
                 [value]="FreezeGroup.value.Amount"
               >
