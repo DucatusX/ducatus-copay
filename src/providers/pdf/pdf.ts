@@ -10,11 +10,11 @@ declare const cordova;
 @Injectable()
 export class PdfProvider {
   public isCordova: boolean;
-  public filename = "ducatusWallet";
+  public filename = 'ducatusWallet';
   private optionsMobile = {
     documentSize: 'A4',
-    landscape: "portrait",
-    type: "share",
+    landscape: 'portrait',
+    type: 'share',
     fileName: this.filename + '.pdf'
   };
 
@@ -32,22 +32,24 @@ export class PdfProvider {
     imgData ? null : null;
     if (filename) this.filename = filename + '.pdf';
     this.logger.warn('making pdf for mobile platforms');
-    cordova.plugins.pdf.fromData(template, optMobile || this.optionsMobile)
-      .then((sucess) => this.logger.warn('sucess: ', sucess))
-      .catch((error) => this.logger.warn('error:', error));
+    cordova.plugins.pdf
+      .fromData(template, optMobile || this.optionsMobile)
+      .then(sucess => this.logger.warn('sucess: ', sucess))
+      .catch(error => this.logger.warn('error:', error));
   }
 
   private createWebPDF(template?, imgData?, filename?) {
     template ? null : null;
     if (filename) this.filename = filename + '.pdf';
 
-    // console.log(imgData);
-
     var img = new Image();
     img.src = imgData;
 
     img.onload = () => {
-      var doc = img.width > img.height ? new jsPDF('l', 'px', [img.width, img.height]) : new jsPDF('p', 'px', [img.width, img.height]);
+      var doc =
+        img.width > img.height
+          ? new jsPDF('l', 'px', [img.width, img.height])
+          : new jsPDF('p', 'px', [img.width, img.height]);
 
       var width = doc.internal.pageSize.getWidth();
       var height = doc.internal.pageSize.getHeight();

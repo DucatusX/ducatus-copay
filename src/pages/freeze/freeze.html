@@ -1,0 +1,103 @@
+<ion-header class="bp-header">
+  <ion-navbar>
+    <ion-title>
+      <div
+        [reveal-at-scroll-pos]="expandableHeader.headerHeight"
+        [scrollArea]="scrollArea"
+      >
+        {{ 'Deposits' | translate }}
+      </div>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content #scrollArea>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="wrapper">
+    <expandable-header
+      [scrollArea]="scrollArea"
+      [fadeFactor]="5"
+      [disableFade]="true"
+      #expandableHeader
+    >
+      <ion-toolbar class="wide-header__title">
+        <expandable-header-primary>
+          {{ 'Deposits' | translate }}
+        </expandable-header-primary>
+      </ion-toolbar>
+    </expandable-header>
+
+    <ion-list class="freeze-list">
+      <div *ngIf="!depositsLoading">
+        <div *ngFor="let item of deposits">
+          <ion-item
+            class="freeze-item"
+            *ngIf="!item.cltv_details.withdraw && item.depositinput_set.length != 0"
+          >
+            <ion-label class="freeze-item-inner">
+              <div class="freeze-item-info">
+                <div>
+                  <div class="freeze-item-title">
+                    {{ item.duc_amount }} DUC
+                    <span class="freeze-item-title-freeze"
+                      >+{{ item.duc_added }}</span
+                    >
+                  </div>
+                  <span class="freeze-item-date"
+                    >{{ item.ended_at_date | date:'dd.LL.y' }}</span
+                  >
+                </div>
+              </div>
+              <div
+                class="freeze-item-info"
+                [ngClass]="{'freeze-item-info-unactive': item.ready_to_withdraw }"
+              >
+                <div *ngIf="item.withdrow_check">
+                  <span ion-button class="freeze-item-loading">
+                    <ion-spinner name="dots"></ion-spinner>
+                  </span>
+                </div>
+                <div *ngIf="!item.withdrow_check">
+                  <span
+                    *ngIf="!item.ready_to_withdraw"
+                    class="freeze-item-percent"
+                    >{{ item.dividends }}%</span
+                  >
+                  <span
+                    *ngIf="item.ready_to_withdraw"
+                    ion-button
+                    class="freeze-item-button"
+                    (click)="withdrowTrigger(item.id)"
+                    >WITHDRAW</span
+                  >
+                </div>
+              </div>
+              <div
+                class="freeze-range-limit"
+                [ngStyle]="{'width':  item.executeRagne +'%'}"
+              ></div>
+            </ion-label>
+          </ion-item>
+        </div>
+      </div>
+
+      <div *ngIf="depositsLoading"><ion-spinner name="dots"></ion-spinner></div>
+
+      <div class="freeze-add">
+        <span
+          ion-button
+          (click)="goToDepositAddPage()"
+          class="freeze-add-button icon icon__add"
+          ><img
+            src="./assets/img/icon-freeze-add-plus.svg"
+            width="21px"
+            height="21px"
+          />
+          freeze</span
+        >
+      </div>
+    </ion-list>
+  </div>
+</ion-content>

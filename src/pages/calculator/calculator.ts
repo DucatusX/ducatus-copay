@@ -41,9 +41,8 @@ export class CalculatorPage {
     private navCtrl: NavController,
     private logger: Logger,
     private formBuilder: FormBuilder,
-    private httpClient: HttpClient
-  ) // private moonPayProvider: MoonPayProvider
-  {
+    private httpClient: HttpClient // private moonPayProvider: MoonPayProvider
+  ) {
     this.formCoins.get = convertCoins['DUC']; // DUC
     this.formCoins.send = this.formCoins.get.items[0]; // DUCX
     this.coin_info = coinInfo;
@@ -85,10 +84,7 @@ export class CalculatorPage {
       this.formCoins.get =
         convertCoins[this.CalculatorGroupForm.value.CalculatorGroupGetCoin];
       this.formCoins.send = this.formCoins.get.items[0];
-
-      // console.log(this.formCoins.send);
       this.CalculatorGroupForm.value.CalculatorGroupGetCoin = this.formCoins.get.name;
-      // this.CalculatorGroupForm.value.CalculatorGroupSendCoin = this.formCoins.send;
     }
     if (type === 'Send') {
       this.formCoins.send = this.CalculatorGroupForm.value.CalculatorGroupSendCoin;
