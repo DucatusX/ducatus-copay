@@ -14,6 +14,8 @@ import { DepositPage } from '../pages/deposit/deposit';
 import { DepositAddPage } from '../pages/deposit/deposit-add/deposit-add';
 import { SendFeedbackPage } from '../pages/feedback/send-feedback/send-feedback';
 import { FinishModalPage } from '../pages/finish/finish';
+import { FreezePage } from '../pages/freeze/freeze';
+import { FreezeAddPage } from '../pages/freeze/freeze-add/freeze-add';
 import { IntegrationsPage } from '../pages/integrations/integrations';
 import { NewDesignTourPage } from '../pages/new-design-tour/new-design-tour';
 import { CollectEmailPage } from '../pages/onboarding/collect-email/collect-email';
@@ -256,5 +258,7 @@ export const PAGES = [
   CardItemPage,
   CoinSelectorPage,
   SlideToAcceptPage, // Phases: card pages
-  PhaseOneCardIntro
+  PhaseOneCardIntro,
+  FreezePage,
+  FreezeAddPage
 ];

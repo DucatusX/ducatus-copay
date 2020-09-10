@@ -1473,6 +1473,32 @@ export class WalletProvider {
     });
   }
 
+  public getInfoByAddress(wallets, addressSelect, addressTo): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const walletToSend = wallets.find(
+        (t: { address: string }) => t.address === addressSelect
+      );
+
+      walletToSend.wallet.getInfoByAddress(addressTo, (err, info) => {
+        if (err) return reject(err);
+        return resolve(info);
+      });
+    });
+  }
+
+  public prepareAddFreeze(wallet: any, addressTo: any) {
+    return new Promise(async resolve => {
+      const publicKey = addressTo.publicKeys[0];
+
+      resolve({
+        wallet,
+        walletId: addressTo.walletId,
+        pubKey: publicKey,
+        path: addressTo.path
+      });
+    });
+  }
+
   public prepareAdd(wallets: any[], addressSelect: string) {
     return new Promise(async resolve => {
       const walletToSend = wallets.find(
