@@ -1,18 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { AlertController, NavController } from 'ionic-angular';
-import { DepositAddPage } from './deposit-add/deposit-add';
+import { FreezeAddPage } from './freeze-add/freeze-add';
 
 import _ from 'lodash';
 
 import { ProfileProvider, WalletProvider } from '../../providers';
-import { DEPOSIT_URL_REQUEST } from './params';
+import { FREEZE_URL_REQUEST } from './params';
 
 @Component({
-  selector: 'page-deposit',
-  templateUrl: 'deposit.html'
+  selector: 'page-freeze',
+  templateUrl: 'freeze.html'
 })
-export class DepositPage {
+export class FreezePage {
   public depositsLoading = true;
   public deposits = [];
   public walletsGroups: any;
@@ -84,7 +84,7 @@ export class DepositPage {
       });
 
       this.httpClient
-        .get(`${DEPOSIT_URL_REQUEST}get_deposits/?wallet_ids=${walletsResult}`)
+        .get(`${FREEZE_URL_REQUEST}get_deposits/?wallet_ids=${walletsResult}`)
         .toPromise()
         .then(result => {
           this.deposits = result as any;
@@ -131,7 +131,7 @@ export class DepositPage {
   }
 
   public goToDepositAddPage() {
-    this.navCtrl.push(DepositAddPage);
+    this.navCtrl.push(FreezeAddPage);
   }
 
   private getAddress(wallet) {
@@ -144,13 +144,13 @@ export class DepositPage {
 
   private getDeposit(id) {
     return this.httpClient
-      .get(`${DEPOSIT_URL_REQUEST}get_deposit_info/?deposit_id=${id}`)
+      .get(`${FREEZE_URL_REQUEST}get_deposit_info/?deposit_id=${id}`)
       .toPromise();
   }
 
   private sendTX(raw_tx_hex) {
     return this.httpClient
-      .post(`${DEPOSIT_URL_REQUEST}send_deposit_transaction/`, {
+      .post(`${FREEZE_URL_REQUEST}send_deposit_transaction/`, {
         raw_tx_hex
       })
       .toPromise();

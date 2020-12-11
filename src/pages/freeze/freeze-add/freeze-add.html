@@ -1,0 +1,125 @@
+<ion-header class="bp-header">
+  <ion-navbar>
+    <ion-title>
+      <div
+        [reveal-at-scroll-pos]="expandableHeader.headerHeight"
+        [scrollArea]="scrollArea"
+      >
+        {{'Send to another user deposit' | translate }}
+      </div>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content #scrollArea>
+  <expandable-header
+    [scrollArea]="scrollArea"
+    [fadeFactor]="5"
+    [disableFade]="true"
+    #expandableHeader
+  >
+    <ion-toolbar class="wide-header__title">
+      <expandable-header-primary
+        >{{'Send to another user deposit' | translate
+        }}</expandable-header-primary
+      >
+    </ion-toolbar>
+  </expandable-header>
+
+  <div page-content class="freeze-page">
+    <ion-list class="freeze-list bp-list">
+      <form [formGroup]="FreezeGroup">
+        <div class="freeze-add-group-wrap">
+          <span class="freeze-add-label">{{'Sender address' | translate}}</span>
+          <div class="freeze-add-group">
+            <ion-item class="freeze-add-input">
+              <ion-input
+                placeholder="Choose sender address"
+                type="text"
+                [readonly]="true"
+                formControlName="Address"
+                [value]="FreezeGroup.value.Address"
+              >
+              </ion-input>
+            </ion-item>
+
+            <ion-item
+              *ngIf="walletAddresses"
+              class="freeze-add-select"
+              (click)="openAddressList()"
+            >
+              <ion-icon name="arrow-dropdown"></ion-icon>
+            </ion-item>
+          </div>
+        </div>
+
+        <div class="freeze-add-group-wrap">
+          <span class="freeze-add-label"
+            >{{'Receiver address' | translate}}</span
+          >
+          <div class="freeze-add-group">
+            <ion-item class="freeze-add-input">
+              <ion-input
+                placeholder="Input receiver address"
+                type="text"
+                formControlName="AddressTo"
+                [value]="FreezeGroup.value.AddressTo"
+              >
+              </ion-input>
+            </ion-item>
+          </div>
+        </div>
+
+        <div class="freeze-add-group-wrap">
+          <span class="freeze-add-label">{{'Amount' | translate}}</span>
+          <div class="freeze-add-group">
+            <ion-item class="freeze-add-input">
+              <ion-input
+                id="floatTextBox"
+                placeholder="Enter amount"
+                type="number"
+                formControlName="Amount"
+                (ionChange)="amountChange($event)"
+                [(ngModel)]="amountWallet"
+                [value]="FreezeGroup.value.Amount"
+              >
+              </ion-input>
+            </ion-item>
+            <div (click)="changeAmountToMax()" class="freeze-btn-sendmax">
+              {{ 'Send Max' | translate }}
+            </div>
+          </div>
+        </div>
+
+        <div class="freeze-add-group-wrap">
+          <span class="freeze-add-label">{{'Days' | translate}}</span>
+          <div class="freeze-add-group">
+            <ion-item class="freeze-add-input">
+              <ion-input
+                placeholder="Enter freeze days"
+                type="number"
+                (ionChange)="daysChange($event)"
+                formControlName="Days"
+                [(ngModel)]="freezeDays"
+                [value]="FreezeGroup.value.Days"
+              >
+              </ion-input>
+            </ion-item>
+          </div>
+        </div>
+
+        <div class="freeze-group-btn">
+          <button
+            ion-button
+            class="freeze-group-btn-button button-standard freeze-item-button freeze-add-page-button"
+            (click)="generateUserFreeze()"
+            [disabled]="!FreezeGroup.valid || freezeLoading"
+          >
+            <span *ngIf="!freezeLoading">{{'freeze' | translate}}</span>
+            <ion-spinner *ngIf="freezeLoading" name="bubbles"></ion-spinner>
+          </button>
+        </div>
+      </form>
+    </ion-list>
+  </div>
+</ion-content>
