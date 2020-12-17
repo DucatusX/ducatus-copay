@@ -3,6 +3,7 @@ export interface Token {
   symbol: string;
   decimal: number;
   address: string;
+  blockchain?: string;
 }
 
 export const TokenOpts = {
@@ -25,3 +26,12 @@ export const TokenOpts = {
     address: '0x056fd409e1d7a124bd7017459dfea2f387b6d5cd'
   }
 };
+export const DRCTokenOpts = {
+  '0x986083cd47dbbc931585d2fe2330fd29b3e849b0': {
+    name: 'Jazz Makati 1638',
+    symbol: 'JAMASY',
+    decimal: 5,
+    address: '0x986083cd47dbbc931585d2fe2330fd29b3e849b0',
+    blockchain: 'ducx'
+  }
+}

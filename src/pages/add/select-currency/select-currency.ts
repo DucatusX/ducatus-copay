@@ -49,6 +49,7 @@ export class SelectCurrencyPage {
 
   public availableChains: string[];
   public availableTokens: Token[];
+  public drcAvailableTokens: Token[];
   public isOnboardingFlow: boolean;
   public isZeroState: boolean;
 
@@ -74,6 +75,7 @@ export class SelectCurrencyPage {
       ? this.currencyProvider.getMultiSigCoins()
       : this.currencyProvider.getAvailableChains();
     this.availableTokens = this.currencyProvider.getAvailableTokens();
+    this.drcAvailableTokens = this.currencyProvider.getDRCAvailableTokens();
     // for (const coin of this.availableChains) {
     this.coinsSelected['duc'] = true;
     this.coinsSelected['ducx'] = true;

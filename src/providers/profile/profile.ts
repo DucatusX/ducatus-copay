@@ -1786,9 +1786,26 @@ export class ProfileProvider {
 
   public createMultipleWallets(coins: string[], tokens = []): Promise<any> {
     return new Promise((resolve, reject) => {
-      if (tokens && tokens.length && coins.indexOf('eth') < 0) {
+      let erc20TokenObjs = this.currencyProvider.getAvailableTokens();
+      let drc20TokenObjs = this.currencyProvider.getDRCAvailableTokens();
+
+
+      const ERC20Tokens = tokens.filter((token) => {
+        token = erc20TokenObjs.find(x => x.symbol == token);
+        return !!token;
+      });
+      if (ERC20Tokens && ERC20Tokens.length && coins.indexOf('eth') < 0) {
         reject('No ethereum wallets for tokens');
       }
+
+      const DRC20Tokens = tokens.filter((token) => {
+        token = drc20TokenObjs.find(x => x.symbol == token);
+        return !!token;
+      });
+      if (DRC20Tokens && DRC20Tokens.length && coins.indexOf('ducx') < 0) {
+        reject('No DucatusX wallets for tokens');
+      }
+
 
       const defaultOpts = this.getDefaultWalletOpts(coins[0]);
 
@@ -1809,23 +1826,34 @@ export class ProfileProvider {
               datas.unshift(firstWalletData);
               let walletClients = _.map(datas, 'walletClient');
 
-              // Handle tokens
-              if (!_.isEmpty(tokens)) {
+              // Handle ERC20 tokens
+              if (!_.isEmpty(ERC20Tokens)) {
                 const ethWalletClient = walletClients.find(
                   wallet => wallet.credentials.coin === 'eth'
                 );
 
                 if (!ethWalletClient) reject('no eth wallet for tokens');
-
-                let tokenObjs = this.currencyProvider.getAvailableTokens();
-
-                const tokenClients = tokens.map(token => {
-                  token = tokenObjs.find(x => x.symbol == token);
+                const ercTokenClients = ERC20Tokens.map(token => {
+                  token = erc20TokenObjs.find(x => x.symbol == token);
                   return this._createTokenWallet(ethWalletClient, token);
                 });
 
-                walletClients = walletClients.concat(tokenClients);
+                walletClients = walletClients.concat(ercTokenClients);
               }
+
+              // Handle DRC20 tokens
+              if (!_.isEmpty(DRC20Tokens)) {
+                const ducxWalletClient = walletClients.find(
+                  wallet => wallet.credentials.coin === 'ducx'
+                );
+                if (!ducxWalletClient) reject('no eth wallet for tokens');
+                const drcTokenClients = DRC20Tokens.map(token => {
+                  token = drc20TokenObjs.find(x => x.symbol == token);
+                  return this._createTokenWallet(ducxWalletClient, token);
+                });
+                walletClients = walletClients.concat(drcTokenClients);
+              }
+
 
               this.addAndBindWalletClients({
                 key: firstWalletData.key,
@@ -2026,7 +2054,7 @@ export class ProfileProvider {
       ret = ret.filter(
         wallet =>
           !tokenWalletIds.includes(`${wallet.id}-${opts.pairFor.address}`) &&
-          wallet.coin === 'eth'
+          wallet.coin === opts.pairFor.blockchain || 'eth'
       );
     }
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { availableCoins, CoinOpts } from './coin';
-import { Token, TokenOpts } from './token';
+import { Token, TokenOpts, DRCTokenOpts } from './token';
 
 export enum Coin {
   BTC = 'btc',
@@ -12,7 +12,8 @@ export enum Coin {
   GUSD = 'gusd',
   PAX = 'pax',
   DUC = 'duc',
-  DUCX = 'ducx'
+  DUCX = 'ducx',
+  JAMASY = 'jamasy',
 }
 
 export type CoinsMap<T> = { [key in Coin]: T };
@@ -24,10 +25,12 @@ export class CurrencyProvider {
   public blockExplorerUrls = {} as CoinsMap<string>;
   public availableCoins: Coin[];
   public availableTokens: Token[];
+  public drcAvailableTokens: Token[];
 
   constructor() {
     this.coinOpts = availableCoins;
     this.availableTokens = Object.values(TokenOpts);
+    this.drcAvailableTokens = Object.values(DRCTokenOpts);
     this.availableCoins = Object.keys(this.coinOpts) as Coin[];
     for (const opts of Object.values(this.coinOpts)) {
       const { paymentInfo, coin } = opts;
@@ -76,6 +79,10 @@ export class CurrencyProvider {
 
   getAvailableTokens(): Token[] {
     return this.availableTokens;
+  }
+
+  getDRCAvailableTokens(): Token[] {
+    return this.drcAvailableTokens;
   }
 
   getMultiSigCoins(): Coin[] {
