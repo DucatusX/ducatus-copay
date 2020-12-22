@@ -946,11 +946,20 @@ export class ConfirmPage {
 
       if (tx.tokenAddress) {
         txp.tokenAddress = tx.tokenAddress;
+        const originalChain = this.bwcProvider.getUtils().getChain(tx.coin);
+        let chain;
+        switch (originalChain) {
+          case 'DUCX':
+            chain = 'DRC20';
+            break;
+          default:
+            chain = 'ERC20';
+        }
         for (const output of txp.outputs) {
           if (!output.data) {
             output.data = this.bwcProvider
               .getCore()
-              .Transactions.get({ chain: 'ERC20' })
+              .Transactions.get({ chain })
               .encodeData({
                 recipients: [
                   { address: output.toAddress, amount: output.amount }
