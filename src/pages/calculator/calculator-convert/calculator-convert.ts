@@ -4,10 +4,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
+import { ErrorsProvider } from '../../../providers/errors/errors';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
 
-import { IncomingDataProvider, TxFormatProvider } from '../../../providers';
+import { TranslateService } from '@ngx-translate/core';
+import { BwcErrorProvider, IncomingDataProvider, TxFormatProvider } from '../../../providers';
 import { Logger } from '../../../providers/logger/logger';
 import { calculator_api, coinInfo } from '../calculator-parameters';
 
@@ -35,6 +37,9 @@ export class CalculatorConvertPage {
     private navParams: NavParams,
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
+    private bwcErrorProvider: BwcErrorProvider,
+    private errorsProvider: ErrorsProvider,
+    private translate: TranslateService,
     private walletProvider: WalletProvider,
     private profileProvider: ProfileProvider,
     private incomingDataProvider: IncomingDataProvider,
@@ -190,10 +195,12 @@ export class CalculatorConvertPage {
   }
 
   public goToSendPage() {
+    const sendAddress = this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput;
+    const getAddress = this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput;
+
     this.wallet = this.walletsInfoSend.find(infoWallet => {
       return (
-        infoWallet.address ===
-        this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput
+        infoWallet.address === sendAddress
       );
     }).wallet;
 
@@ -215,6 +222,39 @@ export class CalculatorConvertPage {
       walletId: this.wallet.id,
       amount: parsedAmount.amountSat
     };
-    this.incomingDataProvider.redir(addressView, redirParms);
+
+    if (this.formCoins.send.toLowerCase() === 'duc' && this.formCoins.get.toLowerCase() === 'ducx') {
+      this.checkTransitionLimitDucToDucx(getAddress, parseInt(parsedAmount.amount, 10))
+        .then(() => {
+          this.incomingDataProvider.redir(addressView, redirParms);
+        })
+        .catch(err => {
+          const title = this.translate.instant('Swap limit');
+          err = this.bwcErrorProvider.msg(err);
+          this.errorsProvider.showDefaultError(err, title);
+        });
+    } else {
+      this.incomingDataProvider.redir(addressView, redirParms);
+    }
+  }
+
+  private checkTransitionLimitDucToDucx(getAddress, amountSend) {
+    return this.httpClient
+      .post(calculator_api + 'transfers/', {
+        'address': getAddress
+      })
+      .toPromise()
+      .then(res => {
+        const DECIMALS = 1e8;
+        const dailyAvailable = res['daily_available'] / DECIMALS;
+        const weeklyAvailable = res['weekly_available'] / DECIMALS;
+        if (dailyAvailable < amountSend) {
+          throw new Error('Daily DUCX swap limit is 1000 DUC. This day you can swap no more than ' + dailyAvailable + ' DUC.');
+        } else if (weeklyAvailable < amountSend) {
+          throw new Error('Weekly DUCX swap limit is 5000 DUC. This week you can swap no more than ' + weeklyAvailable + ' DUC.');
+        } else {
+          return;
+        }
+      })
   }
 }

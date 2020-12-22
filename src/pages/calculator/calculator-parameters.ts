@@ -13,3 +13,4 @@ export const coinInfo = {
 }
 
 export const calculator_api = 'https://www.ducatuscoins.com/api/v1/';
+// export const calculator_api = 'https://ducsite.rocknblock.io/api/v1/';
