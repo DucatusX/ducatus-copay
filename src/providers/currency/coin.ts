@@ -363,8 +363,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     coin: 'jamasy',
     unitInfo: {
       unitName: 'JAMASY',
-      unitToSatoshi: 1e5,
-      unitDecimals: 5,
+      unitToSatoshi: 1e8,
+      unitDecimals: 8,
       unitCode: 'jamasy'
     },
     properties: {

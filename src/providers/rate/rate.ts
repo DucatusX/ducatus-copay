@@ -12,7 +12,8 @@ export class RateProvider {
   private ratesAvailable = {} as CoinsMap<boolean>;
   private rateServiceUrl = {} as CoinsMap<string>;
 
-  private fiatRateAPIUrl = 'http://localhost:3232/bws/api/v1/fiatrates';
+  private fiatRateAPIUrl =
+    'https://duc-ws-dev.rocknblock.io/bws/api/v1/fiatrates';
 
   constructor(
     private currencyProvider: CurrencyProvider,
@@ -24,8 +25,8 @@ export class RateProvider {
     for (const coin of this.currencyProvider.getAvailableCoins()) {
       this.rateServiceUrl[coin] = env.ratesAPI[coin];
       this.rates[coin] = {
-        USD: coin === 'ducx' ? 0.5 : coin === 'duc' ? 0.06 : this.rates[coin],
-        NGN: coin === 'ducx' ? 0.5 : coin === 'duc' ? 29.05 : this.rates[coin] // test
+        USD: coin === 'ducx' ? 0.6 : coin === 'duc' ? 0.06 : this.rates[coin],
+        NGN: coin === 'ducx' ? 0.6 : coin === 'duc' ? 29.05 : this.rates[coin] // test
       };
       this.ratesAvailable[coin] = false;
       this.updateRates(coin);
