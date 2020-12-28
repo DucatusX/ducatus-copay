@@ -9,7 +9,7 @@ import { WalletProvider } from '../../../providers/wallet/wallet';
 
 import { BackupKeyPage } from '../../backup/backup-key/backup-key';
 
-import { VOUCHER_URL_REQUEST } from '../params';
+import { VOUCHER_URL_REQUEST, VOUCHER_URL_REQUEST_TOKEN } from '../params';
 
 @Component({
   selector: 'page-voucher',
@@ -18,7 +18,9 @@ import { VOUCHER_URL_REQUEST } from '../params';
 export class VoucherAddPage {
   public VoucherGroup: FormGroup;
   public voucherLoading = false;
-  public walletAddresses: any;
+  public walletAddresses = [];
+  private wallets: any;
+  private isDucx = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -41,20 +43,42 @@ export class VoucherAddPage {
     });
   }
 
+  // ionViewWillEnter() {
+  //   const wallets = this.profileProvider.getWallets({ showHidden: true });
+
+  //   this.walletProvider.getWalletsByCoin(wallets, 'duc').then(res => {
+
+  //     if (result.count <= 0) this.showModal('needbackup');
+
+  //     this.walletAddresses = result.wallets;
+  //   });
+  // }
+
   ionViewWillEnter() {
+    const coins = ['duc', 'jamasy'];
     const wallets = this.profileProvider.getWallets({ showHidden: true });
+    let promises = [];
 
-    this.walletProvider.getWalletsByCoin(wallets, 'duc').then(res => {
-      const result: any = res;
+    coins.map(coin => {
+      promises.push(this.walletProvider.getWalletsByCoin(wallets, coin));
+    });
 
-      if (result.count <= 0) this.showModal('needbackup');
-
-      this.walletAddresses = result.wallets;
+    Promise.all(promises).then(res => {
+      let count = 0;
+      for (let i = 0; i < res.length; i++) {
+        count += +res[i].count;
+      }
+      if (count <= 0) this.showModal('needbackup');
+      this.wallets = res;
     });
   }
 
   public openAddressList() {
     if (!this.voucherLoading) {
+      this.walletAddresses = [];
+      for (let i = 0; i < this.wallets.length; i++) {
+        this.walletAddresses.push(...this.wallets[i].wallets);
+      }
       const infoSheet = this.actionSheetProvider.createInfoSheet(
         'convertor-address',
         { wallet: this.walletAddresses }
@@ -62,6 +86,13 @@ export class VoucherAddPage {
       infoSheet.present();
       infoSheet.onDidDismiss(option => {
         if (option) {
+          console.log(this.walletAddresses);
+          this.walletAddresses.forEach(wallet => {
+            this.isDucx =
+              wallet.address.toLowerCase() === option.toLowerCase()
+                ? wallet.wallet.coin
+                : false;
+          });
           this.VoucherGroup.value.VoucherGroupAddress = option;
 
           if (option.needsBackup)
@@ -78,7 +109,8 @@ export class VoucherAddPage {
       usd: opt ? opt.usd : '1',
       duc: opt ? opt.duc : '20',
       min: opt ? opt.min : '15',
-      day: opt ? opt.day : '14'
+      day: opt ? opt.day : '14',
+      token: opt ? opt.token : 'jamasy'
     };
 
     const modalAnswers = {
@@ -100,6 +132,13 @@ export class VoucherAddPage {
           options.duc
         } Ducatus after ${options.day} days`
       },
+      ok_token: {
+        title:
+          '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
+        text: `Your voucher was successfully activated. You'll receive ${
+          options.token
+        } tokens shortly.`
+      },
       error: {
         title:
           '<img src="./assets/img/icon-attantion.svg" width="42px" height="42px">',
@@ -114,6 +153,11 @@ export class VoucherAddPage {
         title:
           '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
         text: 'Something went wrong, try again'
+      },
+      back_err: {
+        title:
+          '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+        text: 'Something in backend went wrong, try again'
       },
       needbackup: {
         title:
@@ -164,13 +208,21 @@ export class VoucherAddPage {
     private_path: string
   ) {
     return this.httpClient
-      .post(`${VOUCHER_URL_REQUEST}/transfer/`, {
-        wallet_id,
-        duc_address,
-        duc_public_key,
-        activation_code,
-        private_path
-      })
+      .post(
+        `${
+          this.isDucx
+            ? VOUCHER_URL_REQUEST_TOKEN + 'activate_voucher'
+            : VOUCHER_URL_REQUEST + '/transfer/'
+        }`,
+        {
+          wallet_id,
+          duc_address,
+          ducx_address: duc_address,
+          duc_public_key,
+          activation_code,
+          private_path
+        }
+      )
       .toPromise();
   }
 
@@ -195,17 +247,23 @@ export class VoucherAddPage {
           .then(res => {
             const result: any = res;
 
-            result.lock_days !== 0
-              ? this.showModal('ok_freeze', {
-                  usd: result.usd_amount,
-                  duc: result.duc_amount,
-                  day: result.lock_days
-                })
-              : this.showModal('ok', {
-                  usd: result.usd_amount,
-                  duc: result.duc_amount,
-                  min: '15'
-                });
+            if (this.isDucx) {
+              this.showModal('ok_token', {
+                token: this.isDucx
+              });
+            } else {
+              result.lock_days !== 0
+                ? this.showModal('ok_freeze', {
+                    usd: result.usd_amount,
+                    duc: result.duc_amount,
+                    day: result.lock_days
+                  })
+                : this.showModal('ok', {
+                    usd: result.usd_amount,
+                    duc: result.duc_amount,
+                    min: '15'
+                  });
+            }
           })
           .catch(err => {
             switch (err.status) {
@@ -217,8 +275,13 @@ export class VoucherAddPage {
                   ].includes(err.error.detail)
                 )
                   this.showModal('error');
-                if (err.error.detail == 'This voucher already used')
+                if (
+                  err.error.detail == 'This voucher already used' ||
+                  err.error.detail == 'USED'
+                )
                   this.showModal('registated');
+                if (err.error.detail == 'TRANSFER FAIL')
+                  this.showModal('back_err');
                 break;
               default:
                 this.showModal('network');
