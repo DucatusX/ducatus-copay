@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, NavController } from 'ionic-angular';
+import { Logger } from '../../../providers/logger/logger';
 
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
 import { ProfileProvider } from '../../../providers/profile/profile';
@@ -29,7 +30,8 @@ export class VoucherAddPage {
     private actionSheetProvider: ActionSheetProvider,
     private alertCtrl: AlertController,
     private httpClient: HttpClient,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private logger: Logger
   ) {
     this.VoucherGroup = this.formBuilder.group({
       VoucherGroupCode: [
@@ -86,7 +88,6 @@ export class VoucherAddPage {
       infoSheet.present();
       infoSheet.onDidDismiss(option => {
         if (option) {
-          console.log(this.walletAddresses);
           this.walletAddresses.forEach(wallet => {
             this.isDucx =
               wallet.address.toLowerCase() === option.toLowerCase()
@@ -207,28 +208,23 @@ export class VoucherAddPage {
     activation_code: string,
     private_path: string
   ) {
+    const url = this.isDucx
+      ? VOUCHER_URL_REQUEST_TOKEN + 'activate_voucher'
+      : VOUCHER_URL_REQUEST + '/transfer/';
     return this.httpClient
-      .post(
-        `${
-          this.isDucx
-            ? VOUCHER_URL_REQUEST_TOKEN + 'activate_voucher'
-            : VOUCHER_URL_REQUEST + '/transfer/'
-        }`,
-        {
-          wallet_id,
-          duc_address,
-          ducx_address: duc_address,
-          duc_public_key,
-          activation_code,
-          private_path
-        }
-      )
+      .post(url, {
+        wallet_id,
+        duc_address,
+        ducx_address: duc_address,
+        duc_public_key,
+        activation_code,
+        private_path
+      })
       .toPromise();
   }
 
   public async activateVoucher() {
     this.voucherLoading = true;
-
     this.walletProvider
       .prepareAdd(
         this.walletAddresses,
@@ -236,7 +232,6 @@ export class VoucherAddPage {
       )
       .then(resPrepare => {
         const resultPrepare: any = resPrepare;
-
         this.sendCode(
           resultPrepare.wallet.walletId,
           this.VoucherGroup.value.VoucherGroupAddress,
@@ -266,6 +261,11 @@ export class VoucherAddPage {
             }
           })
           .catch(err => {
+            this.logger.log(
+              `${JSON.stringify(
+                err
+              )} cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc`
+            );
             switch (err.status) {
               case 403:
                 if (
