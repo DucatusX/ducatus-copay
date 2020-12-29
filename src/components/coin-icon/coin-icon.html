@@ -1,4 +1,6 @@
-<ion-icon class="item-img rectangle" [ngClass]="{ 
+<ion-icon
+  class="item-img rectangle"
+  [ngClass]="{ 
 'background_btc': coin == 'btc',
 'background_bch': coin == 'bch',
 'background_eth': coin == 'eth',
@@ -6,8 +8,10 @@
 'background_usdc': coin == 'usdc',
 'background_pax': coin == 'pax',
 'background_gusd': coin == 'gusd',
-'background_jamasy': coin == 'jamasy',
 'testnet': network === 'testnet'
-}" item-start>
+}"
+  item-start
+>
   <img src="assets/img/currencies/{{coin}}.svg" />
 </ion-icon>
+<!-- 'background_jamasy': coin == 'jamasy', -->
