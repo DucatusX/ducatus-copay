@@ -154,7 +154,7 @@ export class ConfigProvider {
 
       // Bitcore wallet service URL
       bws: {
-        url: 'https://duc-ws-dev.rocknblock.io/bws/api'
+        url: 'https://ducws.rocknblock.io/bws/api'
       },
 
       download: {
