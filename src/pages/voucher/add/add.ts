@@ -261,11 +261,7 @@ export class VoucherAddPage {
             }
           })
           .catch(err => {
-            this.logger.log(
-              `${JSON.stringify(
-                err
-              )} cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc`
-            );
+            this.logger.log(`${JSON.stringify(err)}`);
             switch (err.status) {
               case 403:
                 if (
