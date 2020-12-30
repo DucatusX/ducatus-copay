@@ -1530,7 +1530,7 @@ export class WalletProvider {
       resolve({
         wallet: walletToSend,
         pubKey: publicKey,
-        path: addressData.path
+        path: addressData.path,
       });
     });
   }
