@@ -249,9 +249,9 @@ export class CalculatorConvertPage {
         const dailyAvailable = res['daily_available'] / DECIMALS;
         const weeklyAvailable = res['weekly_available'] / DECIMALS;
         if (dailyAvailable < amountSend) {
-          throw new Error('Daily DUCX swap limit is 1000 DUC. This day you can swap no more than ' + dailyAvailable + ' DUC.');
+          throw new Error('Daily DUCX swap limit is 5000 DUC. This day you can swap no more than ' + dailyAvailable + ' DUC.');
         } else if (weeklyAvailable < amountSend) {
-          throw new Error('Weekly DUCX swap limit is 5000 DUC. This week you can swap no more than ' + weeklyAvailable + ' DUC.');
+          throw new Error('Weekly DUCX swap limit is 25000 DUC. This week you can swap no more than ' + weeklyAvailable + ' DUC.');
         } else {
           return;
         }
