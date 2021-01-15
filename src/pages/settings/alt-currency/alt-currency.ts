@@ -70,6 +70,9 @@ export class AltCurrencyPage {
       },
       {
         isoCode: 'NUYASA'
+      },
+      {
+        isoCode: 'SUNOBA'
       }
     ];
   }

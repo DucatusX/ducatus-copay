@@ -40,5 +40,12 @@ export const DRCTokenOpts = {
     decimal: 8,
     address: '0x3D30806b1E1F021Fe12DF506C3A1F96CfB94464a',
     blockchain: 'ducx'
+  },
+  '0xB7A7221E37d12A8Ea92468F283422B16DbC364D9': {
+    name: 'Supernova Bali',
+    symbol: 'SUNOBA',
+    decimal: 8,
+    address: '0xB7A7221E37d12A8Ea92468F283422B16DbC364D9',
+    blockchain: 'ducx'
   }
 };
