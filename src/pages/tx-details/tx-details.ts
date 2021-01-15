@@ -303,7 +303,10 @@ export class TxDetailsModal {
     let url =
       this.wallet.coin !== 'xrp'
         ? `https://${this.blockexplorerUrl}${network}tx/${btx.txid}`
+        : this.wallet.coin === 'btc'
+        ? `https://${this.blockexplorerUrl}tx/${btx.txid}`
         : this.getXRPBlockexplorerUrl() + btx.txid;
+
     let optIn = true;
     let title = null;
     let message = this.translate.instant('View Transaction on Insight');
@@ -326,6 +329,8 @@ export class TxDetailsModal {
         : `https://${this.blockexplorerUrl}tx/`;
     return url;
   }
+
+  private getBtcBlockexplorerUrl(): string {}
 
   public getShortNetworkName(): string {
     let n: string = this.wallet.credentials.network;

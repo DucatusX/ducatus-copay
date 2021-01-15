@@ -134,7 +134,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'BIP73',
       protocolPrefix: { livenet: 'bitcoin', testnet: 'bitcoin' },
       ratesApi: 'https://bitpay.com/api/rates',
-      blockExplorerUrls: 'insight.ducatus.io/#/BTC/'
+      blockExplorerUrls: 'www.blockchain.com/btc/'
     },
     feeInfo: {
       feeUnit: 'sat/byte',
