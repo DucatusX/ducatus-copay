@@ -47,5 +47,19 @@ export const DRCTokenOpts = {
     decimal: 8,
     address: '0xB7A7221E37d12A8Ea92468F283422B16DbC364D9',
     blockchain: 'ducx'
+  },
+  '0x14460383feFFE73eA1FB4F0F11B941F44c17bDD2': {
+    name: 'DSC Mediterranea',
+    symbol: 'DSCMED',
+    decimal: 8,
+    address: '0x14460383feFFE73eA1FB4F0F11B941F44c17bDD2',
+    blockchain: 'ducx'
+  },
+  '0x511e1f8e872c3fe9b3fCefEf58ec7FE4E8130Cc1': {
+    name: 'POG Muscat',
+    symbol: 'POG1',
+    decimal: 8,
+    address: '0x511e1f8e872c3fe9b3fCefEf58ec7FE4E8130Cc1',
+    blockchain: 'ducx'
   }
 };

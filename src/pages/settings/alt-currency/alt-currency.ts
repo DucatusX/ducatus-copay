@@ -73,6 +73,12 @@ export class AltCurrencyPage {
       },
       {
         isoCode: 'SUNOBA'
+      },
+      {
+        isoCode: 'DSCMED'
+      },
+      {
+        isoCode: 'POG1'
       }
     ];
   }

@@ -57,7 +57,7 @@ export class VoucherAddPage {
   // }
 
   ionViewWillEnter() {
-    const coins = ['duc', 'jamasy', 'nuyasa', 'sunoba'];
+    const coins = ['duc', 'jamasy', 'nuyasa', 'sunoba', 'dscmed', 'pog1'];
     const wallets = this.profileProvider.getWallets({ showHidden: true });
     let promises = [];
 

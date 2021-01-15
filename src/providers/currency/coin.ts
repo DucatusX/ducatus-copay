@@ -461,5 +461,75 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       backgroundColor: 'rgba(0,220,250,1)',
       gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
     }
+  },
+  dscmed: {
+    name: 'Supernova Bali',
+    chain: 'DUCX',
+    coin: 'dscmed',
+    unitInfo: {
+      unitName: 'DSCMED',
+      unitToSatoshi: 1e8,
+      unitDecimals: 8,
+      unitCode: 'dscmed'
+    },
+    properties: {
+      hasMultiSig: false,
+      hasMultiSend: false,
+      isUtxo: false,
+      isERCToken: true,
+      isStableCoin: true,
+      singleAddress: true
+    },
+    paymentInfo: {
+      paymentCode: 'EIP681b',
+      protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
+      ratesApi: 'https://bitpay.com/api/rates/',
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+    },
+    feeInfo: {
+      feeUnit: 'Gwei',
+      feeUnitAmount: 1e9,
+      blockTime: 0.2,
+      maxMerchantFee: 'urgent'
+    },
+    theme: {
+      backgroundColor: 'rgba(0,220,250,1)',
+      gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
+    }
+  },
+  pog1: {
+    name: 'POG Muscat',
+    chain: 'DUCX',
+    coin: 'pog1',
+    unitInfo: {
+      unitName: 'POG1',
+      unitToSatoshi: 1e8,
+      unitDecimals: 8,
+      unitCode: 'pog1'
+    },
+    properties: {
+      hasMultiSig: false,
+      hasMultiSend: false,
+      isUtxo: false,
+      isERCToken: true,
+      isStableCoin: true,
+      singleAddress: true
+    },
+    paymentInfo: {
+      paymentCode: 'EIP681b',
+      protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
+      ratesApi: 'https://bitpay.com/api/rates/',
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+    },
+    feeInfo: {
+      feeUnit: 'Gwei',
+      feeUnitAmount: 1e9,
+      blockTime: 0.2,
+      maxMerchantFee: 'urgent'
+    },
+    theme: {
+      backgroundColor: 'rgba(0,220,250,1)',
+      gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
+    }
   }
 };
