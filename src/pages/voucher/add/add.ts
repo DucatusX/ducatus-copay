@@ -86,12 +86,12 @@ export class VoucherAddPage {
         { wallet: this.walletAddresses }
       );
       infoSheet.present();
-      infoSheet.onDidDismiss(option => {
+      infoSheet.onDidDismiss((option, item) => {
         if (option) {
           this.walletAddresses.forEach(wallet => {
             this.isDucx =
               wallet.address.toLowerCase() === option.toLowerCase()
-                ? wallet.wallet.coin
+                ? item.wallet.coin
                 : false;
           });
           this.VoucherGroup.value.VoucherGroupAddress = option;
