@@ -330,8 +330,6 @@ export class TxDetailsModal {
     return url;
   }
 
-  private getBtcBlockexplorerUrl(): string {}
-
   public getShortNetworkName(): string {
     let n: string = this.wallet.credentials.network;
     return n.substring(0, 4);

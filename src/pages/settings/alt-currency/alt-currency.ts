@@ -67,6 +67,9 @@ export class AltCurrencyPage {
       },
       {
         isoCode: 'JAMASY'
+      },
+      {
+        isoCode: 'NUYASA'
       }
     ];
   }

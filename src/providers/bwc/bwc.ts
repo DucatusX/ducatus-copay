@@ -60,7 +60,7 @@ export class BwcProvider {
 
     // note opts use `bwsurl` all lowercase;
     let bwc = new BWC({
-      baseUrl: opts.bwsurl || 'https://ducws.rocknblock.io/bws/api',
+      baseUrl: opts.bwsurl || 'https://duc-ws-dev.rocknblock.io/bws/api',
       verbose: opts.verbose,
       timeout: 100000,
       transports: ['polling'],

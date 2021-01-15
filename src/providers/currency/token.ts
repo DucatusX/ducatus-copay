@@ -33,5 +33,12 @@ export const DRCTokenOpts = {
     decimal: 8,
     address: '0xa9CB8e18E4C2C0a1C9Bf4367E7115165ed7e41F0',
     blockchain: 'ducx'
+  },
+  '0x3D30806b1E1F021Fe12DF506C3A1F96CfB94464a': {
+    name: 'Nucleus Yasmin Salalah',
+    symbol: 'NUYASA',
+    decimal: 8,
+    address: '0x3D30806b1E1F021Fe12DF506C3A1F96CfB94464a',
+    blockchain: 'ducx'
   }
 };
