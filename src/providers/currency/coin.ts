@@ -358,7 +358,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     }
   },
   jamasy: {
-    name: 'Jazz Makati 1638',
+    name: 'JAMASY',
     chain: 'DUCX',
     coin: 'jamasy',
     unitInfo: {
@@ -393,7 +393,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     }
   },
   nuyasa: {
-    name: 'Nucleus Yasmin Salalah',
+    name: 'NUYASA',
     chain: 'DUCX',
     coin: 'nuyasa',
     unitInfo: {
@@ -428,7 +428,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     }
   },
   sunoba: {
-    name: 'Supernova Bali',
+    name: 'SUNOBA',
     chain: 'DUCX',
     coin: 'sunoba',
     unitInfo: {
@@ -463,7 +463,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     }
   },
   dscmed: {
-    name: 'Supernova Bali',
+    name: 'DSCMED',
     chain: 'DUCX',
     coin: 'dscmed',
     unitInfo: {
@@ -498,7 +498,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     }
   },
   pog1: {
-    name: 'POG Muscat',
+    name: 'POG1',
     chain: 'DUCX',
     coin: 'pog1',
     unitInfo: {
