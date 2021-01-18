@@ -358,7 +358,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     }
   },
   jamasy: {
-    name: 'Jazz Makati 1638',
+    name: 'JAMASY',
     chain: 'DUCX',
     coin: 'jamasy',
     unitInfo: {
@@ -366,6 +366,146 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       unitToSatoshi: 1e8,
       unitDecimals: 8,
       unitCode: 'jamasy'
+    },
+    properties: {
+      hasMultiSig: false,
+      hasMultiSend: false,
+      isUtxo: false,
+      isERCToken: true,
+      isStableCoin: true,
+      singleAddress: true
+    },
+    paymentInfo: {
+      paymentCode: 'EIP681b',
+      protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
+      ratesApi: 'https://bitpay.com/api/rates/',
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+    },
+    feeInfo: {
+      feeUnit: 'Gwei',
+      feeUnitAmount: 1e9,
+      blockTime: 0.2,
+      maxMerchantFee: 'urgent'
+    },
+    theme: {
+      backgroundColor: 'rgba(0,220,250,1)',
+      gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
+    }
+  },
+  nuyasa: {
+    name: 'NUYASA',
+    chain: 'DUCX',
+    coin: 'nuyasa',
+    unitInfo: {
+      unitName: 'NUYASA',
+      unitToSatoshi: 1e8,
+      unitDecimals: 8,
+      unitCode: 'nuyasa'
+    },
+    properties: {
+      hasMultiSig: false,
+      hasMultiSend: false,
+      isUtxo: false,
+      isERCToken: true,
+      isStableCoin: true,
+      singleAddress: true
+    },
+    paymentInfo: {
+      paymentCode: 'EIP681b',
+      protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
+      ratesApi: 'https://bitpay.com/api/rates/',
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+    },
+    feeInfo: {
+      feeUnit: 'Gwei',
+      feeUnitAmount: 1e9,
+      blockTime: 0.2,
+      maxMerchantFee: 'urgent'
+    },
+    theme: {
+      backgroundColor: 'rgba(0,220,250,1)',
+      gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
+    }
+  },
+  sunoba: {
+    name: 'SUNOBA',
+    chain: 'DUCX',
+    coin: 'sunoba',
+    unitInfo: {
+      unitName: 'SUNOBA',
+      unitToSatoshi: 1e8,
+      unitDecimals: 8,
+      unitCode: 'sunoba'
+    },
+    properties: {
+      hasMultiSig: false,
+      hasMultiSend: false,
+      isUtxo: false,
+      isERCToken: true,
+      isStableCoin: true,
+      singleAddress: true
+    },
+    paymentInfo: {
+      paymentCode: 'EIP681b',
+      protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
+      ratesApi: 'https://bitpay.com/api/rates/',
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+    },
+    feeInfo: {
+      feeUnit: 'Gwei',
+      feeUnitAmount: 1e9,
+      blockTime: 0.2,
+      maxMerchantFee: 'urgent'
+    },
+    theme: {
+      backgroundColor: 'rgba(0,220,250,1)',
+      gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
+    }
+  },
+  dscmed: {
+    name: 'DSCMED',
+    chain: 'DUCX',
+    coin: 'dscmed',
+    unitInfo: {
+      unitName: 'DSCMED',
+      unitToSatoshi: 1e8,
+      unitDecimals: 8,
+      unitCode: 'dscmed'
+    },
+    properties: {
+      hasMultiSig: false,
+      hasMultiSend: false,
+      isUtxo: false,
+      isERCToken: true,
+      isStableCoin: true,
+      singleAddress: true
+    },
+    paymentInfo: {
+      paymentCode: 'EIP681b',
+      protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
+      ratesApi: 'https://bitpay.com/api/rates/',
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+    },
+    feeInfo: {
+      feeUnit: 'Gwei',
+      feeUnitAmount: 1e9,
+      blockTime: 0.2,
+      maxMerchantFee: 'urgent'
+    },
+    theme: {
+      backgroundColor: 'rgba(0,220,250,1)',
+      gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
+    }
+  },
+  pog1: {
+    name: 'POG1',
+    chain: 'DUCX',
+    coin: 'pog1',
+    unitInfo: {
+      unitName: 'POG1',
+      unitToSatoshi: 1e8,
+      unitDecimals: 8,
+      unitCode: 'pog1'
     },
     properties: {
       hasMultiSig: false,

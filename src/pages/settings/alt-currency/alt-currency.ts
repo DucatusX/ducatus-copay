@@ -67,6 +67,18 @@ export class AltCurrencyPage {
       },
       {
         isoCode: 'JAMASY'
+      },
+      {
+        isoCode: 'NUYASA'
+      },
+      {
+        isoCode: 'SUNOBA'
+      },
+      {
+        isoCode: 'DSCMED'
+      },
+      {
+        isoCode: 'POG1'
       }
     ];
   }

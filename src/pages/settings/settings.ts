@@ -294,7 +294,7 @@ export class SettingsPage {
   // }
 
   public openHelpExternalLink(): void {
-    const url = 'mailto:techsupport@ducatus.net';
+    const url = 'https://t.me/DucatusHelp';
     const optIn = true;
     const title = null;
     const message = this.translate.instant(

@@ -9,7 +9,11 @@ import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
 
 import { TranslateService } from '@ngx-translate/core';
-import { BwcErrorProvider, IncomingDataProvider, TxFormatProvider } from '../../../providers';
+import {
+  BwcErrorProvider,
+  IncomingDataProvider,
+  TxFormatProvider
+} from '../../../providers';
 import { Logger } from '../../../providers/logger/logger';
 import { calculator_api, coinInfo } from '../calculator-parameters';
 
@@ -195,13 +199,13 @@ export class CalculatorConvertPage {
   }
 
   public goToSendPage() {
-    const sendAddress = this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput;
-    const getAddress = this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput;
+    const sendAddress = this.ConvertGroupForm.value
+      .ConvertFormGroupAddressSendInput;
+    const getAddress = this.ConvertGroupForm.value
+      .ConvertFormGroupAddressGetInput;
 
     this.wallet = this.walletsInfoSend.find(infoWallet => {
-      return (
-        infoWallet.address === sendAddress
-      );
+      return infoWallet.address === sendAddress;
     }).wallet;
 
     const addressView = this.walletProvider.getAddressView(
@@ -223,8 +227,14 @@ export class CalculatorConvertPage {
       amount: parsedAmount.amountSat
     };
 
-    if (this.formCoins.send.toLowerCase() === 'duc' && this.formCoins.get.toLowerCase() === 'ducx') {
-      this.checkTransitionLimitDucToDucx(getAddress, parseInt(parsedAmount.amount, 10))
+    if (
+      this.formCoins.send.toLowerCase() === 'duc' &&
+      this.formCoins.get.toLowerCase() === 'ducx'
+    ) {
+      this.checkTransitionLimitDucToDucx(
+        getAddress,
+        parseInt(parsedAmount.amount, 10)
+      )
         .then(() => {
           this.incomingDataProvider.redir(addressView, redirParms);
         })
@@ -241,7 +251,7 @@ export class CalculatorConvertPage {
   private checkTransitionLimitDucToDucx(getAddress, amountSend) {
     return this.httpClient
       .post(calculator_api + 'transfers/', {
-        'address': getAddress
+        address: getAddress
       })
       .toPromise()
       .then(res => {
@@ -249,12 +259,20 @@ export class CalculatorConvertPage {
         const dailyAvailable = res['daily_available'] / DECIMALS;
         const weeklyAvailable = res['weekly_available'] / DECIMALS;
         if (dailyAvailable < amountSend) {
-          throw new Error('Daily DUCX swap limit is 5000 DUC. This day you can swap no more than ' + dailyAvailable + ' DUC.');
+          throw new Error(
+            'Daily DUCX swap limit is 25000 DUC. This day you can swap no more than ' +
+              dailyAvailable +
+              ' DUC.'
+          );
         } else if (weeklyAvailable < amountSend) {
-          throw new Error('Weekly DUCX swap limit is 25000 DUC. This week you can swap no more than ' + weeklyAvailable + ' DUC.');
+          throw new Error(
+            'Weekly DUCX swap limit is 100000 DUC. This week you can swap no more than ' +
+              weeklyAvailable +
+              ' DUC.'
+          );
         } else {
           return;
         }
-      })
+      });
   }
 }

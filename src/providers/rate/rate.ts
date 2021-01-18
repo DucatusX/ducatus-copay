@@ -29,7 +29,7 @@ export class RateProvider {
             ? 0.6
             : coin === 'duc'
             ? 0.06
-            : coin === 'jamasy'
+            : ['jamasy', 'nuyasa', 'sunoba', 'dscmed', 'pog1'].includes(coin)
             ? 1
             : this.rates[coin],
         NGN:
@@ -37,7 +37,7 @@ export class RateProvider {
             ? 0.6
             : coin === 'duc'
             ? 29.05
-            : coin === 'jamasy'
+            : ['jamasy', 'nuyasa', 'sunoba', 'dscmed', 'pog1'].includes(coin)
             ? 1
             : this.rates[coin] // test
       };
@@ -69,7 +69,17 @@ export class RateProvider {
 
   public getCoin(chain: string): Promise<any> {
     return new Promise(resolve => {
-      if (chain === 'duc' || chain === 'ducx' || chain === 'jamasy') {
+      if (
+        [
+          'duc',
+          'ducx',
+          'jamasy',
+          'nuyasa',
+          'sunoba',
+          'dscmed',
+          'pog1'
+        ].includes(chain)
+      ) {
         resolve([]);
       } else {
         this.http.get(this.rateServiceUrl[chain]).subscribe(data => {
