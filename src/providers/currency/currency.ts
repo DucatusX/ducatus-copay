@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { availableCoins, CoinOpts } from './coin';
-import { Token, TokenOpts, DRCTokenOpts } from './token';
+import { DRCTokenOpts, Token, TokenOpts } from './token';
 
 export enum Coin {
   BTC = 'btc',
@@ -14,6 +14,10 @@ export enum Coin {
   DUC = 'duc',
   DUCX = 'ducx',
   JAMASY = 'jamasy',
+  NUYASA = 'nuyasa',
+  SUNOBA = 'sunoba',
+  DSCMED = 'dscmed',
+  POG1 = 'pog1'
 }
 
 export type CoinsMap<T> = { [key in Coin]: T };

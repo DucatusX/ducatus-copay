@@ -11,7 +11,7 @@ export class ActionSheetComponent {
   private transitionDuration: number = 250;
   private parentComponentRef: any;
   private deregisterBackButtonAction;
-  public dismissFunction: (data?: any) => void;
+  public dismissFunction: (data?: any, item?: any) => void;
   @HostBinding('class.open')
   public slideIn: boolean = false;
   @Input() fromTop: boolean;
@@ -32,9 +32,9 @@ export class ActionSheetComponent {
     this.zone.run(() => (this.slideIn = true));
   }
 
-  public async dismiss(data?: any): Promise<void> {
+  public async dismiss(data?: any, item?: any): Promise<void> {
     this.zone.run(() => (this.slideIn = false));
-    this.dismissFunction && this.dismissFunction(data);
+    this.dismissFunction && this.dismissFunction(data, item);
     await Observable.timer(this.transitionDuration).toPromise();
     this.domProvider.removeComponent(this.parentComponentRef);
   }

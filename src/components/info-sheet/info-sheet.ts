@@ -24,8 +24,8 @@ export class InfoSheetComponent extends ActionSheetParent {
     this.dismiss();
   }
 
-  public optionClicked(option): void {
-    this.dismiss(option);
+  public optionClicked(option, item): void {
+    this.dismiss(option, item);
   }
 }
 
