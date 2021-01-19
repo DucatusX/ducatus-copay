@@ -566,7 +566,7 @@ export class AmountPage {
       _amount >= 1000
     ) {
       this.errorsProvider.showDefaultError(
-        'Sending limit for DUCX or DRC-20 tokens is 999',
+        'Sending limit for DUCX is 999',
         'Error'
       );
       return;
