@@ -300,13 +300,18 @@ export class TxDetailsModal {
     let btx = this.btx;
     const network =
       this.getShortNetworkName() == 'test' ? 'testnet/' : 'mainnet/';
-    let url =
-      this.wallet.coin !== 'xrp'
-        ? `https://${this.blockexplorerUrl}${network}tx/${btx.txid}`
-        : this.wallet.coin === 'btc'
-        ? `https://${this.blockexplorerUrl}tx/${btx.txid}`
-        : this.getXRPBlockexplorerUrl() + btx.txid;
-
+    let url;
+    switch (this.wallet.coin) {
+      case 'btc':
+        url = `https://${this.blockexplorerUrl}tx/${btx.txid}`;
+        break;
+      case 'xrp':
+        url = this.getXRPBlockexplorerUrl() + btx.txid;
+        break;
+      default:
+        url = `https://${this.blockexplorerUrl}${network}tx/${btx.txid}`;
+        break;
+    }
     let optIn = true;
     let title = null;
     let message = this.translate.instant('View Transaction on Insight');
