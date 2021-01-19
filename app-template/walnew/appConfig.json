@@ -25,7 +25,7 @@
   "pushSenderId": "1036948132229",
   "description": "A Secure DucatusCoin Wallet",
   "version": "2.5.7",
-  "androidVersion": "70060700",
+  "androidVersion": "70060900",
   "_extraCSS": null,
   "_enabledExtensions": {
     "coinbase": false,
