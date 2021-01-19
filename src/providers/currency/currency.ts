@@ -89,6 +89,10 @@ export class CurrencyProvider {
     return this.drcAvailableTokens;
   }
 
+  isDRC20Coin(coin): boolean {
+    return !!(this.coinOpts[coin].chain === 'DUCX');
+  }
+
   getMultiSigCoins(): Coin[] {
     return this.availableCoins.filter(coin => this.isSharedCoin(coin));
   }
