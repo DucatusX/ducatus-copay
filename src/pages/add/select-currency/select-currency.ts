@@ -203,13 +203,19 @@ export class SelectCurrencyPage {
   }
 
   public showPairedWalletSelector(token) {
-    const eligibleWallets = this.navParam.data.keyId
+    let eligibleWallets = this.navParam.data.keyId
       ? this.profileProvider.getWalletsFromGroup({
           keyId: this.navParam.data.keyId,
           network: 'livenet',
           pairFor: token
         })
       : [];
+
+    if (token.blockchain === 'ducx') {
+      eligibleWallets = eligibleWallets.filter(coin =>
+        this.currencyProvider.isDRC20Coin(coin.coin)
+      );
+    }
 
     const walletSelector = this.actionSheetProvider.createInfoSheet(
       'addTokenWallet',
