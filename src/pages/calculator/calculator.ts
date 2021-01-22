@@ -43,8 +43,8 @@ export class CalculatorPage {
     private formBuilder: FormBuilder,
     private httpClient: HttpClient // private moonPayProvider: MoonPayProvider
   ) {
-    this.formCoins.get = convertCoins['DUC']; // DUC
-    this.formCoins.send = this.formCoins.get.items[0]; // DUCX
+    this.formCoins.get = convertCoins['DUCX']; // DUCX
+    this.formCoins.send = this.formCoins.get.items[0]; // DUC
     this.coin_info = coinInfo;
     this.convertGetCoins = convertGetCoins;
 
