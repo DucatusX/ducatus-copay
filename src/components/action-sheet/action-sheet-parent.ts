@@ -1,7 +1,7 @@
 import { ViewChild } from '@angular/core';
 import { ActionSheetComponent } from './action-sheet';
 
-export type dismissFunction = (data?: any) => void;
+export type dismissFunction = (data?: any, item?: any) => void;
 export class ActionSheetParent {
   public params: any;
   public componentRef: any;
@@ -15,8 +15,8 @@ export class ActionSheetParent {
     return this.actionSheet.present(this.componentRef);
   }
 
-  public async dismiss(data?: any): Promise<void> {
-    await this.actionSheet.dismiss(data);
+  public async dismiss(data?: any, item?: any): Promise<void> {
+    await this.actionSheet.dismiss(data, item);
   }
 
   public onDidDismiss(func: dismissFunction) {

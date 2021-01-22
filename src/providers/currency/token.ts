@@ -28,10 +28,38 @@ export const TokenOpts = {
 };
 export const DRCTokenOpts = {
   '0xa9CB8e18E4C2C0a1C9Bf4367E7115165ed7e41F0': {
-    name: 'Jazz Makati 1638',
+    name: 'JAMASY',
     symbol: 'JAMASY',
     decimal: 8,
     address: '0xa9CB8e18E4C2C0a1C9Bf4367E7115165ed7e41F0',
+    blockchain: 'ducx'
+  },
+  '0x3D30806b1E1F021Fe12DF506C3A1F96CfB94464a': {
+    name: 'NUYASA',
+    symbol: 'NUYASA',
+    decimal: 8,
+    address: '0x3D30806b1E1F021Fe12DF506C3A1F96CfB94464a',
+    blockchain: 'ducx'
+  },
+  '0xB7A7221E37d12A8Ea92468F283422B16DbC364D9': {
+    name: 'SUNOBA',
+    symbol: 'SUNOBA',
+    decimal: 8,
+    address: '0xB7A7221E37d12A8Ea92468F283422B16DbC364D9',
+    blockchain: 'ducx'
+  },
+  '0x14460383feFFE73eA1FB4F0F11B941F44c17bDD2': {
+    name: 'DSCMED',
+    symbol: 'DSCMED',
+    decimal: 8,
+    address: '0x14460383feFFE73eA1FB4F0F11B941F44c17bDD2',
+    blockchain: 'ducx'
+  },
+  '0x511e1f8e872c3fe9b3fCefEf58ec7FE4E8130Cc1': {
+    name: 'POG1',
+    symbol: 'POG1',
+    decimal: 8,
+    address: '0x511e1f8e872c3fe9b3fCefEf58ec7FE4E8130Cc1',
     blockchain: 'ducx'
   }
 };
