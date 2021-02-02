@@ -7,7 +7,7 @@ import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { ConfigProvider } from '../../providers/config/config';
 import { CurrencyProvider } from '../../providers/currency/currency';
 import { ExchangeRatesProvider } from '../../providers/exchange-rates/exchange-rates';
-import { MoonPayProvider } from '../../providers/index';
+import { LiveChatProvider, MoonPayProvider } from '../../providers/index';
 import { Logger } from '../../providers/logger/logger';
 import { PersistenceProvider } from '../../providers/persistence/persistence';
 import { ProfileProvider } from '../../providers/profile/profile';
@@ -56,7 +56,8 @@ export class TabsPage {
     private translate: TranslateService,
     private bwcErrorProvider: BwcErrorProvider,
     // private tabProvider: TabProvider,
-    private moonPayProvider: MoonPayProvider
+    private moonPayProvider: MoonPayProvider,
+    private liveChatProvider: LiveChatProvider
   ) {
     this.logger.info('Loaded: TabsPage');
     this.appName = this.appProvider.info.nameCase;
@@ -92,6 +93,10 @@ export class TabsPage {
     this.profileProvider.getTxps({ limit: 3 }).then(data => {
       this.txpsN = data.n;
     });
+  }
+
+  public liveChatOpen(): void {
+    this.liveChatProvider.openLiveChat();
   }
 
   private bwsEventHandler: any = (walletId: string, type: string) => {

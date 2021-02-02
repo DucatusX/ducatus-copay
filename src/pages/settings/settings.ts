@@ -9,7 +9,11 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 // pages
 import { User } from '../../models/user/user.model';
-import { BitPayIdProvider, IABCardProvider } from '../../providers';
+import {
+  BitPayIdProvider,
+  IABCardProvider,
+  LiveChatProvider
+} from '../../providers';
 // import { AnalyticsProvider } from '../../providers/analytics/analytics';
 import { AppProvider } from '../../providers/app/app';
 import { BitPayCardProvider } from '../../providers/bitpay-card/bitpay-card';
@@ -93,7 +97,8 @@ export class SettingsPage {
     private persistanceProvider: PersistenceProvider,
     private bitPayIdProvider: BitPayIdProvider,
     private changeRef: ChangeDetectorRef,
-    private iabCardProvider: IABCardProvider
+    private iabCardProvider: IABCardProvider,
+    private liveChatProvider: LiveChatProvider
   ) {
     this.appName = this.app.info.nameCase;
     this.isCordova = this.platformProvider.isCordova;
@@ -294,22 +299,7 @@ export class SettingsPage {
   // }
 
   public openHelpExternalLink(): void {
-    const url = 'https://t.me/DucatusHelp';
-    const optIn = true;
-    const title = null;
-    const message = this.translate.instant(
-      'Help and support information is available at the website.'
-    );
-    const okText = this.translate.instant('Open');
-    const cancelText = this.translate.instant('Go Back');
-    this.externalLinkProvider.open(
-      url,
-      optIn,
-      title,
-      message,
-      okText,
-      cancelText
-    );
+    this.liveChatProvider.openLiveChat();
   }
 
   private openPinModal(action): void {

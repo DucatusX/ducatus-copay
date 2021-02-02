@@ -16,6 +16,7 @@ import {
   ExternalLinkProvider,
   FeedbackProvider,
   // GiftCardProvider,
+  LiveChatProvider,
   Logger,
   MoonPayProvider,
   PersistenceProvider,
@@ -100,7 +101,8 @@ export class HomePage {
     private events: Events,
     private releaseProvider: ReleaseProvider,
     private platformProvider: PlatformProvider,
-    private moonPayProvider: MoonPayProvider
+    private moonPayProvider: MoonPayProvider,
+    private liveChatProvider: LiveChatProvider
   ) {
     this.logger.info('Loaded: HomePage');
     this.subscribeEvents();
@@ -152,6 +154,10 @@ export class HomePage {
 
   public openMoonPay() {
     this.moonPayProvider.openMoonPay();
+  }
+
+  public liveChatOpen() {
+    this.liveChatProvider.openLiveChat();
   }
 
   private getCachedTotalBalance() {
