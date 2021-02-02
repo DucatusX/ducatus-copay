@@ -49,6 +49,7 @@ import {
   LanguageLoader,
   LanguageProvider,
   LaunchReview,
+  LiveChatProvider,
   Logger,
   MoonPayProvider,
   OnGoingProcessProvider,
@@ -161,7 +162,8 @@ import {
     File,
     CardPhasesProvider,
     MoonPayProvider,
+    LiveChatProvider,
     PdfProvider
   ]
 })
-export class ProvidersModule { }
+export class ProvidersModule {}

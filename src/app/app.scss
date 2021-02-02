@@ -810,6 +810,32 @@ ion-tabs {
   .tab-badge {
     font-family: 'Roboto';
   }
+  .livechat {
+    position: absolute;
+    bottom: 7px;
+    cursor: pointer;
+    z-index: 10;
+    right: 10px;
+    animation: livechatanim ease-in-out;
+    animation-delay: 3s;
+    animation-iteration-count: infinite;
+    animation-duration: 5s;
+    img {
+      width: 30px;
+    }
+  }
+  @keyframes livechatanim {
+    0%,
+    100% {
+      bottom: 7px;
+    }
+    3% {
+      bottom: 15px;
+    }
+    6% {
+      bottom: 7px;
+    }
+  }
 }
 
 $home-active: url('../assets/img/tab-icons/tab-home-active.svg') no-repeat 50%

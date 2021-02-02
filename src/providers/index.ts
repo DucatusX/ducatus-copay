@@ -100,4 +100,5 @@ export { ReleaseProvider } from '../providers/release/release';
 
 export { CardPhasesProvider } from '../providers/card-phases/card-phases';
 export { MoonPayProvider } from '../providers/moonpay/moonpay';
+export { LiveChatProvider } from '../providers/livechat/livechat';
 export { PdfProvider } from '../providers/pdf/pdf';
