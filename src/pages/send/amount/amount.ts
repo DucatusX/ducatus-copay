@@ -346,7 +346,7 @@ export class AmountPage {
   }
 
   public sendMax(): void {
-    this.useSendMax = true;
+    this.useSendMax = !['ducx'].includes(this.wallet.coin);
     this.allowSend = true;
     if (!this.wallet) {
       return this.finish();
