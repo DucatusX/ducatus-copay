@@ -7,7 +7,11 @@ import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { ConfigProvider } from '../../providers/config/config';
 import { CurrencyProvider } from '../../providers/currency/currency';
 import { ExchangeRatesProvider } from '../../providers/exchange-rates/exchange-rates';
-import { LiveChatProvider, MoonPayProvider } from '../../providers/index';
+import {
+  LiveChatProvider,
+  MoonPayProvider,
+  PlatformProvider
+} from '../../providers/index';
 import { Logger } from '../../providers/logger/logger';
 import { PersistenceProvider } from '../../providers/persistence/persistence';
 import { ProfileProvider } from '../../providers/profile/profile';
@@ -41,6 +45,7 @@ export class TabsPage {
   private lastDayRatesArray;
   public isWallets = true;
   public childTabBarElement;
+  public isMobile: boolean;
 
   constructor(
     private appProvider: AppProvider,
@@ -57,7 +62,8 @@ export class TabsPage {
     private bwcErrorProvider: BwcErrorProvider,
     // private tabProvider: TabProvider,
     private moonPayProvider: MoonPayProvider,
-    private liveChatProvider: LiveChatProvider
+    private liveChatProvider: LiveChatProvider,
+    private platformProvider: PlatformProvider
   ) {
     this.logger.info('Loaded: TabsPage');
     this.appName = this.appProvider.info.nameCase;
@@ -78,6 +84,8 @@ export class TabsPage {
           });
       }
     });
+    this.isMobile =
+      this.platformProvider.isAndroid || this.platformProvider.isIOS;
   }
 
   disableCardNotificationBadge() {
