@@ -78,6 +78,7 @@ export class SettingsPage {
   private user$: Observable<User>;
   public showReorder: boolean = false;
   public showTotalBalance: boolean;
+  public useLegacyQrCode: boolean;
 
   constructor(
     private navCtrl: NavController,
@@ -166,6 +167,7 @@ export class SettingsPage {
         : null;
 
     this.showTotalBalance = this.config.totalBalance.show;
+    this.useLegacyQrCode = this.config.legacyQrCode.show;
   }
 
   ionViewDidEnter() {
@@ -254,6 +256,12 @@ export class SettingsPage {
 
   public openSharePage(): void {
     this.navCtrl.push(SharePage);
+  }
+  public toggleQrCodeLegacyFlag(): void {
+    let opts = {
+      legacyQrCode: { show: this.useLegacyQrCode }
+    };
+    this.configProvider.set(opts);
   }
 
   public openSettingIntegration(name: string): void {

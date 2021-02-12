@@ -1,7 +1,10 @@
 <ion-header class="bp-header">
   <ion-navbar>
     <ion-title>
-      <div [reveal-at-scroll-pos]="expandableHeader.headerHeight" [scrollArea]="scrollArea">
+      <div
+        [reveal-at-scroll-pos]="expandableHeader.headerHeight"
+        [scrollArea]="scrollArea"
+      >
         {{ 'Settings' | translate }}
       </div>
     </ion-title>
@@ -10,7 +13,12 @@
 
 <ion-content #scrollArea>
   <div class="wrapper">
-    <expandable-header [scrollArea]="scrollArea" [fadeFactor]="5" [disableFade]="true" #expandableHeader>
+    <expandable-header
+      [scrollArea]="scrollArea"
+      [fadeFactor]="5"
+      [disableFade]="true"
+      #expandableHeader
+    >
       <ion-toolbar class="wide-header__title">
         <expandable-header-primary>
           {{ 'Settings' | translate }}
@@ -71,21 +79,40 @@
       </button>
 
       <ion-item class="align-with-button">
-        <ion-icon class="item-img icon-settings" name="md-eye" item-start></ion-icon>
+        <ion-icon
+          class="item-img icon-settings"
+          name="md-eye"
+          item-start
+        ></ion-icon>
         <ion-label>
-          <div class="main-label">
-            {{'Show Portfolio Value' | translate}}
-          </div>
+          <div class="main-label">{{'Show Portfolio Value' | translate}}</div>
         </ion-label>
-        <ion-toggle [(ngModel)]="showTotalBalance" (ionChange)="toggleShowBalanceFlag()"></ion-toggle>
+        <ion-toggle
+          [(ngModel)]="showTotalBalance"
+          (ionChange)="toggleShowBalanceFlag()"
+        ></ion-toggle>
       </ion-item>
 
       <ion-item-divider *ngIf="walletsGroups && walletsGroups[0]">
         {{ 'Crypto Wallets & Keys' | translate }}
-        <button class="reorder-option" ion-button item-end clear *ngIf="!showReorder && walletsGroups?.length > 1" (click)="reorder()">
-          <img src="assets/img/sort.svg">
+        <button
+          class="reorder-option"
+          ion-button
+          item-end
+          clear
+          *ngIf="!showReorder && walletsGroups?.length > 1"
+          (click)="reorder()"
+        >
+          <img src="assets/img/sort.svg" />
         </button>
-        <button class="reorder-option" ion-button item-end clear *ngIf="showReorder" (click)="reorder()">
+        <button
+          class="reorder-option"
+          ion-button
+          item-end
+          clear
+          *ngIf="showReorder"
+          (click)="reorder()"
+        >
           {{'Done' | translate}}
         </button>
       </ion-item-divider>
@@ -108,43 +135,82 @@
         </ion-label>
       </button>
 
-      <ion-list reorder="{{showReorder}}" (ionItemReorder)="reorderAccounts($event)">
-        <button ion-item [attr.detail-none]="showReorder ? true : null" *ngFor="let walletsGroup of walletsGroups; let i = index" (click)="openWalletGroupSettings(walletsGroup[0].keyId)">
+      <ion-item class="align-with-button">
+        <ion-icon
+          class="item-img icon-settings icon-qrcode"
+          style="opacity: 0.3;"
+          item-start
+        >
+          <img src="assets/img/settings-icons/icon-qrcode.svg" />
+        </ion-icon>
+        <ion-label>
+          <div class="main-label">{{'Use Basic QR Code' | translate}}</div>
+        </ion-label>
+        <ion-toggle
+          [(ngModel)]="useLegacyQrCode"
+          (ionChange)="toggleQrCodeLegacyFlag()"
+        ></ion-toggle>
+      </ion-item>
+
+      <ion-list
+        reorder="{{showReorder}}"
+        (ionItemReorder)="reorderAccounts($event)"
+      >
+        <button
+          ion-item
+          [attr.detail-none]="showReorder ? true : null"
+          *ngFor="let walletsGroup of walletsGroups; let i = index"
+          (click)="openWalletGroupSettings(walletsGroup[0].keyId)"
+        >
           <ion-icon class="item-img icon-settings" item-start>
             <img src="assets/img/settings-icons/icon-key.svg" />
           </ion-icon>
           <ion-label>
             <div class="main-label">
-              <span>{{profileProvider.getWalletGroup(walletsGroup[0].keyId).name}}</span>
+              <span
+                >{{profileProvider.getWalletGroup(walletsGroup[0].keyId).name}}</span
+              >
             </div>
           </ion-label>
           <ion-note *ngIf="walletsGroup.length == 1" item-end>
-            {{'{walletsGroupLength} Wallet' | translate:{walletsGroupLength: walletsGroup.length} }}
+            {{'{walletsGroupLength} Wallet' | translate:{walletsGroupLength:
+            walletsGroup.length} }}
           </ion-note>
           <ion-note *ngIf="walletsGroup.length > 1" item-end>
-            {{'{walletsGroupLength} Wallets' | translate:{walletsGroupLength: walletsGroup.length} }}
+            {{'{walletsGroupLength} Wallets' | translate:{walletsGroupLength:
+            walletsGroup.length} }}
           </ion-note>
         </button>
       </ion-list>
 
-      <button ion-item (click)="openWalletGroupSettings(readOnlyWalletsGroup[0].keyId)" *ngIf="readOnlyWalletsGroup && readOnlyWalletsGroup.length > 0">
+      <button
+        ion-item
+        (click)="openWalletGroupSettings(readOnlyWalletsGroup[0].keyId)"
+        *ngIf="readOnlyWalletsGroup && readOnlyWalletsGroup.length > 0"
+      >
         <ion-icon class="item-img icon-settings" item-start>
           <img src="assets/img/settings-icons/icon-read-only.svg" width="26" />
         </ion-icon>
         <ion-label>
-          <div class="main-label" translate>
-            Read Only
-          </div>
+          <div class="main-label" translate>Read Only</div>
         </ion-label>
         <ion-note *ngIf="readOnlyWalletsGroup.length == 1" item-end>
-          {{'{walletsGroupLength} Wallet' | translate:{walletsGroupLength: readOnlyWalletsGroup.length} }}
+          {{'{walletsGroupLength} Wallet' | translate:{walletsGroupLength:
+          readOnlyWalletsGroup.length} }}
         </ion-note>
         <ion-note *ngIf="readOnlyWalletsGroup.length > 1" item-end>
-          {{'{walletsGroupLength} Wallets' | translate:{walletsGroupLength: readOnlyWalletsGroup.length} }}
+          {{'{walletsGroupLength} Wallets' | translate:{walletsGroupLength:
+          readOnlyWalletsGroup.length} }}
         </ion-note>
       </button>
 
-      <button ion-item detail-none class="create-button" *ngIf="walletsGroups && walletsGroups[0]" (click)="goToAddView()">
+      <button
+        ion-item
+        detail-none
+        class="create-button"
+        *ngIf="walletsGroups && walletsGroups[0]"
+        (click)="goToAddView()"
+      >
         {{ 'Create or Import a Key' | translate }}
       </button>
 
@@ -154,19 +220,31 @@
 
       <div *ngIf="showBitPayCard && bitpayCardItems && bitpayCardItems[0]">
         <ion-list>
-          <button ion-item *ngFor="let card of bitpayCardItems" (click)="openCardSettings(card.id)">
+          <button
+            ion-item
+            *ngFor="let card of bitpayCardItems"
+            (click)="openCardSettings(card.id)"
+          >
             <ion-icon class="item-img" item-start>
               <img src="assets/img/bitpay-card/bitpay-card-icon-list.svg" />
             </ion-icon>
-            <div class="main-label">BitPay Visa&reg; Card ({{card.lastFourDigits}})</div>
+            <div class="main-label">
+              BitPay Visa&reg; Card ({{card.lastFourDigits}})
+            </div>
             <div class="item-subtitle">
-              {{card.balance ? (card.balance | currency:card.currencySymbol:2) : 'Add funds to get started'|translate}} {{card.updatedOn
-            ? (' &middot; ' + (card.updatedOn * 1000 | amTimeAgo)) : ''}}</div>
+              {{card.balance ? (card.balance | currency:card.currencySymbol:2) :
+              'Add funds to get started'|translate}} {{card.updatedOn ? ('
+              &middot; ' + (card.updatedOn * 1000 | amTimeAgo)) : ''}}
+            </div>
           </button>
         </ion-list>
       </div>
 
-      <button ion-item *ngFor="let card of (cardServices | orderBy: ['title'])" (click)="openSettingIntegration(card.name)">
+      <button
+        ion-item
+        *ngFor="let card of (cardServices | orderBy: ['title'])"
+        (click)="openSettingIntegration(card.name)"
+      >
         <ion-icon class="item-img" item-start>
           <img src="{{card.icon}}" />
         </ion-icon>
@@ -180,15 +258,16 @@
       </button>
 
       <ng-container *ngIf="bitpayIdPairingEnabled">
-        <ion-item-divider>
-          {{'BitPay Account' | translate}}
-        </ion-item-divider>
+        <ion-item-divider> {{'BitPay Account' | translate}} </ion-item-divider>
 
         <button ion-item (click)="openBitPayIdPage()">
           <ion-icon class="item-img" item-start>
-            <img src="assets/img/bitpay-card/icon-bitpay.svg" width="25">
+            <img src="assets/img/bitpay-card/icon-bitpay.svg" width="25" />
           </ion-icon>
-          <span class="main-label">{{ bitPayIdUserInfo ? bitPayIdUserInfo.email : 'Connect your BitPay ID' | translate}}</span>
+          <span class="main-label"
+            >{{ bitPayIdUserInfo ? bitPayIdUserInfo.email : 'Connect your BitPay
+            ID' | translate}}</span
+          >
           <ion-note item-end *ngIf="bitPayIdUserInfo">
             <span translate>Linked</span>
           </ion-note>
@@ -199,12 +278,21 @@
         {{ 'Exchanges' | translate }}
       </ion-item-divider>
 
-      <button ion-item *ngFor="let integration of (integrationServices | orderBy: ['title'])" (click)="openSettingIntegration(integration.name)">
+      <button
+        ion-item
+        *ngFor="let integration of (integrationServices | orderBy: ['title'])"
+        (click)="openSettingIntegration(integration.name)"
+      >
         <ion-icon class="item-img" item-start>
           <img src="{{integration.icon}}" />
         </ion-icon>
         <span class="main-label">{{ integration.title }}</span>
-        <div *ngIf="integration.linked && integration.email" class="secondary-label">{{ integration.email }}</div>
+        <div
+          *ngIf="integration.linked && integration.email"
+          class="secondary-label"
+        >
+          {{ integration.email }}
+        </div>
         <ion-note item-end *ngIf="integration.linked">
           <span *ngIf="integration.linked" translate>Linked</span>
           <span *ngIf="!integration.linked">
