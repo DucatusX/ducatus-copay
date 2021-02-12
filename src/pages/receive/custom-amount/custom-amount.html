@@ -1,7 +1,17 @@
 <wide-header-page title="{{ wallet.name }}">
   <ion-buttons right>
-    <button clear wide-header-bar-button (click)="shareAddress()" *ngIf="showShareButton" ion-button>
-      <ion-icon ios="ios-share-outline" md="md-share" class="pointer"></ion-icon>
+    <button
+      clear
+      wide-header-bar-button
+      (click)="shareAddress()"
+      *ngIf="showShareButton"
+      ion-button
+    >
+      <ion-icon
+        ios="ios-share-outline"
+        md="md-share"
+        class="pointer"
+      ></ion-icon>
     </button>
   </ion-buttons>
   <div page-content>
@@ -9,14 +19,12 @@
       <div class="title-container">
         <span class="title">{{'Payment Request' | translate}}</span>
         <ion-icon (click)="showPaymentRequestInfo()">
-          <img src="assets/img/icon-info-blue.svg">
+          <img src="assets/img/icon-info-blue.svg" />
         </ion-icon>
       </div>
       <div class="address-container">
         <div class="text-address ellipsis">
-          <div class="address-text ellipsis">
-            <span>{{ address }}</span>
-          </div>
+          <div class="address-text ellipsis"><span>{{ address }}</span></div>
         </div>
       </div>
     </div>
@@ -25,13 +33,34 @@
       <div class="lines-background"></div>
       <div class="card qr-card">
         <div class="qr-card-amount">
-          <span>{{amountUnitStr}}</span>
-          <br>
+          <span>{{amountUnitStr}}</span> <br />
           <small>({{altAmountStr}})</small>
         </div>
-        <bp-qr-code class="card qr-card bp-qr-card" copy-to-clipboard="{{ qrAddress }}" contents="{{ qrAddress }}" mask-x-to-y-ratio="1">
-          <img [ngClass]="{'testnet': wallet.network === 'testnet', 'background_xrp': wallet.coin === 'xrp'}" src="assets/img/currencies/{{ wallet.coin }}.svg" slot="icon" />
+        <bp-qr-code
+          *ngIf="!useLegacyQrCode"
+          class="card qr-card bp-qr-card"
+          copy-to-clipboard="{{ qrAddress }}"
+          contents="{{ qrAddress }}"
+          mask-x-to-y-ratio="1"
+        >
+          <img
+            [ngClass]="{'testnet': wallet.network === 'testnet', 'background_xrp': wallet.coin === 'xrp'}"
+            src="assets/img/currencies/{{ wallet.coin }}.svg"
+            slot="icon"
+          />
         </bp-qr-code>
+        <div
+          *ngIf="useLegacyQrCode"
+          class="card qr-card"
+          copy-to-clipboard="{{ qrAddress }}"
+        >
+          <ngx-qrcode
+            hide-toast="true"
+            qrc-value="{{ qrAddress }}"
+            qrc-class="aclass"
+            qrc-errorCorrectionLevel="M"
+          ></ngx-qrcode>
+        </div>
       </div>
     </div>
   </div>
