@@ -10,7 +10,11 @@ import { WalletProvider } from '../../../providers/wallet/wallet';
 
 import { BackupKeyPage } from '../../backup/backup-key/backup-key';
 
-import { VOUCHER_URL_REQUEST, VOUCHER_URL_REQUEST_TOKEN } from '../params';
+import {
+  VOUCHER_URL_REQUEST,
+  VOUCHER_URL_REQUEST_GOLD,
+  VOUCHER_URL_REQUEST_TOKEN
+} from '../params';
 
 @Component({
   selector: 'page-voucher',
@@ -22,6 +26,11 @@ export class VoucherAddPage {
   public walletAddresses = [];
   private wallets: any;
   private isDucx = false;
+
+  private vouchers_api = {
+    'PG-': VOUCHER_URL_REQUEST_GOLD,
+    'CF-': VOUCHER_URL_REQUEST_TOKEN
+  };
 
   constructor(
     private formBuilder: FormBuilder,
@@ -208,9 +217,13 @@ export class VoucherAddPage {
     activation_code: string,
     private_path: string
   ) {
-    const url = this.isDucx
-      ? VOUCHER_URL_REQUEST_TOKEN + 'activate_voucher'
-      : VOUCHER_URL_REQUEST + '/transfer/';
+    let url = VOUCHER_URL_REQUEST;
+    const voucher_start = activation_code.slice(0, 3);
+    Object.keys(this.vouchers_api).map(key => {
+      if (key === voucher_start) {
+        url = this.vouchers_api[key];
+      }
+    });
     return this.httpClient
       .post(url, {
         wallet_id,
