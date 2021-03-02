@@ -46,7 +46,7 @@ export class SharePage {
     this.downloadUrl =
       this.appProvider.info.name == 'copay'
         ? defaults.download.copay.url
-        : defaults.download.bitpay.url;
+        : defaults.download.ducatus.url;
   }
 
   ionViewWillEnter() {

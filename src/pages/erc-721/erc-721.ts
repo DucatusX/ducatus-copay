@@ -84,7 +84,7 @@ export class Erc721Page {
     private navParams: NavParams,
     private navCtrl: NavController,
     private walletProvider: WalletProvider,
-    private externalLinkProvider: ExternalLinkProvider,
+    private externalLinkProvider: ExternalLinkProvider
   ) {
     this.wallet = this.navParams.data.wallet;
     this.goldABI = GOLD_TOKEN_ABI;
@@ -167,7 +167,7 @@ export class Erc721Page {
   }
 
   public goToReceive() {
-    this.openExternalLink('https://remusgold.com');
+    this.openExternalLink('https://d-pog.com');
   }
 
   public openExternalLink(url: string): void {

@@ -217,7 +217,7 @@ export class VoucherAddPage {
     activation_code: string,
     private_path: string
   ) {
-    let url = VOUCHER_URL_REQUEST;
+    let url = VOUCHER_URL_REQUEST + 'transfer/';
     const voucher_start = activation_code.slice(0, 3);
     Object.keys(this.vouchers_api).map(key => {
       if (key === voucher_start) {
