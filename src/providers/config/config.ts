@@ -40,6 +40,9 @@ export interface Config {
     copay: {
       url: string;
     };
+    ducatus: {
+      url: string;
+    };
   };
 
   rateApp: {
@@ -167,6 +170,9 @@ export class ConfigProvider {
         },
         copay: {
           url: 'https://copay.io/#download'
+        },
+        ducatus: {
+          url: 'https://www.ducatuscoins.com'
         }
       },
 
