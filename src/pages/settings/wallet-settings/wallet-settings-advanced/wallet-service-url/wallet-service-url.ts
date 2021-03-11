@@ -80,15 +80,15 @@ export class WalletServiceUrlPage {
     switch (this.walletServiceForm.value.bwsurl) {
       case 'prod':
       case 'production':
-        bws = 'https://ducws.rocknblock.io/bws/api';
+        bws = 'http://localhost:3232/bws/api';
         break;
       case 'sta':
       case 'staging':
-        bws = 'https://ducws.rocknblock.io/bws/api';
+        bws = 'http://localhost:3232/bws/api';
         break;
       case 'loc':
       case 'local':
-        bws = 'https://ducws.rocknblock.io/bws/api';
+        bws = 'http://localhost:3232/bws/api';
         break;
     }
     if (bws) {
