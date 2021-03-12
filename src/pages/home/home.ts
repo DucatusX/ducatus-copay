@@ -59,6 +59,8 @@ export class HomePage {
   showServicesOption: boolean;
   @ViewChild('showSurvey')
   showSurvey;
+
+  @ViewChild('exchangeRates') exchangeRates;
   @ViewChild('showCard')
   showCard;
 
@@ -369,6 +371,7 @@ export class HomePage {
   // }
 
   public doRefresh(refresher): void {
+    this.exchangeRates.getPrices();
     this.fetchAdvertisements();
     this.preFetchWallets();
     setTimeout(() => {
