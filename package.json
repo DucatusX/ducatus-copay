@@ -171,7 +171,7 @@
     "ionic-angular": "3.9.5",
     "ionic-image-loader": "6.3.2",
     "ionicons": "3.0.0",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "lodash": "^4.17.19",
     "ngx-barcode": "0.2.4",
     "ngx-markdown": "1.5.2",
