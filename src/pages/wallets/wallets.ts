@@ -146,7 +146,7 @@ export class WalletsPage {
     this.setWallets();
 
     // Get Coinbase Accounts and UserInfo
-    this.setCoinbase();
+    this.setCoinbase(true);
   }
 
   private setCoinbase(force?) {

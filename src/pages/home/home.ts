@@ -129,6 +129,8 @@ export class HomePage {
     // this.fetchAdvertisements();
     // await this.setDiscountedCard();
     // this.fetchDiscountAdvertisements();
+
+    this.doRefresh();
   }
 
   ionViewDidLoad() {
@@ -370,13 +372,15 @@ export class HomePage {
   //   discountedCard && this.addGiftCardDiscount(discountedCard);
   // }
 
-  public doRefresh(refresher): void {
+  public doRefresh(refresher?): void {
     this.exchangeRates.getPrices();
     this.fetchAdvertisements();
     this.preFetchWallets();
-    setTimeout(() => {
-      refresher.complete();
-    }, 2000);
+    if (refresher) {
+      setTimeout(() => {
+        refresher.complete();
+      }, 2000);
+    }
   }
 
   private removeServerMessage(id): void {
