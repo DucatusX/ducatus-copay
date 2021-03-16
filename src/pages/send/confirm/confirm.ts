@@ -165,6 +165,7 @@ export class ConfirmPage {
   };
 
   ionViewDidLoad() {
+    debugger;
     this.logger.info('Loaded: ConfirmPage');
     this.navCtrl.swipeBackEnabled = false;
     this.isOpenSelector = false;
@@ -300,7 +301,7 @@ export class ConfirmPage {
     this.amount = this.decimalPipe.transform(
       this.tx.amount /
         this.currencyProvider.getPrecision(this.coin).unitToSatoshi,
-      '1.2-6'
+      '1.2-18'
     );
   }
 
@@ -841,8 +842,6 @@ export class ConfirmPage {
       if (this.fromMultiSend) {
         txp.outputs = [];
         this.navParams.data.recipients.forEach(recipient => {
-
-
           if (tx.coin && tx.coin == 'bch') {
             recipient.toAddress = this.bitcoreCash
               .Address(recipient.toAddress)
@@ -981,7 +980,6 @@ export class ConfirmPage {
           txp.from = address;
 
           if (this.token && this.token.type === 'erc721') {
-
             txp.tokenAddress = this.token.base.address;
             txp.tokenId = this.token.selected.tokenId;
 
@@ -991,10 +989,12 @@ export class ConfirmPage {
                   .getCore()
                   .Transactions.get({ chain: 'ERC721' })
                   .encodeData({
-                    recipients: [{
-                      address: output.toAddress,
-                      amount: output.amount
-                    }],
+                    recipients: [
+                      {
+                        address: output.toAddress,
+                        amount: output.amount
+                      }
+                    ],
                     from: address,
                     tokenId: this.token.selected.tokenId,
                     tokenAddress: tx.tokenAddress
