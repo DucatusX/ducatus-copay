@@ -165,7 +165,6 @@ export class ConfirmPage {
   };
 
   ionViewDidLoad() {
-    debugger;
     this.logger.info('Loaded: ConfirmPage');
     this.navCtrl.swipeBackEnabled = false;
     this.isOpenSelector = false;
