@@ -126,6 +126,8 @@ export class ExchangeRates {
     switch (coin) {
       case 'xrp':
         return '1.4-4';
+      case 'duc':
+        return '1.3-3';
       default:
         return '1.2-2';
     }

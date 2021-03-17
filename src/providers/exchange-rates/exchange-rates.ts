@@ -33,11 +33,9 @@ export class ExchangeRatesProvider {
     const ts = today.subtract(this.lastDates, 'days').unix() * 1000;
     const url = `${this.bwsURL}/v2/fiatrates/${isoCode}?ts=${ts}`;
 
-    if (!this.ratesCache) {
-      this.ratesCache = this.httpClient
-        .get<CoinsMap<ApiPrice[]>>(url)
-        .pipe(shareReplay());
-    }
+    this.ratesCache = this.httpClient
+      .get<CoinsMap<ApiPrice[]>>(url)
+      .pipe(shareReplay());
     return this.ratesCache;
   }
 

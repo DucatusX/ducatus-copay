@@ -28,7 +28,7 @@ import { WalletDetailsPage } from '../wallet-details/wallet-details';
 import { ProposalsNotificationsPage } from './proposals-notifications/proposals-notifications';
 
 // Providers
-import { MoonPayProvider } from '../../providers';
+import { MoonPayProvider, RateProvider } from '../../providers';
 import { ActionSheetProvider } from '../../providers/action-sheet/action-sheet';
 import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { ClipboardProvider } from '../../providers/clipboard/clipboard';
@@ -88,6 +88,7 @@ export class WalletsPage {
 
   constructor(
     private plt: Platform,
+    private rateProvider: RateProvider,
     private navCtrl: NavController,
     private profileProvider: ProfileProvider,
     private walletProvider: WalletProvider,
@@ -145,7 +146,7 @@ export class WalletsPage {
     this.setWallets();
 
     // Get Coinbase Accounts and UserInfo
-    this.setCoinbase();
+    this.setCoinbase(true);
   }
 
   private setCoinbase(force?) {
@@ -153,11 +154,27 @@ export class WalletsPage {
       'coinbase'
     );
     this.coinbaseLinked = this.coinbaseProvider.isLinked();
+    if (force) {
+      Promise.all([
+        this.rateProvider.updateRates('duc'),
+        this.rateProvider.updateRates('ducx')
+      ]).then(() => {
+        this.wallets.map(wallet =>
+          this.fetchWalletStatus({
+            walletId: wallet.id,
+            alsoUpdateHistory: true,
+            force: true
+          })
+        );
+      });
+    }
     if (this.coinbaseLinked && this.showCoinbase) {
       if (force || !this.coinbaseData) {
         this.coinbaseProvider.updateExchangeRates();
         this.coinbaseProvider.preFetchAllData(this.coinbaseData);
-      } else this.coinbaseData = this.coinbaseProvider.coinbaseData;
+      } else {
+        this.coinbaseData = this.coinbaseProvider.coinbaseData;
+      }
     }
   }
 
