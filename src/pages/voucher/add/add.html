@@ -45,7 +45,7 @@
           </div>
         </div>
 
-        <div class="voucher-add-group-wrap">
+        <div class="voucher-add-group-wrap" *ngIf="VoucherGroup.value.VoucherGroupCode">
           <span class="voucher-add-label"
             >{{'Choose address to send' | translate}}</span
           >

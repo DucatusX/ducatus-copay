@@ -84,11 +84,29 @@ export class VoucherAddPage {
     });
   }
 
+  private isDucxVaucher(): boolean {
+
+    if(this.VoucherGroup.value.VoucherGroupCode && this.VoucherGroup.value.VoucherGroupCode.slice(0, 3) === 'CF-') {
+      return true
+    }
+
+    return false
+  }
+
   public openAddressList() {
     if (!this.voucherLoading) {
       this.walletAddresses = [];
       for (let i = 0; i < this.wallets.length; i++) {
         this.walletAddresses.push(...this.wallets[i].wallets);
+      }
+      if(this.isDucxVaucher()) {
+        this.walletAddresses = this.walletAddresses.filter(item => item.wallet.coin !== 'duc')
+      } else {
+        this.walletAddresses = this.walletAddresses.filter(item => item.wallet.coin === 'duc')
+      }
+      if(!this.walletAddresses.length) {
+        this.showModal('empty_wallets');
+        return
       }
       const infoSheet = this.actionSheetProvider.createInfoSheet(
         'convertor-address',
@@ -173,6 +191,14 @@ export class VoucherAddPage {
         title:
           '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
         text: 'Needs Backup',
+        handler: () => {
+          this.navCtrl.pop();
+        }
+      },
+      empty_wallets: {
+        title:
+          '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+        text: "You don't have wallets suitable for this voucher",
         handler: () => {
           this.navCtrl.pop();
         }
