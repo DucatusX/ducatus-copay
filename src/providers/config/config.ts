@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ApiProvider } from '../../providers/api/api';
 import { CoinsMap, CurrencyProvider } from '../../providers/currency/currency';
 import { Logger } from '../../providers/logger/logger';
 import { PersistenceProvider } from '../persistence/persistence';
@@ -130,7 +131,8 @@ export class ConfigProvider {
   constructor(
     private currencyProvider: CurrencyProvider,
     private logger: Logger,
-    private persistence: PersistenceProvider
+    private persistence: PersistenceProvider,
+    private apiProvider: ApiProvider
   ) {
     this.logger.debug('ConfigProvider initialized');
     this.configDefault = {
@@ -161,7 +163,7 @@ export class ConfigProvider {
 
       // Bitcore wallet service URL
       bws: {
-        url: 'https://duc-ws-dev.rocknblock.io/bws/api'
+        url: this.apiProvider.getAddresses().bitcore + '/bws/api'
       },
 
       download: {

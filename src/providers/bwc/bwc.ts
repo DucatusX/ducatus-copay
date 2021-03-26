@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import env from '../../environments';
+import {ApiProvider} from '../../providers/api/api';
 import { Logger } from '../../providers/logger/logger';
 
 import BWC from 'ducatus-wallet-client';
@@ -8,8 +10,9 @@ import BWC from 'ducatus-wallet-client';
 export class BwcProvider {
   public parseSecret = BWC.parseSecret;
   public Client = BWC;
-  constructor(private logger: Logger) {
+  constructor(private logger: Logger, private apiProvider: ApiProvider) {
     this.logger.debug('BwcProvider initialized');
+    console.log(env, 'processsssssssssss')
   }
   public getBitcore() {
     return BWC.Bitcore;
@@ -60,7 +63,7 @@ export class BwcProvider {
 
     // note opts use `bwsurl` all lowercase;
     let bwc = new BWC({
-      baseUrl: opts.bwsurl || 'https://duc-ws-dev.rocknblock.io/bws/api',
+      baseUrl: opts.bwsurl || this.apiProvider.getAddresses().bitcore + '/bws/api',
       verbose: opts.verbose,
       timeout: 100000,
       transports: ['polling'],
