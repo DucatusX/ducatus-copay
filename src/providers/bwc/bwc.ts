@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import env from '../../environments';
 import {ApiProvider} from '../../providers/api/api';
 import { Logger } from '../../providers/logger/logger';
 
@@ -12,7 +11,6 @@ export class BwcProvider {
   public Client = BWC;
   constructor(private logger: Logger, private apiProvider: ApiProvider) {
     this.logger.debug('BwcProvider initialized');
-    console.log(env, 'processsssssssssss')
   }
   public getBitcore() {
     return BWC.Bitcore;

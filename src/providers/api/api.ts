@@ -1,22 +1,31 @@
+// import {ConfigProvider} from '../../providers/config/config';
 
-export  class ApiProvider {
+export class ApiProvider {
+  isProduction = false
+  constructor() {
+
+  }
   private config = {
     prod: {
       bitcore: 'https://ducws.rocknblock.io',
-      ducatuscoins: 'https://www.ducatuscoins.com'
+      ducatuscoins: 'https://www.ducatuscoins.com',
+      crowdsale: 'https://tokenization.centuriongm.com',
+      pog: 'https://d-pog.com'
     },
     develop: {
       bitcore: 'https://duc-ws-dev.rocknblock.io',
-      ducatuscoins: 'https://ducsite.rocknblock.io'
+      ducatuscoins: 'https://ducsite.rocknblock.io',
+      crowdsale: 'http://duccrowdsale.rocknblock.io',
+      pog: 'https://devgold.rocknblock.io'
     }
   }
-  private isDevelop = true;
+  
 
   public getAddresses() {
-    if (this.isDevelop) {
-      return this.config.develop
-    } else {
+    if (this.isProduction) {
       return this.config.prod
+    } else {
+      return this.config.develop
     }
   }
 

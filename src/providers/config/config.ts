@@ -7,6 +7,7 @@ import { PersistenceProvider } from '../persistence/persistence';
 import * as _ from 'lodash';
 
 export interface Config {
+  isProduction: boolean,
   limits: {
     totalCopayers: number;
     mPlusN: number;
@@ -136,6 +137,7 @@ export class ConfigProvider {
   ) {
     this.logger.debug('ConfigProvider initialized');
     this.configDefault = {
+      isProduction: false,
       // wallet limits
       limits: {
         totalCopayers: 6,
@@ -174,7 +176,7 @@ export class ConfigProvider {
           url: 'https://copay.io/#download'
         },
         ducatus: {
-          url: 'https://www.ducatuscoins.com'
+          url: this.apiProvider.getAddresses().ducatuscoins
         }
       },
 

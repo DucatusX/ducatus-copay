@@ -5,16 +5,11 @@ import { AlertController, NavController } from 'ionic-angular';
 import { Logger } from '../../../providers/logger/logger';
 
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
+import { ApiProvider } from '../../../providers/api/api';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
 
 import { BackupKeyPage } from '../../backup/backup-key/backup-key';
-
-import {
-  VOUCHER_URL_REQUEST,
-  VOUCHER_URL_REQUEST_GOLD,
-  VOUCHER_URL_REQUEST_TOKEN
-} from '../params';
 
 @Component({
   selector: 'page-voucher',
@@ -28,8 +23,8 @@ export class VoucherAddPage {
   private isDucx = false;
 
   private vouchers_api = {
-    'PG-': VOUCHER_URL_REQUEST_GOLD,
-    'CF-': VOUCHER_URL_REQUEST_TOKEN
+    'PG-': this.apiProvider.getAddresses().pog + '/api/v1/vouchers/activate/',
+    'CF-': this.apiProvider.getAddresses().crowdsale + '/api/v1/activate_voucher'
   };
 
   constructor(
@@ -40,7 +35,8 @@ export class VoucherAddPage {
     private alertCtrl: AlertController,
     private httpClient: HttpClient,
     private navCtrl: NavController,
-    private logger: Logger
+    private logger: Logger,
+    private apiProvider: ApiProvider
   ) {
     this.VoucherGroup = this.formBuilder.group({
       VoucherGroupCode: [
@@ -243,7 +239,7 @@ export class VoucherAddPage {
     activation_code: string,
     private_path: string
   ) {
-    let url = VOUCHER_URL_REQUEST + 'transfer/';
+    let url = this.apiProvider.getAddresses().ducatuscoins + '/api/v3/transfer/';
     const voucher_start = activation_code.slice(0, 3);
     Object.keys(this.vouchers_api).map(key => {
       if (key === voucher_start) {
