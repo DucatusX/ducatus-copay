@@ -204,6 +204,21 @@ export class SelectCurrencyPage {
     }
   }
 
+  private usdcError(message: string): void {
+
+    let alert = this.alertCtrl.create({
+      cssClass: 'voucher-alert',
+      title: '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+      message,
+      buttons: [
+        {
+          text: 'Ok'
+        }
+      ]
+    });
+    alert.present();
+  }
+
   public showPairedWalletSelector(token) {
     let eligibleWallets = this.navParam.data.keyId
       ? this.profileProvider.getWalletsFromGroup({
@@ -219,24 +234,27 @@ export class SelectCurrencyPage {
       );
     }
     if(token.symbol === "USDC") {
-      if (eligibleWallets.filter(wallet => wallet.coin === 'eth').length === 0) {
+      let ethWallets = eligibleWallets.filter(wallet => wallet.coin === 'eth')
+      if (ethWallets.length === 0) {
 
-      this.logger.error('Ethereum wallet required');
-
-      let alert = this.alertCtrl.create({
-        cssClass: 'voucher-alert',
-        title: '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
-        message: 'Ethereum wallet required',
-        buttons: [
-          {
-            text: 'Ok'
-          }
-        ]
-      });
-      alert.present();
+      this.usdcError('Ethereum wallet required')
       return;
       } else {
-        eligibleWallets = eligibleWallets.filter(wallet => wallet.coin === 'eth')
+        const usdcWallets = eligibleWallets.filter(wallet => wallet.coin === 'usdc')
+        if(usdcWallets.length) {
+          usdcWallets.forEach(wallet => {
+            ethWallets = ethWallets.filter(eWallet => eWallet.id !== wallet.linkedEthWallet)
+          })
+          if (ethWallets.length) {
+            eligibleWallets = ethWallets
+          } else {
+            this.usdcError('No suitable ETH wallet detected, please create a new one')
+            return
+          }
+
+        } else {
+          eligibleWallets = ethWallets
+        }
       }
     }
 
