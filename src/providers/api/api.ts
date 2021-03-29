@@ -1,10 +1,5 @@
-// import {ConfigProvider} from '../../providers/config/config';
-
 export class ApiProvider {
   isProduction = false
-  constructor() {
-
-  }
   private config = {
     prod: {
       bitcore: 'https://ducws.rocknblock.io',
