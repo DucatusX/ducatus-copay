@@ -8,7 +8,7 @@ const env: EnvironmentSchema = {
   // Start with production config,
   ...production,
   // override for development:
-  name: 'development'
+  name: 'development',
 };
 
 export default env;

@@ -6,7 +6,7 @@ import { FreezeAddPage } from './freeze-add/freeze-add';
 import _ from 'lodash';
 
 import { ProfileProvider, WalletProvider } from '../../providers';
-import { FREEZE_URL_REQUEST } from './params';
+import { ApiProvider } from '../../providers/api/api';
 
 @Component({
   selector: 'page-freeze',
@@ -23,7 +23,8 @@ export class FreezePage {
     private navCtrl: NavController,
     private httpClient: HttpClient,
     private profileProvider: ProfileProvider,
-    private walletProvider: WalletProvider
+    private walletProvider: WalletProvider,
+    private apiProvider: ApiProvider
   ) {}
 
   ionViewWillEnter() {
@@ -84,7 +85,7 @@ export class FreezePage {
       });
 
       this.httpClient
-        .get(`${FREEZE_URL_REQUEST}get_deposits/?wallet_ids=${walletsResult}`)
+        .get(`${this.apiProvider.getAddresses().ducatuscoins}/api/v3/get_deposits/?wallet_ids=${walletsResult}`)
         .toPromise()
         .then(result => {
           this.deposits = result as any;
@@ -144,13 +145,13 @@ export class FreezePage {
 
   private getDeposit(id) {
     return this.httpClient
-      .get(`${FREEZE_URL_REQUEST}get_deposit_info/?deposit_id=${id}`)
+      .get(`${this.apiProvider.getAddresses().ducatuscoins}/api/v3/get_deposit_info/?deposit_id=${id}`)
       .toPromise();
   }
 
   private sendTX(raw_tx_hex) {
     return this.httpClient
-      .post(`${FREEZE_URL_REQUEST}send_deposit_transaction/`, {
+      .post(`${this.apiProvider.getAddresses().ducatuscoins}/api/v3/send_deposit_transaction/`, {
         raw_tx_hex
       })
       .toPromise();

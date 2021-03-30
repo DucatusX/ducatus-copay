@@ -8,7 +8,7 @@ import { Logger } from '../../../../../providers/logger/logger';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 // providers
-import { AppProvider } from '../../../../../providers/app/app';
+import { ApiProvider, AppProvider } from '../../../../../providers';
 import { ConfigProvider } from '../../../../../providers/config/config';
 import { PersistenceProvider } from '../../../../../providers/persistence/persistence';
 import { PlatformProvider } from '../../../../../providers/platform/platform';
@@ -40,7 +40,8 @@ export class WalletServiceUrlPage {
     private splashScreen: SplashScreen,
     private platformProvider: PlatformProvider,
     private replaceParametersProvider: ReplaceParametersProvider,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private apiProvider: ApiProvider,
   ) {
     this.walletServiceForm = this.formBuilder.group({
       bwsurl: [
@@ -77,18 +78,19 @@ export class WalletServiceUrlPage {
 
   public save(): void {
     let bws;
+    const bwsApi = this.apiProvider.getAddresses().bitcore
     switch (this.walletServiceForm.value.bwsurl) {
       case 'prod':
       case 'production':
-        bws = 'https://ducws.rocknblock.io/bws/api';
+        bws = bwsApi + '/bws/api';
         break;
       case 'sta':
       case 'staging':
-        bws = 'https://ducws.rocknblock.io/bws/api';
+        bws = bwsApi + '/bws/api';
         break;
       case 'loc':
       case 'local':
-        bws = 'https://ducws.rocknblock.io/bws/api';
+        bws = bwsApi + '/bws/api';
         break;
     }
     if (bws) {

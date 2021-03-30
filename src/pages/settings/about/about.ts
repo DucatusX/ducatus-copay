@@ -8,6 +8,7 @@ import { SessionLogPage } from './session-log/session-log';
 
 // providers
 import {
+  ApiProvider,
   AppProvider,
   BitPayProvider,
   ExternalLinkProvider,
@@ -33,7 +34,8 @@ export class AboutPage {
     private replaceParametersProvider: ReplaceParametersProvider,
     private translate: TranslateService,
     private bitpayProvider: BitPayProvider,
-    private persistenceProvider: PersistenceProvider
+    private persistenceProvider: PersistenceProvider,
+    private apiProvider: ApiProvider
   ) {}
 
   ionViewDidLoad() {
@@ -71,7 +73,7 @@ export class AboutPage {
   }
 
   public openTermsOfUse() {
-    const url = 'https://www.ducatuscoins.com/legal';
+    const url = this.apiProvider.getAddresses().ducatuscoins + '/legal';
     const optIn = true;
     const title = null;
     const message = this.translate.instant('View Wallet Terms of Use');
@@ -89,7 +91,7 @@ export class AboutPage {
 
   public openPrivacyPolicy() {
     const url =
-      'https://www.ducatuscoins.com/downloads/pdf/Wallet_Terms_Conditions.pdf';
+    this.apiProvider.getAddresses().ducatuscoins + '/downloads/pdf/Wallet_Terms_Conditions.pdf';
     const optIn = true;
     const title = null;
     const message = this.translate.instant('View Privacy Policy');

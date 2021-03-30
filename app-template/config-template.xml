@@ -14,13 +14,16 @@
     <content src="index.html" />
     <access origin="https://moonpay.ducatuscoins.com" />
     <access origin="https://ducapi.rocknblock.io" />
+    <access origin="https://duc-ws-dev.rocknblock.io" />
     <access origin="https://ducws.rocknblock.io" />
     <access origin="http://89.40.14.180:8545" />
     <access origin="https://bitpay.com" />
     <access origin="https://www.ducatuscoins.com" />
     <access origin="https://ducexpl.rocknblock.io" />
     <access origin="https://tokenization.centuriongm.com" />
+    <access origin="http://duccrowdsale.rocknblock.io" />
     <access origin="https://devgold.rocknblock.io" />
+    <access origin="https://d-pog.com" />
     <access origin="http://ducsite.rocknblock.io" />
     <access origin="https://ducsite.rocknblock.io" />
     <access origin="https://buy.moonpay.io" />

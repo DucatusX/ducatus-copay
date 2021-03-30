@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ApiProvider } from '../../providers/api/api';
 import { CoinsMap, CurrencyProvider } from '../../providers/currency/currency';
 import { Logger } from '../../providers/logger/logger';
 import { PersistenceProvider } from '../persistence/persistence';
@@ -6,6 +7,7 @@ import { PersistenceProvider } from '../persistence/persistence';
 import * as _ from 'lodash';
 
 export interface Config {
+  isProduction: boolean,
   limits: {
     totalCopayers: number;
     mPlusN: number;
@@ -130,10 +132,12 @@ export class ConfigProvider {
   constructor(
     private currencyProvider: CurrencyProvider,
     private logger: Logger,
-    private persistence: PersistenceProvider
+    private persistence: PersistenceProvider,
+    private apiProvider: ApiProvider
   ) {
     this.logger.debug('ConfigProvider initialized');
     this.configDefault = {
+      isProduction: false,
       // wallet limits
       limits: {
         totalCopayers: 6,
@@ -161,7 +165,7 @@ export class ConfigProvider {
 
       // Bitcore wallet service URL
       bws: {
-        url: 'https://ducws.rocknblock.io/bws/api'
+        url: this.apiProvider.getAddresses().bitcore + '/bws/api'
       },
 
       download: {
@@ -172,7 +176,7 @@ export class ConfigProvider {
           url: 'https://copay.io/#download'
         },
         ducatus: {
-          url: 'https://www.ducatuscoins.com'
+          url: this.apiProvider.getAddresses().ducatuscoins
         }
       },
 
