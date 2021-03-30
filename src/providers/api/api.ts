@@ -1,5 +1,5 @@
 export class ApiProvider {
-  isProduction = false
+  isProduction = true;
   private config = {
     prod: {
       bitcore: 'https://ducws.rocknblock.io',
@@ -13,15 +13,13 @@ export class ApiProvider {
       crowdsale: 'http://duccrowdsale.rocknblock.io',
       pog: 'https://devgold.rocknblock.io'
     }
-  }
-  
+  };
 
   public getAddresses() {
     if (this.isProduction) {
-      return this.config.prod
+      return this.config.prod;
     } else {
-      return this.config.develop
+      return this.config.develop;
     }
   }
-
 }
