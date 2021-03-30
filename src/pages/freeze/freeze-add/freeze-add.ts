@@ -4,14 +4,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, NavController } from 'ionic-angular';
 
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
+import { ApiProvider } from '../../../providers/api/api';
 import { IncomingDataProvider } from '../../../providers/incoming-data/incoming-data';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
 import { WalletProvider } from '../../../providers/wallet/wallet';
 
 import { BackupKeyPage } from '../../backup/backup-key/backup-key';
-
-import { FREEZE_URL_REQUEST } from '../params';
 
 @Component({
   selector: 'page-freeze-add',
@@ -36,7 +35,8 @@ export class FreezeAddPage {
     private txFormatProvider: TxFormatProvider,
     private alertCtrl: AlertController,
     private navCtrl: NavController,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private apiProvider: ApiProvider
   ) {
     this.FreezeGroup = this.formBuilder.group({
       Address: [
@@ -163,7 +163,7 @@ export class FreezeAddPage {
     lock_days: number
   ) {
     return this.httpClient
-      .post(`${FREEZE_URL_REQUEST}generate_deposit_without_dividends/`, {
+      .post(`${this.apiProvider.getAddresses().ducatuscoins}/api/v3/generate_deposit_without_dividends/`, {
         wallet_id,
         duc_address,
         receiver_user_public_key,

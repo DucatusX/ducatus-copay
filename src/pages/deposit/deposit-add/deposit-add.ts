@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, NavController } from 'ionic-angular';
 
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
+import { ApiProvider } from '../../../providers/api/api';
 import { IncomingDataProvider } from '../../../providers/incoming-data/incoming-data';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
@@ -11,7 +12,6 @@ import { WalletProvider } from '../../../providers/wallet/wallet';
 
 import { BackupKeyPage } from '../../backup/backup-key/backup-key';
 
-import { DEPOSIT_URL_REQUEST } from '../params';
 
 @Component({
   selector: 'page-deposit-add',
@@ -39,7 +39,8 @@ export class DepositAddPage {
     private txFormatProvider: TxFormatProvider,
     private alertCtrl: AlertController,
     private navCtrl: NavController,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private apiProvider: ApiProvider
   ) {
     this.DepositGroup = this.formBuilder.group({
       Address: [
@@ -161,7 +162,7 @@ export class DepositAddPage {
     private_path: string
   ) {
     return this.httpClient
-      .post(`${DEPOSIT_URL_REQUEST}generate_deposit/`, {
+      .post(`${this.apiProvider.getAddresses().ducatuscoins}/api/v3/generate_deposit/`, {
         wallet_id,
         duc_address,
         duc_public_key,

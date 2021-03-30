@@ -5,8 +5,7 @@ import { VoucherAddPage } from './add/add';
 
 import _ from 'lodash';
 
-import { ProfileProvider, WalletProvider } from '../../providers';
-import { VOUCHER_URL_REQUEST } from './params';
+import { ApiProvider, ProfileProvider, WalletProvider } from '../../providers';
 
 @Component({
   selector: 'page-voucher',
@@ -23,7 +22,8 @@ export class VoucherPage {
     private navCtrl: NavController,
     private httpClient: HttpClient,
     private profileProvider: ProfileProvider,
-    private walletProvider: WalletProvider
+    private walletProvider: WalletProvider,
+    private apiProvider: ApiProvider
   ) {}
 
   ionViewWillEnter() {
@@ -84,7 +84,7 @@ export class VoucherPage {
 
       this.httpClient
         .get(
-          `${VOUCHER_URL_REQUEST}get_frozen_vouchers/?wallet_ids=${walletsResult}`
+          `${this.apiProvider.getAddresses().ducatuscoins}/api/v3/get_frozen_vouchers/?wallet_ids=${walletsResult}`
         )
         .toPromise()
         .then(result => {
@@ -118,13 +118,13 @@ export class VoucherPage {
 
   private getVoucher(id) {
     return this.httpClient
-      .get(`${VOUCHER_URL_REQUEST}get_withdraw_info/?voucher_id=${id}`)
+      .get(`${this.apiProvider.getAddresses().ducatuscoins}/api/v3/get_withdraw_info/?voucher_id=${id}`)
       .toPromise();
   }
 
   private sendTX(raw_tx_hex) {
     return this.httpClient
-      .post(`${VOUCHER_URL_REQUEST}send_raw_transaction/`, {
+      .post(`${this.apiProvider.getAddresses().ducatuscoins}/api/v3/send_raw_transaction/`, {
         raw_tx_hex
       })
       .toPromise();

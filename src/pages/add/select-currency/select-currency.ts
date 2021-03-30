@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import {
+  AlertController,
   App,
   Events,
   ModalController,
@@ -58,6 +59,7 @@ export class SelectCurrencyPage {
     private events: Events,
     private actionSheetProvider: ActionSheetProvider,
     private currencyProvider: CurrencyProvider,
+    private alertCtrl: AlertController,
     private navCtrl: NavController,
     private logger: Logger,
     private navParam: NavParams,
@@ -202,6 +204,21 @@ export class SelectCurrencyPage {
     }
   }
 
+  private usdcError(message: string): void {
+
+    let alert = this.alertCtrl.create({
+      cssClass: 'voucher-alert',
+      title: '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+      message,
+      buttons: [
+        {
+          text: 'Ok'
+        }
+      ]
+    });
+    alert.present();
+  }
+
   public showPairedWalletSelector(token) {
     let eligibleWallets = this.navParam.data.keyId
       ? this.profileProvider.getWalletsFromGroup({
@@ -215,6 +232,30 @@ export class SelectCurrencyPage {
       eligibleWallets = eligibleWallets.filter(coin =>
         this.currencyProvider.isDRC20Coin(coin.coin)
       );
+    }
+    if(token.symbol === "USDC") {
+      let ethWallets = eligibleWallets.filter(wallet => wallet.coin === 'eth')
+      if (ethWallets.length === 0) {
+
+      this.usdcError('Ethereum wallet required')
+      return;
+      } else {
+        const usdcWallets = eligibleWallets.filter(wallet => wallet.coin === 'usdc')
+        if(usdcWallets.length) {
+          usdcWallets.forEach(wallet => {
+            ethWallets = ethWallets.filter(eWallet => eWallet.id !== wallet.linkedEthWallet)
+          })
+          if (ethWallets.length) {
+            eligibleWallets = ethWallets
+          } else {
+            this.usdcError('No suitable ETH wallet detected, please create a new one')
+            return
+          }
+
+        } else {
+          eligibleWallets = ethWallets
+        }
+      }
     }
 
     const walletSelector = this.actionSheetProvider.createInfoSheet(

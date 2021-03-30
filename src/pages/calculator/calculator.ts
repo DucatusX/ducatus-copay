@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from 'ionic-angular';
+import { ApiProvider } from '../../providers/api/api';
 import { Logger } from '../../providers/logger/logger';
 
 // import { MoonPayProvider } from '../../providers';
@@ -10,7 +11,6 @@ import { Logger } from '../../providers/logger/logger';
 import { CalculatorConvertPage } from './calculator-convert/calculator-convert';
 
 import {
-  calculator_api,
   coinInfo,
   convertCoins,
   convertGetCoins
@@ -41,6 +41,7 @@ export class CalculatorPage {
     private navCtrl: NavController,
     private logger: Logger,
     private formBuilder: FormBuilder,
+    private apiProvider: ApiProvider,
     private httpClient: HttpClient // private moonPayProvider: MoonPayProvider
   ) {
     this.formCoins.get = convertCoins['DUCX']; // DUCX
@@ -66,7 +67,7 @@ export class CalculatorPage {
     this.rates = null;
 
     this.httpClient
-      .get(calculator_api + 'rates')
+      .get(this.apiProvider.getAddresses().ducatuscoins + '/api/v1/rates')
       .toPromise()
       .then(
         (result: { res_rates: any }) => {

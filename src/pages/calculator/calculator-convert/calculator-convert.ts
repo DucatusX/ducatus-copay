@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
+import { ApiProvider } from '../../../providers/api/api';
 import { ErrorsProvider } from '../../../providers/errors/errors';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
@@ -15,7 +16,7 @@ import {
   TxFormatProvider
 } from '../../../providers';
 import { Logger } from '../../../providers/logger/logger';
-import { calculator_api, coinInfo } from '../calculator-parameters';
+import { coinInfo } from '../calculator-parameters';
 
 @Component({
   selector: 'page-calculator-convert',
@@ -49,7 +50,8 @@ export class CalculatorConvertPage {
     private incomingDataProvider: IncomingDataProvider,
     private logger: Logger,
     private actionSheetProvider: ActionSheetProvider,
-    private txFormatProvider: TxFormatProvider
+    private txFormatProvider: TxFormatProvider,
+    private apiProvider: ApiProvider
   ) {
     this.formCoins.get = this.navParams.data.get;
     this.formCoins.send = this.navParams.data.send;
@@ -191,7 +193,7 @@ export class CalculatorConvertPage {
 
   public getExchange(address: string, currency: string) {
     return this.httpClient
-      .post(calculator_api + 'exchange/', {
+      .post(this.apiProvider.getAddresses().ducatuscoins + '/api/v1/exchange/', {
         to_address: address,
         to_currency: currency
       })
@@ -250,7 +252,7 @@ export class CalculatorConvertPage {
 
   private checkTransitionLimitDucToDucx(getAddress, amountSend) {
     return this.httpClient
-      .post(calculator_api + 'transfers/', {
+      .post(this.apiProvider.getAddresses().ducatuscoins + '/api/v1/transfers/', {
         address: getAddress
       })
       .toPromise()

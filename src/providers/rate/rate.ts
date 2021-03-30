@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import env from '../../environments';
+import { ApiProvider } from '../../providers/api/api';
 import { CoinsMap, CurrencyProvider } from '../../providers/currency/currency';
 import { Logger } from '../../providers/logger/logger';
 
@@ -12,12 +13,13 @@ export class RateProvider {
   private ratesAvailable = {} as CoinsMap<boolean>;
   private rateServiceUrl = {} as CoinsMap<string>;
 
-  private fiatRateAPIUrl = 'https://ducws.rocknblock.io/bws/api/v1/fiatrates';
+  private fiatRateAPIUrl = this.apiProvider.getAddresses().bitcore + '/bws/api/v1/fiatrates';
 
   constructor(
     private currencyProvider: CurrencyProvider,
     private http: HttpClient,
-    private logger: Logger
+    private logger: Logger,
+    private apiProvider: ApiProvider
   ) {
     this.logger.debug('RateProvider initialized');
     this.alternatives = {};

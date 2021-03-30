@@ -5,6 +5,7 @@ import { Logger } from '../../../providers/logger/logger';
 
 import { TabsPage } from '../../tabs/tabs';
 
+import { ApiProvider } from '../../../providers/api/api';
 import { EmailNotificationsProvider } from '../../../providers/email-notifications/email-notifications';
 import { ExternalLinkProvider } from '../../../providers/external-link/external-link';
 import { PersistenceProvider } from '../../../providers/persistence/persistence';
@@ -27,7 +28,8 @@ export class DisclaimerPage {
     private emailProvider: EmailNotificationsProvider,
     private externalLinkProvider: ExternalLinkProvider,
     private persistenceProvider: PersistenceProvider,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private apiProvider: ApiProvider
   ) {
     this.hasEmail = this.emailProvider.getEmailIfEnabled() ? true : false;
     this.accepted = {
@@ -53,7 +55,7 @@ export class DisclaimerPage {
   }
 
   openDisclaimer() {
-    let url = 'https://www.ducatuscoins.com/legal';
+    let url = this.apiProvider.getAddresses().ducatuscoins + '/legal';
     let optIn = true;
     let title = null;
     let message = this.translate.instant('View Wallet Terms of Use');
