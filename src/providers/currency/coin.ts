@@ -63,7 +63,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     paymentInfo: {
       paymentCode: 'BIP73',
       protocolPrefix: { livenet: 'ducatus', testnet: 'ducatus' },
-      ratesApi: 'https://ducexpl.rocknblock.io/api/v1/rates/',
+      ratesApi: 'https://rates.ducatuscoins.com/api/v1/rates/',
       blockExplorerUrls: 'insight.ducatus.io/#/DUC/'
     },
     feeInfo: {
@@ -98,7 +98,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     paymentInfo: {
       paymentCode: 'EIP681',
       protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
-      ratesApi: 'https://ducexpl.rocknblock.io/api/v1/rates/',
+      ratesApi: 'https://rates.ducatuscoins.com/api/v1/rates/',
       blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
     },
     feeInfo: {
