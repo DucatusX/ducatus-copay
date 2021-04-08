@@ -94,11 +94,16 @@
           </ion-item>
         </div>
 
+        <div class="calculator-attention" *ngIf="!isAvailableSwap">
+          DUC to DUCX swap is currently restricted, please try again later
+        </div>
+
         <button
           ion-button
           class="button-standard calculator-button"
           (click)="goToConvertPage()"
           [disabled]="!CalculatorGroupForm.valid && !rates"
+          *ngIf="isAvailableSwap"
         >
           {{'Convert' | translate}}
         </button>
