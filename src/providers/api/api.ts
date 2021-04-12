@@ -1,5 +1,5 @@
 export class ApiProvider {
-  isProduction = true;
+  isProduction = false;
   private config = {
     prod: {
       bitcore: 'https://ducws.rocknblock.io',
