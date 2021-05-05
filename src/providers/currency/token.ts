@@ -68,5 +68,12 @@ export const DRCTokenOpts = {
     decimal: 8,
     address: '0x17CaCa02DDf472F62bFED5165FACf7A6B5C72926',
     blockchain: 'ducx'
+  },
+  '0x60DFde24CdE54df342E52a72248B2bD54e0ea4A5': {
+    name: 'MarsaDXB',
+    symbol: 'MDXB',
+    decimal: 8,
+    address: '0x60DFde24CdE54df342E52a72248B2bD54e0ea4A5',
+    blockchain: 'ducx'
   }
 };
