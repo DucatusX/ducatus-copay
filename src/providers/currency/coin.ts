@@ -1,4 +1,4 @@
-import { ApiProvider } from '../api';
+import { ApiProvider } from '../api/api';
 import { CoinsMap } from './currency';
 
 export interface CoinOpts {
@@ -508,6 +508,41 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       unitToSatoshi: 1e8,
       unitDecimals: 8,
       unitCode: 'pog1'
+    },
+    properties: {
+      hasMultiSig: false,
+      hasMultiSend: false,
+      isUtxo: false,
+      isERCToken: true,
+      isStableCoin: true,
+      singleAddress: true
+    },
+    paymentInfo: {
+      paymentCode: 'EIP681b',
+      protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
+      ratesApi: 'https://bitpay.com/api/rates/',
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+    },
+    feeInfo: {
+      feeUnit: 'Gwei',
+      feeUnitAmount: 1e9,
+      blockTime: 0.2,
+      maxMerchantFee: 'urgent'
+    },
+    theme: {
+      backgroundColor: 'rgba(0,220,250,1)',
+      gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
+    }
+  },
+  wde: {
+    name: 'WupDE',
+    chain: 'DUCX',
+    coin: 'wde',
+    unitInfo: {
+      unitName: 'WDE',
+      unitToSatoshi: 1e8,
+      unitDecimals: 8,
+      unitCode: 'wde'
     },
     properties: {
       hasMultiSig: false,

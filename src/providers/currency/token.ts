@@ -61,5 +61,12 @@ export const DRCTokenOpts = {
     decimal: 8,
     address: '0x511e1f8e872c3fe9b3fCefEf58ec7FE4E8130Cc1',
     blockchain: 'ducx'
+  },
+  '0x17CaCa02DDf472F62bFED5165FACf7A6B5C72926': {
+    name: 'WupDE',
+    symbol: 'WDE',
+    decimal: 8,
+    address: '0x17CaCa02DDf472F62bFED5165FACf7A6B5C72926',
+    blockchain: 'ducx'
   }
 };
