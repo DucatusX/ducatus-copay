@@ -13,7 +13,8 @@ export class RateProvider {
   private ratesAvailable = {} as CoinsMap<boolean>;
   private rateServiceUrl = {} as CoinsMap<string>;
 
-  private fiatRateAPIUrl = this.apiProvider.getAddresses().bitcore + '/bws/api/v1/fiatrates';
+  private fiatRateAPIUrl =
+    this.apiProvider.getAddresses().bitcore + '/bws/api/v1/fiatrates';
 
   constructor(
     private currencyProvider: CurrencyProvider,
@@ -31,7 +32,9 @@ export class RateProvider {
             ? 0.6
             : coin === 'duc'
             ? 0.06
-            : ['jamasy', 'nuyasa', 'sunoba', 'dscmed', 'pog1'].includes(coin)
+            : ['jamasy', 'nuyasa', 'sunoba', 'dscmed', 'pog1', 'wde'].includes(
+                coin
+              )
             ? 1
             : this.rates[coin],
         NGN:
@@ -39,7 +42,9 @@ export class RateProvider {
             ? 0.6
             : coin === 'duc'
             ? 29.05
-            : ['jamasy', 'nuyasa', 'sunoba', 'dscmed', 'pog1'].includes(coin)
+            : ['jamasy', 'nuyasa', 'sunoba', 'dscmed', 'pog1', 'wde'].includes(
+                coin
+              )
             ? 1
             : this.rates[coin] // test
       };
@@ -77,7 +82,9 @@ export class RateProvider {
 
   public getCoin(chain: string): Promise<any> {
     return new Promise(resolve => {
-      if (['jamasy', 'nuyasa', 'sunoba', 'dscmed', 'pog1'].includes(chain)) {
+      if (
+        ['jamasy', 'nuyasa', 'sunoba', 'dscmed', 'pog1', 'wde'].includes(chain)
+      ) {
         resolve([]);
       } else {
         this.http.get(this.rateServiceUrl[chain]).subscribe(data => {

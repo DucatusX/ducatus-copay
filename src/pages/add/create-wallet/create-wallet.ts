@@ -103,7 +103,7 @@ export class CreateWalletPage implements OnInit {
     this.derivationPathByDefault = this.isShared
       ? this.coin === 'duc'
         ? this.derivationPathHelperProvider.defaultMultisigDUC
-        :this.coin === 'bch'
+        : this.coin === 'bch'
         ? this.derivationPathHelperProvider.defaultMultisigBCH
         : this.derivationPathHelperProvider.defaultMultisigBTC
       : this.bwcProvider.getCore().Deriver.pathFor(this.coin, 'livenet');
