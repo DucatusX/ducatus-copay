@@ -568,5 +568,40 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       backgroundColor: 'rgba(0,220,250,1)',
       gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
     }
+  },
+  mdxb: {
+    name: 'MarsaDXB',
+    chain: 'DUCX',
+    coin: 'mdxb',
+    unitInfo: {
+      unitName: 'MDXB',
+      unitToSatoshi: 1e8,
+      unitDecimals: 8,
+      unitCode: 'mdxb'
+    },
+    properties: {
+      hasMultiSig: false,
+      hasMultiSend: false,
+      isUtxo: false,
+      isERCToken: true,
+      isStableCoin: true,
+      singleAddress: true
+    },
+    paymentInfo: {
+      paymentCode: 'EIP681b',
+      protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
+      ratesApi: 'https://bitpay.com/api/rates/',
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+    },
+    feeInfo: {
+      feeUnit: 'Gwei',
+      feeUnitAmount: 1e9,
+      blockTime: 0.2,
+      maxMerchantFee: 'urgent'
+    },
+    theme: {
+      backgroundColor: 'rgba(0,220,250,1)',
+      gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
+    }
   }
 };

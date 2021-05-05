@@ -1,8 +1,8 @@
 export class ApiProvider {
-  public isProduction = false;
+  public isProduction = true;
   private config = {
     prod: {
-      bitcore: 'https://ducws.rocknblock.io',
+      bitcore: 'https://duc-ws-dev.rocknblock.io',
       ducatuscoins: 'https://www.ducatuscoins.com',
       crowdsale: 'https://tokenization.centuriongm.com',
       pog: 'https://d-pog.com',

@@ -70,7 +70,8 @@ export class VoucherAddPage {
       'sunoba',
       'dscmed',
       'pog1',
-      'wde'
+      'wde',
+      'mdxb'
     ];
     const wallets = this.profileProvider.getWallets({ showHidden: true });
     let promises = [];

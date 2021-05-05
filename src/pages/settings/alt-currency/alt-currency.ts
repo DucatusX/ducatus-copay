@@ -82,6 +82,9 @@ export class AltCurrencyPage {
       },
       {
         isoCode: 'WDE'
+      },
+      {
+        isoCode: 'MDXB'
       }
     ];
   }
