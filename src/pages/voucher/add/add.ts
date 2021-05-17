@@ -24,7 +24,8 @@ export class VoucherAddPage {
 
   private vouchers_api = {
     'PG-': this.apiProvider.getAddresses().pog + '/api/v1/vouchers/activate/',
-    'CF-': this.apiProvider.getAddresses().crowdsale + '/api/v1/activate_voucher'
+    'CF-':
+      this.apiProvider.getAddresses().crowdsale + '/api/v1/activate_voucher'
   };
 
   constructor(
@@ -62,7 +63,16 @@ export class VoucherAddPage {
   // }
 
   ionViewWillEnter() {
-    const coins = ['duc', 'jamasy', 'nuyasa', 'sunoba', 'dscmed', 'pog1'];
+    const coins = [
+      'duc',
+      'jamasy',
+      'nuyasa',
+      'sunoba',
+      'dscmed',
+      'pog1',
+      'wde',
+      'mdxb'
+    ];
     const wallets = this.profileProvider.getWallets({ showHidden: true });
     let promises = [];
 
@@ -81,12 +91,14 @@ export class VoucherAddPage {
   }
 
   private isDucxVaucher(): boolean {
-
-    if(this.VoucherGroup.value.VoucherGroupCode && this.VoucherGroup.value.VoucherGroupCode.slice(0, 3) === 'CF-') {
-      return true
+    if (
+      this.VoucherGroup.value.VoucherGroupCode &&
+      this.VoucherGroup.value.VoucherGroupCode.slice(0, 3) === 'CF-'
+    ) {
+      return true;
     }
 
-    return false
+    return false;
   }
 
   public openAddressList() {
@@ -95,14 +107,18 @@ export class VoucherAddPage {
       for (let i = 0; i < this.wallets.length; i++) {
         this.walletAddresses.push(...this.wallets[i].wallets);
       }
-      if(this.isDucxVaucher()) {
-        this.walletAddresses = this.walletAddresses.filter(item => item.wallet.coin !== 'duc')
+      if (this.isDucxVaucher()) {
+        this.walletAddresses = this.walletAddresses.filter(
+          item => item.wallet.coin !== 'duc'
+        );
       } else {
-        this.walletAddresses = this.walletAddresses.filter(item => item.wallet.coin === 'duc')
+        this.walletAddresses = this.walletAddresses.filter(
+          item => item.wallet.coin === 'duc'
+        );
       }
-      if(!this.walletAddresses.length) {
+      if (!this.walletAddresses.length) {
         this.showModal('empty_wallets');
-        return
+        return;
       }
       const infoSheet = this.actionSheetProvider.createInfoSheet(
         'convertor-address',
@@ -239,7 +255,8 @@ export class VoucherAddPage {
     activation_code: string,
     private_path: string
   ) {
-    let url = this.apiProvider.getAddresses().ducatuscoins + '/api/v3/transfer/';
+    let url =
+      this.apiProvider.getAddresses().ducatuscoins + '/api/v3/transfer/';
     const voucher_start = activation_code.slice(0, 3);
     Object.keys(this.vouchers_api).map(key => {
       if (key === voucher_start) {

@@ -79,6 +79,12 @@ export class AltCurrencyPage {
       },
       {
         isoCode: 'POG1'
+      },
+      {
+        isoCode: 'WDE'
+      },
+      {
+        isoCode: 'MDXB'
       }
     ];
   }
