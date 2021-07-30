@@ -74,7 +74,12 @@ export class CalculatorPage {
       .then(
         (result: { res_rates: any }) => {
           this.logger.debug('getting rates:', result);
-          this.rates = result;
+          this.rates = {
+            ...result,
+            WDUCX: {
+              DUCX: 1
+            }
+          };
         },
         err => {
           this.logger.debug('error in getting rates: ', err);
