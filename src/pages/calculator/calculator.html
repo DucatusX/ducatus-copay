@@ -48,13 +48,19 @@
         <ion-item class="calculator-text" *ngIf="!rates">
           <ion-spinner name="dots"></ion-spinner>
         </ion-item>
-
+        <!-- *ngIf="formCoins.get.name !== 'WDUCX'; else elseTemplate" -->
         <ion-item class="calculator-text" *ngIf="rates">
           <ion-label stacked
             >1 {{ coin_info[formCoins.get.name] }} = {{
             rates[formCoins.get.name][formCoins.send] }} {{
             coin_info[formCoins.send] }}</ion-label
           >
+          <!--
+            <ion-label #elseTemplate stacked>
+              1 {{ coin_info[formCoins.get.name] }} = 1 {{
+              coin_info[formCoins.send] }}
+            </ion-label>
+          -->
         </ion-item>
 
         <div class="calculator-form-group">

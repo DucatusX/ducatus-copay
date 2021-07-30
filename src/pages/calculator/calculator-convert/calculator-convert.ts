@@ -131,7 +131,7 @@ export class CalculatorConvertPage {
 
   public changeAddress(type) {
     if (type == 'Get') {
-      this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput = this.ConvertGroupForm.value.ConvertFormGroupAddressGet;
+      // this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput = this.ConvertGroupForm.value.ConvertFormGroupAddressGet;
       this.setAddress(this.formCoins.get);
     }
     if (type == 'Send') {
@@ -176,6 +176,7 @@ export class CalculatorConvertPage {
         this.getAddresses();
       }
     }
+    if (type === 'WDUCX') this.getAddresses();
   }
 
   public getAddresses() {
@@ -193,10 +194,13 @@ export class CalculatorConvertPage {
 
   public getExchange(address: string, currency: string) {
     return this.httpClient
-      .post(this.apiProvider.getAddresses().ducatuscoins + '/api/v1/exchange/', {
-        to_address: address,
-        to_currency: currency
-      })
+      .post(
+        this.apiProvider.getAddresses().ducatuscoins + '/api/v1/exchange/',
+        {
+          to_address: address,
+          to_currency: currency
+        }
+      )
       .toPromise();
   }
 
@@ -213,7 +217,8 @@ export class CalculatorConvertPage {
     const addressView = this.walletProvider.getAddressView(
       this.wallet.coin,
       this.wallet.network,
-      this.addresses[this.formCoins.send.toLowerCase() + '_address'],
+      this.addresses[this.formCoins.send.toLowerCase() + '_address'] ||
+        getAddress,
       true
     );
 
@@ -223,11 +228,15 @@ export class CalculatorConvertPage {
       this.wallet.coin.toUpperCase()
     );
 
-    const redirParms = {
+    const redirParms: any = {
       activePage: 'ScanPage',
       walletId: this.wallet.id,
       amount: parsedAmount.amountSat
     };
+
+    if (this.formCoins.get === 'WDUCX') {
+      redirParms.tokenAddress = '0x1D85186b5d9C12a6707D5fd3ac7133d58F437877';
+    }
 
     if (
       this.formCoins.send.toLowerCase() === 'duc' &&
@@ -252,9 +261,12 @@ export class CalculatorConvertPage {
 
   private checkTransitionLimitDucToDucx(getAddress, amountSend) {
     return this.httpClient
-      .post(this.apiProvider.getAddresses().ducatuscoins + '/api/v1/transfers/', {
-        address: getAddress
-      })
+      .post(
+        this.apiProvider.getAddresses().ducatuscoins + '/api/v1/transfers/',
+        {
+          address: getAddress
+        }
+      )
       .toPromise()
       .then(res => {
         const DECIMALS = 1e8;

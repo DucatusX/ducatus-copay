@@ -19,6 +19,7 @@ export interface RedirParams {
   coin?: Coin;
   fromHomeCard?: boolean;
   walletId?: number;
+  tokenAddress?: string;
 }
 
 @Injectable()
@@ -105,7 +106,6 @@ export class IncomingDataProvider {
     data = this.sanitizeUri(data);
     return !!this.bwcProvider.getBitcoreCash().URI.isValid(data);
   }
-
 
   private isValidDucatusUri(data: string): boolean {
     data = this.sanitizeUri(data);
@@ -383,7 +383,6 @@ export class IncomingDataProvider {
     } else this.goSend(address, amount, message, coin);
   }
 
-
   private handleDucatusUri(data: string, redirParams?: RedirParams): void {
     this.logger.debug('Incoming-data: Ducatus URI');
     let amountFromRedirParams =
@@ -415,8 +414,17 @@ export class IncomingDataProvider {
     const address = this.extractAddress(data);
     const message = '';
     const amount = parsedAmount || amountFromRedirParams;
+    let tokenAddress = redirParams.tokenAddress;
     if (amount) {
-      this.goSend(address, amount, message, coin, requiredFeeParam);
+      this.goSend(
+        address,
+        amount,
+        message,
+        coin,
+        requiredFeeParam,
+        undefined,
+        tokenAddress
+      );
     } else {
       this.handleDucatusXAddress(address, redirParams);
     }
@@ -559,7 +567,6 @@ export class IncomingDataProvider {
       this.goToAmountPage(data, coin);
     }
   }
-
 
   private handlePlainDucatusAddress(
     data: string,
@@ -758,7 +765,6 @@ export class IncomingDataProvider {
       this.walletId = redirParams.walletId ? redirParams.walletId : false;
     }
 
-
     //  Handling of a bitpay invoice url
     if (this.isValidBitPayInvoice(data)) {
       this.handleBitPayInvoice(data);
@@ -818,7 +824,6 @@ export class IncomingDataProvider {
     } else if (this.isValidBitcoinCashAddress(data)) {
       this.handlePlainBitcoinCashAddress(data, redirParams);
       return true;
-
 
       // Plain Address (Ducatus)
     } else if (this.isValidDucatusAddress(data)) {
@@ -1132,7 +1137,10 @@ export class IncomingDataProvider {
 
   public getPayProUrl(data: string): string {
     return decodeURIComponent(
-      data.replace(/(bitcoin|bitcoincash|ethereum|ripple|ducatus|ducatusx)?:\?r=/, '')
+      data.replace(
+        /(bitcoin|bitcoincash|ethereum|ripple|ducatus|ducatusx)?:\?r=/,
+        ''
+      )
     );
   }
 
@@ -1169,10 +1177,11 @@ export class IncomingDataProvider {
     message: string,
     coin: Coin,
     requiredFeeRate?: string,
-    destinationTag?: string
+    destinationTag?: string,
+    tokenAddress?: string
   ): void {
     if (amount) {
-      let stateParams = {
+      let stateParams: any = {
         amount,
         toAddress: addr,
         description: message,
@@ -1181,6 +1190,9 @@ export class IncomingDataProvider {
         destinationTag,
         walletId: this.walletId
       };
+      if (tokenAddress) {
+        stateParams.tokenAddress = tokenAddress;
+      }
       let nextView = {
         name: 'ConfirmPage',
         params: stateParams

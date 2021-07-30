@@ -953,6 +953,9 @@ export class ConfirmPage {
           default:
             chain = 'ERC20';
         }
+        if (tx.tokenAddress === '0x1D85186b5d9C12a6707D5fd3ac7133d58F437877') {
+          chain = 'TOB';
+        }
         for (const output of txp.outputs) {
           if (!output.data) {
             output.data = this.bwcProvider
