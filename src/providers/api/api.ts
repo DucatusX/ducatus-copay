@@ -2,14 +2,14 @@ export class ApiProvider {
   public isProduction = true;
   private config = {
     prod: {
-      bitcore: 'https://duc-ws-dev.rocknblock.io',
+      bitcore: 'https://ducws.rocknblock.io',
       ducatuscoins: 'https://www.ducatuscoins.com',
       crowdsale: 'https://tokenization.centuriongm.com',
       pog: 'https://d-pog.com',
       ratesApi: 'https://rates.ducatuscoins.com/api/v1/rates/'
     },
     develop: {
-      bitcore: 'https://duc-ws-dev.rocknblock.io',
+      bitcore: 'https://ducws.rocknblock.io',
       ducatuscoins: 'https://ducsite.rocknblock.io',
       crowdsale: 'https://tokenization.centuriongm.com',
       // сейчас работает только прод апи
