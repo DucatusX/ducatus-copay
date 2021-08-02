@@ -254,9 +254,45 @@ export class CalculatorConvertPage {
           err = this.bwcErrorProvider.msg(err);
           this.errorsProvider.showDefaultError(err, title);
         });
+    } else if (
+      this.formCoins.send.toLowerCase() === 'ducx' &&
+      this.formCoins.get.toLowerCase() === 'wducx'
+    ) {
+      this.checkTransitionLimitDucxToWDucx(parseInt(parsedAmount.amount, 10))
+        .then(() => {
+          this.incomingDataProvider.redir(addressView, redirParms);
+        })
+        .catch(err => {
+          const title = this.translate.instant('Swap limit');
+          err = this.bwcErrorProvider.msg(err);
+          this.errorsProvider.showDefaultError(err, title);
+        });
     } else {
       this.incomingDataProvider.redir(addressView, redirParms);
     }
+  }
+
+  private checkTransitionLimitDucxToWDucx(amountSend) {
+    return this.httpClient
+      .get(
+        this.apiProvider.getAddresses().ducatuscoins +
+          '/api/v4/token_balance/Binance-Smart-Chain/'
+      )
+      .toPromise()
+      .then(res => {
+        if (res < amountSend) {
+          throw new Error(
+            'Daily limit for swapping WDUCX is reached. Please try again tomorrow '
+          );
+        } else {
+          return;
+        }
+      })
+      .catch(() => {
+        throw new Error(
+          'Daily limit for swapping WDUCX is reached. Please try again tomorrow '
+        );
+      });
   }
 
   private checkTransitionLimitDucToDucx(getAddress, amountSend) {
