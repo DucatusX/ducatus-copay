@@ -117,7 +117,16 @@ export class CalculatorPage {
       this.CalculatorGroupForm.value.CalculatorGroupGetCoin = this.formCoins.get.name;
     }
     if (type === 'Send') {
-      this.formCoins.send = this.CalculatorGroupForm.value.CalculatorGroupSendCoin;
+      if (
+        this.CalculatorGroupForm.value.CalculatorGroupGetCoin ===
+        this.CalculatorGroupForm.value.CalculatorGroupSendCoin
+      ) {
+        this.formCoins.get =
+          convertCoins[this.CalculatorGroupForm.value.CalculatorGroupSendCoin];
+        this.CalculatorGroupForm.value.CalculatorGroupGetCoin = this.formCoins.get.items[0];
+      } else {
+        this.formCoins.send = this.CalculatorGroupForm.value.CalculatorGroupSendCoin;
+      }
     }
 
     this.changeAmount(this.lastChange);

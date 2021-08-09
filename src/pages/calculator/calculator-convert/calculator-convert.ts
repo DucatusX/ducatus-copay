@@ -258,7 +258,10 @@ export class CalculatorConvertPage {
       this.formCoins.send.toLowerCase() === 'ducx' &&
       this.formCoins.get.toLowerCase() === 'wducx'
     ) {
-      this.checkTransitionLimitDucxToWDucx(parseInt(parsedAmount.amount, 10))
+      Promise.all([
+        this.checkTransitionLimitDucxToWDucx(parseInt(parsedAmount.amount, 10)),
+        this.checkMinimalSwapDucxToWducx(parseInt(parsedAmount.amount, 10))
+      ])
         .then(() => {
           this.incomingDataProvider.redir(addressView, redirParms);
         })
@@ -270,6 +273,21 @@ export class CalculatorConvertPage {
     } else {
       this.incomingDataProvider.redir(addressView, redirParms);
     }
+  }
+  private checkMinimalSwapDucxToWducx(amountSend) {
+    return this.httpClient
+      .get(this.apiProvider.getAddresses().ducatuscoins + '/api/v4/networks/')
+      .toPromise()
+      .then(res => {
+        if (res[0].min_amount > amountSend) {
+          throw new Error('Minimal swap limit is 100 DUCX');
+        } else {
+          return;
+        }
+      })
+      .catch(() => {
+        throw new Error('Minimal swap limit is 100 DUCX');
+      });
   }
 
   private checkTransitionLimitDucxToWDucx(amountSend) {

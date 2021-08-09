@@ -1,6 +1,6 @@
 export const convertCoins = {
   DUC: { name: 'DUC', items: ['DUCX', 'ETH', 'BTC'] },
-  DUCX: { name: 'DUCX', items: ['DUC'] },
+  DUCX: { name: 'DUCX', items: ['DUC', 'DUCX'] },
   WDUCX: { name: 'WDUCX', items: ['DUCX'] }
 };
 
