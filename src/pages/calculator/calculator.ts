@@ -34,7 +34,8 @@ export class CalculatorPage {
   public coin_info: any;
   public convertGetCoins: any;
   public lastChange: any = 'Get';
-  private isAvailableDucSwap: boolean = true;
+  public isAvailableDucSwap: boolean = true;
+  public isAvailableSwapWDUCXtoDUCX: boolean = true;
   public isAvailableSwap: boolean = true;
 
   public rates: any;
@@ -107,6 +108,29 @@ export class CalculatorPage {
       .catch(() => {
         this.isAvailableDucSwap = false;
       });
+
+    // WDUCX - DUXX
+
+    this.httpClient
+      .get(this.apiProvider.getAddresses().wduc + 'api/v1/status/')
+      .toPromise()
+      .then((res: boolean) => {
+        this.isAvailableSwapWDUCXtoDUCX = res;
+
+        if (
+          this.formCoins.get.name === 'WDUCX' &&
+          this.formCoins.send === 'DUCX'
+        ) {
+          this.isAvailableSwap = !this.isAvailableSwapWDUCXtoDUCX
+            ? false
+            : true;
+        } else {
+          this.isAvailableSwap = true;
+        }
+      })
+      .catch(() => {
+        this.isAvailableSwapWDUCXtoDUCX = false;
+      });
   }
 
   public changeCoin(type) {
@@ -130,8 +154,15 @@ export class CalculatorPage {
     }
 
     this.changeAmount(this.lastChange);
+
     if (this.formCoins.get.name === 'DUCX' && this.formCoins.send === 'DUC') {
       this.isAvailableSwap = !this.isAvailableDucSwap ? false : true;
+    } else {
+      this.isAvailableSwap = true;
+    }
+
+    if (this.formCoins.get.name === 'WDUCX' && this.formCoins.send === 'DUCX') {
+      this.isAvailableSwap = this.isAvailableSwapWDUCXtoDUCX;
     } else {
       this.isAvailableSwap = true;
     }
