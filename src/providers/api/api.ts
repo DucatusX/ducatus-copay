@@ -6,7 +6,8 @@ export class ApiProvider {
       ducatuscoins: 'https://www.ducatuscoins.com',
       crowdsale: 'https://tokenization.centuriongm.com',
       pog: 'https://d-pog.com',
-      ratesApi: 'https://rates.ducatuscoins.com/api/v1/rates/'
+      ratesApi: 'https://rates.ducatuscoins.com/api/v1/rates/',
+      wduc: 'https://wducx.rocknblock.io/'
     },
     develop: {
       bitcore: 'https://ducws.rocknblock.io',
@@ -15,7 +16,8 @@ export class ApiProvider {
       // сейчас работает только прод апи
       // crowdsale: 'http://duccrowdsale.rocknblock.io',
       pog: 'https://devgold.rocknblock.io',
-      ratesApi: 'https://ducexpl.rocknblock.io/api/v1/rates/'
+      ratesApi: 'https://ducexpl.rocknblock.io/api/v1/rates/',
+      wduc: 'https://wducx.rocknblock.io/'
     }
   };
 

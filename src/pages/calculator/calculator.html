@@ -101,14 +101,15 @@
         </div>
 
         <div class="calculator-attention" *ngIf="!isAvailableSwap">
-          DUC to DUCX swap is currently restricted, please try again later
+          {{this.formCoins.send}} to {{this.formCoins.get.name}} swap is
+          currently restricted, please try again later
         </div>
 
         <button
           ion-button
           class="button-standard calculator-button"
           (click)="goToConvertPage()"
-          [disabled]="!CalculatorGroupForm.valid && !rates"
+          [disabled]="!CalculatorGroupForm.valid && !rates && isAvailableSwap"
           *ngIf="isAvailableSwap"
         >
           {{'Convert' | translate}}
