@@ -112,7 +112,7 @@ export class CalculatorPage {
     // WDUCX - DUXX
 
     this.httpClient
-      .get(this.apiProvider.getAddresses().wduc + 'api/v1/status/')
+      .get(this.apiProvider.getAddresses().wduc)
       .toPromise()
       .then((res: boolean) => {
         this.isAvailableSwapWDUCXtoDUCX = res;
