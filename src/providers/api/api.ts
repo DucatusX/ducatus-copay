@@ -1,5 +1,5 @@
 export class ApiProvider {
-  public isProduction = true;
+  public isProduction = false;
   private config = {
     prod: {
       bitcore: 'https://ducws.rocknblock.io',
@@ -7,7 +7,7 @@ export class ApiProvider {
       crowdsale: 'https://tokenization.centuriongm.com',
       pog: 'https://d-pog.com',
       ratesApi: 'https://rates.ducatuscoins.com/api/v1/rates/',
-      wduc: 'https://wducx.rocknblock.io/'
+      wduc: 'https://www.ducatuscoins.com/api/v4/status/'
     },
     develop: {
       bitcore: 'https://ducws.rocknblock.io',
@@ -17,7 +17,7 @@ export class ApiProvider {
       // crowdsale: 'http://duccrowdsale.rocknblock.io',
       pog: 'https://devgold.rocknblock.io',
       ratesApi: 'https://ducexpl.rocknblock.io/api/v1/rates/',
-      wduc: 'https://wducx.rocknblock.io/'
+      wduc: 'https://wducx.rocknblock.io/api/v1/status/'
     }
   };
 
