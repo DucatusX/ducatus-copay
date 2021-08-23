@@ -217,8 +217,10 @@ export class CalculatorConvertPage {
     const addressView = this.walletProvider.getAddressView(
       this.wallet.coin,
       this.wallet.network,
-      this.addresses[this.formCoins.send.toLowerCase() + '_address'] ||
-        getAddress,
+      this.formCoins.get === 'WDUCX'
+        ? this.apiProvider.getAddresses().swap.address
+        : this.addresses[this.formCoins.send.toLowerCase() + '_address'] ||
+            getAddress,
       true
     );
 
@@ -235,7 +237,7 @@ export class CalculatorConvertPage {
     };
 
     if (this.formCoins.get === 'WDUCX') {
-      redirParms.tokenAddress = '0x1D85186b5d9C12a6707D5fd3ac7133d58F437877';
+      redirParms.tokenAddress = this.apiProvider.getAddresses().swap.address;
     }
 
     if (
@@ -276,7 +278,7 @@ export class CalculatorConvertPage {
   }
   private checkMinimalSwapDucxToWducx(amountSend) {
     return this.httpClient
-      .get(this.apiProvider.getAddresses().ducatuscoins + '/api/v4/networks/')
+      .get(this.apiProvider.getAddresses().swap.network)
       .toPromise()
       .then(res => {
         if (res[0].min_amount > amountSend) {
@@ -292,10 +294,7 @@ export class CalculatorConvertPage {
 
   private checkTransitionLimitDucxToWDucx(amountSend) {
     return this.httpClient
-      .get(
-        this.apiProvider.getAddresses().ducatuscoins +
-          '/api/v4/token_balance/Binance-Smart-Chain/'
-      )
+      .get(this.apiProvider.getAddresses().swap.bsc)
       .toPromise()
       .then(res => {
         if (res < amountSend) {
