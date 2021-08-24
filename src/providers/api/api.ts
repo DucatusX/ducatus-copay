@@ -13,7 +13,7 @@ export class ApiProvider {
         network: 'https://www.ducatuscoins.com/api/v4/networks/',
         bsc:
           'https://www.ducatuscoins.com/api/v4/token_balance/Binance-Smart-Chain/',
-        address: '0x1D85186b5d9C12a6707D5fd3ac7133d58F437877'
+        address: '0x1D85186b5d9C12a6707D5fd3ac7133d58F437877' // адрес в мейннете
       }
     },
     develop: {
@@ -29,7 +29,8 @@ export class ApiProvider {
         network: 'https://wducx.rocknblock.io/api/v1/networks/',
         bsc:
           'https://wducx.rocknblock.io/api/v1/token_balance/Binance-Smart-Chain/',
-        address: '0xd51bd30A91F88Dcf72Acd45c8A1E7aE0066263e8'
+        address: '0xd51bd30A91F88Dcf72Acd45c8A1E7aE0066263e8' // старый адрес в тестнете
+        // address: '0xc5228008C89DfB03937Ff5ff9124f0d7bd2028F9' // новый адрес в мейннете
       }
     }
   };
