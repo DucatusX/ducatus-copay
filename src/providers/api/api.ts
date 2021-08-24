@@ -8,7 +8,8 @@ export class ApiProvider {
       pog: 'https://d-pog.com',
       ratesApi: 'https://rates.ducatuscoins.com/api/v1/rates/',
       swap: {
-        status: 'https://www.ducatuscoins.com/api/v4/status/',
+        // status: 'https://www.ducatuscoins.com/api/v4/status/',
+        status: 'https://wducx.rocknblock.io/api/v1/status/',
         network: 'https://www.ducatuscoins.com/api/v4/networks/',
         bsc:
           'https://www.ducatuscoins.com/api/v4/token_balance/Binance-Smart-Chain/',
@@ -16,7 +17,7 @@ export class ApiProvider {
       }
     },
     develop: {
-      bitcore: 'https://ducws.rocknblock.io',
+      bitcore: 'https://duc-ws-dev.rocknblock.io',
       ducatuscoins: 'https://ducsite.rocknblock.io',
       crowdsale: 'https://tokenization.centuriongm.com',
       // сейчас работает только прод апи
