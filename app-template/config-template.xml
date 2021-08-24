@@ -15,7 +15,7 @@
     <access origin="https://moonpay.ducatuscoins.com" />
     <access origin="https://ducapi.rocknblock.io" />
     <access origin="https://ducws.rocknblock.io" />
-    <access origin="https://ducws.rocknblock.io" />
+    <access origin="https://duc-ws-dev.rocknblock.io" />
     <access origin="http://89.40.14.180:8545" />
     <access origin="https://bitpay.com" />
     <access origin="https://www.ducatuscoins.com" />
