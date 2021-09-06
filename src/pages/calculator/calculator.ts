@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from 'ionic-angular';
+import { AppProvider } from '../../providers';
 import { ApiProvider } from '../../providers/api/api';
 import { Logger } from '../../providers/logger/logger';
 
@@ -37,6 +38,7 @@ export class CalculatorPage {
   public isAvailableDucSwap: boolean = true;
   public isAvailableSwapWDUCXtoDUCX: boolean = true;
   public isAvailableSwap: boolean = true;
+  public appVersion: string;
 
   public rates: any;
 
@@ -45,12 +47,16 @@ export class CalculatorPage {
     private logger: Logger,
     private formBuilder: FormBuilder,
     private apiProvider: ApiProvider,
+    private appProvider: AppProvider,
     private httpClient: HttpClient // private moonPayProvider: MoonPayProvider
   ) {
     this.formCoins.get = convertCoins['DUCX']; // DUCX
     this.formCoins.send = this.formCoins.get.items[0]; // DUC
     this.coin_info = coinInfo;
     this.convertGetCoins = convertGetCoins;
+    this.appVersion = this.appProvider.info.version;
+
+    console.log('this.appVersion', this.appVersion);
 
     this.CalculatorGroupForm = this.formBuilder.group({
       CalculatorGroupGet: [
@@ -112,9 +118,14 @@ export class CalculatorPage {
     // WDUCX - DUXX
 
     this.httpClient
-      .get(this.apiProvider.getAddresses().swap.status)
+      .get(this.apiProvider.getAddresses().swap.status, {
+        params: {
+          version: this.appVersion
+        }
+      })
       .toPromise()
       .then((res: boolean) => {
+        console.log('WDUCX - DUXX swap res', res);
         this.isAvailableSwapWDUCXtoDUCX = res;
 
         if (

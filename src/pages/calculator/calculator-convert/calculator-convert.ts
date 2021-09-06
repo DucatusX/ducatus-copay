@@ -204,7 +204,9 @@ export class CalculatorConvertPage {
       .toPromise();
   }
 
-  public goToSendPage() {
+  public async goToSendPage() {
+    const dataInfo = {};
+
     const sendAddress = this.ConvertGroupForm.value
       .ConvertFormGroupAddressSendInput;
     const getAddress = this.ConvertGroupForm.value
@@ -214,13 +216,42 @@ export class CalculatorConvertPage {
       return infoWallet.address === sendAddress;
     }).wallet;
 
+    // Getting all data
+
+    dataInfo[this.formCoins.get.toLowerCase()] =
+      this.formCoins.get.toLowerCase() === 'wducx'
+        ? await this.getDucxWduxSwapInfo()
+        : {
+            swap_address:
+              this.addresses[this.formCoins.send.toLowerCase() + '_address'] ||
+              getAddress
+          };
+
+    // Getting addresses from all data
+    const dataAddress = dataInfo;
+
+    if (this.formCoins.get.toLowerCase() === 'wducx') {
+      dataAddress['wducx'] = dataInfo['wducx'].find(
+        i => i.network === 'Ducatusx'
+      );
+    }
+
+    // ! ATTENTION
+    // * dataAddress Must have swap_address parameter
+    // * ex: dataAddress['YOUR_COIN'].swap_address
+
+    console.log('dataInfo:', dataInfo, dataAddress);
+
+    // const address = dataAddress[this.formCoins.get.toLowerCase()].swap_address;
+    this.formCoins.get.toLowerCase() === 'wdux'
+      ? dataInfo['wdux'].find(i => i.network === 'DucatusX').swap_address
+      : this.addresses[this.formCoins.send.toLowerCase() + '_address'] ||
+        getAddress;
+
     const addressView = this.walletProvider.getAddressView(
       this.wallet.coin,
       this.wallet.network,
-      this.formCoins.get === 'WDUCX'
-        ? this.apiProvider.getAddresses().swap.address
-        : this.addresses[this.formCoins.send.toLowerCase() + '_address'] ||
-            getAddress,
+      dataAddress[this.formCoins.get.toLowerCase()].swap_address,
       true
     );
 
@@ -237,7 +268,8 @@ export class CalculatorConvertPage {
     };
 
     if (this.formCoins.get === 'WDUCX') {
-      redirParms.tokenAddress = this.apiProvider.getAddresses().swap.address;
+      // redirParms.tokenAddress = this.apiProvider.getAddresses().swap.address;
+      redirParms.tokenAddress = dataAddress['wducx'].swap_address;
     }
 
     if (
@@ -262,7 +294,10 @@ export class CalculatorConvertPage {
     ) {
       Promise.all([
         this.checkTransitionLimitDucxToWDucx(parseInt(parsedAmount.amount, 10)),
-        this.checkMinimalSwapDucxToWducx(parseInt(parsedAmount.amount, 10))
+        this.checkMinimalSwapDucxToWducx(
+          parseInt(parsedAmount.amount, 10),
+          dataInfo['wducx'].min_amount
+        )
       ])
         .then(() => {
           this.incomingDataProvider.redir(addressView, redirParms);
@@ -276,20 +311,36 @@ export class CalculatorConvertPage {
       this.incomingDataProvider.redir(addressView, redirParms);
     }
   }
-  private checkMinimalSwapDucxToWducx(amountSend) {
+
+  private async getDucxWduxSwapInfo(): Promise<any> {
     return this.httpClient
       .get(this.apiProvider.getAddresses().swap.network)
-      .toPromise()
-      .then(res => {
-        if (res[0].min_amount > amountSend) {
-          throw new Error('Minimal swap limit is 100 DUCX');
-        } else {
-          return;
-        }
-      })
-      .catch(() => {
+      .toPromise();
+  }
+
+  private checkMinimalSwapDucxToWducx(amountSend, minimalAmount): Promise<any> {
+    return new Promise<void>((resolve, reject) => {
+      if (+minimalAmount > +amountSend) {
         throw new Error('Minimal swap limit is 100 DUCX');
-      });
+        // reject('Minimal swap limit is 100 DUCX');
+      } else {
+        resolve();
+      }
+    });
+
+    // return this.httpClient
+    //   .get(this.apiProvider.getAddresses().swap.network)
+    //   .toPromise()
+    //   .then(res => {
+    //     if (res[0].min_amount > amountSend) {
+    //       throw new Error('Minimal swap limit is 100 DUCX');
+    //     } else {
+    //       return;
+    //     }
+    //   })
+    //   .catch(() => {
+    //     throw new Error('Minimal swap limit is 100 DUCX');
+    //   });
   }
 
   private checkTransitionLimitDucxToWDucx(amountSend) {
