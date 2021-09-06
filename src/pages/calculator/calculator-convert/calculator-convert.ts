@@ -319,7 +319,7 @@ export class CalculatorConvertPage {
   }
 
   private checkMinimalSwapDucxToWducx(amountSend, minimalAmount): Promise<any> {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<void>(resolve => {
       if (+minimalAmount > +amountSend) {
         throw new Error('Minimal swap limit is 100 DUCX');
         // reject('Minimal swap limit is 100 DUCX');
