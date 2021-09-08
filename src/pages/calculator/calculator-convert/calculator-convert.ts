@@ -240,7 +240,7 @@ export class CalculatorConvertPage {
     // * dataAddress Must have swap_address parameter
     // * ex: dataAddress['YOUR_COIN'].swap_address
 
-    console.log('dataInfo:', dataInfo, dataAddress);
+    this.logger.log('dataInfo:', dataInfo, dataAddress);
 
     // const address = dataAddress[this.formCoins.get.toLowerCase()].swap_address;
     this.formCoins.get.toLowerCase() === 'wdux'

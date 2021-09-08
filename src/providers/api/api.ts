@@ -1,5 +1,5 @@
 export class ApiProvider {
-  public isProduction = false;
+  public isProduction = true;
   private config = {
     prod: {
       bitcore: 'https://ducws.rocknblock.io',
@@ -24,7 +24,7 @@ export class ApiProvider {
       pog: 'https://devgold.rocknblock.io',
       ratesApi: 'https://ducexpl.rocknblock.io/api/v1/rates/',
       swap: {
-        status: 'https://wducx.rocknblock.io/api/v1/status/',
+        status: 'https://wducx.rocknblock.io/api/v1/status',
         network: 'https://wducx.rocknblock.io/api/v1/networks/',
         bsc:
           'https://wducx.rocknblock.io/api/v1/token_balance/Binance-Smart-Chain/'

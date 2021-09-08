@@ -56,7 +56,7 @@ export class CalculatorPage {
     this.convertGetCoins = convertGetCoins;
     this.appVersion = this.appProvider.info.version;
 
-    console.log('this.appVersion', this.appVersion);
+    this.logger.log('this.appVersion', this.appVersion);
 
     this.CalculatorGroupForm = this.formBuilder.group({
       CalculatorGroupGet: [
@@ -117,6 +117,11 @@ export class CalculatorPage {
 
     // WDUCX - DUXX
 
+    this.logger.log(`APP VERSION: ${this.appVersion}`);
+    this.logger.log(
+      `REQUEST URL: ${this.apiProvider.getAddresses().swap.status}`
+    );
+
     this.httpClient
       .get(this.apiProvider.getAddresses().swap.status, {
         params: {
@@ -125,7 +130,8 @@ export class CalculatorPage {
       })
       .toPromise()
       .then((res: boolean) => {
-        console.log('WDUCX - DUXX swap res', res);
+        this.logger.log('WDUCX - DUXX swap res', JSON.stringify(res));
+        this.logger.log(`WDUCX - DUXX swap res:  ${res}`);
         this.isAvailableSwapWDUCXtoDUCX = res;
 
         if (
@@ -139,7 +145,9 @@ export class CalculatorPage {
           this.isAvailableSwap = true;
         }
       })
-      .catch(() => {
+      .catch((err: any) => {
+        this.logger.log(err);
+        this.logger.log(JSON.stringify(err));
         this.isAvailableSwapWDUCXtoDUCX = false;
       });
   }
