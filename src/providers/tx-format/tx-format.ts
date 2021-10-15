@@ -177,7 +177,6 @@ export class TxFormatProvider {
     const satToUnit = 1 / unitToSatoshi;
     let amountUnitStr;
     let amountSat;
-
     // If fiat currency
     if (!Coin[currency] && currency != 'sat') {
       let formattedAmount =
@@ -195,9 +194,15 @@ export class TxFormatProvider {
       amount = (amountSat * satToUnit).toFixed(unitDecimals);
       currency = coin.toUpperCase();
     } else {
-      amountSat = parseInt((amount * unitToSatoshi).toFixed(0), 10);
+      const amountSatStr = (amount * unitToSatoshi).toFixed(0);
+      // parseInt('2e21',10) = 2
+      // parseInt('2000000000000000000000',10) = 2e+21
+      const formetAmountSatStr = Number(amountSatStr).toLocaleString('fullwide', { useGrouping: false });
+      amountSat = parseInt(formetAmountSatStr, 10);
+     
       amountUnitStr = this.formatAmountStr(coin, amountSat);
-      // convert unit to Coin
+      // WARING! inaccurate calculations.
+      // but apparently they are not important
       amount = (amountSat * satToUnit).toFixed(unitDecimals);
       currency = coin.toUpperCase();
     }
