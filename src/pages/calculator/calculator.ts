@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from 'ionic-angular';
@@ -122,17 +122,40 @@ export class CalculatorPage {
       `REQUEST URL: ${this.apiProvider.getAddresses().swap.status}`
     );
 
-    this.httpClient
-      .get(this.apiProvider.getAddresses().swap.status, {
-        params: {
-          version: this.appVersion
-        }
+    // alert(
+    //   `REQUEST URL: ${this.apiProvider.getAddresses().swap.status}?version=${
+    //     this.appVersion
+    //   }`
+    // );
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
       })
+    };
+
+    // this.httpClient.post(this.apiProvider.getAddresses().swap.status, {params: {version: this.appVersion}}, httpOptions);
+
+    this.httpClient
+      .get(
+        this.apiProvider.getAddresses().swap.status +
+          '?version=' +
+          this.appVersion,
+        httpOptions
+      )
+      // this.httpClient
+      //   .post(
+      //     this.apiProvider.getAddresses().swap.status,
+      //     { version: this.appVersion },
+      //     httpOptions
+      //   )
       .toPromise()
       .then((res: boolean) => {
         this.logger.log('WDUCX - DUXX swap res', JSON.stringify(res));
         this.logger.log(`WDUCX - DUXX swap res:  ${res}`);
         this.isAvailableSwapWDUCXtoDUCX = res;
+
+        // alert(`WDUCX - DUXX swap: ${res}, ${JSON.stringify(res)}`);
 
         if (
           this.formCoins.get.name === 'WDUCX' &&
@@ -148,6 +171,7 @@ export class CalculatorPage {
       .catch((err: any) => {
         this.logger.log(err);
         this.logger.log(JSON.stringify(err));
+        // alert(`WDUCX - DUXX swap err: ${err}, ${JSON.stringify(err)}`);
         this.isAvailableSwapWDUCXtoDUCX = false;
       });
   }

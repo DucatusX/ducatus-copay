@@ -227,6 +227,7 @@ export class CalculatorConvertPage {
               getAddress
           };
 
+    // console.log('data ADDRESS', dataInfo);
     // Getting addresses from all data
     const dataAddress = dataInfo;
 
@@ -255,11 +256,26 @@ export class CalculatorConvertPage {
       true
     );
 
+    this.logger.log('dataInfo:', dataInfo, dataAddress, addressView);
+
+    // ! ATTENTION
+    // * parsedAmount - created for only WDUCX
+    // * because if you send more than 999 DUCX
+    // * it will show 0 in send
+    // * so we need to validate send coins and pass
+    // * an real value which we recieve from previus page
+
+    // this.formCoins.get.toLowerCase() === 'wducx'
+    //   ? this.formCoins.amountSend
+    //   :
+
     const parsedAmount = this.txFormatProvider.parseAmount(
       this.wallet.coin.toLowerCase(),
       this.formCoins.amountSend,
       this.wallet.coin.toUpperCase()
     );
+
+    // console.log('parsedAmount', parsedAmount, this.formCoins.amountSend)
 
     const redirParms: any = {
       activePage: 'ScanPage',
@@ -297,6 +313,10 @@ export class CalculatorConvertPage {
         this.checkMinimalSwapDucxToWducx(
           parseInt(parsedAmount.amount, 10),
           dataInfo['wducx'].min_amount
+        ),
+        this.checkMaxSwapDucxToWducx(
+          parseInt(parsedAmount.amount, 10),
+          dataInfo['wducx'].max_amount
         )
       ])
         .then(() => {
@@ -318,6 +338,31 @@ export class CalculatorConvertPage {
       .toPromise();
   }
 
+  private checkMaxSwapDucxToWducx(amountSend, maxAmount): Promise<any> {
+    return new Promise<void>(resolve => {
+      // console.log('MAX', maxAmount, amountSend);
+      if (+maxAmount < +amountSend) {
+        throw new Error(`Maximun swap limit is ${+maxAmount || 5000} DUCX`);
+        // reject('Minimal swap limit is 100 DUCX');
+      } else {
+        resolve();
+      }
+    });
+
+    // return this.httpClient
+    //   .get(this.apiProvider.getAddresses().swap.network)
+    //   .toPromise()
+    //   .then(res => {
+    //     if (res[0].min_amount > amountSend) {
+    //       throw new Error('Minimal swap limit is 100 DUCX');
+    //     } else {
+    //       return;
+    //     }
+    //   })
+    //   .catch(() => {
+    //     throw new Error('Minimal swap limit is 100 DUCX');
+    //   });
+  }
   private checkMinimalSwapDucxToWducx(amountSend, minimalAmount): Promise<any> {
     return new Promise<void>(resolve => {
       if (+minimalAmount > +amountSend) {
