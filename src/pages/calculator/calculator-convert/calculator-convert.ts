@@ -285,7 +285,8 @@ export class CalculatorConvertPage {
 
     if (this.formCoins.get === 'WDUCX') {
       // redirParms.tokenAddress = this.apiProvider.getAddresses().swap.address;
-      redirParms.tokenAddress = getAddress;
+      redirParms.tokenAddress = dataAddress['wducx'].swap_address;
+      redirParms.wDucxAddress = getAddress;
     }
 
     if (

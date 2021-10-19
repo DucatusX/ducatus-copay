@@ -20,6 +20,7 @@ export interface RedirParams {
   fromHomeCard?: boolean;
   walletId?: number;
   tokenAddress?: string;
+  wDucxAddress?: string;
 }
 
 @Injectable()
@@ -415,6 +416,7 @@ export class IncomingDataProvider {
     const message = '';
     const amount = parsedAmount || amountFromRedirParams;
     let tokenAddress = redirParams.tokenAddress;
+    const wDucxAddress = redirParams.wDucxAddress;
     if (amount) {
       this.goSend(
         address,
@@ -423,7 +425,8 @@ export class IncomingDataProvider {
         coin,
         requiredFeeParam,
         undefined,
-        tokenAddress
+        tokenAddress,
+        wDucxAddress
       );
     } else {
       this.handleDucatusXAddress(address, redirParams);
@@ -1178,7 +1181,8 @@ export class IncomingDataProvider {
     coin: Coin,
     requiredFeeRate?: string,
     destinationTag?: string,
-    tokenAddress?: string
+    tokenAddress?: string,
+    wDucxAddress?: string
   ): void {
     if (amount) {
       let stateParams: any = {
@@ -1192,6 +1196,9 @@ export class IncomingDataProvider {
       };
       if (tokenAddress) {
         stateParams.tokenAddress = tokenAddress;
+      }
+      if (wDucxAddress) {
+        stateParams.wDucxAddress = wDucxAddress;
       }
       let nextView = {
         name: 'ConfirmPage',

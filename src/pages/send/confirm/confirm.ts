@@ -236,6 +236,7 @@ export class ConfirmPage {
       coin: this.navParams.data.coin,
       txp: {},
       tokenAddress: this.navParams.data.tokenAddress,
+      wDucxAddress: this.navParams.data.wDucxAddress,
       speedUpTx: this.isSpeedUpTx,
       fromSelectInputs: this.navParams.data.fromSelectInputs ? true : false,
       inputs: this.navParams.data.inputs
@@ -944,6 +945,7 @@ export class ConfirmPage {
 
       if (tx.tokenAddress) {
         txp.tokenAddress = tx.tokenAddress;
+
         const originalChain = this.bwcProvider.getUtils().getChain(tx.coin);
         let chain;
         switch (originalChain) {
@@ -953,9 +955,10 @@ export class ConfirmPage {
           default:
             chain = 'ERC20';
         }
-        if (tx.toAddress === '0xd62680378AdeD4277f74ac69fd1A4518586bDd08') {
+        if (tx.wDucxAddress) {
           chain = 'TOB';
         }
+        
         for (const output of txp.outputs) {
           if (!output.data) {
             output.data = this.bwcProvider
@@ -963,7 +966,7 @@ export class ConfirmPage {
               .Transactions.get({ chain })
               .encodeData({
                 recipients: [
-                  { address: output.toAddress, amount: output.amount }
+                  { address: tx.wDucxAddress, amount: output.amount }
                 ],
                 tokenAddress: tx.tokenAddress
               });
@@ -1004,7 +1007,7 @@ export class ConfirmPage {
               }
             }
           }
-
+          
           this.walletProvider
             .createTx(wallet, txp)
             .then(ctxp => {
@@ -1122,7 +1125,7 @@ export class ConfirmPage {
 
   public approve(tx, wallet): Promise<void> {
     if (!tx || !wallet) return undefined;
-
+    
     if (this.paymentExpired) {
       this.showErrorInfoSheet(
         this.translate.instant('This bitcoin payment request has expired.')
