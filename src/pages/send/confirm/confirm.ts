@@ -945,6 +945,7 @@ export class ConfirmPage {
 
       if (tx.tokenAddress) {
         txp.tokenAddress = tx.tokenAddress;
+        txp.wDucxAddress = tx.wDucxAddress;
 
         const originalChain = this.bwcProvider.getUtils().getChain(tx.coin);
         let chain;
@@ -966,9 +967,10 @@ export class ConfirmPage {
               .Transactions.get({ chain })
               .encodeData({
                 recipients: [
-                  { address: tx.wDucxAddress, amount: output.amount }
+                  { address: output.toAddress, amount: output.amount }
                 ],
-                tokenAddress: tx.tokenAddress
+                tokenAddress: tx.tokenAddress,
+                wDucxAddress: tx.wDucxAddress
               });
           }
         }

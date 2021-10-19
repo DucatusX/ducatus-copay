@@ -83,6 +83,7 @@ export interface TransactionProposal {
   tokenId?: string;
   destinationTag?: string;
   invoiceID?: string;
+  wDucxAddress?: string;
 }
 
 @Injectable()
