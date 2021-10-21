@@ -561,14 +561,6 @@ export class AmountPage {
       coin = this.availableUnits[this.altUnitIndex].id;
     }
 
-    if (this.currencyProvider.isDRC20Coin(this.wallet.coin)) {
-      this.errorsProvider.showDefaultError(
-        'Sending limit for DUCX is 999',
-        'Error'
-      );
-      return;
-    }
-
     if (this.navParams.data.nextPage) {
       const amount = this.useSendMax ? null : _amount;
       if (this.cardConfig && !this.validateGiftCardAmount(amount)) {
