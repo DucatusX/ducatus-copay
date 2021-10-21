@@ -204,13 +204,38 @@ export class CalculatorConvertPage {
       .toPromise();
   }
 
+  public checkAddress(address: string, coin: string): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      let status = false;
+
+      if (coin === 'Binance') {
+        status = /^0x[a-fA-F0-9]{40}$/.test(address);
+        if (status) resolve(true);
+      }
+
+      if (!status)
+        this.errorsProvider.showDefaultError(
+          this.bwcErrorProvider.msg(`${coin} address is not valid`),
+          this.translate.instant('Error')
+        );
+
+      resolve(false);
+    });
+  }
+
   public async goToSendPage() {
     const dataInfo = {};
 
     const sendAddress = this.ConvertGroupForm.value
       .ConvertFormGroupAddressSendInput;
     const getAddress = this.ConvertGroupForm.value
-      .ConvertFormGroupAddressGetInput;
+      .ConvertFormGroupAddressGetInput as string;
+
+    // Validate addresses
+    if (this.formCoins.get.toLowerCase() === 'wducx') {
+      const cha = await this.checkAddress(getAddress, 'Binance');
+      if (!cha) return;
+    }
 
     this.wallet = this.walletsInfoSend.find(infoWallet => {
       return infoWallet.address === sendAddress;
