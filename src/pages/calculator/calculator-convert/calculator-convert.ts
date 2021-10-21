@@ -275,12 +275,10 @@ export class CalculatorConvertPage {
       this.wallet.coin.toUpperCase()
     );
 
-    // console.log('parsedAmount', parsedAmount, this.formCoins.amountSend)
-
     const redirParms: any = {
       activePage: 'ScanPage',
-      walletId: this.wallet.id,
-      amount: parsedAmount.amountSat
+      walletId: this.wallet.id, 
+      amount: Number(parsedAmount.amountSat).toLocaleString('fullwide', { useGrouping: false })
     };
 
     if (this.formCoins.get === 'WDUCX') {
@@ -295,7 +293,7 @@ export class CalculatorConvertPage {
     ) {
       this.checkTransitionLimitDucToDucx(
         getAddress,
-        parseInt(parsedAmount.amount, 10)
+        parseInt(Number(parsedAmount.amount).toLocaleString('fullwide', { useGrouping: false }), 10)
       )
         .then(() => {
           this.incomingDataProvider.redir(addressView, redirParms);
@@ -310,13 +308,13 @@ export class CalculatorConvertPage {
       this.formCoins.get.toLowerCase() === 'wducx'
     ) {
       Promise.all([
-        this.checkTransitionLimitDucxToWDucx(parseInt(parsedAmount.amount, 10)),
+        this.checkTransitionLimitDucxToWDucx(parseInt(Number(parsedAmount.amount).toLocaleString('fullwide', { useGrouping: false }), 10)),
         this.checkMinimalSwapDucxToWducx(
-          parseInt(parsedAmount.amount, 10),
+          parseInt(Number(parsedAmount.amount).toLocaleString('fullwide', { useGrouping: false }), 10),
           dataInfo['wducx'].min_amount
         ),
         this.checkMaxSwapDucxToWducx(
-          parseInt(parsedAmount.amount, 10),
+          parseInt(Number(parsedAmount.amount).toLocaleString('fullwide', { useGrouping: false }), 10),
           dataInfo['wducx'].max_amount
         )
       ])
