@@ -561,10 +561,7 @@ export class AmountPage {
       coin = this.availableUnits[this.altUnitIndex].id;
     }
 
-    if (
-      this.currencyProvider.isDRC20Coin(this.wallet.coin) &&
-      _amount >= 1000
-    ) {
+    if (this.currencyProvider.isDRC20Coin(this.wallet.coin)) {
       this.errorsProvider.showDefaultError(
         'Sending limit for DUCX is 999',
         'Error'
