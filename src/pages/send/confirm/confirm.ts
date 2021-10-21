@@ -209,14 +209,19 @@ export class ConfirmPage {
         return;
       }
     }
-
+    
+    // parseInt('2e21',10) = 2
+    // parseInt('2000000000000000000000',10) = 2e+21
     this.tx = {
       toAddress: this.navParams.data.toAddress,
       sendMax: this.navParams.data.useSendMax ? true : false,
       amount:
         this.navParams.data.useSendMax && this.isChain()
           ? 0
-          : parseInt(amount, 10),
+          : parseInt(
+              Number(amount).toLocaleString('fullwide', { useGrouping: false }), 
+              10
+            ),
       description: this.navParams.data.description,
       destinationTag: this.navParams.data.destinationTag, // xrp
       paypro: this.navParams.data.paypro,
@@ -891,8 +896,12 @@ export class ConfirmPage {
             1,
             tx.inputs.length
           );
+          const result = (tx.feeRate / 1000).toFixed(0);
           const estimatedFee =
-            size * parseInt((tx.feeRate / 1000).toFixed(0), 10);
+            size * parseInt(
+              Number(result).toLocaleString('fullwide', { useGrouping: false }), 
+              10
+            );
           tx.fee = estimatedFee;
           tx.amount = tx.amount - estimatedFee;
         }
@@ -1347,7 +1356,10 @@ export class ConfirmPage {
     const feeOpts = this.feeProvider.getFeeOpts();
     this.tx.feeLevelName = feeOpts[this.tx.feeLevel];
     if (this.usingCustomFee)
-      this.tx.feeRate = parseInt(data.customFeePerKB, 10);
+      this.tx.feeRate = parseInt(
+        Number(data.customFeePerKB).toLocaleString('fullwide', { useGrouping: false }), 
+        10
+      );
 
     this.updateTx(this.tx, this.wallet, {
       clearCache: true,

@@ -337,8 +337,11 @@ export class IncomingDataProvider {
     const requiredFeeParam = params.get('gasPrice');
     if (amount) {
       const { unitToSatoshi } = this.currencyProvider.getPrecision(coin);
+      // parseInt('2e21',10) = 2
+      // parseInt('2000000000000000000000',10) = 2e+21
+      const result = (Number(amount) * unitToSatoshi).toFixed(0);
       amount = parseInt(
-        (Number(amount) * unitToSatoshi).toFixed(0),
+        Number(result).toLocaleString('fullwide', { useGrouping: false }),
         10
       ).toString();
       this.goSend(address, amount, message, coin, requiredFeeParam);
