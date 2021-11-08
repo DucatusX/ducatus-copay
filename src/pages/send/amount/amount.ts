@@ -372,10 +372,16 @@ export class AmountPage {
   }
 
   public pushDigit(digit: string): void {
+    // console.log('digit: ', digit);
     this.useSendMax = false;
     if (digit === 'delete') {
       return this.removeDigit();
     }
+
+    if (this.expression.length <= 0 && digit === '0') {
+      return;
+    }
+
     if (
       this.expression &&
       this.expression.length >= this.LENGTH_EXPRESSION_LIMIT
