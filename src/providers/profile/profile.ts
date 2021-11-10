@@ -86,7 +86,7 @@ export class ProfileProvider {
     }, 10000);
 
     // xpub6C8byPoebe5qhmkucDusW2TXpG8vwPYDeyCiyA9YqvcepfNEiSPbJu6sx8a9b483uhYkb9CN98XbNTT43Yctao7BM2Q85GYkSKDMLnEFUVS
-    debugger;
+    
     const address = Deriver.deriveAddress(
       'DUC',
       'mainnet',
