@@ -85,7 +85,10 @@ export class AltCurrencyPage {
       },
       {
         isoCode: 'MDXB'
-      }
+      },
+      {
+        isoCode: 'G.O.L.D.'
+      },
     ];
   }
 

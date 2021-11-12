@@ -71,7 +71,8 @@ export class VoucherAddPage {
       'dscmed',
       'pog1',
       'wde',
-      'mdxb'
+      'mdxb',
+      'g.o.l.d.'
     ];
     const wallets = this.profileProvider.getWallets({ showHidden: true });
     let promises = [];

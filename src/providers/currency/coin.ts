@@ -44,7 +44,7 @@ export interface CoinOpts {
 
 const apiProvider: ApiProvider = new ApiProvider();
 export const availableCoins: CoinsMap<CoinOpts> = {
-  duc: {
+  'duc': {
     name: 'Ducatus',
     chain: 'DUC',
     coin: 'duc',
@@ -79,7 +79,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       gradientBackgroundColor: 'rgba(247,146,26, 0.2)'
     }
   },
-  ducx: {
+  'ducx': {
     name: 'DucatusX',
     chain: 'DUCX',
     coin: 'ducx',
@@ -114,7 +114,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       gradientBackgroundColor: 'rgba(30,144,255, 0.2)'
     }
   },
-  btc: {
+  'btc': {
     name: 'Bitcoin',
     chain: 'BTC',
     coin: 'btc',
@@ -149,7 +149,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       gradientBackgroundColor: 'rgba(247,146,26, 0.2)'
     }
   },
-  bch: {
+  'bch': {
     name: 'Bitcoin Cash',
     chain: 'BCH',
     coin: 'bch',
@@ -184,7 +184,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       gradientBackgroundColor: 'rgba(47,207,110, 0.2)'
     }
   },
-  eth: {
+  'eth': {
     name: 'Ethereum',
     chain: 'ETH',
     coin: 'eth',
@@ -219,7 +219,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       gradientBackgroundColor: 'rgba(30,144,255, 0.2)'
     }
   },
-  xrp: {
+  'xrp': {
     name: 'XRP',
     chain: 'XRP',
     coin: 'xrp',
@@ -254,7 +254,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       gradientBackgroundColor: 'rgba(68,79,91, 0.2)'
     }
   },
-  pax: {
+  'pax': {
     name: 'Paxos Standard',
     chain: 'ETH',
     coin: 'pax',
@@ -289,7 +289,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       gradientBackgroundColor: 'rgba(0,209,147, 0.2)'
     }
   },
-  usdc: {
+  'usdc': {
     name: 'USD Coin',
     chain: 'ETH',
     coin: 'usdc',
@@ -324,7 +324,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       gradientBackgroundColor: 'rgba(93,156,224, 0.2)'
     }
   },
-  gusd: {
+  'gusd': {
     name: 'Gemini Dollar',
     chain: 'ETH',
     coin: 'gusd',
@@ -359,7 +359,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
     }
   },
-  jamasy: {
+  'jamasy': {
     name: 'JAMASY',
     chain: 'DUCX',
     coin: 'jamasy',
@@ -394,7 +394,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
     }
   },
-  nuyasa: {
+  'nuyasa': {
     name: 'NUYASA',
     chain: 'DUCX',
     coin: 'nuyasa',
@@ -429,7 +429,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
     }
   },
-  sunoba: {
+  'sunoba': {
     name: 'SUNOBA',
     chain: 'DUCX',
     coin: 'sunoba',
@@ -464,7 +464,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
     }
   },
-  dscmed: {
+  'dscmed': {
     name: 'DSCMED',
     chain: 'DUCX',
     coin: 'dscmed',
@@ -499,7 +499,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
     }
   },
-  pog1: {
+  'pog1': {
     name: 'POG1',
     chain: 'DUCX',
     coin: 'pog1',
@@ -534,7 +534,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
     }
   },
-  wde: {
+  'wde': {
     name: 'WupDE',
     chain: 'DUCX',
     coin: 'wde',
@@ -569,7 +569,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
     }
   },
-  mdxb: {
+  'mdxb': {
     name: 'MarsaDXB',
     chain: 'DUCX',
     coin: 'mdxb',
@@ -578,6 +578,41 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       unitToSatoshi: 1e8,
       unitDecimals: 8,
       unitCode: 'mdxb'
+    },
+    properties: {
+      hasMultiSig: false,
+      hasMultiSend: false,
+      isUtxo: false,
+      isERCToken: true,
+      isStableCoin: true,
+      singleAddress: true
+    },
+    paymentInfo: {
+      paymentCode: 'EIP681b',
+      protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
+      ratesApi: 'https://bitpay.com/api/rates/',
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+    },
+    feeInfo: {
+      feeUnit: 'Gwei',
+      feeUnitAmount: 1e9,
+      blockTime: 0.2,
+      maxMerchantFee: 'urgent'
+    },
+    theme: {
+      backgroundColor: 'rgba(0,220,250,1)',
+      gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
+    }
+  },
+  'g.o.l.d.': {
+    name: 'G.O.L.D.',
+    chain: 'DUCX',
+    coin: 'g.o.l.d.',
+    unitInfo: {
+      unitName: 'G.O.L.D.',
+      unitToSatoshi: 1e18,
+      unitDecimals: 18,
+      unitCode: 'g.o.l.d.'
     },
     properties: {
       hasMultiSig: false,

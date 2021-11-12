@@ -39,7 +39,8 @@ export class RateProvider {
                 'dscmed',
                 'pog1',
                 'wde',
-                'mdxb'
+                'mdxb',
+                'g.o.l.d.'
               ].includes(coin)
             ? 1
             : this.rates[coin],
@@ -55,7 +56,8 @@ export class RateProvider {
                 'dscmed',
                 'pog1',
                 'wde',
-                'mdxb'
+                'mdxb',
+                'g.o.l.d.'
               ].includes(coin)
             ? 1
             : this.rates[coin] // test
@@ -102,7 +104,8 @@ export class RateProvider {
           'dscmed',
           'pog1',
           'wde',
-          'mdxb'
+          'mdxb',
+          'g.o.l.d.'
         ].includes(chain)
       ) {
         resolve([]);

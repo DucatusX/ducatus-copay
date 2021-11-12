@@ -4,22 +4,23 @@ import { availableCoins, CoinOpts } from './coin';
 import { DRCTokenOpts, Token, TokenOpts } from './token';
 
 export enum Coin {
-  BTC = 'btc',
-  BCH = 'bch',
-  ETH = 'eth',
-  XRP = 'xrp',
-  USDC = 'usdc',
-  GUSD = 'gusd',
-  PAX = 'pax',
-  DUC = 'duc',
-  DUCX = 'ducx',
-  JAMASY = 'jamasy',
-  NUYASA = 'nuyasa',
-  SUNOBA = 'sunoba',
-  DSCMED = 'dscmed',
-  POG1 = 'pog1',
-  WDE = 'wde',
-  MDXB = 'mdxb'
+  'BTC' = 'btc',
+  'BCH' = 'bch',
+  'ETH' = 'eth',
+  'XRP' = 'xrp',
+  'USDC' = 'usdc',
+  'GUSD' = 'gusd',
+  'PAX' = 'pax',
+  'DUC' = 'duc',
+  'DUCX' = 'ducx',
+  'JAMASY' = 'jamasy',
+  'NUYASA' = 'nuyasa',
+  'SUNOBA' = 'sunoba',
+  'DSCMED' = 'dscmed',
+  'POG1' = 'pog1',
+  'WDE' = 'wde',
+  'MDXB' = 'mdxb',
+  'G.O.L.D.' = 'g.o.l.d.'
 }
 
 export type CoinsMap<T> = { [key in Coin]: T };
