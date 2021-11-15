@@ -28,7 +28,7 @@ import { WalletOptions, WalletProvider } from '../wallet/wallet';
 // models
 import { Profile } from '../../models/profile/profile.model';
 
-import { Deriver } from 'crypto-ducatus-wallet-core';
+import { Deriver } from '@ducatus/ducatus-crypto-wallet-core-rev';
 
 interface WalletGroups {
   [keyId: string]: {
