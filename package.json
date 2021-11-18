@@ -186,7 +186,7 @@
     "zone.js": "0.8.26",
     "@ducatus/ducatus-core-lib-rev": "8.16.7",
     "@ducatus/ducatus-crypto-wallet-core-rev": "8.16.33",
-    "@ducatus/ducatus-wallet-client-rev": "8.17.17"
+    "@ducatus/ducatus-wallet-client-rev": "8.17.18"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.1000.4",
