@@ -70,6 +70,32 @@ export class CalculatorConvertPage {
     });
   }
 
+  getLastKnownBalance(wallet, currency) {
+    return (
+      wallet.lastKnownBalance &&
+      wallet.lastKnownBalance.replace(` ${currency}`, '')
+    );
+  }
+
+
+  getBalance(wallet, currency) {
+    const lastKnownBalance = this.getLastKnownBalance(wallet, currency);
+    if (currency === 'XRP') {
+      const availableBalanceStr =
+        wallet.cachedStatus &&
+        wallet.cachedStatus.availableBalanceStr &&
+        wallet.cachedStatus.availableBalanceStr.replace(` ${currency}`, '');
+      return availableBalanceStr || lastKnownBalance;
+    } else {
+      const totalBalanceStr =
+        wallet.cachedStatus &&
+        wallet.cachedStatus.totalBalanceStr &&
+        wallet.cachedStatus.totalBalanceStr.replace(` ${currency}`, '');
+      return totalBalanceStr || lastKnownBalance;
+    }
+  }
+
+
   ionViewWillEnter() {
     const wallets = this.profileProvider.getWallets({ showHidden: true });
 
@@ -141,7 +167,14 @@ export class CalculatorConvertPage {
 
   public openAddressList(wallets, type?) {
     this.typeOpenAddressList = type;
-
+  
+    if(type==='Send'){
+         wallets = wallets.filter(elemWallets=>{
+           let currency = elemWallets && elemWallets.wallet && elemWallets.wallet.coin.toUpperCase();
+           return parseFloat(this.getBalance(elemWallets.wallet,currency)) < parseFloat(this.formCoins.amountSend) ? false : true
+         })
+       }
+    
     const infoSheet = this.actionSheetProvider.createInfoSheet(
       'convertor-address',
       { wallet: wallets }
