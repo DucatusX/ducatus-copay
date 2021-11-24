@@ -191,7 +191,7 @@
         *ngIf="params.wallets && params.wallets.length > 0"
         sheet-title-text
         translate
-        >Select an Ethereum Wallet</span
+        >Select an {{params.blockchainName}} Wallet</span
       >
       <span *ngIf="!params.wallets[0]" sheet-title-text translate
         >Ethereum wallet required</span
@@ -200,7 +200,7 @@
         *ngIf="params.wallets && params.wallets.length > 0"
         sheet-text
         translate
-        >Which Ethereum wallet would you like this token to use for transaction
+        >Which {{params.blockchainName}} wallet would you like this token to use for transaction
         costs?</span
       >
 
