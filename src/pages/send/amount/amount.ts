@@ -18,7 +18,6 @@ import * as _ from 'lodash';
 import { Config, ConfigProvider } from '../../../providers/config/config';
 import { Coin, CurrencyProvider } from '../../../providers/currency/currency';
 import { ElectronProvider } from '../../../providers/electron/electron';
-import { ErrorsProvider } from '../../../providers/errors/errors';
 import { FilterProvider } from '../../../providers/filter/filter';
 import { Logger } from '../../../providers/logger/logger';
 import { PlatformProvider } from '../../../providers/platform/platform';
@@ -115,8 +114,7 @@ export class AmountPage {
     private viewCtrl: ViewController,
     private profileProvider: ProfileProvider,
     private navCtrl: NavController,
-    private iabCardProvider: IABCardProvider,
-    private errorsProvider: ErrorsProvider
+    private iabCardProvider: IABCardProvider
   ) {
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
@@ -375,9 +373,17 @@ export class AmountPage {
 
   public pushDigit(digit: string): void {
     this.useSendMax = false;
+
     if (digit === 'delete') {
       return this.removeDigit();
     }
+  
+    const isDecimals: boolean = ( this.expression.length === 0 && digit === "." );
+
+    if( isDecimals  || this.expression === '0' ){
+      this.expression = '0.'
+    }
+
     if (
       this.expression &&
       this.expression.length >= this.LENGTH_EXPRESSION_LIMIT
@@ -559,17 +565,6 @@ export class AmountPage {
 
     if (unit.isFiat) {
       coin = this.availableUnits[this.altUnitIndex].id;
-    }
-
-    if (
-      this.currencyProvider.isDRC20Coin(this.wallet.coin) &&
-      _amount >= 1000
-    ) {
-      this.errorsProvider.showDefaultError(
-        'Sending limit for DUCX is 999',
-        'Error'
-      );
-      return;
     }
 
     if (this.navParams.data.nextPage) {

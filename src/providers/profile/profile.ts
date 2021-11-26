@@ -28,7 +28,7 @@ import { WalletOptions, WalletProvider } from '../wallet/wallet';
 // models
 import { Profile } from '../../models/profile/profile.model';
 
-import { Deriver } from 'crypto-ducatus-wallet-core';
+import { Deriver } from '@ducatus/ducatus-crypto-wallet-core-rev';
 
 interface WalletGroups {
   [keyId: string]: {
@@ -86,7 +86,7 @@ export class ProfileProvider {
     }, 10000);
 
     // xpub6C8byPoebe5qhmkucDusW2TXpG8vwPYDeyCiyA9YqvcepfNEiSPbJu6sx8a9b483uhYkb9CN98XbNTT43Yctao7BM2Q85GYkSKDMLnEFUVS
-
+    
     const address = Deriver.deriveAddress(
       'DUC',
       'mainnet',

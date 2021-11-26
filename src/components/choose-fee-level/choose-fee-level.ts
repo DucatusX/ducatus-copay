@@ -182,16 +182,27 @@ export class ChooseFeeLevelComponent extends ActionSheetParent {
     let value = _.find(this.feeLevels.levels[this.network], feeLevel => {
       return feeLevel.level == 'superEconomy';
     });
-
-    return parseInt((value.feePerKb / this.feeUnitAmount).toFixed(), 10);
+    // parseInt('2e21',10) = 2
+    // parseInt('2000000000000000000000',10) = 2e+21
+    const result = (value.feePerKb / this.feeUnitAmount).toFixed();
+    return parseInt(
+      Number(result).toLocaleString('fullwide', { useGrouping: false }), 
+      10
+    );
   }
 
   private getMaxRecommended(): number {
     let value = _.find(this.feeLevels.levels[this.network], feeLevel => {
       return feeLevel.level == 'urgent';
     });
+    // parseInt('2e21',10) = 2
+    // parseInt('2000000000000000000000',10) = 2e+21
+    const result = (value.feePerKb / this.feeUnitAmount).toFixed();
 
-    return parseInt((value.feePerKb / this.feeUnitAmount).toFixed(), 10);
+    return parseInt(
+      Number(result).toLocaleString('fullwide', { useGrouping: false }), 
+      10
+    );
   }
 
   public checkFees(feePerSatByte: string): void {

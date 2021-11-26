@@ -204,25 +204,95 @@ export class CalculatorConvertPage {
       .toPromise();
   }
 
-  public goToSendPage() {
+  public checkAddress(address: string, coin: string): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      let status = false;
+
+      if (coin === 'Binance') {
+        status = /^0x[a-fA-F0-9]{40}$/.test(address);
+        if (status) resolve(true);
+      }
+
+      if (!status)
+        this.errorsProvider.showDefaultError(
+          this.bwcErrorProvider.msg(`${coin} address is not valid`),
+          this.translate.instant('Error')
+        );
+
+      resolve(false);
+    });
+  }
+
+  public async goToSendPage() {
+    const dataInfo = {};
+
     const sendAddress = this.ConvertGroupForm.value
       .ConvertFormGroupAddressSendInput;
     const getAddress = this.ConvertGroupForm.value
-      .ConvertFormGroupAddressGetInput;
+      .ConvertFormGroupAddressGetInput as string;
+
+    // Validate addresses
+    if (this.formCoins.get.toLowerCase() === 'wducx') {
+      const cha = await this.checkAddress(getAddress, 'Binance');
+      if (!cha) return;
+    }
 
     this.wallet = this.walletsInfoSend.find(infoWallet => {
       return infoWallet.address === sendAddress;
     }).wallet;
 
+    // Getting all data
+
+    dataInfo[this.formCoins.get.toLowerCase()] =
+      this.formCoins.get.toLowerCase() === 'wducx'
+        ? await this.getDucxWduxSwapInfo()
+        : {
+            swap_address:
+              this.addresses[this.formCoins.send.toLowerCase() + '_address'] ||
+              getAddress
+          };
+
+    // console.log('data ADDRESS', dataInfo);
+    // Getting addresses from all data
+    const dataAddress = dataInfo;
+
+    if (this.formCoins.get.toLowerCase() === 'wducx') {
+      dataAddress['wducx'] = dataInfo['wducx'].find(
+        i => i.network === 'Ducatusx'
+      );
+    }
+
+    // ! ATTENTION
+    // * dataAddress Must have swap_address parameter
+    // * ex: dataAddress['YOUR_COIN'].swap_address
+
+    this.logger.log('dataInfo:', dataInfo, dataAddress);
+
+    // const address = dataAddress[this.formCoins.get.toLowerCase()].swap_address;
+    this.formCoins.get.toLowerCase() === 'wdux'
+      ? dataInfo['wdux'].find(i => i.network === 'DucatusX').swap_address
+      : this.addresses[this.formCoins.send.toLowerCase() + '_address'] ||
+        getAddress;
+
     const addressView = this.walletProvider.getAddressView(
       this.wallet.coin,
       this.wallet.network,
-      this.formCoins.get === 'WDUCX'
-        ? this.apiProvider.getAddresses().swap.address
-        : this.addresses[this.formCoins.send.toLowerCase() + '_address'] ||
-            getAddress,
+      dataAddress[this.formCoins.get.toLowerCase()].swap_address,
       true
     );
+
+    this.logger.log('dataInfo:', dataInfo, dataAddress, addressView);
+
+    // ! ATTENTION
+    // * parsedAmount - created for only WDUCX
+    // * because if you send more than 999 DUCX
+    // * it will show 0 in send
+    // * so we need to validate send coins and pass
+    // * an real value which we recieve from previus page
+
+    // this.formCoins.get.toLowerCase() === 'wducx'
+    //   ? this.formCoins.amountSend
+    //   :
 
     const parsedAmount = this.txFormatProvider.parseAmount(
       this.wallet.coin.toLowerCase(),
@@ -232,12 +302,14 @@ export class CalculatorConvertPage {
 
     const redirParms: any = {
       activePage: 'ScanPage',
-      walletId: this.wallet.id,
-      amount: parsedAmount.amountSat
+      walletId: this.wallet.id, 
+      amount: Number(parsedAmount.amountSat).toLocaleString('fullwide', { useGrouping: false })
     };
 
     if (this.formCoins.get === 'WDUCX') {
-      redirParms.tokenAddress = this.apiProvider.getAddresses().swap.address;
+      // redirParms.tokenAddress = this.apiProvider.getAddresses().swap.address;
+      redirParms.tokenAddress = dataAddress['wducx'].swap_address;
+      redirParms.wDucxAddress = getAddress;
     }
 
     if (
@@ -246,7 +318,7 @@ export class CalculatorConvertPage {
     ) {
       this.checkTransitionLimitDucToDucx(
         getAddress,
-        parseInt(parsedAmount.amount, 10)
+        parseInt(Number(parsedAmount.amount).toLocaleString('fullwide', { useGrouping: false }), 10)
       )
         .then(() => {
           this.incomingDataProvider.redir(addressView, redirParms);
@@ -261,8 +333,15 @@ export class CalculatorConvertPage {
       this.formCoins.get.toLowerCase() === 'wducx'
     ) {
       Promise.all([
-        this.checkTransitionLimitDucxToWDucx(parseInt(parsedAmount.amount, 10)),
-        this.checkMinimalSwapDucxToWducx(parseInt(parsedAmount.amount, 10))
+        this.checkTransitionLimitDucxToWDucx(parseInt(Number(parsedAmount.amount).toLocaleString('fullwide', { useGrouping: false }), 10)),
+        this.checkMinimalSwapDucxToWducx(
+          parseInt(Number(parsedAmount.amount).toLocaleString('fullwide', { useGrouping: false }), 10),
+          dataInfo['wducx'].min_amount
+        ),
+        this.checkMaxSwapDucxToWducx(
+          parseInt(Number(parsedAmount.amount).toLocaleString('fullwide', { useGrouping: false }), 10),
+          dataInfo['wducx'].max_amount
+        )
       ])
         .then(() => {
           this.incomingDataProvider.redir(addressView, redirParms);
@@ -276,20 +355,61 @@ export class CalculatorConvertPage {
       this.incomingDataProvider.redir(addressView, redirParms);
     }
   }
-  private checkMinimalSwapDucxToWducx(amountSend) {
+
+  private async getDucxWduxSwapInfo(): Promise<any> {
     return this.httpClient
       .get(this.apiProvider.getAddresses().swap.network)
-      .toPromise()
-      .then(res => {
-        if (res[0].min_amount > amountSend) {
-          throw new Error('Minimal swap limit is 100 DUCX');
-        } else {
-          return;
-        }
-      })
-      .catch(() => {
+      .toPromise();
+  }
+
+  private checkMaxSwapDucxToWducx(amountSend, maxAmount): Promise<any> {
+    return new Promise<void>(resolve => {
+      // console.log('MAX', maxAmount, amountSend);
+      if (+maxAmount < +amountSend) {
+        throw new Error(`Maximun swap limit is ${+maxAmount || 5000} DUCX`);
+        // reject('Minimal swap limit is 100 DUCX');
+      } else {
+        resolve();
+      }
+    });
+
+    // return this.httpClient
+    //   .get(this.apiProvider.getAddresses().swap.network)
+    //   .toPromise()
+    //   .then(res => {
+    //     if (res[0].min_amount > amountSend) {
+    //       throw new Error('Minimal swap limit is 100 DUCX');
+    //     } else {
+    //       return;
+    //     }
+    //   })
+    //   .catch(() => {
+    //     throw new Error('Minimal swap limit is 100 DUCX');
+    //   });
+  }
+  private checkMinimalSwapDucxToWducx(amountSend, minimalAmount): Promise<any> {
+    return new Promise<void>(resolve => {
+      if (+minimalAmount > +amountSend) {
         throw new Error('Minimal swap limit is 100 DUCX');
-      });
+        // reject('Minimal swap limit is 100 DUCX');
+      } else {
+        resolve();
+      }
+    });
+
+    // return this.httpClient
+    //   .get(this.apiProvider.getAddresses().swap.network)
+    //   .toPromise()
+    //   .then(res => {
+    //     if (res[0].min_amount > amountSend) {
+    //       throw new Error('Minimal swap limit is 100 DUCX');
+    //     } else {
+    //       return;
+    //     }
+    //   })
+    //   .catch(() => {
+    //     throw new Error('Minimal swap limit is 100 DUCX');
+    //   });
   }
 
   private checkTransitionLimitDucxToWDucx(amountSend) {

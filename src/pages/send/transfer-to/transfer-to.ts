@@ -293,11 +293,16 @@ export class TransferToPage {
           this.events.publish('addRecipient', recipient);
           this.viewCtrl.dismiss();
         } else {
+          // parseInt('2e21',10) = 2
+          // parseInt('2000000000000000000000',10) = 2e+21
           this.navCtrl.push(AmountPage, {
             token,
             walletId: this.navParams.data.wallet.id,
             recipientType: item.recipientType,
-            amount: parseInt(this.navParams.data.amount, 10),
+            amount: parseInt(
+              Number(this.navParams.data.amount).toLocaleString('fullwide', { useGrouping: false }), 
+              10
+            ),
             toAddress: addr,
             name: item.name,
             email: item.email,

@@ -83,6 +83,7 @@ export interface TransactionProposal {
   tokenId?: string;
   destinationTag?: string;
   invoiceID?: string;
+  wDucxAddress?: string;
 }
 
 @Injectable()
@@ -1111,7 +1112,11 @@ export class WalletProvider {
             normalLevelRate.feePerKb / 1000
           ).toFixed(0);
           const size = this.getEstimatedTxSize(wallet, nbOutputs);
-          return resolve(size * parseInt(lowLevelRate, 10));
+          // parseInt('2e21',10) = 2
+          // parseInt('2000000000000000000000',10) = 2e+21
+          return resolve(
+            size * parseInt(Number(lowLevelRate).toLocaleString('fullwide', { useGrouping: false }), 10)
+          );
         })
         .catch(err => {
           return reject(err);
@@ -1145,7 +1150,9 @@ export class WalletProvider {
     nbInputs = nbInputs ? nbInputs : 1; // Assume 1 input
 
     const size = overhead + inputSize * nbInputs + outputSize * nbOutputs;
-    return parseInt((size * (1 + safetyMargin)).toFixed(0), 10);
+    const result = (size * (1 + safetyMargin)).toFixed(0);
+    
+    return parseInt(Number(result).toLocaleString('fullwide', { useGrouping: false }), 10);
   }
 
   public getTxNote(wallet, txid: string): Promise<any> {

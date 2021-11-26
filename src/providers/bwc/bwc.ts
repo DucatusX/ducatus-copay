@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import {ApiProvider} from '../../providers/api/api';
 import { Logger } from '../../providers/logger/logger';
 
-import BWC from 'ducatus-wallet-client';
+import BWC from '@ducatus/ducatus-wallet-client-rev';
 
 @Injectable()
 export class BwcProvider {

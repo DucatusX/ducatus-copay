@@ -257,7 +257,7 @@
   </div>
 
   <div class="control-container" ion-fixed>
-    <div class="scan-buttons">
+    <!-- <div class="scan-buttons">
       <button
         *ngIf="wallets && wallets[0]"
         ion-button
@@ -268,7 +268,7 @@
         <ion-avatar item-start> <img src="assets/img/scan.svg" /> </ion-avatar>
         <div translate>Scan</div>
       </button>
-    </div>
+    </div> -->
     <div class="ducatus-scan-buttons" *ngIf="wallets && wallets[0]">
       <button class="ducatus-scan-button" (click)="openMoonPay()">
         <span class="ducatus-scan-button_icon">

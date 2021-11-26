@@ -209,14 +209,19 @@ export class ConfirmPage {
         return;
       }
     }
-
+    
+    // parseInt('2e21',10) = 2
+    // parseInt('2000000000000000000000',10) = 2e+21
     this.tx = {
       toAddress: this.navParams.data.toAddress,
       sendMax: this.navParams.data.useSendMax ? true : false,
       amount:
         this.navParams.data.useSendMax && this.isChain()
           ? 0
-          : parseInt(amount, 10),
+          : parseInt(
+              Number(amount).toLocaleString('fullwide', { useGrouping: false }), 
+              10
+            ),
       description: this.navParams.data.description,
       destinationTag: this.navParams.data.destinationTag, // xrp
       paypro: this.navParams.data.paypro,
@@ -236,6 +241,7 @@ export class ConfirmPage {
       coin: this.navParams.data.coin,
       txp: {},
       tokenAddress: this.navParams.data.tokenAddress,
+      wDucxAddress: this.navParams.data.wDucxAddress,
       speedUpTx: this.isSpeedUpTx,
       fromSelectInputs: this.navParams.data.fromSelectInputs ? true : false,
       inputs: this.navParams.data.inputs
@@ -890,8 +896,12 @@ export class ConfirmPage {
             1,
             tx.inputs.length
           );
+          const result = (tx.feeRate / 1000).toFixed(0);
           const estimatedFee =
-            size * parseInt((tx.feeRate / 1000).toFixed(0), 10);
+            size * parseInt(
+              Number(result).toLocaleString('fullwide', { useGrouping: false }), 
+              10
+            );
           tx.fee = estimatedFee;
           tx.amount = tx.amount - estimatedFee;
         }
@@ -944,6 +954,8 @@ export class ConfirmPage {
 
       if (tx.tokenAddress) {
         txp.tokenAddress = tx.tokenAddress;
+        txp.wDucxAddress = tx.wDucxAddress;
+
         const originalChain = this.bwcProvider.getUtils().getChain(tx.coin);
         let chain;
         switch (originalChain) {
@@ -953,9 +965,10 @@ export class ConfirmPage {
           default:
             chain = 'ERC20';
         }
-        if (tx.tokenAddress === '0x1D85186b5d9C12a6707D5fd3ac7133d58F437877') {
+        if (tx.wDucxAddress) {
           chain = 'TOB';
         }
+        
         for (const output of txp.outputs) {
           if (!output.data) {
             output.data = this.bwcProvider
@@ -965,7 +978,8 @@ export class ConfirmPage {
                 recipients: [
                   { address: output.toAddress, amount: output.amount }
                 ],
-                tokenAddress: tx.tokenAddress
+                tokenAddress: tx.tokenAddress,
+                wDucxAddress: tx.wDucxAddress
               });
           }
         }
@@ -1004,7 +1018,7 @@ export class ConfirmPage {
               }
             }
           }
-
+          
           this.walletProvider
             .createTx(wallet, txp)
             .then(ctxp => {
@@ -1122,7 +1136,7 @@ export class ConfirmPage {
 
   public approve(tx, wallet): Promise<void> {
     if (!tx || !wallet) return undefined;
-
+    
     if (this.paymentExpired) {
       this.showErrorInfoSheet(
         this.translate.instant('This bitcoin payment request has expired.')
@@ -1342,7 +1356,10 @@ export class ConfirmPage {
     const feeOpts = this.feeProvider.getFeeOpts();
     this.tx.feeLevelName = feeOpts[this.tx.feeLevel];
     if (this.usingCustomFee)
-      this.tx.feeRate = parseInt(data.customFeePerKB, 10);
+      this.tx.feeRate = parseInt(
+        Number(data.customFeePerKB).toLocaleString('fullwide', { useGrouping: false }), 
+        10
+      );
 
     this.updateTx(this.tx, this.wallet, {
       clearCache: true,

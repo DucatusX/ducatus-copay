@@ -26,7 +26,6 @@
     <access origin="https://d-pog.com" />
     <access origin="https://ducexpl.rocknblock.io" />
     <access origin="https://wducx.rocknblock.io/" />
-    <access origin="http://ducsite.rocknblock.io" />
     <access origin="https://ducsite.rocknblock.io" />
     <access origin="https://buy.moonpay.io" />
     <access origin="https://ducx-testnet-node1.ducatus.com" />
@@ -40,6 +39,7 @@
     <access origin="https://coinbase.com" />
     <access origin="https://www.coinbase.com" />
     <allow-navigation href="gap://ready" />
+    <allow-navigation href="*://*.rocknblock.io/*" />
     <preference name="AndroidPersistentFileLocation" value="Internal" />
     <preference name="iosPersistentFileLocation" value="Library" />
     <preference name="DisallowOverscroll" value="true"/>

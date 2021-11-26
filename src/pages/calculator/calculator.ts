@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from 'ionic-angular';
+import { AppProvider } from '../../providers';
 import { ApiProvider } from '../../providers/api/api';
 import { Logger } from '../../providers/logger/logger';
 
@@ -37,6 +38,7 @@ export class CalculatorPage {
   public isAvailableDucSwap: boolean = true;
   public isAvailableSwapWDUCXtoDUCX: boolean = true;
   public isAvailableSwap: boolean = true;
+  public appVersion: string;
 
   public rates: any;
 
@@ -45,12 +47,16 @@ export class CalculatorPage {
     private logger: Logger,
     private formBuilder: FormBuilder,
     private apiProvider: ApiProvider,
+    private appProvider: AppProvider,
     private httpClient: HttpClient // private moonPayProvider: MoonPayProvider
   ) {
     this.formCoins.get = convertCoins['DUCX']; // DUCX
     this.formCoins.send = this.formCoins.get.items[0]; // DUC
     this.coin_info = coinInfo;
     this.convertGetCoins = convertGetCoins;
+    this.appVersion = this.appProvider.info.version;
+
+    this.logger.log('this.appVersion', this.appVersion);
 
     this.CalculatorGroupForm = this.formBuilder.group({
       CalculatorGroupGet: [
@@ -111,11 +117,45 @@ export class CalculatorPage {
 
     // WDUCX - DUXX
 
+    this.logger.log(`APP VERSION: ${this.appVersion}`);
+    this.logger.log(
+      `REQUEST URL: ${this.apiProvider.getAddresses().swap.status}`
+    );
+
+    // alert(
+    //   `REQUEST URL: ${this.apiProvider.getAddresses().swap.status}?version=${
+    //     this.appVersion
+    //   }`
+    // );
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    // this.httpClient.post(this.apiProvider.getAddresses().swap.status, {params: {version: this.appVersion}}, httpOptions);
+
     this.httpClient
-      .get(this.apiProvider.getAddresses().swap.status)
+      .get(
+        this.apiProvider.getAddresses().swap.status +
+          '?version=' +
+          this.appVersion,
+        httpOptions
+      )
+      // this.httpClient
+      //   .post(
+      //     this.apiProvider.getAddresses().swap.status,
+      //     { version: this.appVersion },
+      //     httpOptions
+      //   )
       .toPromise()
       .then((res: boolean) => {
+        this.logger.log('WDUCX - DUXX swap res', JSON.stringify(res));
+        this.logger.log(`WDUCX - DUXX swap res:  ${res}`);
         this.isAvailableSwapWDUCXtoDUCX = res;
+
+        // alert(`WDUCX - DUXX swap: ${res}, ${JSON.stringify(res)}`);
 
         if (
           this.formCoins.get.name === 'WDUCX' &&
@@ -128,7 +168,10 @@ export class CalculatorPage {
           this.isAvailableSwap = true;
         }
       })
-      .catch(() => {
+      .catch((err: any) => {
+        this.logger.log(err);
+        this.logger.log(JSON.stringify(err));
+        // alert(`WDUCX - DUXX swap err: ${err}, ${JSON.stringify(err)}`);
         this.isAvailableSwapWDUCXtoDUCX = false;
       });
   }
