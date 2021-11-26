@@ -1,5 +1,7 @@
 export class ApiProvider {
+
   public isProduction = false;
+
   private config = {
     prod: {
       bitcore: 'https://ducws.rocknblock.io',
@@ -35,6 +37,7 @@ export class ApiProvider {
   };
 
   public getAddresses() {
+    
     if (this.isProduction) {
       return this.config.prod;
     } else {
