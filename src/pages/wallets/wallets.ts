@@ -21,7 +21,7 @@ import { CoinbaseAccountPage } from '../integrations/coinbase/coinbase-account/c
 import { ShapeshiftPage } from '../integrations/shapeshift/shapeshift';
 import { SimplexPage } from '../integrations/simplex/simplex';
 import { SimplexBuyPage } from '../integrations/simplex/simplex-buy/simplex-buy';
-import { ScanPage } from '../scan/scan';
+// import { ScanPage } from '../scan/scan';
 import { SettingsPage } from '../settings/settings';
 import { VoucherPage } from '../voucher/voucher';
 import { WalletDetailsPage } from '../wallet-details/wallet-details';
@@ -679,9 +679,9 @@ export class WalletsPage {
     }, 2000);
   }
 
-  public scan(): void {
-    this.navCtrl.push(ScanPage);
-  }
+  // public scan(): void {
+  //   this.navCtrl.push(ScanPage);
+  // }
 
   public settings(): void {
     this.navCtrl.push(SettingsPage);
