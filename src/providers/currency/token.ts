@@ -3,7 +3,7 @@ export interface Token {
   symbol: string;
   decimal: number;
   address: string;
-  blockchain?: string;
+  blockchain: string;
 }
 
 export const TokenOpts = {
@@ -11,19 +11,22 @@ export const TokenOpts = {
     name: 'USD Coin',
     symbol: 'USDC',
     decimal: 6,
-    address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
+    address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    blockchain: 'eth'
   },
   '0x8e870d67f660d95d5be530380d0ec0bd388289e1': {
     name: 'Paxos Standard',
     symbol: 'PAX',
     decimal: 18,
-    address: '0x8e870d67f660d95d5be530380d0ec0bd388289e1'
+    address: '0x8e870d67f660d95d5be530380d0ec0bd388289e1',
+    blockchain: 'eth'
   },
   '0x056fd409e1d7a124bd7017459dfea2f387b6d5cd': {
     name: 'Gemini Dollar',
     symbol: 'GUSD',
     decimal: 2,
-    address: '0x056fd409e1d7a124bd7017459dfea2f387b6d5cd'
+    address: '0x056fd409e1d7a124bd7017459dfea2f387b6d5cd',
+    blockchain: 'eth'
   }
 };
 export const DRCTokenOpts = {
