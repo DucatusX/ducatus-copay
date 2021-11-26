@@ -372,14 +372,16 @@ export class AmountPage {
   }
 
   public pushDigit(digit: string): void {
-    // console.log('digit: ', digit);
     this.useSendMax = false;
+
     if (digit === 'delete') {
       return this.removeDigit();
     }
+  
+    const isDecimals: boolean = ( this.expression.length === 0 && digit === "." );
 
-    if (this.expression.length <= 0 && digit === '0') {
-      return;
+    if( isDecimals  || this.expression === '0' ){
+      this.expression = '0.'
     }
 
     if (
