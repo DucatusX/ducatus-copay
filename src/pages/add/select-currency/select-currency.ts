@@ -204,7 +204,7 @@ export class SelectCurrencyPage {
     }
   }
 
-  private usdcError(message: string): void {
+  private viewWalletsError(message: string): void {
     let alert = this.alertCtrl.create({
       cssClass: 'voucher-alert',
       title:
@@ -228,37 +228,41 @@ export class SelectCurrencyPage {
         })
       : [];
 
+    let blockchainName = '';
+
     if (token.blockchain === 'ducx') {
-      eligibleWallets = eligibleWallets.filter(coin =>
-        this.currencyProvider.isDRC20Coin(coin.coin)
-      );
+      blockchainName = 'DucatusX';
+    } else {
+      blockchainName = 'Ethereum';
     }
-    if (token.symbol === 'USDC') {
-      let ethWallets = eligibleWallets.filter(wallet => wallet.coin === 'eth');
-      if (ethWallets.length === 0) {
-        this.usdcError('Ethereum wallet required');
-        return;
-      } else {
-        const usdcWallets = eligibleWallets.filter(
-          wallet => wallet.coin === 'usdc'
-        );
-        if (usdcWallets.length) {
-          usdcWallets.forEach(wallet => {
-            ethWallets = ethWallets.filter(
-              eWallet => eWallet.id !== wallet.linkedEthWallet
-            );
-          });
-          if (ethWallets.length) {
-            eligibleWallets = ethWallets;
-          } else {
-            this.usdcError(
-              'No suitable ETH wallet detected, please create a new one'
-            );
-            return;
-          }
+
+    let correctWallets = eligibleWallets.filter(
+      wallet => wallet.coin === token.blockchain
+    );
+
+    if (correctWallets.length === 0) {
+      this.viewWalletsError(`${blockchainName} Wallet required`);
+      return;
+    } else {
+      const currentWallets = eligibleWallets.filter(
+        wallet => wallet.coin === token.symbol.toLowerCase()
+      );
+      if (currentWallets.length) {
+        currentWallets.forEach(wallet => {
+          correctWallets = correctWallets.filter(
+            eWallet => eWallet.id !== wallet.linkedEthWallet
+          );
+        });
+        if (correctWallets.length) {
+          eligibleWallets = correctWallets;
         } else {
-          eligibleWallets = ethWallets;
+          this.viewWalletsError(
+            ` No suitable ${blockchainName} wallet detected, please create a new one`
+          );
+          return;
         }
+      } else {
+        eligibleWallets = correctWallets;
       }
     }
 
@@ -266,7 +270,8 @@ export class SelectCurrencyPage {
       'addTokenWallet',
       {
         wallets: eligibleWallets,
-        token
+        token,
+        blockchainName
       }
     );
     walletSelector.present();
