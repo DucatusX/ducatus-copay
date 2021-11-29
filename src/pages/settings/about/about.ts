@@ -90,8 +90,7 @@ export class AboutPage {
   }
 
   public openPrivacyPolicy() {
-    const url =
-    this.apiProvider.getAddresses().ducatuscoins + '/downloads/pdf/Wallet_Terms_Conditions.pdf';
+    const url = this.apiProvider.getAddresses().ducatuscoins + '/legal';
     const optIn = true;
     const title = null;
     const message = this.translate.instant('View Privacy Policy');
