@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavParams } from 'ionic-angular';
+import { NavParams, AlertController } from 'ionic-angular';
 import * as _ from 'lodash';
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
 import { ApiProvider } from '../../../providers/api/api';
@@ -51,7 +51,8 @@ export class CalculatorConvertPage {
     private logger: Logger,
     private actionSheetProvider: ActionSheetProvider,
     private txFormatProvider: TxFormatProvider,
-    private apiProvider: ApiProvider
+    private apiProvider: ApiProvider,
+    private alertCtrl: AlertController
   ) {
     this.formCoins.get = this.navParams.data.get;
     this.formCoins.send = this.navParams.data.send;
@@ -163,6 +164,21 @@ export class CalculatorConvertPage {
     }
   }
 
+  private viewWalletsError(message: string): void {
+    let alert = this.alertCtrl.create({
+      cssClass: 'voucher-alert',
+      title:
+        '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+      message,
+      buttons: [
+        {
+          text: 'Ok'
+        }
+      ]
+    });
+    alert.present();
+  }
+
   public openAddressList(wallets, type?) {
     this.typeOpenAddressList = type;
 
@@ -180,6 +196,12 @@ export class CalculatorConvertPage {
           return false;
         }
       });
+    }
+
+    if(wallets.length == 0)
+    {
+      this.viewWalletsError('You do not have suitable wallets');
+      return;
     }
 
     const infoSheet = this.actionSheetProvider.createInfoSheet(
