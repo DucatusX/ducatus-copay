@@ -153,14 +153,15 @@ export class CalculatorConvertPage {
       if (type == 'send') this.sendLength++;
     });
 
-    if (type == 'send' && this.sendLength === 1) {
-      wallets.map(res => {
-        res.then(result => {
-          this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput =
-            result.address;
-        });
-      });
-    }
+   //autosubstitution sendAddressInput
+    // if (type == 'send' && this.sendLength === 1) {
+    //   wallets.map(res => {
+    //     res.then(result => {
+    //       this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput =
+    //         result.address;
+    //     });
+    //   });
+    // }
 
     return walletsRes;
   }
