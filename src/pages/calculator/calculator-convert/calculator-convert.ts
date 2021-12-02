@@ -95,6 +95,20 @@ export class CalculatorConvertPage {
     }
   }
 
+  ballanceStrToNumber(balance) {
+    if(balance){
+      //ToValidStrDecimal
+      balance = balance.split('');
+      while (balance.indexOf(',') !== -1) {
+        balance.splice(balance.indexOf(','), 1);
+      }
+      //toNumber
+      balance = parseFloat(balance.join(''));
+      return balance;
+    }
+    else return
+  }
+
   ionViewWillEnter() {
     const wallets = this.profileProvider.getWallets({ showHidden: true });
 
@@ -185,10 +199,11 @@ export class CalculatorConvertPage {
     if (type === 'Send') {
       wallets = wallets.filter(elemWallets => {
         let currency = elemWallets && elemWallets.wallet && elemWallets.wallet.coin.toUpperCase();
-        let walletBalance = parseFloat(this.getBalance(elemWallets.wallet, currency));
+        let walletBalance  = this.getBalance(elemWallets.wallet, currency);
+        walletBalance = this.ballanceStrToNumber(walletBalance);
         let amountSend = parseFloat(this.formCoins.amountSend);
 
-        if (walletBalance > amountSend) {
+        if (walletBalance >= amountSend) {
           return true;
         } else if (Number.isNaN(walletBalance)) {
           return false;
