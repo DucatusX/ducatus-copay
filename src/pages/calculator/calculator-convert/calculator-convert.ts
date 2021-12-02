@@ -153,7 +153,7 @@ export class CalculatorConvertPage {
       if (type == 'send') this.sendLength++;
     });
 
-   //Автоматически подставляет адресс
+   //autosubstitution sendAddressInput
     // if (type == 'send' && this.sendLength === 1) {
     //   wallets.map(res => {
     //     res.then(result => {
