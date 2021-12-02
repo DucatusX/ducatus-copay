@@ -95,6 +95,17 @@ export class CalculatorConvertPage {
     }
   }
 
+  ballanceStrToNumber(balance:string):number {
+    if(balance){
+      //ToValidStrDecimal
+      balance.replace(/[\s.,%]/g, '')
+      //toNumber
+      let balanceNum = parseFloat(balance);
+      return balanceNum;
+    }
+    else return 0
+  }
+
   ionViewWillEnter() {
     const wallets = this.profileProvider.getWallets({ showHidden: true });
 
@@ -185,10 +196,11 @@ export class CalculatorConvertPage {
     if (type === 'Send') {
       wallets = wallets.filter(elemWallets => {
         let currency = elemWallets && elemWallets.wallet && elemWallets.wallet.coin.toUpperCase();
-        let walletBalance = parseFloat(this.getBalance(elemWallets.wallet, currency));
+        let walletBalance  = this.getBalance(elemWallets.wallet, currency);
+        walletBalance = this.ballanceStrToNumber(walletBalance);
         let amountSend = parseFloat(this.formCoins.amountSend);
 
-        if (walletBalance > amountSend) {
+        if (walletBalance >= amountSend) {
           return true;
         } else if (Number.isNaN(walletBalance)) {
           return false;
