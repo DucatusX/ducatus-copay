@@ -349,7 +349,14 @@ export class AmountPage {
     if (!this.wallet) {
       return this.finish();
     }
-    const maxAmount = parseFloat(this.wallet.cachedStatus.availableBalanceStr);
+
+    let currency = this.wallet.coin.toUpperCase()
+
+    let maxAmount = this.wallet.cachedStatus.availableBalanceStr;
+    maxAmount.replace(` ${currency}`, '')
+    maxAmount.replace(/[\s.,%]/g, '')
+    maxAmount = parseFloat(maxAmount);
+    
     this.zone.run(() => {
       this.expression = this.availableUnits[this.unitIndex].isFiat
         ? this.toFiat(maxAmount, this.wallet.coin).toFixed(2)
