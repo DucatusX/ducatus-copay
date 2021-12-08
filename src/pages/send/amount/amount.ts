@@ -353,8 +353,8 @@ export class AmountPage {
     let currency = this.wallet.coin.toUpperCase()
 
     let maxAmount = this.wallet.cachedStatus.availableBalanceStr;
-    maxAmount.replace(` ${currency}`, '')
-    maxAmount.replace(/[\s.,%]/g, '')
+    maxAmount = maxAmount.replace(` ${currency}`, '')
+    maxAmount = maxAmount.replace(/[\s,%]/g, '')
     maxAmount = parseFloat(maxAmount);
     
     this.zone.run(() => {
