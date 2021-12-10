@@ -1,6 +1,5 @@
 export class ApiProvider {
-
-  public isProduction = false;
+  public isProduction = true;
 
   private config = {
     prod: {
@@ -37,9 +36,6 @@ export class ApiProvider {
   };
 
   public getAddresses() {
-    // tslint:disable-next-line:no-console
-    console.log(`isProduction: ${this.isProduction}`);
-
     if (this.isProduction) {
       // tslint:disable-next-line:no-console
       console.log(`BWS: ${this.config.develop.bitcore}`);
