@@ -118,6 +118,14 @@
     width: 100%;
     height: 88px;
 
+    &-alternative {
+      color: #565d6d;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 25px;
+      opacity: 50%;
+    }
+
     &-inner {
       display: flex;
       justify-content: space-between;

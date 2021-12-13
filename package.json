@@ -125,6 +125,7 @@
     "@zxing/ngx-scanner": "1.2.1",
     "angular2-moment": "1.7.1",
     "base64-js": "1.3.0",
+    "big.js": "^6.1.1",
     "bip174": "^1.0.1",
     "bip65": "^1.0.3",
     "bitauth": "git+https://github.com/bitpay/bitauth.git",
