@@ -1,5 +1,6 @@
+import env from '../../environments';
+
 export class ApiProvider {
-  public isProduction = true;
 
   private config = {
     prod: {
@@ -36,7 +37,13 @@ export class ApiProvider {
   };
 
   public getAddresses() {
-    if (this.isProduction) {
+    // if you want build dev:
+    // # npm run build:desktop
+    // if you want build prod: 
+    // # npm run build:desktop-release
+    const mode: string = env && env.name;
+
+    if ( mode === "production" ) {
       // tslint:disable-next-line:no-console
       console.log(`BWS: ${this.config.develop.bitcore}`);
       return this.config.prod;
