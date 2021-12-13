@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { AlertController, NavController } from 'ionic-angular';
 import { DepositAddPage } from './deposit-add/deposit-add';
+import { Big } from 'big.js';
+import { RateProvider, FilterProvider } from '../../providers';
 
 import _ from 'lodash';
 
@@ -24,7 +26,9 @@ export class DepositPage {
     private httpClient: HttpClient,
     private profileProvider: ProfileProvider,
     private walletProvider: WalletProvider,
-    private apiProvider: ApiProvider
+    private apiProvider: ApiProvider,
+    private rateProvider: RateProvider,
+    private filter: FilterProvider
   ) {}
 
   ionViewWillEnter() {
@@ -91,6 +95,18 @@ export class DepositPage {
           this.deposits = result as any;
 
           this.deposits.map(x => {
+            //we get an alternative balance
+            if (x.duc_amount === 0) {
+              x.duc_amountAlt = 0;
+            } else {
+              let balance = new Big(x.duc_amount);
+              balance = Number(balance.times(100000000));
+              this.rateProvider.whenRatesAvailable('duc').then(() => {
+                x.duc_amountAlt = this.rateProvider.toFiat(balance, 'USD', 'duc');
+                x.duc_amountAlt = this.filter.formatFiatAmount(x.duc_amountAlt);
+              });
+            }
+            //
             if (x.depositinput_set.length != 0) {
               x.ended_at_date = new Date(x.ended_at * 1000);
               x.duc_added = (
