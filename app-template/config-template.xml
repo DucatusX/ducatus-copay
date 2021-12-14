@@ -27,6 +27,7 @@
     <access origin="https://ducexpl.rocknblock.io" />
     <access origin="https://wducx.rocknblock.io/" />
     <access origin="https://ducsite.rocknblock.io" />
+    <access origin="https://devducatus.rocknblock.io" />
     <access origin="https://buy.moonpay.io" />
     <access origin="https://ducx-testnet-node1.ducatus.com" />
     <access origin="https://ducx-node1.ducatus.com" />

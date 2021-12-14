@@ -1,5 +1,6 @@
+import env from '../../environments';
+
 export class ApiProvider {
-  public isProduction = true;
 
   private config = {
     prod: {
@@ -18,7 +19,7 @@ export class ApiProvider {
     },
     develop: {
       bitcore: 'https://duc-ws-dev.rocknblock.io',
-      ducatuscoins: 'https://ducsite.rocknblock.io',
+      ducatuscoins: 'https://devducatus.rocknblock.io',
       crowdsale: 'https://tokenization.centuriongm.com',
       // сейчас работает только прод апи
       // crowdsale: 'http://duccrowdsale.rocknblock.io',
@@ -36,7 +37,13 @@ export class ApiProvider {
   };
 
   public getAddresses() {
-    if (this.isProduction) {
+    // if you want build dev:
+    // # npm run build:desktop
+    // if you want build prod: 
+    // # npm run build:desktop-release
+    const mode: string = env && env.name;
+
+    if ( mode === 'production' ) {
       // tslint:disable-next-line:no-console
       console.log(`BWS: ${this.config.develop.bitcore}`);
       return this.config.prod;
