@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavParams, AlertController } from 'ionic-angular';
+import { AlertController, NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
+import env from '../../../environments';
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
 import { ApiProvider } from '../../../providers/api/api';
 import { ErrorsProvider } from '../../../providers/errors/errors';
@@ -38,6 +39,8 @@ export class CalculatorConvertPage {
 
   public wallet: any;
 
+  public isProduction: boolean;
+
   constructor(
     private navParams: NavParams,
     private formBuilder: FormBuilder,
@@ -69,6 +72,9 @@ export class CalculatorConvertPage {
         Validators.compose([Validators.minLength(1), Validators.required])
       ]
     });
+
+    const mode: string = env && env.name;
+    this.isProduction = ( mode === 'production' );
   }
 
   getLastKnownBalance(wallet, currency) {
@@ -97,9 +103,9 @@ export class CalculatorConvertPage {
 
   ballanceStrToNumber(balance:string):number {
     if(balance){
-      //ToValidStrDecimal
+      // ToValidStrDecimal
       balance.replace(/[\s.,%]/g, '')
-      //toNumber
+      // toNumber
       let balanceNum = parseFloat(balance);
       return balanceNum;
     }
@@ -153,7 +159,7 @@ export class CalculatorConvertPage {
       if (type == 'send') this.sendLength++;
     });
 
-   //autosubstitution sendAddressInput
+    // autosubstitution sendAddressInput
     // if (type == 'send' && this.sendLength === 1) {
     //   wallets.map(res => {
     //     res.then(result => {
@@ -237,21 +243,33 @@ export class CalculatorConvertPage {
 
   public setAddress(type) {
     const address = this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput;
-    if (type === 'DUC') {
-      if (
-        address.length === 34 &&
-        ['L', 'l', 'M', 'm'].includes(address.substring(0, 1))
-      ) {
-        this.getAddresses();
-      }
+   
+    if (
+      type === 'DUC' &&
+      this.isProduction && 
+      address.length === 34 &&
+      ['L', 'l', 'M', 'm'].includes(address.substring(0, 1))
+    ) {
+      this.getAddresses();
     }
 
+    if (
+      type === 'DUC' &&
+      !this.isProduction && 
+      address.length === 34
+    ) {
+      this.getAddresses();
+    }
+   
     if (type === 'DUCX') {
       if (address.length === 42) {
         this.getAddresses();
       }
     }
-    if (type === 'WDUCX') this.getAddresses();
+
+    if (type === 'WDUCX') {
+      this.getAddresses();
+    }
   }
 
   public getAddresses() {
@@ -311,13 +329,22 @@ export class CalculatorConvertPage {
       const cha = await this.checkAddress(getAddress, 'Binance');
       if (!cha) return;
     }
-
+    
     this.wallet = this.walletsInfoSend.find(infoWallet => {
-      return infoWallet.address === sendAddress;
+      const coincidenceAddress = ( infoWallet.address === sendAddress );
+      const isTestnetWallet = ( 
+        infoWallet.wallet 
+        && infoWallet.wallet.network === 'testnet' 
+      );
+      // DUCX: addresses for testnet and mainnet is same
+      if ( this.isProduction ) {
+        return coincidenceAddress;
+      } else {
+        return coincidenceAddress && isTestnetWallet;
+      }
     }).wallet;
-
+    
     // Getting all data
-
     dataInfo[this.formCoins.get.toLowerCase()] =
       this.formCoins.get.toLowerCase() === 'wducx'
         ? await this.getDucxWduxSwapInfo()

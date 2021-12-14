@@ -172,6 +172,15 @@ export class ConfirmPage {
     let networkName;
     let amount;
     this.setTitle();
+
+    if ( 
+      !this.navParams.data.network 
+      && this.wallet 
+      &&  this.wallet.network
+    ) {
+      this.navParams.data.network = this.wallet.network;
+    }
+
     if (this.fromSelectInputs) {
       networkName = this.navParams.data.network;
       amount = this.navParams.data.amount
@@ -182,6 +191,7 @@ export class ConfirmPage {
       amount = this.navParams.data.totalAmount;
     } else {
       amount = this.navParams.data.amount;
+
       try {
         networkName = this.addressProvider.getCoinAndNetwork(
           this.navParams.data.toAddress,
@@ -246,7 +256,7 @@ export class ConfirmPage {
       fromSelectInputs: this.navParams.data.fromSelectInputs ? true : false,
       inputs: this.navParams.data.inputs
     };
-
+    
     this.tx.origToAddress = this.tx.toAddress;
 
     if (this.navParams.data.requiredFeeRate) {

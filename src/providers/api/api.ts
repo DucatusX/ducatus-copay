@@ -43,7 +43,7 @@ export class ApiProvider {
     // # npm run build:desktop-release
     const mode: string = env && env.name;
 
-    if ( mode === "production" ) {
+    if ( mode === 'production' ) {
       // tslint:disable-next-line:no-console
       console.log(`BWS: ${this.config.develop.bitcore}`);
       return this.config.prod;
