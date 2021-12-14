@@ -104,7 +104,7 @@ export class CalculatorConvertPage {
   ballanceStrToNumber(balance:string):number {
     if(balance){
       // ToValidStrDecimal
-      balance.replace(/[\s.,%]/g, '')
+      balance = balance.replace(/[\s,%]/g, '')
       // toNumber
       let balanceNum = parseFloat(balance);
       return balanceNum;
