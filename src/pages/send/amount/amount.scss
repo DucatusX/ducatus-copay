@@ -47,7 +47,7 @@ page-amount {
     justify-content: flex-end;
     .switcher {
       @media (max-height: $short-screen) {
-        width: 77px;
+        width: 100px;
       }
 
       width: 115px;
