@@ -19,7 +19,7 @@ export class ApiProvider {
     },
     develop: {
       bitcore: 'https://duc-ws-dev.rocknblock.io',
-      ducatuscoins: 'https://ducsite.rocknblock.io',
+      ducatuscoins: 'https://devducatus.rocknblock.io',
       crowdsale: 'https://tokenization.centuriongm.com',
       // сейчас работает только прод апи
       // crowdsale: 'http://duccrowdsale.rocknblock.io',
