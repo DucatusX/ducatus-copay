@@ -48,7 +48,7 @@ page-wallet-details {
   .balance-header {
     position: relative;
     margin: 1rem 2rem 1rem 2rem;
-    height: 12rem;
+    min-height: 12rem;
     color: color($colors, light);
     display: flex;
     flex-direction: column;
