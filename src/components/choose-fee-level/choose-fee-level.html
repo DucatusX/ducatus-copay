@@ -15,7 +15,7 @@
     Testnet
   </div>
   <div class="fee-container">
-    <ion-slides #feeSlides slidesPerView="2" slidesPerView="2" spaceBetween="20" centeredSlides="true" pager="false" radio-group [(ngModel)]="feeLevel">
+    <ion-slides #feeSlides [slidesPerView]='slidesView' spaceBetween="20" centeredSlides="true" pager="false" radio-group [(ngModel)]="feeLevel">
       <ion-slide *ngFor="let fee of feeOpts" class="fee-card" (click)="changeSelectedFee(fee.level)">
         <ion-grid no-padding>
           <ion-row class="fee-row">
