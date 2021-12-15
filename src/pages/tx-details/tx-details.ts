@@ -213,7 +213,6 @@ export class TxDetailsModal {
       .getTx(this.wallet, this.txId)
       .then(tx => {
         if (!opts.hideLoading) this.onGoingProcess.clear();
-
         this.btx = this.txFormatProvider.processTx(this.wallet.coin, tx);
         this.btx.network = this.wallet.credentials.network;
         this.btx.coin = this.wallet.coin;
@@ -238,14 +237,19 @@ export class TxDetailsModal {
         if (this.btx.note && this.btx.note.body) {
           this.txMemo = this.btx.note.body;
         }
+        
+        if (this.btx.swap) {
+          this.title = `Swap from ${this.btx.swap.convertedFrom} to ${this.btx.swap.convertedTo}`;
+        } else {
 
-        if (this.btx.action != 'invalid') {
-          if (this.btx.action == 'sent')
-            this.title = this.translate.instant('Sent Funds');
-          if (this.btx.action == 'received')
-            this.title = this.translate.instant('Received Funds');
-          if (this.btx.action == 'moved')
-            this.title = this.translate.instant('Moved Funds');
+          if (this.btx.action != 'invalid') {
+            if (this.btx.action == 'sent')
+              this.title = this.translate.instant('Sent Funds');
+            if (this.btx.action == 'received')
+              this.title = this.translate.instant('Received Funds');
+            if (this.btx.action == 'moved')
+              this.title = this.translate.instant('Moved Funds');
+          }
         }
 
         this.updateMemo();
