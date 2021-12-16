@@ -8,6 +8,7 @@ import { FeeProvider } from '../../providers/fee/fee';
 import { Logger } from '../../providers/logger/logger';
 import { PopupProvider } from '../../providers/popup/popup';
 import { ActionSheetParent } from '../action-sheet/action-sheet-parent';
+import {Platform} from 'ionic-angular';
 
 interface FeeOpts {
   feeUnit: string;
@@ -48,6 +49,7 @@ export class ChooseFeeLevelComponent extends ActionSheetParent {
   public showMinWarning: boolean;
   public okText: string;
   public cancelText: string;
+  public slidesView = '2'
 
   constructor(
     private currencyProvider: CurrencyProvider,
@@ -55,7 +57,8 @@ export class ChooseFeeLevelComponent extends ActionSheetParent {
     private popupProvider: PopupProvider,
     public feeProvider: FeeProvider,
     private translate: TranslateService,
-    private externalLinkProvider: ExternalLinkProvider
+    private externalLinkProvider: ExternalLinkProvider,
+    private platform: Platform
   ) {
     super();
   }
@@ -68,6 +71,9 @@ export class ChooseFeeLevelComponent extends ActionSheetParent {
     this.coin = this.params.coin;
     this.feeLevel = this.params.feeLevel;
     this.setFeeUnits();
+    if(this.platform.width()<=420){
+      this.slidesView = '1.2'
+    }
 
     // IF usingCustomFee
     this.customFeePerKB = this.params.customFeePerKB
