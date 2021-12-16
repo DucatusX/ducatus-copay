@@ -95,26 +95,34 @@
         </ion-note>
       </ion-item>
 
-      <ion-item *ngIf="btx && btx.feeStr && btx.action != 'received' && btx.amountUnitStr != 'DUC' && btx.amountUnitStr != 'DUCX'  && !btx.swap">
+      <ion-item *ngIf="btx && btx.swap">
         <ion-label>
           <div class="summary-item">
-            <span translate>Miner fee</span>
+            <span translate>Sent to</span>
           </div>
         </ion-label>
+
         <ion-note item-end>
-          <div class="summary-item-detail">
-            {{btx.feeStr}}
+          <div class="payment-proposal-to">
+            <div class="background-content" copy-to-clipboard="{{btx.swap.sentTo}}">
+              <span>{{btx.swap.sentTo}}</span>
+            </div>
           </div>
-          <div class="secondary-note fee-details">
-            {{btx.feeFiatStr}}
-            <span *ngIf="btx.feeRateStr">
-              &middot;
-              <span>
-                <span *ngIf="btx.feeRateStr">{{btx.feeRateStr}}
-                  <span translate> of total amount</span>
-                </span>
-              </span>
-            </span>
+        </ion-note>
+      </ion-item>
+
+      <ion-item *ngIf="btx && btx.swap">
+        <ion-label>
+          <div class="summary-item">
+            <span translate>Sent from</span>
+          </div>
+        </ion-label>
+
+        <ion-note item-end>
+          <div class="payment-proposal-to">
+            <div class="background-content" copy-to-clipboard="{{btx.swap.sentFrom}}">
+              <span>{{btx.swap.sentFrom}}</span>
+            </div>
           </div>
         </ion-note>
       </ion-item>
@@ -167,7 +175,7 @@
           </div>
         </ion-label>
         <ion-note item-end>
-          <div class="summary-item-detail" *ngIf="!btx.confirmations || btx.confirmations == 0 && !btx.swap" translate>
+          <div class="summary-item-detail" *ngIf="!btx.confirmations || btx.confirmations == 0" translate>
             Unconfirmed
           </div>
           <div class="secondary-note fee-details" translate>
@@ -176,10 +184,10 @@
               {{btx.feeRate}}
             </span>
           </div>
-          <span class="note-container ellipsis summary-item-detail" *ngIf="btx.confirmations>0 && !btx.safeConfirmed && !btx.swap">
+          <span class="note-container ellipsis summary-item-detail" *ngIf="btx.confirmations>0 && !btx.safeConfirmed">
             {{btx.confirmations}}
           </span>
-          <span class="note-container ellipsis summary-item-detail" *ngIf="btx.safeConfirmed && !btx.swap">
+          <span class="note-container ellipsis summary-item-detail" *ngIf="btx.safeConfirmed">
             {{btx.safeConfirmed}}
           </span>
         </ion-note>
@@ -240,6 +248,25 @@
             </ion-note>
           </div>
         </div>
+      </div>
+
+      <div *ngIf="btx.swap && btx.swap.statusHistory && btx.swap.statusHistory.length">
+        <ion-item class="sub-title">
+          <ion-label>
+            <div class="main-label" translate>Status history</div>
+          </ion-label>
+        </ion-item>
+
+        <ion-item *ngFor="let historyRow of btx.swap.statusHistory;  let i=index" class="list-item-without-border">
+            <ion-label>
+              <div class="summary-item">
+                <span translate>{{historyRow.status}}</span>
+              </div>
+            </ion-label>
+            <ion-note item-end>
+              <time>{{historyRow.date}}</time>
+            </ion-note>
+        </ion-item>
       </div>
 
       <div class="line-divider"></div>
