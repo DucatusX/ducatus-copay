@@ -388,6 +388,10 @@ export class AmountPage {
       this.expression = '0.'
     }
 
+    const numberOfPoints = this.expression.split('.').length - 1;
+
+    if (numberOfPoints === 1 && digit === '.') return;
+
     if (
       this.expression &&
       this.expression.length >= this.LENGTH_EXPRESSION_LIMIT
