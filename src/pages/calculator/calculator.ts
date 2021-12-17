@@ -1,16 +1,16 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavController } from 'ionic-angular';
+import { ModalController, NavController } from 'ionic-angular';
+import * as _ from 'lodash';
+import { TxDetailsModal } from '../../pages/tx-details/tx-details';
 import { AppProvider } from '../../providers';
 import { ApiProvider } from '../../providers/api/api';
 import { Logger } from '../../providers/logger/logger';
-
-// import { MoonPayProvider } from '../../providers';
-
-// import { VoucherPage } from '../voucher/voucher';
+import { ProfileProvider } from '../../providers/profile/profile';
+import { TimeProvider } from '../../providers/time/time';
+import { WalletProvider } from '../../providers/wallet/wallet';
 import { CalculatorConvertPage } from './calculator-convert/calculator-convert';
-
 import {
   coinInfo,
   convertCoins,
@@ -39,8 +39,10 @@ export class CalculatorPage {
   public isAvailableSwapWDUCXtoDUCX: boolean = true;
   public isAvailableSwap: boolean = true;
   public appVersion: string;
-
   public rates: any;
+  public isShowSwapHistory: boolean = false;
+  public swapHistory: any[] = [];
+  public historyIsLoaded: boolean = false; 
 
   constructor(
     private navCtrl: NavController,
@@ -48,7 +50,11 @@ export class CalculatorPage {
     private formBuilder: FormBuilder,
     private apiProvider: ApiProvider,
     private appProvider: AppProvider,
-    private httpClient: HttpClient // private moonPayProvider: MoonPayProvider
+    private httpClient: HttpClient, // private moonPayProvider: MoonPayProvider
+    private profileProvider: ProfileProvider,
+    private walletProvider: WalletProvider,
+    private timeProvider: TimeProvider,
+    private modalCtrl: ModalController
   ) {
     this.formCoins.get = convertCoins['DUCX']; // DUCX
     this.formCoins.send = this.formCoins.get.items[0]; // DUC
@@ -73,6 +79,16 @@ export class CalculatorPage {
   }
 
   ionViewWillEnter() {
+    const wallets = this.profileProvider.getWallets({ showHidden: true });
+   
+    wallets.forEach((wallet, index) => {
+      this.fetchTxHistory(wallet, () => {
+        if ( wallets.length - 1 === index ) {
+          this.historyIsLoaded = true;
+        }
+      });
+    });
+    
     this.rates = null;
 
     this.httpClient
@@ -101,14 +117,13 @@ export class CalculatorPage {
       .toPromise()
       .then((res: boolean) => {
         this.isAvailableDucSwap = res;
+        this.isAvailableSwap = true;
 
         if (
           this.formCoins.get.name === 'DUCX' &&
           this.formCoins.send === 'DUC'
         ) {
-          this.isAvailableSwap = !this.isAvailableDucSwap ? false : true;
-        } else {
-          this.isAvailableSwap = true;
+          this.isAvailableSwap = !Boolean(this.isAvailableDucSwap);
         }
       })
       .catch(() => {
@@ -122,19 +137,11 @@ export class CalculatorPage {
       `REQUEST URL: ${this.apiProvider.getAddresses().swap.status}`
     );
 
-    // alert(
-    //   `REQUEST URL: ${this.apiProvider.getAddresses().swap.status}?version=${
-    //     this.appVersion
-    //   }`
-    // );
-
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
     };
-
-    // this.httpClient.post(this.apiProvider.getAddresses().swap.status, {params: {version: this.appVersion}}, httpOptions);
 
     this.httpClient
       .get(
@@ -143,46 +150,67 @@ export class CalculatorPage {
           this.appVersion,
         httpOptions
       )
-      // this.httpClient
-      //   .post(
-      //     this.apiProvider.getAddresses().swap.status,
-      //     { version: this.appVersion },
-      //     httpOptions
-      //   )
       .toPromise()
       .then((res: boolean) => {
         this.logger.log('WDUCX - DUXX swap res', JSON.stringify(res));
         this.logger.log(`WDUCX - DUXX swap res:  ${res}`);
         this.isAvailableSwapWDUCXtoDUCX = res;
-
-        // alert(`WDUCX - DUXX swap: ${res}, ${JSON.stringify(res)}`);
+        this.isAvailableSwap = true;
 
         if (
           this.formCoins.get.name === 'WDUCX' &&
           this.formCoins.send === 'DUCX'
         ) {
-          this.isAvailableSwap = !this.isAvailableSwapWDUCXtoDUCX
-            ? false
-            : true;
-        } else {
-          this.isAvailableSwap = true;
+          this.isAvailableSwap = !Boolean(this.isAvailableSwapWDUCXtoDUCX);
         }
       })
       .catch((err: any) => {
         this.logger.log(err);
         this.logger.log(JSON.stringify(err));
-        // alert(`WDUCX - DUXX swap err: ${err}, ${JSON.stringify(err)}`);
         this.isAvailableSwapWDUCXtoDUCX = false;
       });
   }
+  
+  private fetchTxHistory = (wallet, cb) => {
+    const progressFn = ((_, newTxs) => {
+      let args = {
+        walletId: wallet.walletId,
+        finished: false,
+        progress: newTxs
+      };
+      // tslint:disable-next-line:no-console
+      console.log(args);
+    }).bind(this);
 
+    // Fire a startup event, to allow UI to show the spinner
+    this.walletProvider
+      .fetchTxHistory(wallet, progressFn)
+      .then((txHistory = []) => {
+        txHistory.forEach(tx => {
+          if (tx.swap) {
+            tx.wallet = _.cloneDeep(wallet);
+            this.swapHistory.push(tx);
+          } 
+        });
+        cb();
+      })
+      .catch(err => {
+        if (err != 'HISTORY_IN_PROGRESS') {
+          this.logger.warn('fetchTxHistory ERROR', err);
+        }
+        cb();
+      });
+  }
+  
   public changeCoin(type) {
+
     if (type === 'Get') {
       this.formCoins.get =
         convertCoins[this.CalculatorGroupForm.value.CalculatorGroupGetCoin];
       this.formCoins.send = this.formCoins.get.items[0];
       this.CalculatorGroupForm.value.CalculatorGroupGetCoin = this.formCoins.get.name;
     }
+    
     if (type === 'Send') {
       if (
         this.CalculatorGroupForm.value.CalculatorGroupGetCoin ===
@@ -197,17 +225,20 @@ export class CalculatorPage {
     }
 
     this.changeAmount(this.lastChange);
+    this.isAvailableSwap = true;
 
-    if (this.formCoins.get.name === 'DUCX' && this.formCoins.send === 'DUC') {
-      this.isAvailableSwap = !this.isAvailableDucSwap ? false : true;
-    } else {
-      this.isAvailableSwap = true;
+    if (
+      this.formCoins.get.name === 'DUCX' 
+      && this.formCoins.send === 'DUC'
+    ) {
+      this.isAvailableSwap = !Boolean(this.isAvailableDucSwap);
     }
 
-    if (this.formCoins.get.name === 'WDUCX' && this.formCoins.send === 'DUCX') {
-      this.isAvailableSwap = this.isAvailableSwapWDUCXtoDUCX;
-    } else {
-      this.isAvailableSwap = true;
+    if (
+      this.formCoins.get.name === 'WDUCX' 
+      && this.formCoins.send === 'DUCX'
+    ) {
+      this.isAvailableSwap = !Boolean(this.isAvailableDucSwap);
     }
   }
 
@@ -220,18 +251,30 @@ export class CalculatorPage {
 
     this.CalculatorGroupForm.value.CalculatorGroupSendCoin = this.formCoins.send;
 
-    if (type === 'Get' && this.lastChange === 'Get') {
+    if (
+      type === 'Get' 
+      && this.lastChange === 'Get'
+    ) {
       const chNumber = this.CalculatorGroupForm.value.CalculatorGroupGet * rate;
       const fix = fixNumber(chNumber);
+
       this.CalculatorGroupForm.value.CalculatorGroupSend =
-        fix === 0 ? chNumber : chNumber.toFixed(fix);
+        fix === 0 
+          ? chNumber 
+          : chNumber.toFixed(fix);
     }
-    if (type === 'Send' && this.lastChange === 'Send') {
-      const chNumber =
-        this.CalculatorGroupForm.value.CalculatorGroupSend / rate;
+
+    if (
+      type === 'Send' 
+      && this.lastChange === 'Send'
+    ) {
+      const chNumber = this.CalculatorGroupForm.value.CalculatorGroupSend / rate;
       const fix = fixNumber(chNumber);
+
       this.CalculatorGroupForm.value.CalculatorGroupGet =
-        fix === 0 ? chNumber : chNumber.toFixed(fix);
+        fix === 0 
+          ? chNumber 
+          : chNumber.toFixed(fix);
     }
   }
 
@@ -244,11 +287,23 @@ export class CalculatorPage {
     });
   }
 
-  // public openMoonPay() {
-  //   this.moonPayProvider.openMoonPay();
-  // }
+  public showSwapHistory() {
+    this.isShowSwapHistory = !this.isShowSwapHistory;
+  }
 
-  // public openVoucher() {
-  //   this.navCtrl.push(VoucherPage);
-  // }
+  public itemTapped(tx) {
+    this.goToTxDetails(tx);
+  }
+
+  public goToTxDetails(tx) {
+    const txDetailModal = this.modalCtrl.create(TxDetailsModal, {
+      walletId: tx.wallet.credentials.walletId,
+      txid: tx.txid
+    });
+    txDetailModal.present();
+  }
+
+  public createdWithinPastDay(time) {
+    return this.timeProvider.withinPastDay(time);
+  }
 }
