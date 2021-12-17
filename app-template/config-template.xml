@@ -17,6 +17,7 @@
     <access origin="https://ducws.rocknblock.io" />
     <access origin="https://duc-ws-dev.rocknblock.io" />
     <access origin="http://89.40.14.180:8545" />
+    <access origin="http://195.181.242.115:8546" />
     <access origin="https://bitpay.com" />
     <access origin="https://www.ducatuscoins.com" />
     <access origin="https://rates.ducatuscoins.com" />
