@@ -38,44 +38,109 @@
         </ion-label>
       </ion-item>
 
-      <ion-item *ngIf="btx && btx.feeStr && btx.action != 'received' && btx.amountUnitStr != 'DUC' && btx.amountUnitStr != 'DUCX'">
+      <ion-item *ngIf="btx && btx.swap">
         <ion-label>
           <div class="summary-item">
-            <span translate>Miner fee</span>
+            <span>Status</span>
           </div>
         </ion-label>
         <ion-note item-end>
-          <div class="summary-item-detail">
-            {{btx.feeStr}}
+          <span class="note-container ellipsis summary-item-detail swap-status">{{btx.swap.status[0] + btx.swap.status.toLowerCase().substr(1)}}</span>
+        </ion-note>
+      </ion-item>
+
+
+      <ion-item *ngIf="btx && btx.swap" class="list-item-without-border">
+        <ion-label>
+          <div class="summary-item">
+            <span>Converted from</span>
           </div>
-          <div class="secondary-note fee-details">
-            {{btx.feeFiatStr}}
-            <span *ngIf="btx.feeRateStr">
-              &middot;
-              <span>
-                <span *ngIf="btx.feeRateStr">{{btx.feeRateStr}}
-                  <span translate> of total amount</span>
-                </span>
-              </span>
-            </span>
+        </ion-label>
+        <ion-note item-end>
+          <span class="note-container ellipsis summary-item-detail">{{btx.swap.convertedFrom}}</span>
+        </ion-note>
+      </ion-item>
+
+      <ion-item *ngIf="btx && btx.swap">
+        <ion-label>
+          <div class="summary-item">
+            <span>Amount</span>
+          </div>
+        </ion-label>
+        <ion-note item-end>
+          <span class="note-container ellipsis summary-item-detail">{{btx.swap.convertedFromAmount}}</span>
+        </ion-note>
+      </ion-item>
+
+
+      <ion-item *ngIf="btx && btx.swap" class="list-item-without-border">
+        <ion-label>
+          <div class="summary-item">
+            <span>Converted to</span>
+          </div>
+        </ion-label>
+        <ion-note item-end>
+          <span class="note-container ellipsis summary-item-detail">{{btx.swap.convertedTo}}</span>
+        </ion-note>
+      </ion-item>
+
+      <ion-item *ngIf="btx && btx.swap">
+        <ion-label>
+          <div class="summary-item">
+            <span>Amount</span>
+          </div>
+        </ion-label>
+        <ion-note item-end>
+          <span class="note-container ellipsis summary-item-detail">{{btx.swap.convertedToAmount}}</span>
+        </ion-note>
+      </ion-item>
+
+      <ion-item *ngIf="btx && btx.swap">
+        <ion-label>
+          <div class="summary-item">
+            <span translate>Sent to</span>
+          </div>
+        </ion-label>
+
+        <ion-note item-end>
+          <div class="payment-proposal-to">
+            <div class="background-content" copy-to-clipboard="{{btx.swap.sentTo}}">
+              <span>{{btx.swap.sentTo}}</span>
+            </div>
           </div>
         </ion-note>
       </ion-item>
 
-      <label-tip *ngIf="btx.action == 'received' && btx.lowFees" type="danger">
+      <ion-item *ngIf="btx && btx.swap">
+        <ion-label>
+          <div class="summary-item">
+            <span translate>Sent from</span>
+          </div>
+        </ion-label>
+
+        <ion-note item-end>
+          <div class="payment-proposal-to">
+            <div class="background-content" copy-to-clipboard="{{btx.swap.sentFrom}}">
+              <span>{{btx.swap.sentFrom}}</span>
+            </div>
+          </div>
+        </ion-note>
+      </ion-item>
+
+      <label-tip *ngIf="btx.action == 'received' && btx.lowFees && !btx.swap" type="danger">
         <span label-tip-title translate>Low Fee</span>
         <div label-tip-body translate>
           This transaction could take a long time to confirm or could be dropped due to the low fees set by the sender.
         </div>
       </label-tip>
 
-      <div class="line-divider" *ngIf="btx.action === 'sent'"></div>
+      <div class="line-divider" *ngIf="btx.action === 'sent' && !btx.swap"></div>
 
-      <page-multiple-outputs *ngIf="btx.action === 'sent'" [tx]="btx"></page-multiple-outputs>
+      <page-multiple-outputs *ngIf="btx.action === 'sent' && !btx.swap" [tx]="btx"></page-multiple-outputs>
 
-      <div class="line-divider" *ngIf="btx.creatorName && isShared"></div>
+      <div class="line-divider" *ngIf="btx.creatorName && isShared && !btx.swap"></div>
 
-      <ion-item *ngIf="btx.creatorName && isShared">
+      <ion-item *ngIf="btx.creatorName && isShared && !btx.swap">
         <ion-label>
           <div class="summary-item">
             <span translate>Created by</span>
@@ -128,7 +193,7 @@
         </ion-note>
       </ion-item>
 
-      <div *ngIf="!btx.confirmations || btx.confirmations == 0" class="unconfirmed-message">
+      <div *ngIf="!btx.confirmations || btx.confirmations == 0 && !btx.swap" class="unconfirmed-message">
         <a class="positive" (click)="openExternalLink('https://support.bitpay.com/hc/en-us/articles/360025484512-Missing-transactions-Why-is-my-transaction-unconfirmed-')">
           {{'Why is my transaction unconfirmed?' | translate}}
         </a>
@@ -156,14 +221,14 @@
         </ion-note>
       </ion-item>
 
-      <ion-item *ngIf="txsUnsubscribedForNotifications">
+      <ion-item *ngIf="txsUnsubscribedForNotifications && !btx.swap">
         <ion-label>{{'Notify me if confirmed' | translate}}</ion-label>
         <ion-toggle checked="false" *ngIf="!btx.confirmations || btx.confirmations == 0" [(ngModel)]="txNotification.value" (ionChange)="txConfirmNotificationChange()"></ion-toggle>
       </ion-item>
 
       <div class="line-divider" *ngIf="actionList && actionList[0]"></div>
 
-      <div *ngIf="actionList && actionList[0]">
+      <div *ngIf="actionList && actionList[0] && !btx.swap">
         <ion-item detail-none>
           <div>{{'Timeline' | translate}}</div>
         </ion-item>
@@ -183,6 +248,25 @@
             </ion-note>
           </div>
         </div>
+      </div>
+
+      <div *ngIf="btx.swap && btx.swap.statusHistory && btx.swap.statusHistory.length">
+        <ion-item class="sub-title">
+          <ion-label>
+            <div class="main-label" translate>Status history</div>
+          </ion-label>
+        </ion-item>
+
+        <ion-item *ngFor="let historyRow of btx.swap.statusHistory;  let i=index" class="list-item-without-border">
+            <ion-label>
+              <div class="summary-item">
+                <span translate>{{historyRow.status}}</span>
+              </div>
+            </ion-label>
+            <ion-note item-end>
+              <time>{{historyRow.date}}</time>
+            </ion-note>
+        </ion-item>
       </div>
 
       <div class="line-divider"></div>

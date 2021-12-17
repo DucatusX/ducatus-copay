@@ -257,7 +257,7 @@
 
               <button ion-item (click)="itemTapped(tx)" [ngClass]="{'speed-up-bg': canSpeedUpTx(tx)}">
                 <ion-icon class="item-img" item-start>
-                  <div *ngIf="tx.confirmations <= 0">
+                  <div *ngIf="tx.confirmations <= 0 && !tx.swap">
                     <img src="assets/img/tx-action/icon-confirming.svg" width="40">
                   </div>
                   <div *ngIf="tx.confirmations > 0">
@@ -287,16 +287,17 @@
                     </span>
                     <span
                       *ngIf="!tx.customData || (tx.customData && !tx.customData.service && !tx.customData.toWalletName)">
-                      <img src="assets/img/tx-action/icon-sent.svg" *ngIf="tx.action == 'sent'" width="40">
+                      <img src="assets/img/tx-action/icon-sent.svg" *ngIf="tx.action == 'sent' && !tx.swap" width="40">
                     </span>
                     <span>
-                      <img src="assets/img/tx-action/icon-received.svg" *ngIf="tx.action == 'received'" width="40">
-                      <img src="assets/img/tx-action/icon-moved.svg" *ngIf="tx.action == 'moved'" width="40">
+                      <img src="assets/img/tx-action/icon-received.svg" *ngIf="tx.action == 'received' && !tx.swap" width="40">
+                      <img src="assets/img/tx-action/icon-moved.svg" *ngIf="tx.action == 'moved' && !tx.swap" width="40">
+                      <img src="assets/img/tx-action/swap.svg" *ngIf="tx.swap" width="40">
                     </span>
                   </div>
                 </ion-icon>
 
-                <div class="action" *ngIf="tx.confirmations <= 0 && !(tx.amount === 0 && wallet?.coin === 'eth')">
+                <div class="action" *ngIf="tx.confirmations <= 0 && !(tx.amount === 0 && wallet?.coin === 'eth') && !tx.swap">
                   <span
                     *ngIf="(tx.action == 'sent') && !(addressbook && tx.outputs[0] && addressbook[tx.outputs[0].address])">{{'Sending'
                     | translate}}</span>
@@ -309,7 +310,7 @@
                   <span *ngIf="tx.action == 'received'">{{'Receiving' | translate}}</span>
                 </div>
 
-                <div class="action" *ngIf="tx.confirmations > 0 && tx.action == 'received'">
+                <div class="action" *ngIf="tx.confirmations > 0 && tx.action == 'received' && !tx.swap">
                   <span
                     *ngIf="(!tx.note || (tx.note && !tx.note.body)) && (!addressbook || !tx.outputs[0] || !addressbook[tx.outputs[0].address])">{{'Received'
                     | translate}}</span>
@@ -320,7 +321,7 @@
                 </div>
 
                 <div class="action"
-                  *ngIf="tx.confirmations > 0 && tx.action == 'sent' && !(tx.amount === 0 && wallet?.coin === 'eth')">
+                  *ngIf="tx.confirmations > 0 && tx.action == 'sent' && !(tx.amount === 0 && wallet?.coin === 'eth') && !tx.swap">
                   <span
                     *ngIf="(tx.message && (tx.note && !tx.note.body)) && (!addressbook || !tx.outputs[0] || !addressbook[tx.outputs[0].address]) && (!tx.customData || !tx.customData.toWalletName)"
                     translate>Sent</span>
@@ -338,7 +339,7 @@
                   </span>
                 </div>
 
-                <div class="action" *ngIf="tx.amount === 0 && wallet?.coin === 'eth'">
+                <div class="action" *ngIf="tx.amount === 0 && wallet?.coin === 'eth' && !tx.swap">
                   <span>{{'Fee for token transfer' | translate}}</span>
                 </div>
 
@@ -349,8 +350,18 @@
                   <span *ngIf="tx.note && tx.note.body != ''">{{tx.note.body}}</span>
                 </div>
 
-                <div class="action" *ngIf="tx.confirmations > 0 && tx.action == 'invalid'">
+                <div class="action" *ngIf="tx.confirmations > 0 && tx.action == 'invalid' && !tx.swap">
                   <span class="assertive" *ngIf="!tx.message && !tx.note" translate>Invalid</span>
+                </div>
+
+                <div class="action" *ngIf="tx.swap">
+                  <div>
+                    <span translate>Swap from {{tx.swap.convertedFrom}} to {{tx.swap.convertedTo}}</span>
+                  </div>
+                  <div class="swap-status-block">
+                    <span translate>Status</span> 
+                    <span class="swap-status">{{tx.swap.status}}</span>
+                  </div>
                 </div>
 
                 <ion-note item-end text-end>

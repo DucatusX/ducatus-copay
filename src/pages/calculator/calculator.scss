@@ -72,6 +72,19 @@
     margin-top: 25px;
   }
 
+  &-swap-button {
+    max-width: 100%;
+    width: 100%;
+    margin-top: 25px;
+    color: #862633;
+    background-color: transparent;
+    border: 1px solid #862633;
+  }
+
+  &-swap-button:hover {
+    color: #ffffff;
+  }
+
   &-convert {
     &-type {
       display: flex;
@@ -146,6 +159,133 @@
         margin: 0 10px !important;
         font-size: 25px !important;
       }
+    }
+  }
+}
+
+.tx-history {
+  $wallet-details-primary-color: #862633;
+  $icon-width: 36px;
+
+  .tx-history-header {
+    height: 5rem;
+    border-bottom: 0;
+    border-radius: 5px 5px 0 0;
+
+    .ng-star-inserted {
+      font-size: 18px;
+      font-weight: 600;
+      color: #444444;
+    }
+
+    &--large {
+      &.item {
+        ion-label {
+          font-size: 15px;
+        }
+      }
+    }
+
+    &.item {
+      min-height: 26px;
+      background: $feather-dark;
+
+      ion-label {
+        margin: 0;
+        font-size: 14px;
+      }
+
+      .item-inner {
+        padding: 0 !important;
+      }
+    }
+
+    ion-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .txps-badge {
+      margin-right: 1rem;
+    }
+  }
+
+  .item-wrapper {
+    margin-bottom: 10px;
+
+    &:last-child {
+      .item-inner {
+        border-bottom: 0;
+      }
+    }
+  }
+
+  .item {
+    font-size: 16px;
+    padding-left: 19px;
+
+    .item-icon {
+      margin-right: 15px;
+    }
+
+    .item-inner {
+      background-image: none;
+      padding: 11px 10px 11px 0;
+      margin-left: 3px;
+      border-bottom: 1px solid color($colors, light);
+    }
+  }
+
+  img {
+    width: $icon-width;
+  }
+
+  .action {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .amount {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 24px;
+    color: color($colors, dark);
+
+    .received {
+      color: color($colors, success);
+    }
+  }
+
+  .date {
+    font-size: 14px;
+    margin-top: 8px;
+    opacity: 0.4;
+    font-weight: 300;
+    color: #434d5a;
+  }
+
+  .proposal-container {
+    .item .item-inner {
+      padding: 0 10px 0 0;
+    }
+
+    .date {
+      margin-top: 0px;
+    }
+  }
+
+  .swap-block {
+    margin-top: 10px;
+
+    &-status {
+      color: #862633;
+    }
+
+    &-amount {
+      color: #862633;
     }
   }
 }
