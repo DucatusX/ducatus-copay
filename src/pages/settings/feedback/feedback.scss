@@ -1,0 +1,39 @@
+page-feedback {
+  .form {
+    color: black;
+    padding: 20px;
+    &-input {
+      border-radius: 12px;
+      margin: 10px 0px 30px 0px;
+    }
+    &-title {
+      opacity: 0.5;
+      font-weight: 700;
+    }
+    &-warning {
+      display: none;
+      opacity: 0.4;
+      color: red;
+    }
+    .visible {
+      display: inline;
+    }
+    input {
+      height: 24px;
+    }
+    textarea {
+      min-height: 200px;
+      resize: none;
+    }
+    .novalid {
+      border: 1px solid red;
+    }
+    button {
+      margin: 0;
+      height: 60px;
+      width: 100%;
+      border-radius: 33px;
+      color: white;
+    }
+  }
+}

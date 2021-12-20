@@ -1,0 +1,22 @@
+<wide-header-page title="{{ 'Support' | translate }}">
+  <div page-content>
+    <div class="form">
+    <form [formGroup]='feedbackForm' (ngSubmit)="onSubmit()">
+      <span class="form-title">Subject</span>
+      <ion-item class="form-input" [ngClass]='{novalid: subject.invalid && subject.touched}'> 
+        <ion-input type="text" [disabled]="disabledForm" formControlName="subject"></ion-input>
+      </ion-item>
+      <span class="form-title">Email</span>
+      <ion-item class="form-input" [ngClass]='{novalid: email.invalid && email.touched}' > 
+        <ion-input type="email" [disabled]="disabledForm"  formControlName="email"></ion-input>
+      </ion-item>
+      <span class="form-title">Message</span>
+      <span class="form-warning" [ngClass]='{visible: message.invalid && message.touched}'>we need more information about your problem</span>
+      <ion-item class="form-input" [ngClass]='{novalid: message.invalid && message.touched}' >
+        <ion-textarea [disabled]="disabledForm" formControlName="message"></ion-textarea>
+      </ion-item>
+      <button  ion-button [disabled]="!feedbackForm.valid || disabledForm" type="submit">submit</button>
+    </form>
+  </div>
+  </div>  
+</wide-header-page>
