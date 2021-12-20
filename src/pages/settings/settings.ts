@@ -9,11 +9,7 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 // pages
 import { User } from '../../models/user/user.model';
-import {
-  BitPayIdProvider,
-  IABCardProvider,
-  LiveChatProvider
-} from '../../providers';
+import { BitPayIdProvider, IABCardProvider } from '../../providers';
 // import { AnalyticsProvider } from '../../providers/analytics/analytics';
 import { AppProvider } from '../../providers/app/app';
 import { BitPayCardProvider } from '../../providers/bitpay-card/bitpay-card';
@@ -49,6 +45,7 @@ import { LockPage } from './lock/lock';
 import { NotificationsPage } from './notifications/notifications';
 import { SharePage } from './share/share';
 import { WalletSettingsPage } from './wallet-settings/wallet-settings';
+import { FeedbackPage } from './feedback/feedback';
 
 @Component({
   selector: 'page-settings',
@@ -98,8 +95,7 @@ export class SettingsPage {
     private persistanceProvider: PersistenceProvider,
     private bitPayIdProvider: BitPayIdProvider,
     private changeRef: ChangeDetectorRef,
-    private iabCardProvider: IABCardProvider,
-    private liveChatProvider: LiveChatProvider
+    private iabCardProvider: IABCardProvider
   ) {
     this.appName = this.app.info.nameCase;
     this.isCordova = this.platformProvider.isCordova;
@@ -306,8 +302,8 @@ export class SettingsPage {
   //   this.navCtrl.push(GiftCardsSettingsPage);
   // }
 
-  public openHelpExternalLink(): void {
-    this.liveChatProvider.openLiveChat();
+  public openFeedbackPage(): void {
+    this.navCtrl.push(FeedbackPage);
   }
 
   private openPinModal(action): void {

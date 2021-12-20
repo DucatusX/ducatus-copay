@@ -104,6 +104,7 @@ import { LanguagePage } from '../pages/settings/language/language';
 import { LockPage } from '../pages/settings/lock/lock';
 import { NotificationsPage } from '../pages/settings/notifications/notifications';
 import { SharePage } from '../pages/settings/share/share';
+import { FeedbackPage } from './settings/feedback/feedback';
 
 /* Wallet Group Settings */
 import { ClearEncryptPasswordPage } from '../pages/settings/key-settings/clear-encrypt-password/clear-encrypt-password';
@@ -220,6 +221,7 @@ export const PAGES = [
   SimplexSettingsPage,
   NotificationsPage,
   FeePolicyPage,
+  FeedbackPage,
   SearchTxModalPage,
   SessionLogPage,
   SendFeedbackPage,
