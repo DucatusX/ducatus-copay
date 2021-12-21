@@ -123,7 +123,7 @@ export class CalculatorPage {
           this.formCoins.get.name === 'DUCX' &&
           this.formCoins.send === 'DUC'
         ) {
-          this.isAvailableSwap = !Boolean(this.isAvailableDucSwap);
+          this.isAvailableSwap = Boolean(this.isAvailableDucSwap);
         }
       })
       .catch(() => {
@@ -156,12 +156,11 @@ export class CalculatorPage {
         this.logger.log(`WDUCX - DUXX swap res:  ${res}`);
         this.isAvailableSwapWDUCXtoDUCX = res;
         this.isAvailableSwap = true;
-
         if (
           this.formCoins.get.name === 'WDUCX' &&
           this.formCoins.send === 'DUCX'
         ) {
-          this.isAvailableSwap = !Boolean(this.isAvailableSwapWDUCXtoDUCX);
+          this.isAvailableSwap = Boolean(this.isAvailableSwapWDUCXtoDUCX);
         }
       })
       .catch((err: any) => {
@@ -231,14 +230,14 @@ export class CalculatorPage {
       this.formCoins.get.name === 'DUCX' 
       && this.formCoins.send === 'DUC'
     ) {
-      this.isAvailableSwap = !Boolean(this.isAvailableDucSwap);
+      this.isAvailableSwap = Boolean(this.isAvailableDucSwap);
     }
 
     if (
       this.formCoins.get.name === 'WDUCX' 
       && this.formCoins.send === 'DUCX'
     ) {
-      this.isAvailableSwap = !Boolean(this.isAvailableDucSwap);
+      this.isAvailableSwap = Boolean(this.isAvailableDucSwap);
     }
   }
 
