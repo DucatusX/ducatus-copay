@@ -12,8 +12,8 @@ const TokenAddresses = {
   livenet: '0x90503468DB36aD503e1EDC7965C4d5123070EdAF'
 };
 const NetworkProvidersUrls = {
-  testnet: 'http://89.40.14.180:8545/',
-  livenet: 'http://195.181.242.115:8546/'
+  testnet: 'https://ducx-testnet-node1.rocknblock.io/',
+  livenet: 'https://ducx-mainnet-node1.rocknblock.io/'
 };
 
 @Component({
