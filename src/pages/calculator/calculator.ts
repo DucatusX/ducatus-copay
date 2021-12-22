@@ -211,6 +211,7 @@ export class CalculatorPage {
     }
 
     this.isAvailableSwap = true;
+    this.changeAmount(type)
 
     if (
       this.formCoins.get.name === 'DUCX' 
@@ -225,7 +226,6 @@ export class CalculatorPage {
     ) {
       this.isAvailableSwap = Boolean(this.isAvailableDucSwap);
     }
-      
   }
 
   public selectInputType(type) {
@@ -237,7 +237,6 @@ export class CalculatorPage {
     const {GetAmount,SendAmount} = this.CalculatorForm.value
     const {GetCoin,SendCoin} = this.CalculatorForm.value
 
-    
     const rate = this.rates[GetCoin][SendCoin];
 
     //if change GetAmount then change SendAmount
@@ -267,10 +266,9 @@ export class CalculatorPage {
           ? chNumber 
           : chNumber.toFixed(fix);
     }
-   
+
+    this.CalculatorForm.value.GetCoin = this.formCoins.get.items[0]; 
   }
-
-
 
   public goToConvertPage() {
     this.navCtrl.push(CalculatorConvertPage, {
