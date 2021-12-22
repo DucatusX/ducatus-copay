@@ -14,7 +14,8 @@ import { CalculatorConvertPage } from './calculator-convert/calculator-convert';
 import {
   coinInfo,
   convertCoins,
-  convertGetCoins
+  convertGetCoins,
+  convertSendCoins,
 } from './calculator-parameters';
 
 const fixNumber = x =>
@@ -30,10 +31,11 @@ const fixNumber = x =>
   templateUrl: 'calculator.html'
 })
 export class CalculatorPage {
-  public CalculatorGroupForm: FormGroup;
+  public CalculatorForm: FormGroup;
   public formCoins: any = [];
   public coin_info: any;
   public convertGetCoins: any;
+  public convertSendCoins: any;
   public lastChange: any = 'Get';
   public isAvailableDucSwap: boolean = true;
   public isAvailableSwapWDUCXtoDUCX: boolean = true;
@@ -56,25 +58,25 @@ export class CalculatorPage {
     private timeProvider: TimeProvider,
     private modalCtrl: ModalController
   ) {
-    this.formCoins.get = convertCoins['DUCX']; // DUCX
-    this.formCoins.send = this.formCoins.get.items[0]; // DUC
+    this.formCoins.get = convertCoins['DUC']; // DUCX
+    this.formCoins.send = convertSendCoins[0]; // DUC
     this.coin_info = coinInfo;
     this.convertGetCoins = convertGetCoins;
+    this.convertSendCoins = convertSendCoins;
     this.appVersion = this.appProvider.info.version;
-
     this.logger.log('this.appVersion', this.appVersion);
-
-    this.CalculatorGroupForm = this.formBuilder.group({
-      CalculatorGroupGet: [
+    
+    this.CalculatorForm = this.formBuilder.group({
+      GetAmount: [
         0,
         Validators.compose([Validators.minLength(1), Validators.required])
       ],
-      CalculatorGroupSend: [
+      SendAmount: [
         0,
         Validators.compose([Validators.minLength(1), Validators.required])
       ],
-      CalculatorGroupGetCoin: [this.formCoins.get.name],
-      CalculatorGroupSendCoin: [this.formCoins.send]
+      GetCoin: 'DUCX',
+      SendCoin: 'DUC'
     });
   }
 
@@ -202,28 +204,12 @@ export class CalculatorPage {
   }
   
   public changeCoin(type) {
-
-    if (type === 'Get') {
-      this.formCoins.get =
-        convertCoins[this.CalculatorGroupForm.value.CalculatorGroupGetCoin];
-      this.formCoins.send = this.formCoins.get.items[0];
-      this.CalculatorGroupForm.value.CalculatorGroupGetCoin = this.formCoins.get.name;
-    }
     
     if (type === 'Send') {
-      if (
-        this.CalculatorGroupForm.value.CalculatorGroupGetCoin ===
-        this.CalculatorGroupForm.value.CalculatorGroupSendCoin
-      ) {
-        this.formCoins.get =
-          convertCoins[this.CalculatorGroupForm.value.CalculatorGroupSendCoin];
-        this.CalculatorGroupForm.value.CalculatorGroupGetCoin = this.formCoins.get.items[0];
-      } else {
-        this.formCoins.send = this.CalculatorGroupForm.value.CalculatorGroupSendCoin;
-      }
+      this.formCoins.get = convertCoins[this.CalculatorForm.value.SendCoin]//changing the possible choice for GetCoin
+      this.CalculatorForm.value.GetCoin = this.formCoins.get.items[0]; // GetCoin = the first possible coin to choose
     }
 
-    this.changeAmount(this.lastChange);
     this.isAvailableSwap = true;
 
     if (
@@ -239,6 +225,7 @@ export class CalculatorPage {
     ) {
       this.isAvailableSwap = Boolean(this.isAvailableDucSwap);
     }
+      
   }
 
   public selectInputType(type) {
@@ -246,43 +233,51 @@ export class CalculatorPage {
   }
 
   public changeAmount(type) {
-    const rate = this.rates[this.formCoins.get.name][this.formCoins.send];
 
-    this.CalculatorGroupForm.value.CalculatorGroupSendCoin = this.formCoins.send;
+    const {GetAmount,SendAmount} = this.CalculatorForm.value
+    const {GetCoin,SendCoin} = this.CalculatorForm.value
 
+    
+    const rate = this.rates[GetCoin][SendCoin];
+
+    //if change GetAmount then change SendAmount
     if (
       type === 'Get' 
       && this.lastChange === 'Get'
     ) {
-      const chNumber = this.CalculatorGroupForm.value.CalculatorGroupGet * rate;
+      const chNumber = GetAmount * rate;
       const fix = fixNumber(chNumber);
 
-      this.CalculatorGroupForm.value.CalculatorGroupSend =
+      this.CalculatorForm.value.SendAmount =
         fix === 0 
           ? chNumber 
           : chNumber.toFixed(fix);
     }
 
+    //if change sendAmount then change GetAmount
     if (
       type === 'Send' 
       && this.lastChange === 'Send'
     ) {
-      const chNumber = this.CalculatorGroupForm.value.CalculatorGroupSend / rate;
+      const chNumber = SendAmount / rate;
       const fix = fixNumber(chNumber);
 
-      this.CalculatorGroupForm.value.CalculatorGroupGet =
+      this.CalculatorForm.value.GetAmount =
         fix === 0 
           ? chNumber 
           : chNumber.toFixed(fix);
     }
+   
   }
+
+
 
   public goToConvertPage() {
     this.navCtrl.push(CalculatorConvertPage, {
       get: this.formCoins.get.name,
       send: this.formCoins.send,
-      amountGet: this.CalculatorGroupForm.value.CalculatorGroupGet,
-      amountSend: this.CalculatorGroupForm.value.CalculatorGroupSend
+      amountGet: this.CalculatorForm.value.SendAmount,
+      amountSend: this.CalculatorForm.value.SendAmount
     });
   }
 
