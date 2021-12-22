@@ -274,8 +274,8 @@ export class CalculatorPage {
 
   public goToConvertPage() {
     this.navCtrl.push(CalculatorConvertPage, {
-      get: this.formCoins.get.name,
-      send: this.formCoins.send,
+      get: this.CalculatorForm.value.GetCoin,
+      send: this.CalculatorForm.value.SendCoin,
       amountGet: this.CalculatorForm.value.SendAmount,
       amountSend: this.CalculatorForm.value.SendAmount
     });
