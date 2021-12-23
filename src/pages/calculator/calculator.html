@@ -14,7 +14,6 @@
               type="number"
               formControlName="SendAmount"
               [value]="CalculatorForm.value.SendAmount"
-              (click)="selectInputType('Send')"
               (ionChange)="changeAmount('Send')"
               required
             >
@@ -67,7 +66,6 @@
               type="number"
               formControlName="GetAmount"
               [value]="CalculatorForm.value.GetAmount"
-              (click)="selectInputType('Get')"
               (ionChange)="changeAmount('Get')"
               required
             >
