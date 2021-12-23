@@ -69,7 +69,7 @@ export class CalculatorPage {
     this.CalculatorForm = this.formBuilder.group({
       GetAmount: [
         0,
-        Validators.compose([Validators.minLength(1), Validators.required])
+        Validators.compose([Validators.minLength(1), Validators.required,Validators.pattern(/^[0-9.]+$/)])
       ],
       SendAmount: [
         0,
