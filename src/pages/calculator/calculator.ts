@@ -36,6 +36,7 @@ export class CalculatorPage {
   public coin_info: any;
   public convertGetCoins: any;
   public convertSendCoins: any;
+  public lastChange: any = 'Get';
   public isAvailableDucSwap: boolean = true;
   public isAvailableSwapWDUCXtoDUCX: boolean = true;
   public isAvailableSwap: boolean = true;
@@ -204,6 +205,8 @@ export class CalculatorPage {
   
   public changeCoin(type) {
     
+    this.selectInputType(type)
+
     if (type === 'Send') {
       this.formCoins.get = convertCoins[this.CalculatorForm.value.SendCoin]//changing the possible choice for GetCoin
       this.CalculatorForm.value.GetCoin = this.formCoins.get.items[0]; // GetCoin = the first possible coin to choose
@@ -227,17 +230,19 @@ export class CalculatorPage {
     }
   }
 
+  public selectInputType(type) {
+    this.lastChange = type;
+  }
 
   public changeAmount(type) {
-
     const {GetAmount,SendAmount} = this.CalculatorForm.value
     const {GetCoin,SendCoin} = this.CalculatorForm.value
 
     const rate = this.rates[GetCoin][SendCoin];
-
     //if change GetAmount then change SendAmount
     if (
       type === 'Get' 
+      && this.lastChange === 'Get'
     ) {
       const chNumber = GetAmount * rate;
       const fix = fixNumber(chNumber);
@@ -251,6 +256,7 @@ export class CalculatorPage {
     //if change sendAmount then change GetAmount
     if (
       type === 'Send' 
+      && this.lastChange === 'Send'
     ) {
       const chNumber = SendAmount / rate;
       const fix = fixNumber(chNumber);
