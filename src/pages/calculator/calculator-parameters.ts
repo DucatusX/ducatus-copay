@@ -1,5 +1,5 @@
 export const convertCoins = {
-  DUC: { name: 'DUC', items: ['DUCX', 'ETH', 'BTC'] },
+  DUC: { name: 'DUC', items: ['DUCX'] },
   DUCX: { name: 'DUCX', items: ['DUC']},
   BTC: { name: 'BTC', items: ['DUC']},
   ETH: { name: 'ETH', items: ['DUC']},
@@ -8,7 +8,7 @@ export const convertCoins = {
 
 
 export const convertSendCoins = ['DUC','DUCX', 'ETH' , 'BTC',]
-export const convertGetCoins =  ['DUCX', 'ETH', 'BTC'];
+export const convertGetCoins =  ['DUCX'];
 
 export const coinInfo = {
   DUC: 'Ducatus',
