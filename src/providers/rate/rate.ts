@@ -26,22 +26,26 @@ export class RateProvider {
     this.alternatives = {};
     for (const coin of this.currencyProvider.getAvailableCoins()) {
       this.rateServiceUrl[coin] = env.ratesAPI[coin];
+      const token = [
+        'jamasy',
+        'nuyasa',
+        'sunoba',
+        'dscmed',
+        'pog1',
+        'wde',
+        'mdxb',
+        'g.o.l.d.'
+      ];
+
       this.rates[coin] = {
         USD:
           coin === 'ducx'
             ? 0.6
+            : coin === 'g.o.l.d.'
+            ? 0.01
             : coin === 'duc'
             ? 0.06
-            : [
-                'jamasy',
-                'nuyasa',
-                'sunoba',
-                'dscmed',
-                'pog1',
-                'wde',
-                'mdxb',
-                'g.o.l.d.'
-              ].includes(coin)
+            : token.includes(coin)
             ? 1
             : this.rates[coin],
         NGN:
@@ -49,16 +53,7 @@ export class RateProvider {
             ? 0.6
             : coin === 'duc'
             ? 29.05
-            : [
-                'jamasy',
-                'nuyasa',
-                'sunoba',
-                'dscmed',
-                'pog1',
-                'wde',
-                'mdxb',
-                'g.o.l.d.'
-              ].includes(coin)
+            : token.includes(coin)
             ? 1
             : this.rates[coin] // test
       };
