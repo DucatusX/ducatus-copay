@@ -26,41 +26,39 @@ export class RateProvider {
     this.alternatives = {};
     for (const coin of this.currencyProvider.getAvailableCoins()) {
       this.rateServiceUrl[coin] = env.ratesAPI[coin];
+      let usdValue;
+      let ngnValue;
+      const token = [
+        'jamasy',
+        'nuyasa',
+        'sunoba',
+        'dscmed',
+        'pog1',
+        'wde',
+        'mdxb',
+        'g.o.l.d.'
+      ];
+
+      if (coin === 'ducx') {
+        usdValue = 0.6;
+        ngnValue = 0.6;
+      } else if (coin === 'duc') {
+        usdValue = 0.06;
+        ngnValue = 29.05;
+      } else if (coin === 'g.o.l.d.') {
+        usdValue = 0.01;
+        ngnValue = 0.01;
+      } else if (token.includes(coin)) {
+        usdValue = 1;
+        ngnValue = 1;
+      } else {
+        usdValue = this.rates[coin];
+        ngnValue = this.rates[coin];
+      }
+
       this.rates[coin] = {
-        USD:
-          coin === 'ducx'
-            ? 0.6
-            : coin === 'duc'
-            ? 0.06
-            : [
-                'jamasy',
-                'nuyasa',
-                'sunoba',
-                'dscmed',
-                'pog1',
-                'wde',
-                'mdxb',
-                'g.o.l.d.'
-              ].includes(coin)
-            ? 1
-            : this.rates[coin],
-        NGN:
-          coin === 'ducx'
-            ? 0.6
-            : coin === 'duc'
-            ? 29.05
-            : [
-                'jamasy',
-                'nuyasa',
-                'sunoba',
-                'dscmed',
-                'pog1',
-                'wde',
-                'mdxb',
-                'g.o.l.d.'
-              ].includes(coin)
-            ? 1
-            : this.rates[coin] // test
+        USD: usdValue,
+        NGN: ngnValue
       };
       this.ratesAvailable[coin] = false;
       this.updateRates(coin);
