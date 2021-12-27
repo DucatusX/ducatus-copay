@@ -11,11 +11,11 @@
         <ion-input type="email" [disabled]="disabledForm"  formControlName="email"></ion-input>
       </ion-item>
       <span class="form-title">Message</span>
-      <span class="form-warning" [ngClass]='{visible: message.invalid && message.touched}'>we need more information about your problem</span>
+      <span class="form-warning" [ngClass]='{visible: message.invalid && message.touched}'>We need more information about your problem</span>
       <ion-item class="form-input" [ngClass]='{novalid: message.invalid && message.touched}' >
         <ion-textarea [disabled]="disabledForm" formControlName="message"></ion-textarea>
       </ion-item>
-      <button  ion-button [disabled]="!feedbackForm.valid || disabledForm" type="submit">submit</button>
+      <button  ion-button [disabled]="!feedbackForm.valid || disabledForm" type="submit">Submit</button>
     </form>
   </div>
   </div>  
