@@ -15,7 +15,7 @@ import {
   coinInfo,
   convertCoins,
   convertGetCoins,
-  convertSendCoins,
+  convertSendCoins
 } from './calculator-parameters';
 
 const fixNumber = x =>
@@ -31,7 +31,7 @@ const fixNumber = x =>
   templateUrl: 'calculator.html'
 })
 export class CalculatorPage {
-  public CalculatorForm: FormGroup;
+  public calculatorForm: FormGroup;
   public formCoins: any = [];
   public coin_info: any;
   public convertGetCoins: any;
@@ -44,7 +44,7 @@ export class CalculatorPage {
   public rates: any;
   public isShowSwapHistory: boolean = false;
   public swapHistory: any[] = [];
-  public historyIsLoaded: boolean = false; 
+  public historyIsLoaded: boolean = false;
 
   constructor(
     private navCtrl: NavController,
@@ -65,18 +65,18 @@ export class CalculatorPage {
     this.convertSendCoins = convertSendCoins;
     this.appVersion = this.appProvider.info.version;
     this.logger.log('this.appVersion', this.appVersion);
-    
-    this.CalculatorForm = this.formBuilder.group({
-      GetAmount: [
+
+    this.calculatorForm = this.formBuilder.group({
+      getAmount: [
         0,
         Validators.compose([Validators.minLength(1), Validators.required,Validators.pattern(/^[0-9.]+$/)])
       ],
-      SendAmount: [
+      sendAmount: [
         0,
         Validators.compose([Validators.minLength(1), Validators.required])
       ],
-      GetCoin: 'DUCX',
-      SendCoin: 'DUC'
+      getCoin: 'DUCX',
+      sendCoin: 'DUC'
     });
   }
 
@@ -205,11 +205,11 @@ export class CalculatorPage {
   
   public changeCoin(type) {
     
-    this.selectInputType(type)
+    this.selectInputType(type);
 
     if (type === 'Send') {
-      this.formCoins.get = convertCoins[this.CalculatorForm.value.SendCoin]//changing the possible choice for GetCoin
-      this.CalculatorForm.value.GetCoin = this.formCoins.get.items[0]; // GetCoin = the first possible coin to choose
+      this.formCoins.get = convertCoins[this.calculatorForm.value.sendCoin]; //changing the possible choice for getCoin
+      this.calculatorForm.value.getCoin = this.formCoins.get.items[0]; // getCoin = the first possible coin to choose
     }
 
     this.isAvailableSwap = true;
@@ -235,47 +235,37 @@ export class CalculatorPage {
   }
 
   public changeAmount(type) {
-    const {GetAmount,SendAmount} = this.CalculatorForm.value
-    const {GetCoin,SendCoin} = this.CalculatorForm.value
+    const { getAmount, sendAmount } = this.calculatorForm.value;
+    const { getCoin, sendCoin } = this.calculatorForm.value;
 
-    const rate = this.rates[GetCoin][SendCoin];
-    //if change GetAmount then change SendAmount
-    if (
-      type === 'Get' 
-      && this.lastChange === 'Get'
-    ) {
-      const chNumber = GetAmount * rate;
+    const rate = this.rates[getCoin][sendCoin];
+    //if change getAmount then change sendAmount
+    if (type === 'Get' && this.lastChange === 'Get') {
+      const chNumber = getAmount * rate;
       const fix = fixNumber(chNumber);
 
-      this.CalculatorForm.value.SendAmount =
-        fix === 0 
-          ? chNumber 
-          : chNumber.toFixed(fix);
+      this.calculatorForm.value.sendAmount =
+        fix === 0 ? chNumber : chNumber.toFixed(fix);
     }
 
-    //if change sendAmount then change GetAmount
-    if (
-      type === 'Send' 
-      && this.lastChange === 'Send'
-    ) {
-      const chNumber = SendAmount / rate;
+    //if change sendAmount then change getAmount
+    if (type === 'Send' && this.lastChange === 'Send') {
+      const chNumber = sendAmount / rate;
       const fix = fixNumber(chNumber);
 
-      this.CalculatorForm.value.GetAmount =
-        fix === 0 
-          ? chNumber 
-          : chNumber.toFixed(fix);
+      this.calculatorForm.value.getAmount =
+        fix === 0 ? chNumber : chNumber.toFixed(fix);
     }
 
-    this.CalculatorForm.value.GetCoin = this.formCoins.get.items[0]; 
+    this.calculatorForm.value.getCoin = this.formCoins.get.items[0];
   }
 
   public goToConvertPage() {
     this.navCtrl.push(CalculatorConvertPage, {
-      get: this.CalculatorForm.value.GetCoin,
-      send: this.CalculatorForm.value.SendCoin,
-      amountGet: this.CalculatorForm.value.SendAmount,
-      amountSend: this.CalculatorForm.value.SendAmount
+      get: this.calculatorForm.value.getCoin,
+      send: this.calculatorForm.value.sendCoin,
+      amountGet: this.calculatorForm.value.sendAmount,
+      amountSend: this.calculatorForm.value.sendAmount
     });
   }
 

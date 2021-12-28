@@ -5,15 +5,15 @@
         <div class="calculator-heading" translate>Calculator</div>
       </div>
 
-      <form [formGroup]="CalculatorForm">
+      <form [formGroup]="calculatorForm">
         <div class="calculator-form-group">
           <ion-item class="calculator-input">
             <ion-label stacked>{{'Send' | translate}}</ion-label>
             <ion-input
               [disabled]="!rates"
               type="number"
-              formControlName="SendAmount"
-              [value]="CalculatorForm.value.SendAmount"
+              formControlName="sendAmount"
+              [value]="calculatorForm.value.sendAmount"
               (click)="selectInputType('Send')"
               (ionChange)="changeAmount('Send')"
               required
@@ -32,8 +32,8 @@
             <ion-select
               class="calculator-select-ion"
               interface="popover"
-              formControlName="SendCoin"
-              [(ngModel)]="CalculatorForm.value.SendCoin"
+              formControlName="sendCoin"
+              [(ngModel)]="calculatorForm.value.sendCoin"
               (ionChange)="changeCoin('Send')"
             >
               <ion-option
@@ -52,9 +52,9 @@
         <ion-item class="calculator-text" *ngIf="rates">
       
           <ion-label stacked
-          >1 {{ coin_info[CalculatorForm.value.SendCoin] }} = {{
-          rates[CalculatorForm.value.GetCoin][CalculatorForm.value.SendCoin] }} {{
-          coin_info[CalculatorForm.value.GetCoin] }}</ion-label
+          >1 {{ coin_info[calculatorForm.value.sendCoin] }} = {{
+          rates[calculatorForm.value.getCoin][calculatorForm.value.sendCoin] }} {{
+          coin_info[calculatorForm.value.getCoin] }}</ion-label
         >
         
         </ion-item>
@@ -65,8 +65,8 @@
             <ion-input
               [disabled]="!rates"
               type="number"
-              formControlName="GetAmount"
-              [value]="CalculatorForm.value.GetAmount"
+              formControlName="getAmount"
+              [value]="calculatorForm.value.getAmount"
               (click)="selectInputType('Get')"
               (ionChange)="changeAmount('Get')"
               required
@@ -85,8 +85,8 @@
             <ion-select
               class="calculator-select-ion"
               interface="popover"
-              formControlName="GetCoin"
-              [(ngModel)]="CalculatorForm.value.GetCoin"
+              formControlName="getCoin"
+              [(ngModel)]="calculatorForm.value.getCoin"
               (ionChange)="changeCoin('Get')"
             >
               <ion-option *ngFor="let item of formCoins.get.items" [value]="item">
@@ -105,7 +105,7 @@
           ion-button
           class="button-standard calculator-button"
           (click)="goToConvertPage()"
-          [disabled]="!CalculatorForm.valid || !rates || !isAvailableSwap"
+          [disabled]="!calculatorForm.valid || !rates || !isAvailableSwap"
           *ngIf="isAvailableSwap"
         >
           {{'Convert' | translate}}
