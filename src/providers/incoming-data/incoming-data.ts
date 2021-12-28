@@ -985,14 +985,20 @@ export class IncomingDataProvider {
         title: this.translate.instant('Bitcoin Cash URI')
       };
 
-      // Ethereum URI
+      // Ducatus URI
     } else if (this.isValidDucatusUri(data)) {
       return {
         data,
         type: 'DucatusUri',
         title: this.translate.instant('Ducatus URI')
       };
-
+      // DucatusX URI
+    } else if(this.isValidDucatusXUri(data)){
+      return{
+        data,
+        type: 'DucatusUri',
+        title: this.translate.instant('DucatusX Uri')
+      }
       // Ethereum URI
     } else if (this.isValidEthereumUri(data)) {
       return {
