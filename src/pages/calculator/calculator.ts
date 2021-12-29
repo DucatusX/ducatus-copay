@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Big } from 'big.js';
 import { ModalController, NavController } from 'ionic-angular';
 import * as _ from 'lodash';
 import { TxDetailsModal } from '../../pages/tx-details/tx-details';
@@ -17,14 +18,6 @@ import {
   convertGetCoins,
   convertSendCoins
 } from './calculator-parameters';
-
-const fixNumber = x =>
-  x.toString().includes('.')
-    ? x
-        .toString()
-        .split('.')
-        .pop().length
-    : 0;
 
 @Component({
   selector: 'page-calculator',
@@ -208,7 +201,7 @@ export class CalculatorPage {
     this.selectInputType(type);
 
     if (type === 'Send') {
-      this.formCoins.get = convertCoins[this.calculatorForm.value.sendCoin]; //changing the possible choice for getCoin
+      this.formCoins.get = convertCoins[this.calculatorForm.value.sendCoin]; // changing the possible choice for getCoin
       this.calculatorForm.value.getCoin = this.formCoins.get.items[0]; // getCoin = the first possible coin to choose
     }
 
@@ -239,22 +232,26 @@ export class CalculatorPage {
     const { getCoin, sendCoin } = this.calculatorForm.value;
 
     const rate = this.rates[getCoin][sendCoin];
-    //if change getAmount then change sendAmount
-    if (type === 'Get' && this.lastChange === 'Get') {
-      const chNumber = getAmount * rate;
-      const fix = fixNumber(chNumber);
+    const bgGetAmount = Big(Number(getAmount));
+    const bgSendAmount = Big(Number(sendAmount));
 
-      this.calculatorForm.value.sendAmount =
-        fix === 0 ? chNumber : chNumber.toFixed(fix);
+    // if change getAmount then change sendAmount
+    if (type === 'Get' && this.lastChange === 'Get') {
+      let chNumber: any = bgGetAmount
+        .times(rate)
+        .toFixed();
+
+      this.calculatorForm.value.sendAmount = chNumber;
+  
     }
 
-    //if change sendAmount then change getAmount
+    // if change sendAmount then change getAmount
     if (type === 'Send' && this.lastChange === 'Send') {
-      const chNumber = sendAmount / rate;
-      const fix = fixNumber(chNumber);
-
-      this.calculatorForm.value.getAmount =
-        fix === 0 ? chNumber : chNumber.toFixed(fix);
+      let chNumber: any = bgSendAmount
+        .div(rate)
+        .toFixed();
+      
+      this.calculatorForm.value.getAmount = chNumber;
     }
 
     this.calculatorForm.value.getCoin = this.formCoins.get.items[0];
