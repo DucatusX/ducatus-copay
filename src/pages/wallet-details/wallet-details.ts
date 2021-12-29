@@ -655,8 +655,9 @@ export class WalletDetailsPage {
   }
 
   public showMoreOptions(): void {
+    const isTokenWallet = Boolean(this.wallet.linkedEthWallet);
     const showRequest =
-      this.wallet && this.wallet.isComplete() && !this.wallet.needsBackup;
+      this.wallet && this.wallet.isComplete() && !this.wallet.needsBackup && !isTokenWallet;
     const showShare = showRequest && this.isCordova;
     const optionsSheet = this.actionSheetProvider.createOptionsSheet(
       'wallet-options',
