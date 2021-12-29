@@ -16,6 +16,7 @@
               [value]="calculatorForm.value.sendAmount"
               (click)="selectInputType('Send')"
               (ionChange)="changeAmount('Send')"
+              (keydown.-)="$event.preventDefault()"
               required
             >
             </ion-input>
@@ -69,6 +70,7 @@
               [value]="calculatorForm.value.getAmount"
               (click)="selectInputType('Get')"
               (ionChange)="changeAmount('Get')"
+              (keydown.-)="$event.preventDefault()"
               required
             >
             </ion-input>
