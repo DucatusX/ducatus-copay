@@ -1,7 +1,7 @@
 wallet-item-content {
   .secondary-label {
     &.warning {
-      height: 26px;
+      height: 27px;
     }
   }
   ion-item {
@@ -15,7 +15,7 @@ wallet-item-content {
     }
   }
   .wallet-warning {
-    line-height: 12px;
+    line-height: 13px;
     color: color($colors, danger);
     ion-label {
       white-space: inherit;
