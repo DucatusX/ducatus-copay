@@ -15,8 +15,8 @@ msgstr ""
 msgid "(possible double spend)"
 msgstr "(возможна двойная трата)"
 
-msgid "* A payment proposal can be deleted if 1) you are the creator, and no other copayer has signed, or 2) 10 minutes have passed since the proposal was created."
-msgstr "* Предложенный платёж может быть удалён если 1) вы создали этот платёж и никто его ещё не подписал, или 2) если прошло более 10 минут с момента его создания."
+msgid "* A payment proposal can be deleted if 1) you created this payment and other wallet owners did not sign it 2) 10 minutes have passed since the proposal was created."
+msgstr "* Предложенный платёж может быть удалён если 1) вы создали этот платеж и другие владельцы кошелька его не подписали, или 2) если прошло более 10 минут с момента его создания."
 
 msgid "5-star ratings help us get BitPay Wallet into more hands, and more users means more resources can be committed to the app!"
 msgstr ""
