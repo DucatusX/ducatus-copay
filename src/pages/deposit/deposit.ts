@@ -96,15 +96,16 @@ export class DepositPage {
 
           this.deposits.map(x => {
             //we get an alternative balance
-            if (x.duc_amount === 0) {
-              x.duc_amountAlt = 0;
-            } else {
+            if(x.duc_amount){
               let balance = new Big(x.duc_amount);
               balance = Number(balance.times(100000000));
               this.rateProvider.whenRatesAvailable('duc').then(() => {
                 x.duc_amountAlt = this.rateProvider.toFiat(balance, 'USD', 'duc');
                 x.duc_amountAlt = this.filter.formatFiatAmount(x.duc_amountAlt);
               });
+            }
+            else if (x.duc_amount === 0) {
+              x.duc_amountAlt = 0;
             }
             //
             if (x.depositinput_set.length != 0) {
