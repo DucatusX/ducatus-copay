@@ -344,19 +344,27 @@ export class AmountPage {
   }
 
   public sendMax(): void {
-    this.useSendMax = !['ducx'].includes(this.wallet.coin);
+    this.useSendMax = true;
     this.allowSend = true;
+
     if (!this.wallet) {
       return this.finish();
     }
 
-    let currency = this.wallet.coin.toUpperCase()
+    if (
+      this.wallet.cachedStatus &&
+      this.wallet.cachedStatus.availableBalanceSat
+    ) {
+      this.logger.debug(
+        `availableBalanceSat: ${this.wallet.cachedStatus.availableBalanceSat}`
+      );
+    }
 
-    let maxAmount = this.wallet.cachedStatus.availableBalanceStr;
-    maxAmount = maxAmount.replace(` ${currency}`, '')
-    maxAmount = maxAmount.replace(/[\s,%]/g, '')
-    maxAmount = parseFloat(maxAmount);
-    
+    const maxAmount = this.txFormatProvider.satToUnit(
+      this.wallet.cachedStatus.availableBalanceSat,
+      this.wallet.coin
+    );
+
     this.zone.run(() => {
       this.expression = this.availableUnits[this.unitIndex].isFiat
         ? this.toFiat(maxAmount, this.wallet.coin).toFixed(2)
