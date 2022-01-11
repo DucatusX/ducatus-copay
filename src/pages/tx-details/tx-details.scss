@@ -1,5 +1,12 @@
 page-coinbase-tx-details,
 page-tx-details {
+  .background-content {
+    padding: 0;
+    button {
+      margin: 0 0.2em;
+    }
+  }
+
   .note-container {
     max-width: 200px;
   }
