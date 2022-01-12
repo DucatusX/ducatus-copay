@@ -82,6 +82,7 @@
                 (ionChange)="amountChange($event)"
                 [(ngModel)]="amountWallet"
                 [value]="FreezeGroup.value.Amount"
+                OnlyNumber="true"
               >
               </ion-input>
             </ion-item>
@@ -102,6 +103,7 @@
                 formControlName="Days"
                 [(ngModel)]="freezeDays"
                 [value]="FreezeGroup.value.Days"
+                OnlyNumber="true"
               >
               </ion-input>
             </ion-item>

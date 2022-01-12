@@ -62,7 +62,7 @@ export class CalculatorPage {
     this.calculatorForm = this.formBuilder.group({
       getAmount: [
         0,
-        Validators.compose([Validators.minLength(1), Validators.required,Validators.pattern(/^[0-9.]+$/)])
+        Validators.compose([Validators.minLength(1), Validators.required, Validators.pattern(/^[0-9.]+$/)])
       ],
       sendAmount: [
         0,
@@ -240,7 +240,7 @@ export class CalculatorPage {
       let chNumber: any = bgGetAmount
         .times(rate)
         .toFixed();
-
+    
       this.calculatorForm.value.sendAmount = chNumber;
   
     }

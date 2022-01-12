@@ -25,7 +25,7 @@
 
     <form class="form-margin" [formGroup]="quoteForm">
       <ion-item>
-        <ion-input class="input-box" item-end type="number" formControlName="amount" (ionChange)="amountChange()"></ion-input>
+        <ion-input class="input-box" item-end type="number" OnlyNumber="true" formControlName="amount" (ionChange)="amountChange()"></ion-input>
         <ion-select class="switcher" [selectOptions]="selectOptions" okText="{{okText}}" cancelText="{{cancelText}}" formControlName="altCurrency" (ionChange)="altCurrencyChange()">
           <ion-option *ngFor="let fiatAltCurrency of altCurrenciesToShow" [value]="fiatAltCurrency">{{ fiatAltCurrency }}</ion-option>
           <ion-option *ngIf="wallet && wallet.coin" [value]="currencyProvider.getChain(wallet.coin)">{{ wallet.coin | uppercase }}</ion-option>
