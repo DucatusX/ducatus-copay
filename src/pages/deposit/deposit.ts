@@ -89,7 +89,7 @@ export class DepositPage {
       });
 
       this.httpClient
-        .get(`${this.apiProvider.getAddresses().ducatuscoins}/api/v3/get_deposits/?wallet_ids=${walletsResult}`)
+        .get(`${this.apiProvider.getAddresses().deposit}/api/v3/get_deposits/?wallet_ids=${walletsResult}`)
         .toPromise()
         .then(result => {
           this.deposits = result as any;
@@ -162,13 +162,13 @@ export class DepositPage {
 
   private getDeposit(id) {
     return this.httpClient
-      .get(`${this.apiProvider.getAddresses().ducatuscoins}/api/v3/get_deposit_info/?deposit_id=${id}`)
+      .get(`${this.apiProvider.getAddresses().deposit}/api/v3/get_deposit_info/?deposit_id=${id}`)
       .toPromise();
   }
 
   private sendTX(raw_tx_hex) {
     return this.httpClient
-      .post(`${this.apiProvider.getAddresses().ducatuscoins}/api/v3/send_deposit_transaction/`, {
+      .post(`${this.apiProvider.getAddresses().deposit}/api/v3/send_deposit_transaction/`, {
         raw_tx_hex
       })
       .toPromise();

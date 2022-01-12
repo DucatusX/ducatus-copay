@@ -9,6 +9,7 @@ export class ApiProvider {
       crowdsale: 'https://tokenization.centuriongm.com',
       pog: 'https://d-pog.com',
       ratesApi: 'https://rates.ducatuscoins.com/api/v1/rates/',
+      deposit: 'https://www.ducatuscoins.com',
       swap: {
         status: 'https://www.ducatuscoins.com/api/v4/status/',
         network: 'https://www.ducatuscoins.com/api/v4/networks/',
@@ -25,6 +26,7 @@ export class ApiProvider {
       // crowdsale: 'http://duccrowdsale.rocknblock.io',
       pog: 'https://devgold.rocknblock.io',
       ratesApi: 'https://ducexpl.rocknblock.io/api/v1/rates/',
+      deposit: 'https://ducsite.rocknblock.io/',
       swap: {
         status: 'https://wducx.rocknblock.io/api/v1/status/',
         network: 'https://wducx.rocknblock.io/api/v1/networks/',

@@ -162,7 +162,7 @@ export class DepositAddPage {
     private_path: string
   ) {
     return this.httpClient
-      .post(`${this.apiProvider.getAddresses().ducatuscoins}/api/v3/generate_deposit/`, {
+      .post(`${this.apiProvider.getAddresses().deposit}/api/v3/generate_deposit/`, {
         wallet_id,
         duc_address,
         duc_public_key,
