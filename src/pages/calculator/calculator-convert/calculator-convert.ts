@@ -216,7 +216,7 @@ export class CalculatorConvertPage {
         }
       });
     }
-
+    
     if(wallets.length == 0)
     {
       this.viewWalletsError('You do not have suitable wallets');

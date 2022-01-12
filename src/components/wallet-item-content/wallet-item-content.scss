@@ -12,6 +12,9 @@ wallet-item-content {
     }
     .item-inner {
       border-bottom: 0px !important;
+      ion-note {
+        flex: 0 0 15%;
+      }
     }
   }
   .wallet-warning {

@@ -250,9 +250,8 @@ export class CalculatorPage {
       let chNumber: any = bgSendAmount
         .div(rate)
         .toFixed();
-      // remove leading numbers
-      chNumber = parseFloat(chNumber).toString();
-      this.calculatorForm.value.getAmount = chNumber.length === 0 ? '0' : chNumber;
+
+      this.calculatorForm.value.getAmount = chNumber;
     }
 
     this.calculatorForm.value.getCoin = this.formCoins.get.items[0];
