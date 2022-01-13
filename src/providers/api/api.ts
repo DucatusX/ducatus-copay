@@ -27,8 +27,8 @@ export class ApiProvider {
       pog: 'https://devgold.rocknblock.io',
       ratesApi: 'https://ducexpl.rocknblock.io/api/v1/rates/',
       deposit: 'https://www.ducatuscoins.com',
-      //сейчас работает только прод апи
-      //deposit: 'https://ducsite.rocknblock.io/',
+      // сейчас работает только прод апи
+      // deposit: 'https://ducsite.rocknblock.io/',
       swap: {
         status: 'https://wducx.rocknblock.io/api/v1/status/',
         network: 'https://wducx.rocknblock.io/api/v1/networks/',
