@@ -253,8 +253,15 @@ export class CalculatorPage {
       
       this.calculatorForm.value.getAmount = chNumber;
     }
-
-    this.calculatorForm.value.getCoin = this.formCoins.get.items[0];
+    if(getCoin==='DUC'){
+      this.calculatorForm.value.getCoin = this.formCoins.get.items[0];
+    }
+    else if(getCoin==='WDUCX'){
+      this.calculatorForm.value.getCoin = this.formCoins.get.items[1];
+    }
+    else {
+      this.calculatorForm.value.getCoin = this.formCoins.get.items[0];
+    }
   }
 
   public goToConvertPage() {
