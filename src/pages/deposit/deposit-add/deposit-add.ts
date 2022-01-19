@@ -61,6 +61,7 @@ export class DepositAddPage {
   }
 
   ionViewWillEnter() {
+    this.viewAlertAttantion('confirmation of the deposit can take up to 1 business day.');
     const wallets = this.profileProvider.getWallets({
       showHidden: true,
       backedUp: true
@@ -73,6 +74,21 @@ export class DepositAddPage {
 
       this.walletAddresses = result.wallets;
     });
+  }
+
+  private viewAlertAttantion(message: string): void {
+    let alert = this.alertCtrl.create({
+      cssClass: 'voucher-alert',
+      title:
+        '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+      message,
+      buttons: [
+        {
+          text: 'Ok'
+        }
+      ]
+    });
+    alert.present();
   }
 
   public changePercentAndMoth(type: string) {
