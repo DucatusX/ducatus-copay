@@ -48,6 +48,7 @@ export type InfoSheetType =
   | 'request-feature'
   | 'report-issue'
   | 'new-key'
+  | 'wducx-select'
   | 'wrong-encrypt-password'
   | 'bch-legacy-warning-1'
   | 'bch-legacy-warning-2'

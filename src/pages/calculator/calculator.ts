@@ -12,6 +12,7 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import { TimeProvider } from '../../providers/time/time';
 import { WalletProvider } from '../../providers/wallet/wallet';
 import { CalculatorConvertPage } from './calculator-convert/calculator-convert';
+import { ActionSheetProvider } from '../../providers';
 import {
   coinInfo,
   convertCoins,
@@ -47,6 +48,7 @@ export class CalculatorPage {
     private appProvider: AppProvider,
     private httpClient: HttpClient, // private moonPayProvider: MoonPayProvider
     private profileProvider: ProfileProvider,
+    private actionSheetProvider: ActionSheetProvider,
     private walletProvider: WalletProvider,
     private timeProvider: TimeProvider,
     private modalCtrl: ModalController
@@ -265,6 +267,12 @@ export class CalculatorPage {
   }
 
   public goToConvertPage() {
+    if(this.calculatorForm.value.getCoin === 'WDUCX'){
+      const infoSheet = this.actionSheetProvider.createInfoSheet('wducx-select')
+      infoSheet.present()
+      return
+    }
+
     this.navCtrl.push(CalculatorConvertPage, {
       get: this.calculatorForm.value.getCoin,
       send: this.calculatorForm.value.sendCoin,
