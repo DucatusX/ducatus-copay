@@ -453,6 +453,16 @@
       <span sheet-button-text translate>Show me the legacy address</span>
     </info-sheet-template>
 
+    <info-sheet-template *ngSwitchCase="'wducx-select'" type="warning">
+      <span sheet-title-text translate>Temporarily disabled</span>
+      <span sheet-text translate>
+        The swap will be enabled again after necessary improvements and 
+        when 90% of tokens in circulation will be send to the burn address.
+      </span>
+      <span sheet-button-text translate>GOT IT</span>
+      
+    </info-sheet-template>
+    
     <info-sheet-template *ngSwitchCase="'wrong-encrypt-password'" type="danger">
       <span sheet-title-text translate>Wrong password</span>
       <span sheet-text>
