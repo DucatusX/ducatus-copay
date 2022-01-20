@@ -12,17 +12,8 @@ wallet-item-content {
     }
     .item-inner {
       border-bottom: 0px !important;
-      .note {
-        flex: 0 0 15%;
-        div {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end;
-        }
-      }
     }
   }
-
   .wallet-warning {
     line-height: 13px;
     color: color($colors, danger);
