@@ -78,8 +78,6 @@ export class WalletDetailsPage {
   public txpsPending: any[];
   public lowUtxosWarning: boolean;
   public associatedWallet: string;
-
-  public showOptionsButton: boolean = true;
   private isCordova: boolean;
 
   public supportedCards: Promise<CardConfigMap>;
@@ -139,7 +137,6 @@ export class WalletDetailsPage {
       .catch(err => {
         this.logger.error(err);
       });
-
   }
 
   subscribeEvents() {
@@ -160,8 +157,6 @@ export class WalletDetailsPage {
       this.profileProvider.setFastRefresh(this.wallet);
       this.subscribeEvents();
     });
-
-    this.showOptionsButton = this.genMoreOptionsList().length > 0;
   }
 
   ionViewWillLeave() {
@@ -659,23 +654,13 @@ export class WalletDetailsPage {
     });
   }
 
-  public genMoreOptionsList() {
-  
+  public showMoreOptions(): void {
     const isTokenWallet = Boolean(this.wallet.linkedEthWallet);
     const showRequest =
       this.wallet && this.wallet.isComplete() && !this.wallet.needsBackup && !isTokenWallet;
-
     const showShare = showRequest && this.isCordova;
-
-    const listOfOptions: boolean[] = [showRequest, showShare];
-    const listLength = listOfOptions.reduce((acc, val) => acc + Number(val), 0)
-    return { showRequest, showShare, length: listLength}
-  }
-
-  public showMoreOptions(): void {
-    const { showShare, showRequest } = this.genMoreOptionsList();
     const optionsSheet = this.actionSheetProvider.createOptionsSheet(
-      'wallet-options', 
+      'wallet-options',
       { showShare, showRequest }
     );
     optionsSheet.present();

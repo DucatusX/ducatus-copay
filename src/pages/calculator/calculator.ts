@@ -250,7 +250,7 @@ export class CalculatorPage {
       let chNumber: any = bgSendAmount
         .div(rate)
         .toFixed();
-
+      
       this.calculatorForm.value.getAmount = chNumber;
     }
     if(getCoin==='DUC'){
