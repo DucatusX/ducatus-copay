@@ -62,6 +62,7 @@
     "start:android": "npm run run:android",
     "start:desktop": "npm run build:desktop && electron .",
     "build:ios": "npm run env:dev && ionic cordova build ios --debug",
+    "build:ios-prod": "npm run env:prod && ionic cordova build ios --debug",
     "build:android": "npm run env:dev && ionic cordova build android --debug",
     "build:desktop": "npm run env:dev && npm run ionic:build",
     "build:web": "npm run env:dev && npm run ionic:build",
