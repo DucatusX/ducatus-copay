@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Big } from 'big.js';
 import { Logger } from '../../providers/logger/logger';
 import { BwcProvider } from '../bwc/bwc';
 import { ConfigProvider } from '../config/config';
@@ -216,11 +217,15 @@ export class TxFormatProvider {
     };
   }
 
-  public satToUnit(amount: number, coin: Coin): number {
-    let { unitToSatoshi, unitDecimals } = this.currencyProvider.getPrecision(
-      coin
-    );
-    let satToUnit = 1 / unitToSatoshi;
-    return parseFloat((amount * satToUnit).toFixed(unitDecimals));
+  public satToUnit(amount: number = 0, coin: Coin): number {
+    const { unitToSatoshi, unitDecimals } = this.currencyProvider.getPrecision(coin);
+    const bgSatToUnit = Big(1 / unitToSatoshi);
+    const bgAmount = Big(amount);
+    
+    const unitAmount = bgAmount
+      .times(bgSatToUnit)
+      .toFixed(unitDecimals);
+    
+    return unitAmount;
   }
 }
