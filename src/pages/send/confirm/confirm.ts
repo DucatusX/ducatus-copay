@@ -1375,6 +1375,7 @@ export class ConfirmPage {
       clearCache: true,
       dryRun: true
     }).catch(err => {
+      this.showErrorInfoSheet(err)
       this.logger.warn('Error updateTx', err);
     });
   }
