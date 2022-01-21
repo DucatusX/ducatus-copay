@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Big } from 'big.js';
+import * as _ from 'lodash';
 import { Logger } from '../../providers/logger/logger';
 import { BwcProvider } from '../bwc/bwc';
 import { ConfigProvider } from '../config/config';
@@ -7,12 +8,9 @@ import { Coin, CurrencyProvider } from '../currency/currency';
 import { FilterProvider } from '../filter/filter';
 import { RateProvider } from '../rate/rate';
 
-import * as _ from 'lodash';
-
 @Injectable()
 export class TxFormatProvider {
   private bitcoreCash;
-
   // TODO: implement configService
   public pendingTxProposalsCountForUs: number;
 
@@ -29,29 +27,36 @@ export class TxFormatProvider {
   }
 
   public toCashAddress(address: string, withPrefix?: boolean): string {
-    return this.bitcoreCash.Address(address).toString(!withPrefix);
+    return this.bitcoreCash
+      .Address(address)
+      .toString(!withPrefix);
   }
 
   public toLegacyAddress(address: string): string {
-    let legacyAddr: string = this.bitcoreCash
+    const legacyAddr: string = this.bitcoreCash
       .Address(address)
       .toLegacyAddress();
+
     return legacyAddr;
   }
-
   // TODO: Check return of formatAmount(...), sometimes returns a number and sometimes a string
   public formatAmount(coin: string, satoshis: number, fullPrecision?: boolean) {
-    if (coin == 'sat') return satoshis;
-
+    if (coin == 'sat') {
+      return satoshis;
+    }
     // TODO : now only works for english, specify opts to change thousand separator and decimal separator
-    var opts = {
+    const opts = {
       fullPrecision: !!fullPrecision
     };
+
     return this.bwcProvider.getUtils().formatAmount(satoshis, coin, opts);
   }
 
   public formatAmountStr(coin: string, satoshis: number): string {
-    if (isNaN(satoshis)) return undefined;
+    if (isNaN(satoshis)) {
+      return undefined;
+    }
+
     return this.formatAmount(coin, satoshis) + ' ' + coin.toUpperCase();
   }
 
@@ -63,10 +68,17 @@ export class TxFormatProvider {
   ): Promise<string> {
     // TODO not a promise
     return new Promise(resolve => {
-      if (isNaN(satoshis)) return resolve();
-      var v1;
+      if (isNaN(satoshis)) {
+        return resolve(null);
+      }
+      
+      let v1;
       v1 = this.rate.toFiat(satoshis, code, coin, opts);
-      if (!v1) return resolve(null);
+      
+      if (!v1) {
+        return resolve(null);
+      }
+
       return resolve(v1.toFixed(2));
     });
   }
@@ -75,23 +87,36 @@ export class TxFormatProvider {
     // TODO not a promise
     return new Promise(resolve => {
       let v1: number;
-      if (isNaN(satoshis)) return resolve();
+
+      if (isNaN(satoshis)) {
+        return resolve(null);
+      }
+
       v1 = this.rate.toFiat(satoshis, 'USD', coin);
-      if (!v1) return resolve(null);
+      
+      if (!v1) {
+        return resolve(null);
+      }
+
       return resolve(v1.toFixed(2));
     });
   }
 
   public formatAlternativeStr(coin: string, satoshis: number): string {
-    if (isNaN(satoshis)) return undefined;
-    let settings = this.configProvider.get().wallet.settings;
+    if (isNaN(satoshis)) {
+      return undefined;
+    }
 
-    let val = (() => {
-      var v1 = parseFloat(
+    const settings = this.configProvider.get().wallet.settings;
+    const val = (() => {
+      let v1 = parseFloat(
         this.rate.toFiat(satoshis, settings.alternativeIsoCode, coin).toFixed(2)
       );
       v1 = this.filter.formatFiatAmount(v1);
-      if (!v1) return null;
+
+      if (!v1) {
+        return null;
+      }
 
       return v1 + ' ' + settings.alternativeIsoCode;
     }).bind(this);
@@ -101,18 +126,21 @@ export class TxFormatProvider {
   }
 
   public processTx(coin: Coin, tx) {
-    if (!tx || tx.action == 'invalid') return tx;
-
+    if (!tx || tx.action == 'invalid')  {
+      return tx;
+    }
     // New transaction output format. Fill tx.amount and tx.toAmount for
     // backward compatibility.
     if (tx.outputs && tx.outputs.length) {
-      var outputsNr = tx.outputs.length;
+      const outputsNr = tx.outputs.length;
 
       if (tx.action != 'received') {
+
         if (outputsNr > 1) {
           tx.recipientCount = outputsNr;
           tx.hasMultiplesOutputs = true;
         }
+
         tx.amount = _.reduce(
           tx.outputs,
           (total, o) => {
@@ -123,8 +151,8 @@ export class TxFormatProvider {
           0
         );
       }
-      tx.toAddress = tx.outputs[0].toAddress;
 
+      tx.toAddress = tx.outputs[0].toAddress;
       // toDo: translate all tx.outputs[x].toAddress ?
       if (tx.toAddress && coin == 'bch') {
         tx.toAddress = this.toCashAddress(tx.toAddress);
@@ -148,8 +176,9 @@ export class TxFormatProvider {
     tx.feeStr = tx.fee
       ? this.formatAmountStr(chain, tx.fee)
       : tx.fees
-      ? this.formatAmountStr(chain, tx.fees)
-      : 'N/A';
+        ? this.formatAmountStr(chain, tx.fees)
+        : 'N/A';
+
     if (tx.amountStr) {
       tx.amountValueStr = tx.amountStr.split(' ')[0];
       tx.amountUnitStr = tx.amountStr.split(' ')[1];
@@ -172,9 +201,7 @@ export class TxFormatProvider {
     opts?: { onlyIntegers?: boolean; rates? }
   ) {
     const { alternativeIsoCode } = this.configProvider.get().wallet.settings;
-    const { unitToSatoshi, unitDecimals } = this.currencyProvider.getPrecision(
-      coin
-    );
+    const { unitToSatoshi, unitDecimals } = this.currencyProvider.getPrecision(coin);
     const satToUnit = 1 / unitToSatoshi;
     let amountUnitStr;
     let amountSat;
@@ -198,9 +225,8 @@ export class TxFormatProvider {
       const amountSatStr = (amount * unitToSatoshi).toFixed(0);
       // parseInt('2e21',10) = 2
       // parseInt('2000000000000000000000',10) = 2e+21
-      const formetAmountSatStr = Number(amountSatStr).toLocaleString('fullwide', { useGrouping: false });
-      amountSat = parseInt(formetAmountSatStr, 10);
-     
+      const formatAmountSatStr = Number(amountSatStr).toLocaleString('fullwide', { useGrouping: false });
+      amountSat = parseInt(formatAmountSatStr, 10);
       amountUnitStr = this.formatAmountStr(coin, amountSat);
       // WARING! inaccurate calculations.
       // but apparently they are not important
