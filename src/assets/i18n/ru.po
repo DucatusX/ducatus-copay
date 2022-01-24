@@ -2002,7 +2002,7 @@ msgid "Requires multiple devices (most secure)"
 msgstr ""
 
 msgid "Retrieving inputs information..."
-msgstr "Ошибка при получении информации SendMax"
+msgstr "Получение информации..."
 
 msgid "Retry camera"
 msgstr "Retry camera"
