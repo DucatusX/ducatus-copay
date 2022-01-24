@@ -289,6 +289,8 @@ export class CalculatorConvertPage {
         //if we don't get address
         this.sendDisabled = false
         this.logger.debug('cant get addresses: ', err);
+        const infoSheet = this.actionSheetProvider.createInfoSheet('cant-get-addresses')
+        infoSheet.present();
       });
   }
 
