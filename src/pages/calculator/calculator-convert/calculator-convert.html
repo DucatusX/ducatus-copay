@@ -57,76 +57,41 @@
         </div>
       </div>
 
-      <form [formGroup]="ConvertGroupForm">
-        <div class="calculator-convert-group">
+      <form >
+        <div class="calculator-convert-group" (click)="openAddressListSend(walletsInfoSend)">
           <span class="calculator-convert-label"
             >{{'Choose address to pay' | translate}}</span
           >
-
-          <div class="calculator-convert-group">
-            <ion-item class="calculator-convert-input">
-              <ion-input
-                placeholder="Enter or select an address"
-                type="text"
-                formControlName="ConvertFormGroupAddressSendInput"
-                [value]="ConvertGroupForm.value.ConvertFormGroupAddressSendInput"
-                required
-              >
-              </ion-input>
-            </ion-item>
-
-            <ion-item
-              *ngIf="walletsChecker"
-              class="calculator-convert-select"
-              (click)="openAddressList(walletsInfoSend,'Send')"
-            >
+          <div class="calculator-convert-select">
+            <span *ngIf="!sendAddress" class="calculator-convert-select-placeholder">Select your address</span>
+            <div *ngIf="!fullSize" class="calculator-convert-select-address">{{sendAddress | shortenedAddress: 22}}</div>
+            <div *ngIf="fullSize" class="calculator-convert-select-address">{{sendAddress}}</div>
+            <div class="calculator-convert-select-icon">
               <ion-icon name="arrow-dropdown"></ion-icon>
-            </ion-item>
+            </div>
           </div>
         </div>
 
-        <div class="calculator-convert-group">
-          <ng-container> </ng-container>
 
-          <span
-            class="calculator-convert-label"
-            *ngIf="formCoins.get !== 'WDUCX'; else elseTemplate"
+        <div class="calculator-convert-group" [ngClass]="{active: !sendAddress}" (click)="openAddressListGet(walletsInfoGet)">
+          <span class="calculator-convert-label"
             >{{'Choose address to get' | translate}}</span
           >
-          <ng-template #elseTemplate>
-            <span class="calculator-convert-label"
-              >{{'Enter your Binance Smart Chain address' | translate}}</span
-            >
-          </ng-template>
-
-          <div class="calculator-convert-group">
-            <ion-item class="calculator-convert-input">
-              <ion-input
-                [placeholder]="formCoins.get !== 'WDUCX'? 'Enter or select an address' : 'Enter address'"
-                type="text"
-                formControlName="ConvertFormGroupAddressGetInput"
-                [value]="ConvertGroupForm.value.ConvertFormGroupAddressGetInput"
-                required
-                (change)="changeAddress('Get')"
-              >
-              </ion-input>
-            </ion-item>
-
-            <ion-item
-              *ngIf="walletsChecker && formCoins.get !== 'WDUCX'"
-              class="calculator-convert-select"
-              (click)="openAddressList(walletsInfoGet, 'Get')"
-            >
+          <div class="calculator-convert-select">
+            <span *ngIf="!sendAddress" class="calculator-convert-select-placeholder">Select your address</span>
+            <div *ngIf="!fullSize" class="calculator-convert-select-address">{{getAddress | shortenedAddress: 22}}</div>
+            <div *ngIf="fullSize" class="calculator-convert-select-address">{{getAddress}}</div>
+            <div class="calculator-convert-select-icon">
               <ion-icon name="arrow-dropdown"></ion-icon>
-            </ion-item>
+            </div>
           </div>
         </div>
 
         <button
           ion-button
           class="button-standard calculator-button"
-          (click)="goToSendPage()"
-          [disabled]="!ConvertGroupForm.valid"
+          (click)="inizilizationOfSend()"
+          [disabled]="(!sendAddress || !getAddress) || sendDisabled"
         >
           {{'Send' | translate}}
         </button>
