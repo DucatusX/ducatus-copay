@@ -25,6 +25,7 @@ export type InfoSheetType =
   | 'backup-later-warning'
   | 'convertor-address'
   | 'backup-safeguard-warning'
+  | 'cant-get-addresses'
   | 'copayers'
   | 'copy-to-clipboard'
   | 'copied-gift-card-claim-code'

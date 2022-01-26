@@ -10,6 +10,10 @@ export class ApiProvider {
       pog: 'https://d-pog.com',
       ratesApi: 'https://rates.ducatuscoins.com/api/v1/rates/',
       deposit: 'https://www.ducatuscoins.com',
+      getExchange:{
+        livenet: "https://www.ducatuscoins.com",
+        testnet: "https://devducatus.rocknblock.io"
+      },
       swap: {
         status: 'https://www.ducatuscoins.com/api/v4/status/',
         network: 'https://www.ducatuscoins.com/api/v4/networks/',
@@ -29,6 +33,10 @@ export class ApiProvider {
       deposit: 'https://www.ducatuscoins.com',
       //сейчас работает только прод апи
       //deposit: 'https://ducsite.rocknblock.io/',
+      getExchange:{
+        livenet: "https://www.ducatuscoins.com",
+        testnet: "https://devducatus.rocknblock.io"
+      },
       swap: {
         status: 'https://wducx.rocknblock.io/api/v1/status/',
         network: 'https://wducx.rocknblock.io/api/v1/networks/',

@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
 import env from '../../../environments';
@@ -9,6 +8,8 @@ import { ApiProvider } from '../../../providers/api/api';
 import { ErrorsProvider } from '../../../providers/errors/errors';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
+import {Platform} from 'ionic-angular';
+
 
 import { TranslateService } from '@ngx-translate/core';
 import {
@@ -19,12 +20,12 @@ import {
 import { Logger } from '../../../providers/logger/logger';
 import { coinInfo } from '../calculator-parameters';
 
+
 @Component({
   selector: 'page-calculator-convert',
   templateUrl: 'calculator-convert.html'
 })
 export class CalculatorConvertPage {
-  public ConvertGroupForm: FormGroup;
   public formCoins: any = [];
   public coinInfo = coinInfo;
 
@@ -35,15 +36,19 @@ export class CalculatorConvertPage {
   public addresses: any;
   public typeOpenAddressList: any;
   public sendLength: number = 0;
+  public sendDisabled:boolean
   public sendFirstAddress: any;
-
+  public sendAddress:string;
+  public sendWallet: any;
+  public getAddress:string;
+  public getWallet:any;
   public wallet: any;
+  public fullSize:boolean
 
   public isProduction: boolean;
 
   constructor(
     private navParams: NavParams,
-    private formBuilder: FormBuilder,
     private httpClient: HttpClient,
     private bwcErrorProvider: BwcErrorProvider,
     private errorsProvider: ErrorsProvider,
@@ -55,23 +60,16 @@ export class CalculatorConvertPage {
     private actionSheetProvider: ActionSheetProvider,
     private txFormatProvider: TxFormatProvider,
     private apiProvider: ApiProvider,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private platform: Platform
   ) {
+    if (this.platform.width()>500){
+      this.fullSize = true
+    }
     this.formCoins.get = this.navParams.data.get;
     this.formCoins.send = this.navParams.data.send;
     this.formCoins.amountGet = this.navParams.data.amountGet;
     this.formCoins.amountSend = this.navParams.data.amountSend;
-
-    this.ConvertGroupForm = this.formBuilder.group({
-      ConvertFormGroupAddressGetInput: [
-        '',
-        Validators.compose([Validators.minLength(1), Validators.required])
-      ],
-      ConvertFormGroupAddressSendInput: [
-        '',
-        Validators.compose([Validators.minLength(1), Validators.required])
-      ]
-    });
 
     const mode: string = env && env.name;
     this.isProduction = ( mode === 'production' );
@@ -102,7 +100,7 @@ export class CalculatorConvertPage {
   }
 
   ballanceStrToNumber(balance:string):number {
-    if(balance){
+    if (balance){
       // ToValidStrDecimal
       balance = balance.replace(/[\s,%]/g, '')
       // toNumber
@@ -172,15 +170,6 @@ export class CalculatorConvertPage {
     return walletsRes;
   }
 
-  public changeAddress(type) {
-    if (type == 'Get') {
-      // this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput = this.ConvertGroupForm.value.ConvertFormGroupAddressGet;
-      this.setAddress(this.formCoins.get);
-    }
-    if (type == 'Send') {
-      this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput = this.ConvertGroupForm.value.ConvertFormGroupAddressSend;
-    }
-  }
 
   private viewWalletsError(message: string): void {
     let alert = this.alertCtrl.create({
@@ -197,98 +186,133 @@ export class CalculatorConvertPage {
     alert.present();
   }
 
-  public openAddressList(wallets, type?) {
-    this.typeOpenAddressList = type;
 
-    if (type === 'Send') {
-      wallets = wallets.filter(elemWallets => {
-        let currency = elemWallets && elemWallets.wallet && elemWallets.wallet.coin.toUpperCase();
-        let walletBalance  = this.getBalance(elemWallets.wallet, currency);
-        walletBalance = this.ballanceStrToNumber(walletBalance);
-        let amountSend = parseFloat(this.formCoins.amountSend);
+ openAddressListSend(wallets){
+  wallets = wallets.filter(elemWallets => {
+    let currency = elemWallets && elemWallets.wallet && elemWallets.wallet.coin.toUpperCase();
+    let walletBalance  = this.getBalance(elemWallets.wallet, currency);
+    walletBalance = this.ballanceStrToNumber(walletBalance);
+    let amountSend = parseFloat(this.formCoins.amountSend);
 
-        if (walletBalance >= amountSend) {
-          return true;
-        } else if (Number.isNaN(walletBalance)) {
-          return false;
-        } else {
-          return false;
-        }
-      });
+    if (walletBalance >= amountSend) {
+      return true;
+    } else if (Number.isNaN(walletBalance)) {
+      return false;
+    } else {
+      return false;
     }
+  });
 
-    if(wallets.length == 0)
-    {
+  if (wallets.length == 0)
+  {
+    this.viewWalletsError('You do not have suitable wallets');
+    return;
+  }
+
+  const infoSheet = this.actionSheetProvider.createInfoSheet(
+    'convertor-address',
+    { wallet: wallets }
+  );
+   infoSheet.present();
+   infoSheet.onDidDismiss((option,item)=>{
+    this.sendWallet = item
+    this.sendAddress = option
+    this.getAddress = ''
+  })
+
+}
+
+
+ openAddressListGet(wallets){
+   if (!this.sendAddress){
+     return;
+   }
+
+   else if (wallets.length == 0){
       this.viewWalletsError('You do not have suitable wallets');
       return;
     }
 
-    const infoSheet = this.actionSheetProvider.createInfoSheet(
-      'convertor-address',
-      { wallet: wallets }
-    );
-    infoSheet.present();
-    infoSheet.onDidDismiss(option => {
-      if (option) {
-        if (type == 'Get') {
-          this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput = option;
-          this.setAddress(this.formCoins.get);
-        }
-        if (type == 'Send') {
-          this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput = option;
-        }
-      }
-    });
+  wallets = wallets.filter(elemWallets=>{
+    if (elemWallets.wallet.network === this.sendWallet.wallet.network) {
+      return true
+    }
+    else {
+      return false
+    }
+  })
+
+
+  const infoSheet = this.actionSheetProvider.createInfoSheet(
+    'convertor-address',
+    { wallet: wallets }
+  );
+  infoSheet.present();
+  infoSheet.onDidDismiss((option,item)=>{
+    this.getAddress = option;
+    this.getWallet = item.wallet;
+  })
+}
+
+
+ public  setAddress(type) {
+   //address validation check
+   
+  const address = this.getAddress;
+  if (
+    type === 'DUC' &&
+    address.length === 34 &&
+    ['L', 'l', 'M', 'm','n','N'].includes(address.substring(0, 1))
+  ) {
+    this.getAddresses();
   }
-
-  public setAddress(type) {
-    const address = this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput;
-   
-    if (
-      type === 'DUC' &&
-      this.isProduction && 
-      address.length === 34 &&
-      ['L', 'l', 'M', 'm'].includes(address.substring(0, 1))
-    ) {
-      this.getAddresses();
-    }
-
-    if (
-      type === 'DUC' &&
-      !this.isProduction && 
-      address.length === 34
-    ) {
-      this.getAddresses();
-    }
-   
-    if (type === 'DUCX') {
-      if (address.length === 42) {
-        this.getAddresses();
-      }
-    }
-
-    if (type === 'WDUCX') {
+ 
+  if (type === 'DUCX') {
+    if (address.length === 42) {
       this.getAddresses();
     }
   }
+
+  if (type === 'WDUCX') {
+    this.getAddresses();
+  }
+}
 
   public getAddresses() {
+    //get the address to which we will send
     this.getExchange(
-      this.ConvertGroupForm.value.ConvertFormGroupAddressGetInput,
+      this.getAddress,
       this.formCoins.get
     )
       .then(result => {
-        this.addresses = result;
+        //if we get address
+        this.addresses = result
+        this.goToSendPage()
       })
       .catch(err => {
+        //if we don't get address
+        this.sendDisabled = false
         this.logger.debug('cant get addresses: ', err);
+        const infoSheet = this.actionSheetProvider.createInfoSheet('cant-get-addresses')
+        infoSheet.present();
       });
   }
 
   public getExchange(address: string, currency: string) {
+    let network;
+    if (this.sendWallet.wallet.network==='livenet'){
+      network = "livenet"
+    }
+    else {
+      network = "testnet"
+    }
+
+    //testnet -> devApi
+    //livenet -> prodApi
+    
     return this.httpClient
       .post(
-        this.apiProvider.getAddresses().ducatuscoins + '/api/v1/exchange/',
+        this.apiProvider.getAddresses().getExchange[network] + '/api/v1/exchange/',
         {
           to_address: address,
           to_currency: currency
@@ -316,13 +340,15 @@ export class CalculatorConvertPage {
     });
   }
 
+  public inizilizationOfSend(){
+    this.sendDisabled = true
+    this.setAddress(this.getWallet.coin.toUpperCase())
+  }
+
   public async goToSendPage() {
     const dataInfo = {};
 
-    const sendAddress = this.ConvertGroupForm.value
-      .ConvertFormGroupAddressSendInput;
-    const getAddress = this.ConvertGroupForm.value
-      .ConvertFormGroupAddressGetInput as string;
+    const getAddress = this.getAddress as string;
 
     // Validate addresses
     if (this.formCoins.get.toLowerCase() === 'wducx') {
@@ -330,29 +356,21 @@ export class CalculatorConvertPage {
       if (!cha) return;
     }
     
-    this.wallet = this.walletsInfoSend.find(infoWallet => {
-      const coincidenceAddress = ( infoWallet.address === sendAddress );
-      const isTestnetWallet = ( 
-        infoWallet.wallet 
-        && infoWallet.wallet.network === 'testnet' 
-      );
-      // DUCX: addresses for testnet and mainnet is same
-      if ( this.isProduction ) {
-        return coincidenceAddress;
-      } else {
-        return coincidenceAddress && isTestnetWallet;
-      }
-    }).wallet;
-    
+    this.wallet = this.sendWallet.wallet
+
     // Getting all data
-    dataInfo[this.formCoins.get.toLowerCase()] =
-      this.formCoins.get.toLowerCase() === 'wducx'
-        ? await this.getDucxWduxSwapInfo()
-        : {
+    let coin = this.formCoins.get.toLowerCase()
+
+        if (this.formCoins.get.toLowerCase() === 'wducx'){
+          dataInfo[coin] = await this.getDucxWduxSwapInfo()
+        }
+        else {
+          dataInfo[coin] = {
             swap_address:
               this.addresses[this.formCoins.send.toLowerCase() + '_address'] ||
               getAddress
-          };
+          }
+        }
 
     // console.log('data ADDRESS', dataInfo);
     // Getting addresses from all data
@@ -423,6 +441,7 @@ export class CalculatorConvertPage {
         parseInt(Number(parsedAmount.amount).toLocaleString('fullwide', { useGrouping: false }), 10)
       )
         .then(() => {
+          this.sendDisabled = false
           this.incomingDataProvider.redir(addressView, redirParms);
         })
         .catch(err => {
