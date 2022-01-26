@@ -63,7 +63,7 @@ export class CalculatorConvertPage {
     private alertCtrl: AlertController,
     private platform: Platform
   ) {
-    if(this.platform.width()>500){
+    if (this.platform.width()>500){
       this.fullSize = true
     }
     this.formCoins.get = this.navParams.data.get;
@@ -100,7 +100,7 @@ export class CalculatorConvertPage {
   }
 
   ballanceStrToNumber(balance:string):number {
-    if(balance){
+    if (balance){
       // ToValidStrDecimal
       balance = balance.replace(/[\s,%]/g, '')
       // toNumber
@@ -203,7 +203,7 @@ export class CalculatorConvertPage {
     }
   });
 
-  if(wallets.length == 0)
+  if (wallets.length == 0)
   {
     this.viewWalletsError('You do not have suitable wallets');
     return;
@@ -224,18 +224,22 @@ export class CalculatorConvertPage {
 
 
  openAddressListGet(wallets){
-   if(!this.sendAddress){
+   if (!this.sendAddress){
      return;
    }
 
-   else if(wallets.length == 0){
+   else if (wallets.length == 0){
       this.viewWalletsError('You do not have suitable wallets');
       return;
     }
 
   wallets = wallets.filter(elemWallets=>{
-    if(elemWallets.wallet.network === this.sendWallet.wallet.network) return true
-    else return false
+    if (elemWallets.wallet.network === this.sendWallet.wallet.network) {
+      return true
+    }
+    else {
+      return false
+    }
   })
 
 
@@ -296,9 +300,10 @@ export class CalculatorConvertPage {
 
   public getExchange(address: string, currency: string) {
     let network;
-    if(this.sendWallet.wallet.network==='livenet'){
+    if (this.sendWallet.wallet.network==='livenet'){
       network = "livenet"
-    }else {
+    }
+    else {
       network = "testnet"
     }
 
@@ -356,10 +361,10 @@ export class CalculatorConvertPage {
     // Getting all data
     let coin = this.formCoins.get.toLowerCase()
 
-        if(this.formCoins.get.toLowerCase() === 'wducx'){
+        if (this.formCoins.get.toLowerCase() === 'wducx'){
           dataInfo[coin] = await this.getDucxWduxSwapInfo()
         }
-        else{
+        else {
           dataInfo[coin] = {
             swap_address:
               this.addresses[this.formCoins.send.toLowerCase() + '_address'] ||
