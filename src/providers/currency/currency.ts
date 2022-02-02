@@ -84,6 +84,11 @@ export class CurrencyProvider {
     );
   }
 
+  getCoinsHome(disaredCoins): string[]  {
+    // returns the intersection of available and requested coins
+    return _.intersection(this.availableCoins,disaredCoins)
+  }
+
   getAvailableTokens(): Token[] {
     return this.availableTokens;
   }

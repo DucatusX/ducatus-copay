@@ -32,15 +32,25 @@ export class ExchangeRates {
     'AUD'
   ];
 
+  
+  public disaredCoins = [
+    'duc',
+    'ducx',
+    'btc',
+    'bch',
+    'eth',
+    'xrp',
+    'usdc',
+  ];
+
   constructor(
     private currencyProvider: CurrencyProvider,
     private exchangeRatesProvider: ExchangeRatesProvider,
     private configProvider: ConfigProvider,
     private logger: Logger
   ) {
-    const availableChains = this.currencyProvider.getAvailableChains();
-    availableChains.push('usdc');
-    for (const coin of availableChains) {
+    const receivedCoins = this.currencyProvider.getCoinsHome(this.disaredCoins);
+    for (const coin of receivedCoins) {
       const {
         backgroundColor,
         gradientBackgroundColor
