@@ -228,10 +228,6 @@ export class CalculatorConvertPage {
      return;
    }
 
-   else if (wallets.length == 0){
-      this.viewWalletsError('You do not have suitable wallets');
-      return;
-    }
 
   wallets = wallets.filter(elemWallets=>{
     if (elemWallets.wallet.network === this.sendWallet.wallet.network) {
@@ -242,6 +238,10 @@ export class CalculatorConvertPage {
     }
   })
 
+  if (wallets.length == 0){
+    this.viewWalletsError('You do not have suitable wallets');
+    return;
+  }
 
   const infoSheet = this.actionSheetProvider.createInfoSheet(
     'convertor-address',
