@@ -23,6 +23,16 @@ export enum Coin {
   'G.O.L.D.' = 'g.o.l.d.'
 }
 
+export const availableCurrencys = [
+  Coin.BTC,
+  Coin.DUC,
+  Coin.DUCX,
+  Coin.BCH,
+  Coin.ETH,
+  Coin.XRP,
+  Coin.USDC,
+];
+
 export type CoinsMap<T> = { [key in Coin]: T };
 
 @Injectable()
@@ -84,9 +94,9 @@ export class CurrencyProvider {
     );
   }
 
-  getCoinsHome(disaredCoins): string[]  {
+  getAvaibleCurrencys(): string[]  {
     // returns the intersection of available and requested coins
-    return _.intersection(this.availableCoins,disaredCoins)
+    return _.intersection(this.availableCoins, availableCurrencys)
   }
 
   getAvailableTokens(): Token[] {
