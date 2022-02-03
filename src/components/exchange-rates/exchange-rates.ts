@@ -38,8 +38,8 @@ export class ExchangeRates {
     private configProvider: ConfigProvider,
     private logger: Logger
   ) {
-    const availableChains = this.currencyProvider.getAvailableChains();
-    for (const coin of availableChains) {
+    const availableCurrencys = this.currencyProvider.getAvaibleCurrencys();
+    for (const coin of availableCurrencys) {
       const {
         backgroundColor,
         gradientBackgroundColor
@@ -66,7 +66,7 @@ export class ExchangeRates {
           this.coins[index].historicalRates = response[coin.unitCode]
             ? response[coin.unitCode].reverse()
             : [];
-          this.updateValues(index);
+          this.updateValues(index, coin.unitCode);
         });
       },
       err => {
@@ -91,7 +91,7 @@ export class ExchangeRates {
             this.coins[i].historicalRates[
               this.coins[i].historicalRates.length - 1
             ] = response;
-            this.updateValues(i);
+            this.updateValues(i, coin.unitCode);
           },
           err => {
             this.logger.error('Error getting current rate:', err);
@@ -100,7 +100,12 @@ export class ExchangeRates {
     });
   }
 
-  private updateValues(i: number) {
+  private updateValues(i: number, coin: string) {
+    if (coin === 'usdc'){
+      this.coins[i].currentPrice = 1
+      return
+    }
+
     const coinHistoricalRates = this.coins[i].historicalRates[
       this.coins[i].historicalRates.length - 1
     ];
