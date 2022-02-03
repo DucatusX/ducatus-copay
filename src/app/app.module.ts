@@ -52,6 +52,7 @@ import { IonContentBackgroundColor } from '../directives/ion-content-background-
 import { LongPress } from '../directives/long-press/long-press';
 import { NavbarBg } from '../directives/navbar-bg/navbar-bg';
 import { NoLowFee } from '../directives/no-low-fee/no-low-fee';
+import { OnlyNumber } from '../directives/number-input/number-input';
 import { RevealAtScrollPosition } from '../directives/reveal-at-scroll-pos/reveal-at-scroll-pos';
 import { ScrolledIntoView } from '../directives/scrolled-into-view/scrolled-into-view';
 import { WideHeaderBarButton } from '../pages/templates/wide-header-page/wide-header-bar-button';
@@ -95,6 +96,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
     RevealAtScrollPosition,
     ScrolledIntoView,
     WideHeaderBarButton,
+    OnlyNumber,
     /* Pipes */
     FiatToUnitPipe,
     FormatCurrencyPipe,
