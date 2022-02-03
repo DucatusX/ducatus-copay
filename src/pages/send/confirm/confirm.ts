@@ -1088,13 +1088,20 @@ export class ConfirmPage {
     exit?: boolean
   ): void {
     let msg: string;
-    if (!error) return;
+
+    if (!error) {
+      return;
+    }
+
     this.logger.warn('ERROR:', error);
-    if (this.isCordova) this.slideButton.isConfirmed(false);
+    
+    if (this.isCordova) {
+      this.slideButton.isConfirmed(false);
+    }
 
     if (
-      (error as Error).message === 'FINGERPRINT_CANCELLED' ||
-      (error as Error).message === 'PASSWORD_CANCELLED'
+      (error as Error).message === 'FINGERPRINT_CANCELLED' 
+      || (error as Error).message === 'PASSWORD_CANCELLED'
     ) {
       return;
     }
@@ -1103,9 +1110,13 @@ export class ConfirmPage {
       this.errorsProvider.showWrongEncryptPasswordError();
       return;
     }
-
+    
     // Currently the paypro error is the following string: 500 - "{}"
-    if (error.toString().includes('500')) {
+    if (error.toString().includes('64: dust')) {
+      msg = this.translate.instant(
+        'The transaction was rejected by network rules.(64: dust)'
+      );
+    } else if (error.toString().includes('500')) {
       msg = this.translate.instant(
         'Error 500 - There is a temporary problem, please try again later.'
       );
@@ -1121,16 +1132,16 @@ export class ConfirmPage {
           this.fromWalletDetails
             ? this.navCtrl.popToRoot()
             : this.navCtrl.last().name == 'ConfirmCardPurchasePage'
-            ? this.navCtrl.pop()
-            : this.app
-                .getRootNavs()[0]
-                .setRoot(TabsPage)
-                .then(() =>
-                  this.app
-                    .getRootNav()
-                    .getActiveChildNav()
-                    .select(1)
-                ); // using setRoot(TabsPage) as workaround when coming from scanner
+              ? this.navCtrl.pop()
+              : this.app
+                  .getRootNavs()[0]
+                  .setRoot(TabsPage)
+                  .then(() =>
+                    this.app
+                      .getRootNav()
+                      .getActiveChildNav()
+                      .select(1)
+                  ); // using setRoot(TabsPage) as workaround when coming from scanner
         }
       }
     );
@@ -1155,17 +1166,20 @@ export class ConfirmPage {
     }
 
     this.onGoingProcessProvider.set('creatingTx');
+    
     return this.getTxp(_.clone(tx), wallet, false)
       .then(txp => {
         this.logger.debug('Transaction Fee:', txp.fee);
-        return this.confirmTx(txp, wallet).then((nok: boolean) => {
-          if (nok) {
-            if (this.isCordova) this.slideButton.isConfirmed(false);
-            this.onGoingProcessProvider.clear();
-            return;
-          }
-          this.publishAndSign(txp, wallet);
-        });
+        
+        return this.confirmTx(txp, wallet)
+          .then((nok: boolean) => {
+            if (nok) {
+              if (this.isCordova) this.slideButton.isConfirmed(false);
+              this.onGoingProcessProvider.clear();
+              return;
+            }
+            this.publishAndSign(txp, wallet);
+          })
       })
       .catch(err => {
         this.onGoingProcessProvider.clear();
@@ -1174,31 +1188,45 @@ export class ConfirmPage {
   }
 
   private confirmTx(txp, wallet) {
+    
     return new Promise<boolean>(resolve => {
-      if (wallet.isPrivKeyEncrypted) return resolve(false);
-      this.txFormatProvider.formatToUSD(wallet.coin, txp.amount).then(val => {
-        const amountUsd = parseFloat(val);
-        if (amountUsd <= this.CONFIRM_LIMIT_USD) return resolve(false);
-        const unit = txp.coin.toUpperCase();
-        const amount = (
-          this.tx.amount /
-          this.currencyProvider.getPrecision(txp.coin).unitToSatoshi
-        ).toFixed(8);
-        const name = wallet.name;
-        const message = this.replaceParametersProvider.replace(
-          this.translate.instant(
-            'Sending {{amount}} {{unit}} from your {{name}} wallet'
-          ),
-          { amount, unit, name }
-        );
-        const okText = this.translate.instant('Confirm');
-        const cancelText = this.translate.instant('Cancel');
-        this.popupProvider
-          .ionicConfirm(null, message, okText, cancelText)
-          .then((ok: boolean) => {
-            return resolve(!ok);
-          });
-      });
+
+      if (wallet.isPrivKeyEncrypted) {
+        return resolve(false);
+      }
+
+      this.txFormatProvider.formatToUSD(wallet.coin, txp.amount)
+        .then(val => {
+          const amountUsd = parseFloat(val);
+          
+          if (amountUsd <= this.CONFIRM_LIMIT_USD) {
+            return resolve(false);
+          }
+          
+          const unit = txp.coin.toUpperCase();
+          const amount = (
+            this.tx.amount 
+            / this.currencyProvider.getPrecision(txp.coin).unitToSatoshi
+          ).toFixed(8);
+          const name = wallet.name;
+          const message = this.replaceParametersProvider.replace(
+            this.translate.instant(
+              'Sending {{amount}} {{unit}} from your {{name}} wallet'
+            ),
+            { amount, unit, name }
+          );
+          const okText = this.translate.instant('Confirm');
+          const cancelText = this.translate.instant('Cancel');
+            
+          this.popupProvider
+            .ionicConfirm(null, message, okText, cancelText)
+            .then((ok: boolean) => {
+              return resolve(!ok);
+            });
+        })
+        .catch(err => {
+          this.logger.warn('Error getting transaction proposal', err);
+        });
     });
   }
 
