@@ -53,9 +53,9 @@
         <ion-item class="calculator-text" *ngIf="rates">
       
           <ion-label stacked
-          >1 {{ coin_info[calculatorForm.value.sendCoin] }} = {{
-          rates[calculatorForm.value.getCoin][calculatorForm.value.sendCoin] }} {{
-          coin_info[calculatorForm.value.getCoin] }}</ion-label
+          >1 {{ coin_info[calculatorForm.value.sendCoin] }} 
+           = {{ valueGetForOneCoin }} 
+           {{coin_info[calculatorForm.value.getCoin] }}</ion-label
         >
         
         </ion-item>
