@@ -6,13 +6,14 @@ import { ModalController, NavController } from 'ionic-angular';
 import * as _ from 'lodash';
 import { TxDetailsModal } from '../../pages/tx-details/tx-details';
 import { AppProvider } from '../../providers';
+import { ActionSheetProvider } from '../../providers';
 import { ApiProvider } from '../../providers/api/api';
 import { Logger } from '../../providers/logger/logger';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { TimeProvider } from '../../providers/time/time';
 import { WalletProvider } from '../../providers/wallet/wallet';
 import { CalculatorConvertPage } from './calculator-convert/calculator-convert';
-import { ActionSheetProvider } from '../../providers';
+
 import {
   coinInfo,
   convertCoins,
@@ -40,7 +41,7 @@ export class CalculatorPage {
   public isShowSwapHistory: boolean = false;
   public swapHistory: any[] = [];
   public historyIsLoaded: boolean = false;
-  public valueGetForOneCoin: number = 10.00
+  public valueGetForOneCoin: number = 10.00; // set value for 1 Duc -> 10.00 DucX
 
   constructor(
     private navCtrl: NavController,
@@ -237,7 +238,7 @@ export class CalculatorPage {
 
     const rate = this.rates[getCoin][sendCoin];
 
-    //calculate the values of the received amount for 1 coin
+    // calculate the values of the received amount for 1 coin
     if(rate){
       this.valueGetForOneCoin = Big(1)
         .div(rate)
