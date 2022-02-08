@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { AlertController, NavParams } from 'ionic-angular';
+import {Platform} from 'ionic-angular';
 import * as _ from 'lodash';
 import env from '../../../environments';
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
@@ -8,7 +9,6 @@ import { ApiProvider } from '../../../providers/api/api';
 import { ErrorsProvider } from '../../../providers/errors/errors';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
-import {Platform} from 'ionic-angular';
 
 
 import { TranslateService } from '@ngx-translate/core';
@@ -256,7 +256,7 @@ export class CalculatorConvertPage {
 
 
  public  setAddress(type) {
-   //address validation check
+   // address validation check
    
   const address = this.getAddress;
   if (
@@ -279,18 +279,18 @@ export class CalculatorConvertPage {
 }
 
   public getAddresses() {
-    //get the address to which we will send
+    // get the address to which we will send
     this.getExchange(
       this.getAddress,
       this.formCoins.get
     )
       .then(result => {
-        //if we get address
+        // if we get address
         this.addresses = result
         this.goToSendPage()
       })
       .catch(err => {
-        //if we don't get address
+        // if we don't get address
         this.sendDisabled = false
         this.logger.debug('cant get addresses: ', err);
         const infoSheet = this.actionSheetProvider.createInfoSheet('cant-get-addresses')
@@ -307,8 +307,8 @@ export class CalculatorConvertPage {
       network = "testnet"
     }
 
-    //testnet -> devApi
-    //livenet -> prodApi
+    // testnet -> devApi
+    // livenet -> prodApi
     
     return this.httpClient
       .post(
@@ -554,9 +554,10 @@ export class CalculatorConvertPage {
   }
 
   private checkTransitionLimitDucToDucx(getAddress, amountSend) {
+    const network = this.sendWallet.wallet.network
     return this.httpClient
       .post(
-        this.apiProvider.getAddresses().ducatuscoins + '/api/v1/transfers/',
+        this.apiProvider.getAddresses().getExchange[network] + '/api/v1/transfers/',
         {
           address: getAddress
         }
