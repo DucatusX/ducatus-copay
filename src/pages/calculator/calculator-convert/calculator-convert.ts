@@ -554,9 +554,10 @@ export class CalculatorConvertPage {
   }
 
   private checkTransitionLimitDucToDucx(getAddress, amountSend) {
+    const network = this.sendWallet.wallet.network
     return this.httpClient
       .post(
-        this.apiProvider.getAddresses().ducatuscoins + '/api/v1/transfers/',
+        this.apiProvider.getAddresses().getExchange[network] + '/api/v1/transfers/',
         {
           address: getAddress
         }
