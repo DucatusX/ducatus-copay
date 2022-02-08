@@ -19,6 +19,7 @@ import {
   convertSendCoins
 } from './calculator-parameters';
 
+
 @Component({
   selector: 'page-calculator',
   templateUrl: 'calculator.html'
@@ -38,6 +39,7 @@ export class CalculatorPage {
   public isShowSwapHistory: boolean = false;
   public swapHistory: any[] = [];
   public historyIsLoaded: boolean = false;
+  public valueGetForOneCoin: number = 10.00; // set value for 1 Duc -> 10.00 DucX
 
   constructor(
     private navCtrl: NavController,
@@ -237,6 +239,14 @@ export class CalculatorPage {
     const { getCoin, sendCoin } = this.calculatorForm.value;
 
     const rate = this.rates[getCoin][sendCoin];
+
+    // calculate the values of the received amount for 1 coin
+    if(rate){
+      this.valueGetForOneCoin = Big(1)
+        .div(rate)
+        .toFixed(2)
+    }
+    
     const bgGetAmount = Big(Number(getAmount));
     const bgSendAmount = Big(Number(sendAmount));
 
