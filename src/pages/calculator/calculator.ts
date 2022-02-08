@@ -5,15 +5,13 @@ import { Big } from 'big.js';
 import { ModalController, NavController } from 'ionic-angular';
 import * as _ from 'lodash';
 import { TxDetailsModal } from '../../pages/tx-details/tx-details';
-import { AppProvider } from '../../providers';
-import { ActionSheetProvider } from '../../providers';
+import { ActionSheetProvider, AppProvider } from '../../providers';
 import { ApiProvider } from '../../providers/api/api';
 import { Logger } from '../../providers/logger/logger';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { TimeProvider } from '../../providers/time/time';
 import { WalletProvider } from '../../providers/wallet/wallet';
 import { CalculatorConvertPage } from './calculator-convert/calculator-convert';
-
 import {
   coinInfo,
   convertCoins,
@@ -191,6 +189,10 @@ export class CalculatorPage {
             this.swapHistory.push(tx);
           } 
         });
+        this.swapHistory = this.swapHistory.sort((a, b) => {
+          return b.time - a.time;
+        })
+        
         cb();
       })
       .catch(err => {
