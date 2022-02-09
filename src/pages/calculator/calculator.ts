@@ -39,7 +39,7 @@ export class CalculatorPage {
   public isShowSwapHistory: boolean = false;
   public swapHistory: any[] = [];
   public historyIsLoaded: boolean = false;
-  public valueGetForOneCoin: number = 10.00; // set value for 1 Duc -> 10.00 DucX
+  public valueGetForOneCoin: number = 0.10; // set value for 1 Duc -> 10.00 DucX
 
   constructor(
     private navCtrl: NavController,
