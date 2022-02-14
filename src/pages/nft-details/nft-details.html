@@ -1,0 +1,52 @@
+  
+<ion-header no-border class="wallet-details-header">
+  <ion-navbar>
+      <ion-title>
+          <div class="header-wallet-name" [reveal-at-scroll-pos]="(expandableHeader.headerHeight - 300)" [scrollArea]="scrollArea">
+  
+          </div>
+      </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content #scrollArea [fixed-scroll-bg-color]="'#862633'" scroll-y="fixed" >
+
+      <expandable-header class="nft" [scrollArea]="scrollArea" #expandableHeader>
+
+        <div class="nft-content">
+          <div class="nft-img">
+              <img class="nft-content-img" [src]="nftData.ipfs_hash">
+          </div>
+          <div class="nft-data">
+            <div class="nft-data-number">
+              <span>
+                Number
+              </span>
+              <p>
+                #{{nftData.number}}
+              </p>
+            </div>
+            <div class="nft-data-email">
+              <span>
+                Associated email address
+              </span>
+              <p>
+                {{nftData.mail}}
+              </p>
+            </div>
+            <div class="nft-data-date">
+              <span>
+              Minting date
+              </span>
+              <p>
+                {{nftData.transaction.created | date:'mediumDate'}}
+              </p>
+            </div>
+          </div>
+        </div>
+
+          <expandable-header-footer>
+          </expandable-header-footer>
+      </expandable-header>
+
+</ion-content>     

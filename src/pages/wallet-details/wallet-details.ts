@@ -37,6 +37,7 @@ import { WalletAddressesPage } from '../../pages/settings/wallet-settings/wallet
 import { TxDetailsModal } from '../../pages/tx-details/tx-details';
 import { ProposalsNotificationsPage } from '../../pages/wallets/proposals-notifications/proposals-notifications';
 import { Erc721Page } from '../erc-721/erc-721';
+import { SeedPage } from '../seed/seed';
 import { AmountPage } from '../send/amount/amount';
 import { SearchTxModalPage } from './search-tx-modal/search-tx-modal';
 import { WalletBalanceModal } from './wallet-balance/wallet-balance';
@@ -649,6 +650,16 @@ export class WalletDetailsPage {
         this.goToReceivePage();
       } else {
         this.navCtrl.push(Erc721Page, { wallet: this.wallet });
+      }
+    }
+  }
+
+  public goToSeedPage() {
+    if (this.wallet.credentials.walletId) {
+      if (this.wallet.needsBackup) {
+        this.goToReceivePage();
+      } else {
+        this.navCtrl.push(SeedPage, { wallet: this.wallet });
       }
     }
   }
