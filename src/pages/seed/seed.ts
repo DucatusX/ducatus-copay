@@ -1,26 +1,24 @@
 import { HttpClient } from '@angular/common/http';
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { Nft } from '../../models/nft/nft.model';
 import { WalletProvider } from '../../providers';
 import { ApiProvider } from '../../providers/api/api';
 import { Logger } from '../../providers/logger/logger';
 import { NftDetailsPage } from '../nft-details/nft-details';
-
-
 
 @Component({
   selector: 'page-seed',
   templateUrl: 'seed.html'
 })
 
-
 export class SeedPage {
 
-  public nftData;
-  public wallet;
-  public walletAddress;
+  public nftData: Nft[];
+  public wallet: any;
+  public walletAddress: string;
   public loaded = false;
-  public messageErr;
+  public messageErr: string;
 
   constructor(
     private http: HttpClient,
@@ -31,7 +29,6 @@ export class SeedPage {
     private apiProvider: ApiProvider,
   ) {} 
 
- 
   ionViewWillEnter(){
     this.wallet = this.navParams.data.wallet;
     this.walletProvider.getAddress(this.wallet, false).then(address => {
@@ -40,19 +37,19 @@ export class SeedPage {
     });
   }
 
-
-  public goToNFTDetails(nft){
+  public goToNFTDetails(nft: Nft){
     this.navCtrl.push(NftDetailsPage, { nft });
   }
 
   public getTokenMeta() {
+    const url = this.apiProvider.getAddresses().nftSeed + this.walletAddress;
     let headers = {
       'X-Api-Key': 'akEUBl92.mtoSPPzDAvNjo2WUmiVh9xUPNJROVUF9'
     };
-    this.http.get(`${this.apiProvider.getAddresses().nftSeed}` + this.walletAddress, { headers }).subscribe(
-      result => {
-       this.nftData = result;
-       this.loaded = true;
+    this.http.get<Nft[]>(url, { headers }).subscribe(
+      (result: Nft[]) =>{
+        this.nftData = result;
+        this.loaded = true;
       },
       error => {
         this.loaded = true;
@@ -60,7 +57,6 @@ export class SeedPage {
       }
     );
   }
- 
 }
 
 
