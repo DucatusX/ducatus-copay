@@ -42,11 +42,8 @@ export class SeedPage {
   }
 
   public getTokenMeta() {
-    const url = this.apiProvider.getAddresses().nftSeed + this.walletAddress;
-    let headers = {
-      'X-Api-Key': 'akEUBl92.mtoSPPzDAvNjo2WUmiVh9xUPNJROVUF9'
-    };
-    this.http.get<Nft[]>(url, { headers }).subscribe(
+    const url: string = this.apiProvider.getAddresses().nftSeed + this.walletAddress;
+    this.http.get<Nft[]>(url).subscribe(
       (result: Nft[]) =>{
         this.nftData = result;
         this.loaded = true;
