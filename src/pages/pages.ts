@@ -31,6 +31,7 @@ import { VoucherPage } from '../pages/voucher/voucher';
 import { SearchTxModalPage } from '../pages/wallet-details/search-tx-modal/search-tx-modal';
 import { WalletBalanceModal } from '../pages/wallet-details/wallet-balance/wallet-balance';
 import { WalletDetailsPage } from '../pages/wallet-details/wallet-details';
+import { NftDetailsPage } from './nft-details/nft-details';
 
 // Integrations: Invoice
 import { SelectInvoicePage } from '../pages/integrations/invoice/select-invoice/select-invoice';
@@ -147,6 +148,7 @@ import { CardCatalogPage } from './integrations/gift-cards/card-catalog/card-cat
 import { GIFT_CARD_PAGES } from './integrations/gift-cards/gift-cards';
 
 import { Erc721Page } from './erc-721/erc-721';
+import { SeedPage } from './seed/seed';
 
 export const PAGES = [
   AddPage,
@@ -174,12 +176,14 @@ export const PAGES = [
   CoinbaseWithdrawPage,
   CopayersPage,
   Erc721Page,
+  SeedPage,
   SelectInputsPage,
   FeedbackCardPage,
   SharePage,
   ImportWalletPage,
   IntegrationsPage,
   JoinWalletPage,
+  NftDetailsPage,
   BackupGamePage,
   BackupKeyPage,
   CalculatorPage,

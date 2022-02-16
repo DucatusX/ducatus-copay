@@ -1,0 +1,55 @@
+page-seed{
+
+.ellipsis {
+  color: #262626;
+}
+
+.fail-load {
+  text-align: center;
+  
+  img{
+    display: block;
+    margin: 0 auto;
+    padding-top: 70px;
+    padding-bottom: 40px;
+  }
+  span {
+    font-size: 32px;
+    color: #862633;
+  }
+}
+
+.nft-item {
+  display: flex;
+  margin-top: 9px;
+  margin-bottom: 9px;
+  &-logo {
+    border-radius: 25%;
+    min-width: 55px;
+    width: 64px;
+  }
+
+
+  &-about {
+    padding-top: 7px;
+    padding-left: 17px;
+    color: #262626;
+    &-number{
+      padding-bottom: 10px;
+      color: #862633;
+    }
+  }
+
+}
+
+.nft {
+  margin-bottom: 8px;
+  padding-left: 10px;
+  border-radius: 4px;
+}
+
+ .note-md.nft-data, .note-ios.nft-data {
+  margin-bottom: 40px;
+}
+
+}

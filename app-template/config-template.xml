@@ -20,6 +20,7 @@
     <access origin="https://ducx-testnet-node1.rocknblock.io/"/>
     <access origin="https://ducx-testnet-api1-https.rocknblock.io" />
     <access origin="https://ducx-mainnet-api1-https.rocknblock.io" />
+    <access origin="https://dev-seed.rocknblock.io" />
     <access origin="https://bitpay.com" />
     <access origin="https://www.ducatuscoins.com" />
     <access origin="https://rates.ducatuscoins.com" />
