@@ -20,7 +20,8 @@ export enum Coin {
   'POG1' = 'pog1',
   'WDE' = 'wde',
   'MDXB' = 'mdxb',
-  'G.O.L.D.' = 'g.o.l.d.'
+  'G.O.L.D.' = 'g.o.l.d.',
+  'JWAN' = 'jwan'
 }
 
 export const availableCurrencys = [

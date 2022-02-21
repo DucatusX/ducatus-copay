@@ -89,6 +89,9 @@ export class AltCurrencyPage {
       {
         isoCode: 'G.O.L.D.'
       },
+      {
+        isoCode: 'JWAN'
+      },
     ];
   }
 
