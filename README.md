@@ -114,6 +114,122 @@ npm run prepare:copay
 npm run final:ios
 ```
 
+
+### Web extensions
+
+```sh
+  npm i 
+  npm run apply:copay
+  npm run build:web-release
+```
+
+Open www/manifest.json . Content substitute:
+```sh
+{
+  "name": "DucatusWallet2.0",
+  "version": "2.7.14",
+  "homepage_url": "https://ducatus.io",
+  "description": "A Secure DucatusCoin Wallet",
+  "icons": {
+    "16": "assets/img/app/16x16.png",
+    "24": "assets/img/app/24x24.png",
+    "32": "assets/img/app/32x32.png",
+    "48": "assets/img/app/48x48.png",
+    "57": "assets/img/app/57x57.png",
+    "60": "assets/img/app/60x60.png",
+    "64": "assets/img/app/64x64.png",
+    "72": "assets/img/app/72x72.png",
+    "76": "assets/img/app/76x76.png",
+    "96": "assets/img/app/96x96.png",
+    "114": "assets/img/app/114x114.png",
+    "120": "assets/img/app/120x120.png",
+    "128": "assets/img/app/128x128.png",
+    "144": "assets/img/app/144x144.png",
+    "152": "assets/img/app/152x152.png",
+    "180": "assets/img/app/180x180.png",
+    "192": "assets/img/app/192x192.png",
+    "256": "assets/img/app/256x256.png"
+  },
+  "manifest_version": 2,
+  "browser_action": {
+    "default_icon": {
+      "16": "assets/img/app/16x16.png",
+      "24": "assets/img/app/24x24.png",
+      "32": "assets/img/app/32x32.png",
+      "48": "assets/img/app/48x48.png",
+      "57": "assets/img/app/57x57.png",
+      "60": "assets/img/app/60x60.png",
+      "64": "assets/img/app/64x64.png",
+      "72": "assets/img/app/72x72.png",
+      "76": "assets/img/app/76x76.png",
+      "96": "assets/img/app/96x96.png",
+      "114": "assets/img/app/114x114.png",
+      "120": "assets/img/app/120x120.png",
+      "128": "assets/img/app/128x128.png",
+      "144": "assets/img/app/144x144.png",
+      "152": "assets/img/app/152x152.png",
+      "180": "assets/img/app/180x180.png",
+      "192": "assets/img/app/192x192.png",
+      "256": "assets/img/app/256x256.png"
+    },
+    "default_title": "DucatusWallet 2.0",
+    "default_popup": "index.html"
+  },
+    "permissions": [
+      "notifications",
+      "storage"
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://connect.facebook.net https://www.googletagmanager.com https://cdn.firebase.com https://*.firebaseio.com 'sha256-z1j/q3bcHDXPADCex9UxMqmTJ89l+JZEloxE7qqWjfY='; object-src 'self'"
+}
+```
+And update version.
+
+#### For Chrome
+Open www/index.html. Paste:
+```sh
+  <style type="text/css">
+    body {
+        overflow: hidden;
+        min-width: 375px;
+        max-width: auto;
+    }
+    html {
+        overflow: hidden;
+        min-width: 375px;
+        max-width: auto;
+        min-height: 667px;
+    }
+  </style>  
+```
+under
+```sh
+  <link href="build/main.css" rel="stylesheet" />
+```
+
+#### For Firefox
+Open www/index.html. Paste:
+```sh
+  <style type="text/css">
+    body {
+      display: block !important; 
+      position: relative !important;
+      overflow: hidden;
+      min-width: 375px;
+      max-width: auto;
+    }
+    html {
+      overflow: hidden;
+      min-width: 375px;
+      max-width: auto;
+      min-height: 667px;
+    }
+  </style>  
+```
+under
+```sh
+  <link href="build/main.css" rel="stylesheet" />
+```
+
 ### Push Notifications
 
 Push notification doesn't work on iOS 12 due to an update of Xcode and plugin `cordova-plugin-fcm`.
