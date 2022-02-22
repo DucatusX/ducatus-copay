@@ -1,0 +1,60 @@
+
+
+page-nft-details {
+  @include toolbar-button-color(white);
+
+  .toolbar-background {
+    background: #862633;
+  }
+
+  .nft {
+    min-height: 420px;
+    background-color: #862633;
+    &-content{
+      display: flex;
+      flex-wrap: wrap;
+      padding-top: 25px;
+      padding-left: 20px;
+      color: #FFFFFF;
+      &-img{
+        width: 330px;
+        border-radius: 20px;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.25);
+      }
+      span {
+        color: #FFFFFF;
+        opacity: 0.5;
+      }
+      p{
+        margin-top: 8px;
+        font-weight: 700;
+        font-size: 16px;
+      }
+    }
+  }
+
+  .nft-data {
+    padding-top: 20px;
+    padding-left: 50px;
+    padding-bottom: 20px;
+    &-email, &-date {
+      margin-top: 25px;
+    }
+  }
+
+  @media screen and (max-width: 500px){
+    .nft-data{
+      padding-left: 15px;
+      min-width: 340px;
+      margin: 0 auto;
+    }
+    .nft-img{
+      margin: 0 auto;
+    }
+    .nft-content{
+      padding-left: 0px;
+    }
+
+}
+
+}

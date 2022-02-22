@@ -1,0 +1,32 @@
+
+<wide-header-page title="{{ 'S.E.E.D' | translate }}">
+  <div style="padding: 0px 20px" page-content>
+
+
+    <div class="fail-load" *ngIf="!nftData && loaded">
+        <img class="seedLogo" src="assets/img/seedLogo.png" alt="seedLogo">
+      <span>NO NFT</span>
+    </div>
+
+    <ion-list *ngIf="nftData">
+      <ion-item *ngFor="let nft of nftData;let i = index" (click)="goToNFTDetails(nft)"  class="nft">
+
+        <ion-label class="nft-item">
+          <ion-icon>
+            <img class="nft-item-logo" src="assets/img/nftPreview.png" alt="nftPreview">
+          </ion-icon>
+          <div class="nft-item-about">
+            <h2 class="nft-item-about-number">#{{nft.number}}</h2>
+            <h3>{{nft.mail}}</h3>
+          </div>
+        </ion-label>
+
+        <ion-note class="nft-data" style="font-size: 13px;" item-end text-end>
+          {{nft.transaction.created | date:'mediumDate'}}
+        </ion-note>
+
+      </ion-item>
+    </ion-list>
+    
+  </div>  
+</wide-header-page>

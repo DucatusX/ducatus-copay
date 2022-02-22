@@ -85,5 +85,12 @@ export const DRCTokenOpts = {
     decimal: 18,
     address: '0xcDdd562C0cF8c262AD8A5c1A476cdBBE114FcC28',
     blockchain: 'ducx'
+  },
+  '0xFCb965D9Da10A15eb87B3Da539383997ce6fA597': {
+    name: 'Jwan',
+    symbol: 'JWAN',
+    decimal: 8,
+    address: '0xFCb965D9Da10A15eb87B3Da539383997ce6fA597',
+    blockchain: 'ducx'
   }
 };
