@@ -1,4 +1,4 @@
-<ion-header class="bp-header">
+<!-- <ion-header class="bp-header">
   <ion-navbar>
     <ion-title>
       <div
@@ -152,4 +152,94 @@
       </div>
     </ion-list>
   </div>
+</ion-content> -->
+
+ <ion-header class="bp-header">
+  <ion-navbar>
+    <ion-title>
+      {{ 'Deposits' | translate }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content >
+
+<expandable-header
+[scrollArea]="scrollArea"
+[fadeFactor]="5"
+[disableFade]="true"
+#expandableHeader
+>
+<ion-toolbar class="wide-header__title">
+<expandable-header-primary>
+{{ 'Deposits' | translate }}
+</expandable-header-primary>
+</ion-toolbar>
+</expandable-header>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+ 
+
+    <ion-list *ngIf="deposits">
+      <div class="deposits" *ngFor="let deposit of deposits;let i = index">
+        <ion-item *ngIf="deposit.amountDeposited && !deposit.withdrawn" class="deposit">
+          <ion-label class="deposit-item">
+            <div class="deposit-item-info">
+                <div class="deposit-item-title">
+                    {{deposit.amountUnit}} DUC
+                  <span class="deposit-item-title-deposit">
+                    + {{deposit.amountAdd}}
+                  </span>
+                </div>
+              <div class="deposit-item-alternative">
+                {{deposit.amountAlt}} USD
+              </div>
+                <span class="deposit-item-date">
+                  {{deposit.readyToWithdrawDate | date:'dd.LL.y'}}
+                </span>
+            </div>
+            <div>
+              <span
+              *ngIf="!deposit.readyToWithdraw"
+              class="deposit-item-percent"
+              >
+              {{deposit.percent}}%
+              </span>
+              <span
+              *ngIf="deposit.readyToWithdraw"
+              ion-button
+              class="deposit-item-button"
+              (click)="withdraw(deposit.id)"
+              > 
+                WITHDRAW
+              </span>
+            </div>
+            <div
+            class="deposit-range-limit"
+            [ngStyle]="{'width':  deposit.executeRange +'%'}"
+            >
+            </div>
+          </ion-label>
+        </ion-item>
+      </div>
+
+    </ion-list>
+
+
+    <div class="deposit-add">
+      <span
+        ion-button 
+        (click)="goToDepositAddPage()"
+        class="deposit-add-button icon icon__add"
+        ><img
+          src="./assets/img/icon-deposit-add-plus.svg"
+          width="21px"
+          height="21px"
+        />
+        Deposit</span
+      >
+    </div>
+     
 </ion-content>
