@@ -21,7 +21,6 @@ export class DepositPage {
     '34': '21'
   };
   
-
   constructor(
     private alertCtrl: AlertController,
     private navCtrl: NavController,
@@ -36,8 +35,6 @@ export class DepositPage {
   ) {}
 
   ionViewWillEnter() {
-
-
     let walletsGet = this.getWalletsInfoAddress('duc');
 
     Promise.all([walletsGet]).then(results => {
@@ -122,34 +119,32 @@ export class DepositPage {
     });
   }
 
-
   public async unitToFiat(amount:number):Promise<number>{
-   return this.rateProvider.whenRatesAvailable('duc').then( () => {
-    let amountAlt: number;
-    amountAlt = this.rateProvider.toFiat(amount, 'USD', 'duc');
-    amountAlt = this.filter.formatFiatAmount(amountAlt);
-    return amountAlt;
+    return this.rateProvider.whenRatesAvailable('duc').then( () => {
+      let amountAlt: number;
+      amountAlt = this.rateProvider.toFiat(amount, 'USD', 'duc');
+      amountAlt = this.filter.formatFiatAmount(amountAlt);
+
+      return amountAlt;
     });
   }
 
   public getTimePassed(depositDateCreated:string, depositDateEnd:string,daysToWithdraw: string) {
-    const endDate:number = new Date(depositDateEnd).getTime();
-    const createdAt:number = new Date(depositDateCreated).getTime();
+    const endDate: number = new Date(depositDateEnd).getTime();
+    const createdAt: number = new Date(depositDateCreated).getTime();
     const coefficient = 24 * 60 * 60 * 1000;
    
     // the number of days which have passed 
     // since the creation of the deposit 
-    const passedDays:number = (createdAt - endDate) / coefficient * -1; // passed 5 (days)
+    const passedDays: number = (createdAt - endDate) / coefficient * -1; // passed 5 (days)
     const passedDaysPercent = ((passedDays - Number(daysToWithdraw)) / passedDays) * 100; // passed 1 (%)
     if (+daysToWithdraw <= 0 || +daysToWithdraw === -0) {
       return 100;
     }
-    else{
+    else {
       return passedDaysPercent;
     }
   }
-
-
 
   public goToDepositAddPage() {
     this.navCtrl.push(DepositAddPage);
@@ -162,9 +157,6 @@ export class DepositPage {
       });
     });
   }
-
-
-
 
   private getWalletsInfo(coin): Promise<any> {
     return new Promise(resolve => {
@@ -226,7 +218,9 @@ export class DepositPage {
           text: answers.button,
           handler: () => {
             this.deposits.forEach(t => {
-              if (t.id == id) t.withdrawn = true;
+              if (t.id == id) {
+                t.withdrawn = true;
+              }
             });
           }
         }

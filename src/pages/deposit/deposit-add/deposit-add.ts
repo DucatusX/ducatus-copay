@@ -70,9 +70,10 @@ export class DepositAddPage {
 
     this.walletProvider.getWalletsByCoin(wallets, 'duc').then(res => {
       const result: any = res;
-
-      if (result.count <= 0) this.showModal('needbackup');
-
+  
+      if (result.count <= 0) {
+        this.showModal('needbackup');
+      } 
       this.walletAddresses = result.wallets;
     });
   }
@@ -187,7 +188,7 @@ export class DepositAddPage {
 
   public async generateUserDeposit() {
     this.depositLoading = true;
-
+    
     this.walletProvider
       .prepareAdd(this.walletAddresses, this.DepositGroup.value.Address)
       .then(resPrepare => {
