@@ -33,6 +33,8 @@ export class ApiProvider {
       pog: 'https://devgold.rocknblock.io',
       ratesApi: 'https://ducexpl.rocknblock.io/api/v1/rates/',
       deposit: 'https://dev-vouchers.rocknblock.io/api/v1/',
+      // сейчас работает только прод апи
+      // deposit: 'https://ducsite.rocknblock.io/',
       nftSeed: 'https://dev-seed.rocknblock.io/api/v1/nfts/',
       getExchange:{
         livenet: "https://www.ducatuscoins.com",
