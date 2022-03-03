@@ -67,7 +67,7 @@
     "build:android": "npm run env:dev && ionic cordova build android --debug",
     "build:desktop": "npm run env:dev && npm run ionic:build",
     "build:web": "npm run env:dev && npm run ionic:build",
-    "build:chrome-extension": "npm run build:web && cp -f manifest.json www/manifest.json && npm run patch:chrome-extension",
+    "build:chrome-extension": "npm run build:web && cp -f manifest.json www/manifest.json && cp -f ./web_extensions/chrome/background.html ./www/background.html && cp -R ./web_extensions/chrome/background-scripts www/ && npm run patch:chrome-extension",
     "build:firefox-extension": "npm run build:web && cp -f manifest.json www/manifest.json && npm run patch:firefox-extension",
     "build:ios-release": "npm run env:prod && ionic cordova build ios --release --aot true --environment prod --output-hashing all --sourcemaps false --extract-css true --named-chunks false --build-optimizer true",
     "build:android-release": "npm run env:prod && ionic cordova build android --release --aot true --environment prod --output-hashing all --sourcemaps false --extract-css true --named-chunks false --build-optimizer true",

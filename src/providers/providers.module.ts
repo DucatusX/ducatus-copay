@@ -81,7 +81,8 @@ import {
   TxFormatProvider,
   UserAgent,
   Vibration,
-  WalletProvider
+  WalletProvider,
+  WebExtensionsProvider
 } from './index';
 
 @NgModule({
@@ -165,7 +166,8 @@ import {
     CardPhasesProvider,
     MoonPayProvider,
     LiveChatProvider,
-    PdfProvider
+    PdfProvider,
+    WebExtensionsProvider
   ]
 })
 export class ProvidersModule {}
