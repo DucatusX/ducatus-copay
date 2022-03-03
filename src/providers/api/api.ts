@@ -10,6 +10,7 @@ export class ApiProvider {
       pog: 'https://d-pog.com',
       ratesApi: 'https://rates.ducatuscoins.com/api/v1/rates/',
       deposit: 'https://www.ducatuscoins.com',
+      // Cейчас работает только дев апи
       nftSeed: 'https://nft.goldxb.com/api/v1/nfts/',
       getExchange:{
         livenet: "https://www.ducatuscoins.com",
