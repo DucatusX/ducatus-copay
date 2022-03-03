@@ -24,8 +24,8 @@
   "WindowsApplicationId": "804636ee-b017-4cad-8719-e58ac97ffa5c",
   "pushSenderId": "1036948132229",
   "description": "A Secure DucatusCoin Wallet",
-  "version": "2.8.13",
-  "androidVersion": "70177000",
+  "version": "2.9.13",
+  "androidVersion": "70178000",
   "_extraCSS": null,
   "_enabledExtensions": {
     "coinbase": false,
