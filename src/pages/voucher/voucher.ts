@@ -5,7 +5,7 @@ import { VoucherAddPage } from './add/add';
 
 import _ from 'lodash';
 
-import { ApiProvider, ProfileProvider, WalletProvider } from '../../providers';
+import { ApiProvider, Coin, Logger, ProfileProvider, TxFormatProvider, WalletProvider } from '../../providers';
 
 @Component({
   selector: 'page-voucher',
@@ -23,7 +23,9 @@ export class VoucherPage {
     private httpClient: HttpClient,
     private profileProvider: ProfileProvider,
     private walletProvider: WalletProvider,
-    private apiProvider: ApiProvider
+    private apiProvider: ApiProvider,
+    private logger: Logger,
+    private formatProvider: TxFormatProvider
   ) {}
 
   ionViewWillEnter() {
@@ -84,21 +86,18 @@ export class VoucherPage {
 
       this.httpClient
         .get(
-          `${this.apiProvider.getAddresses().ducatuscoins}/api/v3/get_frozen_vouchers/?wallet_ids=${walletsResult}`
+          this.apiProvider.getAddresses().deposit + `user/vouchers/list/?wallet_ids=${walletsResult}`
         )
         .toPromise()
         .then(result => {
           this.vouchers = result as any;
-
           this.vouchers.map(x => {
-            x.freez_date = new Date(x.cltv_details.lock_time * 1000);
-            x.freez_date_count = Math.ceil(
-              Math.abs(x.freez_date.getTime() - new Date().getTime()) /
-                (1000 * 3600 * 24)
-            );
+            if(x.daysToUnlock < 0){
+              x.daysToUnlock = x.daysToUnlock * -1;
+            }
+            x.ducAmount = this.formatProvider.satToUnit(x.ducAmount,Coin.DUC);
             x.withdrow_check = false;
           });
-
           this.vouchersLoading = false;
         });
     });
@@ -114,20 +113,6 @@ export class VoucherPage {
         return resolve(addr);
       });
     });
-  }
-
-  private getVoucher(id) {
-    return this.httpClient
-      .get(`${this.apiProvider.getAddresses().ducatuscoins}/api/v3/get_withdraw_info/?voucher_id=${id}`)
-      .toPromise();
-  }
-
-  private sendTX(raw_tx_hex) {
-    return this.httpClient
-      .post(`${this.apiProvider.getAddresses().ducatuscoins}/api/v3/send_raw_transaction/`, {
-        raw_tx_hex
-      })
-      .toPromise();
   }
 
   private getWalletsInfo(coin): Promise<any> {
@@ -218,45 +203,25 @@ export class VoucherPage {
     }, 2000);
   }
 
+  private withdraw (wallet_id: number):Promise<object>{
+    let url = this.apiProvider.getAddresses().deposit + `/user/vouchers/${wallet_id}/withdraw/`;
+
+    return this.httpClient
+      .put(url, "")
+      .toPromise();
+  }
+
   public withdrowTrigger(id: number) {
-    this.vouchers.map(t => {
-      if (t.id === id) t.withdrow_check = true;
-    });
-
-    this.getVoucher(id).then(async res => {
-      const voucher: any = res;
-
-      voucher.cltv_details.sending_amount =
-        voucher.voucherinput_set[0].amount - voucher.tx_fee;
-      voucher.cltv_details.tx_hash = voucher.voucherinput_set[0].mint_tx_hash;
-      voucher.cltv_details.user_duc_address = voucher.user_duc_address;
-      voucher.cltv_details.vout_number = voucher.voucherinput_set[0].tx_vout;
-
-      const addressFilter = this.wallets.find(t => {
-        return t.address === voucher.cltv_details.user_duc_address;
-      });
-
-      const walletToUnfreeze = addressFilter
-        ? addressFilter.wallet
-        : this.wallets.find(t => {
-            return t.wallet.credentials.walletId === voucher.wallet_id;
-          }).wallet;
-
-      const txHex = await this.walletProvider.signFreeze(
-        walletToUnfreeze,
-        voucher.cltv_details,
-        !!addressFilter
-      );
-
-      this.sendTX(txHex)
-        .then(() => {
-          this.showModal('success', id, voucher.duc_amount);
-        })
-        .catch(err => {
-          err.error.detail === '-27: transaction already in block chain'
-            ? this.showModal('alreadyActivated', id)
-            : this.showModal('network', id);
-        });
-    });
+    this.withdraw(id)
+    .then(
+      res=>{
+        this.logger.debug(res);
+        this.showModal('success', id, );
+    })
+    .catch(
+      err=>{
+        this.logger.debug(err);
+        this.showModal('network', id);
+    })
   }
 }
