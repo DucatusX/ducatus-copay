@@ -13,7 +13,7 @@
 
         <ion-label class="nft-item">
           <ion-icon>
-            <img class="nft-item-logo" src="assets/img/nftPreview.png" alt="nftPreview">
+            <img class="nft-item-logo" [src]="nft.ipfs_hash" alt="nftPreview">
           </ion-icon>
           <div class="nft-item-about">
             <h2 class="nft-item-about-number">#{{nft.number}}</h2>

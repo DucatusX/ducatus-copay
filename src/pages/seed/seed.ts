@@ -44,7 +44,15 @@ export class SeedPage {
   public getTokenMeta() {
     const url: string = this.apiProvider.getAddresses().nftSeed + this.walletAddress;
     this.http.get<Nft[]>(url).subscribe(
-      (result: Nft[]) =>{
+      (result: Nft[]) => {
+        // sorted by time. 
+        // new nft to the beginning of the array
+        result.sort((a,b) => {
+         const dataA: number = new Date(a.transaction.created).getTime();
+         const datab: number = new Date(b.transaction.created).getTime();
+
+         return datab - dataA;
+        })
         this.nftData = result;
         this.loaded = true;
       },
