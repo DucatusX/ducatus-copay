@@ -48,10 +48,10 @@ export class SeedPage {
         // sorted by time. 
         // new nft to the beginning of the array
         result.sort((a,b) => {
-         const dataA: number = new Date(a.transaction.created).getTime()
-         const datab: number = new Date(b.transaction.created).getTime()
+         const dataA: number = new Date(a.transaction.created).getTime();
+         const datab: number = new Date(b.transaction.created).getTime();
 
-         return datab - dataA
+         return datab - dataA;
         })
         this.nftData = result;
         this.loaded = true;
