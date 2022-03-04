@@ -93,7 +93,7 @@ export class VoucherPage {
           this.vouchers = result as any;
           this.vouchers.map(x => {
             if(x.daysToUnlock < 0){
-              x.daysToUnlock = x.daysToUnlock * -1;
+              x.daysToUnlock = 0;
             }
             x.ducAmount = this.formatProvider.satToUnit(x.ducAmount,Coin.DUC);
             x.withdrow_check = false;
