@@ -1,3 +1,8 @@
+.deposits{
+  margin-top: 10px;
+  padding: 0 16px;
+}
+
 .deposit {
   &-list {
     padding: 18px;
@@ -58,7 +63,8 @@
         min-height: 45px !important;
         height: 45px !important;
         padding: 0 !important;
-
+        margin-top: 10px;
+        
         .item-inner {
           margin: 0 !important;
           padding: 0 !important;
@@ -110,13 +116,15 @@
   }
 
   &-item {
-    padding: 10px 10px 10px 15px;
+    padding-left: 5px;
     background-color: #ffffff;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
     border-radius: 4px;
     margin-bottom: 10px;
     width: 100%;
-    height: 88px;
+    height: 80px;
+    justify-content: space-between;
+    align-items: center;
 
     &-alternative {
       color: #565d6d;
