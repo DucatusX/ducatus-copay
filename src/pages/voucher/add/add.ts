@@ -258,15 +258,15 @@ export class VoucherAddPage {
         )
           .then(res => {
             const result: any = res;
-            if(result.readyToWithdraw === false && result.daysToUnlock === null){
+
+            if (
+              result.readyToWithdraw === false 
+              && result.daysToUnlock === null
+            ) {
               this.showModal('ok', { min: '15' });
-            }
-            else{
-              if(result.daysToUnlock < 0){
-                this.showModal('ok_freeze', result.daysToUnlock * -1);
-              }
-              this.showModal('ok_freeze', result.daysToUnlock);
-            }
+            } 
+             
+            this.showModal('ok_freeze', {day: result.daysToUnlock});
           })
           .catch(err => {
             this.logger.log(`${JSON.stringify(err)}`);
