@@ -204,7 +204,7 @@ export class VoucherPage {
   }
 
   private withdraw (wallet_id: number):Promise<object>{
-    let url = this.apiProvider.getAddresses().deposit + `/user/vouchers/${wallet_id}/withdraw/`;
+    let url = this.apiProvider.getAddresses().deposit + `user/vouchers/${wallet_id}/withdraw/`;
 
     return this.httpClient
       .put(url, "")
