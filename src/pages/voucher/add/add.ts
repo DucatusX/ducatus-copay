@@ -20,7 +20,13 @@ export class VoucherAddPage {
   public voucherLoading = false;
   public walletAddresses = [];
   private wallets: any;
-  public isDucx: boolean;
+  private isDucx = false;
+
+  private vouchers_api = {
+    'PG-': this.apiProvider.getAddresses().pog + '/api/v1/vouchers/activate/',
+    'CF-':
+      this.apiProvider.getAddresses().crowdsale + '/api/v1/activate_voucher'
+  };
 
   constructor(
     private formBuilder: FormBuilder,
@@ -44,6 +50,17 @@ export class VoucherAddPage {
       ]
     });
   }
+
+  // ionViewWillEnter() {
+  //   const wallets = this.profileProvider.getWallets({ showHidden: true });
+
+  //   this.walletProvider.getWalletsByCoin(wallets, 'duc').then(res => {
+
+  //     if (result.count <= 0) this.showModal('needbackup');
+
+  //     this.walletAddresses = result.wallets;
+  //   });
+  // }
 
   ionViewWillEnter() {
     const coins = [
@@ -143,12 +160,20 @@ export class VoucherAddPage {
       ok: {
         title:
           '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
-        text: `Your voucher successfully activated. You will get Ducatus in ${options.min} minutes`
+        text: `Your ${
+          options.usd
+        }$ voucher successfully activated. You will get ${
+          options.duc
+        } Ducatus in ${options.min} minutes`
       },
       ok_freeze: {
         title:
           '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
-        text: `Your voucher succesfully activated. You can withdraw your Ducatus after ${options.day} days`
+        text: `Your $${
+          options.usd
+        } voucher succesfully activated. You can withdraw your ${
+          options.duc
+        } Ducatus after ${options.day} days`
       },
       ok_token: {
         title:
@@ -226,19 +251,29 @@ export class VoucherAddPage {
     alert.present();
   }
 
-  private sendCode (
-    activation_code: string,
-    user_address: string,
+  private sendCode(
     wallet_id: string,
-  ) 
-  {
-    let url = this.apiProvider.getAddresses().deposit + 'user/vouchers/activate/';
-    
+    duc_address: string,
+    duc_public_key: string,
+    activation_code: string,
+    private_path: string
+  ) {
+    let url =
+      this.apiProvider.getAddresses().ducatuscoins + '/api/v3/transfer/';
+    const voucher_start = activation_code.slice(0, 3);
+    Object.keys(this.vouchers_api).map(key => {
+      if (key === voucher_start) {
+        url = this.vouchers_api[key];
+      }
+    });
     return this.httpClient
       .post(url, {
-        activation_code,
-        user_address,
         wallet_id,
+        duc_address,
+        ducx_address: duc_address,
+        duc_public_key,
+        activation_code,
+        private_path
       })
       .toPromise();
   }
@@ -253,20 +288,31 @@ export class VoucherAddPage {
       .then(resPrepare => {
         const resultPrepare: any = resPrepare;
         this.sendCode(
-          this.VoucherGroup.value.VoucherGroupCode,
-          this.VoucherGroup.value.VoucherGroupAddress,
           resultPrepare.wallet.walletId,
+          this.VoucherGroup.value.VoucherGroupAddress,
+          resultPrepare.pubKey,
+          this.VoucherGroup.value.VoucherGroupCode,
+          resultPrepare.path
         )
           .then(res => {
             const result: any = res;
-            if(result.readyToWithdraw === false && result.daysToUnlock === null){
-              this.showModal('ok', { min: '15' });
-            }
-            else{
-              if(result.daysToUnlock < 0){
-                this.showModal('ok_freeze', result.daysToUnlock * -1);
-              }
-              this.showModal('ok_freeze', result.daysToUnlock);
+
+            if (this.isDucx) {
+              this.showModal('ok_token', {
+                token: this.isDucx
+              });
+            } else {
+              result.lock_days !== 0
+                ? this.showModal('ok_freeze', {
+                    usd: result.usd_amount,
+                    duc: result.duc_amount,
+                    day: result.lock_days
+                  })
+                : this.showModal('ok', {
+                    usd: result.usd_amount,
+                    duc: result.duc_amount,
+                    min: '15'
+                  });
             }
           })
           .catch(err => {
