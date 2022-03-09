@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, NavController } from 'ionic-angular';
+
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
 import { ApiProvider } from '../../../providers/api/api';
 import { IncomingDataProvider } from '../../../providers/incoming-data/incoming-data';
-import { Logger } from '../../../providers/logger/logger';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
 import { WalletProvider } from '../../../providers/wallet/wallet';
@@ -40,8 +40,7 @@ export class DepositAddPage {
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private httpClient: HttpClient,
-    private apiProvider: ApiProvider,
-    private logger: Logger
+    private apiProvider: ApiProvider
   ) {
     this.DepositGroup = this.formBuilder.group({
       Address: [
@@ -70,10 +69,9 @@ export class DepositAddPage {
 
     this.walletProvider.getWalletsByCoin(wallets, 'duc').then(res => {
       const result: any = res;
-  
-      if (result.count <= 0) {
-        this.showModal('needbackup');
-      } 
+
+      if (result.count <= 0) this.showModal('needbackup');
+
       this.walletAddresses = result.wallets;
     });
   }
@@ -173,22 +171,26 @@ export class DepositAddPage {
   }
 
   private generateDeposit(
-    wallet: string,
+    wallet_id: string,
     duc_address: string,
-    lock_months: string,
+    duc_public_key: string,
+    lock_months: number,
+    private_path: string
   ) {
     return this.httpClient
-      .post(this.apiProvider.getAddresses().deposit +`user/deposits/create/`, {
-        wallet,
+      .post(`${this.apiProvider.getAddresses().deposit}/api/v3/generate_deposit/`, {
+        wallet_id,
         duc_address,
+        duc_public_key,
         lock_months,
+        private_path
       })
       .toPromise();
   }
 
   public async generateUserDeposit() {
     this.depositLoading = true;
-    
+
     this.walletProvider
       .prepareAdd(this.walletAddresses, this.DepositGroup.value.Address)
       .then(resPrepare => {
@@ -197,16 +199,18 @@ export class DepositAddPage {
         this.generateDeposit(
           resultPrepare.wallet.walletId,
           this.DepositGroup.value.Address,
-          String(this.DepositGroup.value.Month)
+          resultPrepare.pubKey,
+          parseFloat(this.DepositGroup.value.Month),
+          resultPrepare.path
         )
           .then(res => {
             const result: any = res;
 
-            if (result.ducAddress) {
+            if (result.cltv_details.locked_duc_address) {
               const addressView = this.walletProvider.getAddressView(
                 resultPrepare.wallet.wallet.coin,
                 resultPrepare.wallet.wallet.network,
-                result.ducAddress,
+                result.cltv_details.locked_duc_address,
                 true
               );
 
@@ -225,10 +229,7 @@ export class DepositAddPage {
               this.incomingDataProvider.redir(addressView, redirParms);
             }
           })
-          .catch((err)=>{
-            this.showModal('network');
-            this.logger.debug(err);
-          });
+          .catch(() => this.showModal('network'));
       });
   }
 

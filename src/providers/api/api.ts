@@ -9,7 +9,7 @@ export class ApiProvider {
       crowdsale: 'https://tokenization.centuriongm.com',
       pog: 'https://d-pog.com',
       ratesApi: 'https://rates.ducatuscoins.com/api/v1/rates/',
-      deposit: 'https://www.ducatuscoins.com/api/v3/',
+      deposit: 'https://www.ducatuscoins.com',
       // Cейчас работает только дев апи
       nftSeed: 'https://nft.goldxb.com/api/v1/nfts/',
       getExchange:{
@@ -32,7 +32,9 @@ export class ApiProvider {
       // crowdsale: 'http://duccrowdsale.rocknblock.io',
       pog: 'https://devgold.rocknblock.io',
       ratesApi: 'https://ducexpl.rocknblock.io/api/v1/rates/',
-      deposit: 'https://dev-vouchers.rocknblock.io/api/v1/',
+      deposit: 'https://www.ducatuscoins.com',
+      // сейчас работает только прод апи
+      // deposit: 'https://ducsite.rocknblock.io/',
       nftSeed: 'https://dev-seed.rocknblock.io/api/v1/nfts/',
       getExchange:{
         livenet: "https://www.ducatuscoins.com",
