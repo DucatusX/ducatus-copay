@@ -360,10 +360,10 @@ export class AmountPage {
       );
     }
 
-    const maxAmount = this.txFormatProvider.satToUnit(
+    const maxAmount = Number(this.txFormatProvider.satToUnit(
       this.wallet.cachedStatus.availableBalanceSat,
       this.wallet.coin
-    );
+    ));
 
     this.zone.run(() => {
       this.expression = this.availableUnits[this.unitIndex].isFiat
