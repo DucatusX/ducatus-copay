@@ -78,7 +78,7 @@
             >{{'Choose address to get' | translate}}</span
           >
           <div class="calculator-convert-select">
-            <span *ngIf="!sendAddress" class="calculator-convert-select-placeholder">Select your address</span>
+            <span *ngIf="!sendAddress || !getAddress" class="calculator-convert-select-placeholder">Select your address</span>
             <div *ngIf="!fullSize" class="calculator-convert-select-address">{{getAddress | shortenedAddress: 22}}</div>
             <div *ngIf="fullSize" class="calculator-convert-select-address">{{getAddress}}</div>
             <div class="calculator-convert-select-icon">
