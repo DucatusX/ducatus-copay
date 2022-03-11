@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { AlertController, NavParams } from 'ionic-angular';
-import {Platform} from 'ionic-angular';
+import { AlertController, NavParams, Platform } from 'ionic-angular';
 import * as _ from 'lodash';
 import env from '../../../environments';
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
@@ -64,7 +63,7 @@ export class CalculatorConvertPage {
     private platform: Platform
   ) {
     if (this.platform.width()>500){
-      this.fullSize = true
+      this.fullSize = true;
     }
     this.formCoins.get = this.navParams.data.get;
     this.formCoins.send = this.navParams.data.send;
@@ -102,7 +101,7 @@ export class CalculatorConvertPage {
   ballanceStrToNumber(balance:string):number {
     if (balance){
       // ToValidStrDecimal
-      balance = balance.replace(/[\s,%]/g, '')
+      balance = balance.replace(/[\s,%]/g, '');
       // toNumber
       let balanceNum = parseFloat(balance);
       return balanceNum;
@@ -215,9 +214,9 @@ export class CalculatorConvertPage {
   );
    infoSheet.present();
    infoSheet.onDidDismiss((option,item)=>{
-    this.sendWallet = item
-    this.sendAddress = option
-    this.getAddress = ''
+    this.sendWallet = item;
+    this.sendAddress = option;
+    this.getAddress = '';
   })
 
 }
@@ -231,10 +230,10 @@ export class CalculatorConvertPage {
 
   wallets = wallets.filter(elemWallets=>{
     if (elemWallets.wallet.network === this.sendWallet.wallet.network) {
-      return true
+      return true;
     }
     else {
-      return false
+      return false;
     }
   })
 
@@ -286,14 +285,14 @@ export class CalculatorConvertPage {
     )
       .then(result => {
         // if we get address
-        this.addresses = result
-        this.goToSendPage()
+        this.addresses = result;
+        this.goToSendPage();
       })
       .catch(err => {
         // if we don't get address
-        this.sendDisabled = false
+        this.sendDisabled = false;
         this.logger.debug('cant get addresses: ', err);
-        const infoSheet = this.actionSheetProvider.createInfoSheet('cant-get-addresses')
+        const infoSheet = this.actionSheetProvider.createInfoSheet('cant-get-addresses');
         infoSheet.present();
       });
   }
@@ -301,10 +300,10 @@ export class CalculatorConvertPage {
   public getExchange(address: string, currency: string) {
     let network;
     if (this.sendWallet.wallet.network==='livenet'){
-      network = "livenet"
+      network = "livenet";
     }
     else {
-      network = "testnet"
+      network = "testnet";
     }
 
     // testnet -> devApi
@@ -341,8 +340,8 @@ export class CalculatorConvertPage {
   }
 
   public inizilizationOfSend(){
-    this.sendDisabled = true
-    this.setAddress(this.getWallet.coin.toUpperCase())
+    this.sendDisabled = true;
+    this.setAddress(this.getWallet.coin.toUpperCase());
   }
 
   public async goToSendPage() {
@@ -356,13 +355,13 @@ export class CalculatorConvertPage {
       if (!cha) return;
     }
     
-    this.wallet = this.sendWallet.wallet
+    this.wallet = this.sendWallet.wallet;
 
     // Getting all data
-    let coin = this.formCoins.get.toLowerCase()
+    let coin = this.formCoins.get.toLowerCase();
 
         if (this.formCoins.get.toLowerCase() === 'wducx'){
-          dataInfo[coin] = await this.getDucxWduxSwapInfo()
+          dataInfo[coin] = await this.getDucxWduxSwapInfo();
         }
         else {
           dataInfo[coin] = {
@@ -441,7 +440,7 @@ export class CalculatorConvertPage {
         parseInt(Number(parsedAmount.amount).toLocaleString('fullwide', { useGrouping: false }), 10)
       )
         .then(() => {
-          this.sendDisabled = false
+          this.sendDisabled = false;
           this.incomingDataProvider.redir(addressView, redirParms);
         })
         .catch(err => {
