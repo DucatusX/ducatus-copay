@@ -6,17 +6,15 @@
       </div>
 
       <form [formGroup]="calculatorForm">
-        <div class="calculator-form-group">
+        <div class="calculator-form-group" [ngClass]="{error: calculationError}">
           <ion-item class="calculator-input">
             <ion-label stacked>{{'Send' | translate}}</ion-label>
             <ion-input
-              [disabled]="!rates"
+              [disabled]="!rates && calculationError"
               type="number"
               formControlName="sendAmount"
-              [value]="calculatorForm.value.sendAmount"
-              (click)="selectInputType('Send')"
-              (ionChange)="changeAmount('Send')"
               OnlyNumber="true"
+              inputmode="decimal"
               required
             >
             </ion-input>
@@ -34,8 +32,6 @@
               class="calculator-select-ion"
               interface="popover"
               formControlName="sendCoin"
-              [(ngModel)]="calculatorForm.value.sendCoin"
-              (ionChange)="changeCoin('Send')"
             >
               <ion-option
                 *ngFor="let item of convertSendCoins"
@@ -60,16 +56,14 @@
         
         </ion-item>
 
-        <div class="calculator-form-group">
+        <div class="calculator-form-group" [ngClass]="{error: calculationError}">
           <ion-item class="calculator-input">
             <ion-label stacked>{{'Get' | translate}}</ion-label>
             <ion-input
-              [disabled]="!rates"
+              [disabled]="!rates && calculationError"
               type="number"
               formControlName="getAmount"
-              [value]="calculatorForm.value.getAmount"
-              (click)="selectInputType('Get')"
-              (ionChange)="changeAmount('Get')"
+              inputmode="decimal"
               OnlyNumber="true"
               required
             >
@@ -88,8 +82,6 @@
               class="calculator-select-ion"
               interface="popover"
               formControlName="getCoin"
-              [(ngModel)]="calculatorForm.value.getCoin"
-              (ionChange)="changeCoin('Get')"
             >
               <ion-option *ngFor="let item of formCoins.get.items" [value]="item">
                 {{ item }}</ion-option
