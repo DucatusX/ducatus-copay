@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { AlertController, NavParams } from 'ionic-angular';
-import {Platform} from 'ionic-angular';
+import { AlertController, NavParams, Platform} from 'ionic-angular';
 import * as _ from 'lodash';
 import env from '../../../environments';
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
@@ -299,17 +298,10 @@ export class CalculatorConvertPage {
   }
 
   public getExchange(address: string, currency: string) {
-    let network;
-    if (this.sendWallet.wallet.network==='livenet'){
-      network = "livenet"
-    }
-    else {
-      network = "testnet"
-    }
+  // network === livenet -> prodApi
+  // network === testnet -> devApi
+  const network = this.sendWallet.wallet.network;
 
-    // testnet -> devApi
-    // livenet -> prodApi
-    
     return this.httpClient
       .post(
         this.apiProvider.getAddresses().getExchange[network] + '/api/v1/exchange/',
