@@ -1,4 +1,3 @@
-// import { from } from 'rxjs/observable/from';
 
 /* Native modules */
 export { AndroidFingerprintAuth } from '@ionic-native/android-fingerprint-auth';
@@ -25,6 +24,7 @@ export { AnalyticsProvider } from '../providers/analytics/analytics';
 export { AppIdentityProvider } from '../providers/app-identity/app-identity';
 export { AppProvider } from '../providers/app/app';
 export { BackupProvider } from '../providers/backup/backup';
+export { FormControllerProvider } from './form-contoller/form-controller';
 export {
   BitPayAccountProvider
 } from '../providers/bitpay-account/bitpay-account';
