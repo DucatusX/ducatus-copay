@@ -29,16 +29,18 @@
         <div class="calculator-heading" translate>Convert</div>
       </div>
 
-      <div class="calculator-convert-type">
+      <!-- <div class="calculator-convert-type">
         <div class="calculator-convert-type-send">
           <span>{{ formCoins.amountSend }}</span>
-          <ion-icon class="item-img icon-settings" item-start>
-            <img
-              src="assets/img/calculator/{{ coinInfo[formCoins.send] }}.svg"
-              width="30"
-            />
-          </ion-icon>
-          {{ formCoins.send }}
+          <div c>
+            <ion-icon class="item-img icon-settings" item-start>
+              <img
+                src="assets/img/calculator/{{ coinInfo[formCoins.send] }}.svg"
+                width="30"
+              />
+            </ion-icon>
+            {{ formCoins.send }}
+          </div>
         </div>
 
         <ion-icon class="item-img icon-settings" item-start>
@@ -54,6 +56,43 @@
             />
           </ion-icon>
           {{ formCoins.get }}
+        </div>
+      </div> -->
+
+      <div class="calculator-convert-type">
+        <div class="calculator-convert-type-send">
+          <div class="amount-info">
+            <span class="transaction-type">PAY</span> <span>{{ formCoins.amountSend }}</span>
+          </div>
+          <div class="coin-info">
+            <ion-icon class="item-img icon-settings" item-start>
+              <img
+                src="assets/img/calculator/{{ coinInfo[formCoins.send] }}.svg"
+                width="30"
+              />
+            </ion-icon>
+            <div class="coin-info-type">{{ formCoins.send }}</div>
+          </div>
+        </div>
+
+      <ion-icon class="item-img icon-settings" item-start>
+        <img class="arrow" src="assets/img/calculator/arrow-right.svg" width="22" />
+      </ion-icon>
+
+        <div class="calculator-convert-type-get">
+          <div class="amount-info">
+            <span class="transaction-type">GET</span> <span>{{ formCoins.amountGet }}</span>
+          </div>
+          <div class="coin-info">
+            <ion-icon class="item-img icon-settings" item-start>
+              <img
+                src="assets/img/calculator/{{ coinInfo[formCoins.get] }}.svg"
+                width="30"
+              />
+            </ion-icon>
+            <div class="coin-info-type">{{ formCoins.get }}</div>
+            
+          </div>
         </div>
       </div>
 
