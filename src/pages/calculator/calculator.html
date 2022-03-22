@@ -11,7 +11,7 @@
             <ion-label stacked>{{'Send' | translate}}</ion-label>
             <ion-input
               [disabled]="!rates && calculationError"
-              type="number"
+              type="text"
               formControlName="sendAmount"
               OnlyNumber="true"
               inputmode="decimal"
@@ -61,7 +61,7 @@
             <ion-label stacked>{{'Get' | translate}}</ion-label>
             <ion-input
               [disabled]="!rates && calculationError"
-              type="number"
+              type="text"
               formControlName="getAmount"
               inputmode="decimal"
               OnlyNumber="true"
