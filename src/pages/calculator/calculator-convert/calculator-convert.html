@@ -29,36 +29,6 @@
         <div class="calculator-heading" translate>Convert</div>
       </div>
 
-      <!-- <div class="calculator-convert-type">
-        <div class="calculator-convert-type-send">
-          <span>{{ formCoins.amountSend }}</span>
-          <div c>
-            <ion-icon class="item-img icon-settings" item-start>
-              <img
-                src="assets/img/calculator/{{ coinInfo[formCoins.send] }}.svg"
-                width="30"
-              />
-            </ion-icon>
-            {{ formCoins.send }}
-          </div>
-        </div>
-
-        <ion-icon class="item-img icon-settings" item-start>
-          <img src="assets/img/calculator/arrow-right.svg" width="22" />
-        </ion-icon>
-
-        <div class="calculator-convert-type-get">
-          <span>{{ formCoins.amountGet }}</span>
-          <ion-icon class="item-img icon-settings" item-start>
-            <img
-              src="assets/img/calculator/{{ coinInfo[formCoins.get] }}.svg"
-              width="30"
-            />
-          </ion-icon>
-          {{ formCoins.get }}
-        </div>
-      </div> -->
-
       <div class="calculator-convert-type">
         <div class="calculator-convert-type-send">
           <div class="amount-info">
@@ -66,18 +36,15 @@
           </div>
           <div class="coin-info">
             <ion-icon class="item-img icon-settings" item-start>
-              <img
-                src="assets/img/calculator/{{ coinInfo[formCoins.send] }}.svg"
-                width="30"
-              />
+              <img class="coin-info-img" src="assets/img/calculator/{{ coinInfo[formCoins.send] }}.svg"/>
             </ion-icon>
             <div class="coin-info-type">{{ formCoins.send }}</div>
           </div>
         </div>
 
-      <ion-icon class="item-img icon-settings" item-start>
-        <img class="arrow" src="assets/img/calculator/arrow-right.svg" width="22" />
-      </ion-icon>
+        <ion-icon class="item-img icon-settings" item-start>
+          <img class="arrow" src="assets/img/calculator/arrow-right.svg" width="22" />
+        </ion-icon>
 
         <div class="calculator-convert-type-get">
           <div class="amount-info">
@@ -85,22 +52,16 @@
           </div>
           <div class="coin-info">
             <ion-icon class="item-img icon-settings" item-start>
-              <img
-                src="assets/img/calculator/{{ coinInfo[formCoins.get] }}.svg"
-                width="30"
-              />
+              <img class="coin-info-img" src="assets/img/calculator/{{ coinInfo[formCoins.get] }}.svg"/>
             </ion-icon>
             <div class="coin-info-type">{{ formCoins.get }}</div>
-            
           </div>
         </div>
       </div>
 
       <form >
         <div class="calculator-convert-group" (click)="openAddressListSend(walletsInfoSend)">
-          <span class="calculator-convert-label"
-            >{{'Choose address to pay' | translate}}</span
-          >
+          <span class="calculator-convert-label">{{'Choose address to pay' | translate}}</span>
           <div class="calculator-convert-select">
             <span *ngIf="!sendAddress" class="calculator-convert-select-placeholder">Select your address</span>
             <div *ngIf="!fullSize" class="calculator-convert-select-address">{{sendAddress | shortenedAddress: 22}}</div>
@@ -111,11 +72,8 @@
           </div>
         </div>
 
-
         <div class="calculator-convert-group" [ngClass]="{active: !sendAddress}" (click)="openAddressListGet(walletsInfoGet)">
-          <span class="calculator-convert-label"
-            >{{'Choose address to get' | translate}}</span
-          >
+          <span class="calculator-convert-label">{{'Choose address to get' | translate}}</span>
           <div class="calculator-convert-select">
             <span *ngIf="!sendAddress" class="calculator-convert-select-placeholder">Select your address</span>
             <div *ngIf="!fullSize" class="calculator-convert-select-address">{{getAddress | shortenedAddress: 22}}</div>
