@@ -9,7 +9,15 @@ export const convertCoins = {
 export const convertSendCoins = ['DUC','DUCX', 'ETH' , 'BTC',]
 export const convertGetCoins =  ['DUCX'];
 
-export const coinInfo = {
+export interface ICoinInfo {
+  DUC: 'Ducatus';
+  DUCX: 'DucatusX';
+  ETH: 'Etherium';
+  BTC: 'Bitcoin';
+  WDUCX: 'WRAPPED DUCX';
+};
+
+export const coinInfo: ICoinInfo = {
   DUC: 'Ducatus',
   DUCX: 'DucatusX',
   ETH: 'Etherium',
