@@ -149,9 +149,13 @@ export class DepositPage {
   }
 
   private async getAddress(wallet): Promise<string> {
-    const address = await this.walletProvider.getAddress(wallet, false);
-
-    return address;
+    try {
+      const address = await this.walletProvider.getAddress(wallet, false);
+      
+      return address;
+    } catch(e) {
+      return null;
+    } 
   }
 
   private async getWalletsInfo(coin): Promise<any> {
@@ -168,13 +172,15 @@ export class DepositPage {
     for ( let i = 0; i < coins.length; i++ ) {
       const coin = coins[i];
       const address = await this.getAddress(coin);
-
-      wallets.push({
-        walletId: coin.credentials.walletId,
-        requestPubKey: coin.credentials.requestPubKey,
-        wallet: coin,
-        address
-      });
+      
+      if (address) {
+        wallets.push({
+          walletId: coin.credentials.walletId,
+          requestPubKey: coin.credentials.requestPubKey,
+          wallet: coin,
+          address
+        });
+      }
     }
     
     return wallets;
