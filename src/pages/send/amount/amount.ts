@@ -520,10 +520,10 @@ export class AmountPage {
   }
 
   private toFiat(val: number, coin?: Coin): number {
-    const enterCoinType = coin || this.availableUnits[this.unitIndex].id
-    const ratioCoins = this.rateProvider.getRate(this.fiatCode, enterCoinType)
+    const enterCoinType = coin || this.availableUnits[this.unitIndex].id;
+    const ratioCoins = this.rateProvider.getRate(this.fiatCode, enterCoinType);
 
-    if (ratioCoins){
+    if (ratioCoins) {
       return undefined;
     }
       
@@ -533,7 +533,7 @@ export class AmountPage {
           this.fiatCode,
           enterCoinType
         )
-        .toFixed(2)
+        .toFixed(2);
 
     return parseFloat(valFiat);
   }
@@ -712,7 +712,9 @@ export class AmountPage {
   }
 
   public changeUnit(): void {
-    if (this.fixedUnit) return;
+    if (this.fixedUnit) {
+      return;
+    }
 
     this.unitIndex++;
     if (this.unitIndex >= this.availableUnits.length) {
@@ -738,7 +740,10 @@ export class AmountPage {
 
   public closeModal(item): void {
     if (this.viewCtrl.name === 'AmountPage') {
-      if (item) this.events.publish('addRecipient', item);
+      if (item) {
+        this.events.publish('addRecipient', item);
+      }
+
       this.navCtrl.remove(this.viewCtrl.index - 1).then(() => {
         this.viewCtrl.dismiss();
       });
