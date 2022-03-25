@@ -92,6 +92,9 @@ export class AltCurrencyPage {
       {
         isoCode: 'JWAN'
       },
+      {
+        isoCode: 'TKF'
+      },
     ];
   }
 

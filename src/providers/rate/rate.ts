@@ -37,7 +37,8 @@ export class RateProvider {
         'wde',
         'mdxb',
         'g.o.l.d.',
-        'jwan'
+        'jwan',
+        'tkf'
       ];
 
       if (coin === 'ducx') {
@@ -52,6 +53,9 @@ export class RateProvider {
       } else if (coin === 'jwan') {
         usdValue = 0.01;
         ngnValue = 0.01;
+      } else if (coin === 'tkf') {
+        usdValue = 0.25;
+        ngnValue = 0.25;
       } else if (token.includes(coin)) {
         usdValue = 1;
         ngnValue = 1;
@@ -108,7 +112,8 @@ export class RateProvider {
           'wde',
           'mdxb',
           'g.o.l.d.',
-          'jwan'
+          'jwan',
+          'tkf'
         ].includes(chain)
       ) {
         resolve([]);

@@ -73,7 +73,8 @@ export class VoucherAddPage {
       'wde',
       'mdxb',
       'g.o.l.d.',
-      'jwan'
+      'jwan',
+      'tkf'
     ];
     const wallets = this.profileProvider.getWallets({ showHidden: true });
     let promises = [];
