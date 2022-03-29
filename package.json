@@ -25,11 +25,11 @@
   "homepage": "https://ducatus.io",
   "license": "MIT",
   "repository": {
-    "url": "git://github.com/DUCATUS-revival/ducatus-copay.git",
+    "url": "git://github.com/DucatusX/ducatus-copay.git",
     "type": "git"
   },
   "bugs": {
-    "url": "https://github.com/DUCATUS-revival/ducatus-copay/issues"
+    "url": "https://github.com/DucatusX/ducatus-copay/issues"
   },
   "scripts": {
     "postinstall": "npm run env:dev && npm run prompt",
