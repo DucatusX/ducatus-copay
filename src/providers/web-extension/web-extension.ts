@@ -6,6 +6,7 @@ import { Logger } from '../logger/logger';
 export class WebExtensionsProvider {
   private wallets;
   private ducxAddresses = [];
+  private extension = null;
 
   constructor(
     private logger: Logger,
@@ -16,24 +17,29 @@ export class WebExtensionsProvider {
   }
 
   init()  {
-    chrome.storage.sync.get("ducxTx", (data) => {
+   
+    if ( chrome && chrome.storage ) {
+      return;
+    } 
+
+    this.extension.storage.sync.get("ducxTx", (data) => {
       const { ducxTx } = data;
 
       if ( ducxTx ) {
         this.openTxPage(ducxTx);
-        chrome.storage.sync.set({ducxTx: null}, function() {
+        this.extension.storage.sync.set({ducxTx: null}, function() {
           console.log('Value is set to null');
         });
       } 
     });
 
-    chrome.storage.onChanged.addListener( (changes) => {
+    this.extension.storage.onChanged.addListener( (changes) => {
       const { ducxTx = {} } = changes;
       const { newValue } = ducxTx;
     
       if ( newValue ) {
         this.openTxPage(newValue);
-        chrome.storage.sync.set({ducxTx: null}, function() {
+        this.extension.storage.sync.set({ducxTx: null}, function() {
           console.log('Value is set to null');
         });
       } 
@@ -65,7 +71,7 @@ export class WebExtensionsProvider {
       }
     }
     
-    chrome.storage.sync.set({ ducxAddresses: this.ducxAddresses });
+    this.extension.storage.sync.set({ ducxAddresses: this.ducxAddresses });
   }
 
 }
