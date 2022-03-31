@@ -9,6 +9,7 @@ import {
   TxFormatProvider, WalletProvider 
 } from '../../providers';
 import { DepositAddPage } from './deposit-add/deposit-add';
+import moment from 'moment';
 
 @Component({
   selector: 'page-deposit',
@@ -92,14 +93,17 @@ export class DepositPage {
     });
 
     const address = `${this.apiProvider.getAddresses().deposit}user/deposits/list/?wallet_ids=${walletsResult}`;
-    const deposits = await this.httpClient
+    // @ts-ignore
+    const deposits: any[] = await this.httpClient
       .get(address)
       .toPromise();
-
-    for ( let i = 0; i < this.deposits.length; i++ ) {
-      const deposit = this.deposits[i];
-
+    
+    for ( let i = 0; i < deposits.length; i++ ) {
+      const deposit = deposits[i];
+    
       if ( deposit.amountDeposited ) {
+        deposit.readyToWithdrawDate = moment(deposit.readyToWithdrawDate).format();
+        deposit.createdAt = moment(deposit.createdAt).format();
         deposit.amountUnit = Number(this.formatProvider.satToUnit(deposit.amountDeposited, Coin.DUC));
         deposit.amountAdd = Number(this.formatProvider.satToUnit(deposit.amountToWithdraw, Coin.DUC)) - deposit.amountUnit;
         deposit.amountAdd = deposit.amountAdd.toFixed(2);
@@ -112,7 +116,7 @@ export class DepositPage {
         );
       }
     }
-
+    
     this.deposits = deposits as any[];
     this.depositsLoading = false;
   }
@@ -131,8 +135,8 @@ export class DepositPage {
     depositDateEnd: string,
     daysToWithdraw: string
   ): number {
-    const endDate: number = new Date(depositDateEnd).getTime();
-    const createdAt: number = new Date(depositDateCreated).getTime();
+    const createdAt: number = moment(depositDateCreated).valueOf();
+    const endDate: number = moment(depositDateEnd).valueOf();
     const coefficient = 24 * 60 * 60 * 1000;
     const passedDays: number = (createdAt - endDate) / coefficient * -1; // passed 5 (days)
     const passedDaysPercent = ((passedDays - Number(daysToWithdraw)) / passedDays) * 100; // passed 1 (%)
@@ -173,7 +177,7 @@ export class DepositPage {
       const coin = coins[i];
       const address = await this.getAddress(coin);
       
-      if (address) {
+      if ( address ) {
         wallets.push({
           walletId: coin.credentials.walletId,
           requestPubKey: coin.credentials.requestPubKey,
@@ -189,20 +193,17 @@ export class DepositPage {
   private showModal(type: string, id?: number, ducAmount?: number): void {
     const modalAnswers = {
       success: {
-        title:
-          '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
+        title: '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
         text: `You will get ${ducAmount || ''} Ducatus in 15 minutes`,
         button: 'OK'
       },
       alreadyActivated: {
-        title:
-          '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
+        title: '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
         text: `Please wait, Ducatus is on the way to your wallet`,
         button: 'OK'
       },
       network: {
-        title:
-          '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+        title: '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
         text: 'Something went wrong, try again',
         button: 'OK'
       }
@@ -243,6 +244,7 @@ export class DepositPage {
 
   public doRefresh(refresher): void {
     this.debounceGetDeposits();
+
     setTimeout(() => {
       refresher.complete();
     }, 2000);
