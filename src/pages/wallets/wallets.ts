@@ -44,6 +44,7 @@ import { PopupProvider } from '../../providers/popup/popup';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { SimplexProvider } from '../../providers/simplex/simplex';
 import { WalletProvider } from '../../providers/wallet/wallet';
+import { WebExtensionsProvider } from '../../providers/web-extension/web-extension';
 import { SelectCurrencyPage } from '../add/select-currency/select-currency';
 
 interface UpdateWalletOptsI {
@@ -109,7 +110,8 @@ export class WalletsPage {
     private modalCtrl: ModalController,
     private actionSheetProvider: ActionSheetProvider,
     private coinbaseProvider: CoinbaseProvider,
-    private moonPayProvider: MoonPayProvider
+    private moonPayProvider: MoonPayProvider,
+    private webExtensionsProvider: WebExtensionsProvider
   ) {
     this.slideDown = false;
     this.isBlur = false;
@@ -383,7 +385,8 @@ export class WalletsPage {
         'keyId'
       )
     );
-
+    
+    this.webExtensionsProvider.setDucxAddresses(this.wallets);
     this.readOnlyWalletsGroup = this.profileProvider.getWalletsFromGroup({
       keyId: 'read-only'
     });

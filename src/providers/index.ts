@@ -103,3 +103,4 @@ export { MoonPayProvider } from '../providers/moonpay/moonpay';
 export { LiveChatProvider } from '../providers/livechat/livechat';
 export { PdfProvider } from '../providers/pdf/pdf';
 export { ApiProvider } from '../providers/api/api';
+export { WebExtensionsProvider } from '../providers/web-extension/web-extension';

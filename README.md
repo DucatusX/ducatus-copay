@@ -114,6 +114,26 @@ npm run prepare:copay
 npm run final:ios
 ```
 
+
+### Web extensions
+
+```sh
+  npm i 
+  npm run apply:copay
+```
+
+#### For Chrome
+
+```sh
+  npm run build:chrome-extension
+```
+
+#### For Firefox
+
+```sh
+  npm run build:firefox-extension
+```
+
 ### Push Notifications
 
 Push notification doesn't work on iOS 12 due to an update of Xcode and plugin `cordova-plugin-fcm`.

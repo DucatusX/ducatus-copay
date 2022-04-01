@@ -1,0 +1,14 @@
+body {
+  display: block !important; 
+  position: relative !important;
+  overflow: hidden;
+  min-width: 350px;
+  max-width: auto;
+}
+
+html {
+  overflow: hidden;
+  min-width: 350px;
+  max-width: auto;
+  min-height: 600px;
+}
