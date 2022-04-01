@@ -34,12 +34,11 @@ import { getActivationFee } from '../../../providers/gift-card/gift-card';
 import { CardConfig } from '../../../providers/gift-card/gift-card.types';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { BitPayCardTopUpPage } from '../../integrations/bitpay-card/bitpay-card-topup/bitpay-card-topup';
+import { CoinbaseWithdrawPage } from '../../integrations/coinbase/coinbase-withdraw/coinbase-withdraw';
 import { ConfirmCardPurchasePage } from '../../integrations/gift-cards/confirm-card-purchase/confirm-card-purchase';
 import { ShapeshiftConfirmPage } from '../../integrations/shapeshift/shapeshift-confirm/shapeshift-confirm';
 import { CustomAmountPage } from '../../receive/custom-amount/custom-amount';
 import { ConfirmPage } from '../confirm/confirm';
-
-import { CoinbaseWithdrawPage } from '../../integrations/coinbase/coinbase-withdraw/coinbase-withdraw';
 
 @Component({
   selector: 'page-amount',
@@ -47,11 +46,11 @@ import { CoinbaseWithdrawPage } from '../../integrations/coinbase/coinbase-withd
 })
 export class AmountPage {
   private LENGTH_EXPRESSION_LIMIT: number;
-  private availableUnits;
+  private availableUnits: any;
   public unit: string;
   private reNr: RegExp;
   private reOp: RegExp;
-  private nextView;
+  private nextView: any;
   private fixedUnit: boolean;
   public fiatCode: string;
   private altUnitIndex: number;
@@ -59,7 +58,7 @@ export class AmountPage {
   private unitToSatoshi: number;
   private satToUnit: number;
   private unitDecimals: number;
-  private zone;
+  private zone: NgZone;
   private description: string;
 
   public disableHardwareKeyboard: boolean;
@@ -67,8 +66,8 @@ export class AmountPage {
   public alternativeUnit: string;
   public globalResult: string;
   public alternativeAmount;
-  public expression;
-  public amount;
+  public expression: any;
+  public amount: number;
 
   public showSendMax: boolean;
   public allowSend: boolean;
@@ -92,8 +91,8 @@ export class AmountPage {
   public cardName: string;
   public cardConfig: CardConfig;
 
-  private fromCoinbase;
-  private alternativeCurrency;
+  private fromCoinbase: any;
+  private alternativeCurrency: string;
 
   @ViewChild(Navbar) navBar: Navbar;
 
@@ -208,7 +207,7 @@ export class AmountPage {
   }
 
   @HostListener('document:keydown', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent) {
+  handleKeyboardEvent(event: KeyboardEvent): void {
     if (this.disableHardwareKeyboard) return;
     if (!event.key) return;
     if (event.which === 8) {
@@ -272,7 +271,7 @@ export class AmountPage {
     }
 
     //  currency have preference
-    let fiatName;
+    let fiatName: string;
     if (this.navParams.data.currency) {
       this.fiatCode = this.navParams.data.currency;
       this.altUnitIndex = this.unitIndex;
@@ -299,7 +298,7 @@ export class AmountPage {
     }
   }
 
-  private paste(value: string): void {
+  private paste(value: number): void {
     this.zone.run(() => {
       this.expression = value;
       this.processAmount();
@@ -307,8 +306,8 @@ export class AmountPage {
     });
   }
 
-  private getNextView() {
-    let nextPage;
+  private getNextView(): any {
+    let nextPage: any;
     switch (this.navParams.data.nextPage) {
       case 'BitPayCardTopUpPage':
         this.showSendMax = true;
@@ -336,11 +335,15 @@ export class AmountPage {
   }
 
   public processClipboard(): void {
-    if (!this.platformProvider.isElectron) return;
+    if (!this.platformProvider.isElectron) {
+      return;
+    }
 
-    let value = this.electronProvider.readFromClipboard();
+    const value = this.electronProvider.readFromClipboard();
 
-    if (value && this.evaluate(value) > 0) this.paste(this.evaluate(value));
+    if (value && this.inputValueToNumber(value) > 0) {
+      this.paste(this.inputValueToNumber(value));
+    }
   }
 
   public sendMax(): void {
@@ -360,10 +363,10 @@ export class AmountPage {
       );
     }
 
-    const maxAmount = this.txFormatProvider.satToUnit(
+    const maxAmount = Number(this.txFormatProvider.satToUnit(
       this.wallet.cachedStatus.availableBalanceSat,
       this.wallet.coin
-    );
+    ));
 
     this.zone.run(() => {
       this.expression = this.availableUnits[this.unitIndex].isFiat
@@ -375,7 +378,7 @@ export class AmountPage {
     });
   }
 
-  public isSendMaxButtonShown() {
+  public isSendMaxButtonShown(): boolean {
     return this.showSendMax && !this.requestingAmount && !this.useAsModal;
   }
 
@@ -430,7 +433,7 @@ export class AmountPage {
     });
   }
 
-  private _pushOperator(val: string, operator: string) {
+  private _pushOperator(val: string, operator: string): string {
     if (!this.isOperator(_.last(val))) {
       return val + operator;
     } else {
@@ -453,8 +456,9 @@ export class AmountPage {
   }
 
   private processAmount(): void {
-    let formatedValue = this.format(this.expression);
-    let result = this.evaluate(formatedValue);
+    const formatedValue = this.format(this.expression);
+    const result = this.inputValueToNumber(formatedValue);
+
     this.allowSend = this.onlyIntegers
       ? _.isNumber(result) && +result > 0 && Number.isInteger(+result)
       : _.isNumber(result) && +result > 0;
@@ -465,7 +469,7 @@ export class AmountPage {
         : '';
 
       if (this.availableUnits[this.unitIndex].isFiat) {
-        let a = this.fromFiat(result);
+        const a = this.fromFiat(result);
         if (a) {
           this.alternativeAmount = this.txFormatProvider.formatAmount(
             this.availableUnits[this.altUnitIndex].id,
@@ -516,44 +520,44 @@ export class AmountPage {
   }
 
   private toFiat(val: number, coin?: Coin): number {
-    if (
-      !this.rateProvider.getRate(
-        this.fiatCode,
-        coin || this.availableUnits[this.unitIndex].id
-      )
-    )
-      return undefined;
+    const enterCoinType = coin || this.availableUnits[this.unitIndex].id;
+    const ratioCoins = this.rateProvider.getRate(this.fiatCode, enterCoinType);
 
-    return parseFloat(
-      this.rateProvider
+    if (ratioCoins) {
+      return undefined;
+    }
+      
+    const valFiat = this.rateProvider
         .toFiat(
           val * this.unitToSatoshi,
           this.fiatCode,
-          coin || this.availableUnits[this.unitIndex].id
+          enterCoinType
         )
-        .toFixed(2)
-    );
+        .toFixed(2);
+
+    return parseFloat(valFiat);
   }
 
   private format(val: string): string {
-    if (!val) return undefined;
+    if (!val) {
+      return undefined;
+    }
 
     let result = val.toString();
 
-    if (this.isOperator(_.last(val))) result = result.slice(0, -1);
+    if (this.isOperator(_.last(val))) {
+      result = result.slice(0, -1);
+    } 
 
     return result.replace('x', '*');
   }
 
-  private evaluate(val: string) {
-    let result;
+  private inputValueToNumber(val: string): number {
     try {
-      result = eval(val);
+      return Number(val);
     } catch (e) {
       return 0;
     }
-    if (!_.isFinite(result)) return 0;
-    return result;
   }
 
   public validateGiftCardAmount(amount) {
@@ -573,9 +577,12 @@ export class AmountPage {
   }
 
   public finish(skipActivationFeeAlert: boolean = false): void {
-    if (!this.allowSend && !this.token) return;
-    let unit = this.availableUnits[this.unitIndex];
-    let _amount = this.evaluate(this.format(this.expression));
+    if (!this.allowSend && !this.token) {
+      return;
+    }
+
+    const unit = this.availableUnits[this.unitIndex];
+    const _amount = this.inputValueToNumber(this.format(this.expression));
     let coin = unit.id;
     let data;
 
@@ -601,10 +608,12 @@ export class AmountPage {
         description: this.description
       };
     } else {
-      let amount = _amount;
+      let amount: number | string = _amount;
+
       amount = unit.isFiat
         ? (this.fromFiat(amount) * this.unitToSatoshi).toFixed(0)
         : (amount * this.unitToSatoshi).toFixed(0);
+        
       data = {
         recipientType: this.recipientType,
         amount,
@@ -679,8 +688,7 @@ export class AmountPage {
   private updateUnitUI(): void {
     this.unit = this.availableUnits[this.unitIndex].shortName;
     this.alternativeUnit = this.availableUnits[this.altUnitIndex].shortName;
-    const { unitToSatoshi, unitDecimals } = this.availableUnits[this.unitIndex]
-      .isFiat
+    const { unitToSatoshi, unitDecimals } = this.availableUnits[this.unitIndex].isFiat
       ? this.currencyProvider.getPrecision(
           this.availableUnits[this.altUnitIndex].id
         )
@@ -704,10 +712,14 @@ export class AmountPage {
   }
 
   public changeUnit(): void {
-    if (this.fixedUnit) return;
+    if (this.fixedUnit) {
+      return;
+    }
 
     this.unitIndex++;
-    if (this.unitIndex >= this.availableUnits.length) this.unitIndex = 0;
+    if (this.unitIndex >= this.availableUnits.length) {
+      this.unitIndex = 0;
+    }
 
     if (this.availableUnits[this.unitIndex].isFiat) {
       // Always return to BTC... TODO?
@@ -728,7 +740,10 @@ export class AmountPage {
 
   public closeModal(item): void {
     if (this.viewCtrl.name === 'AmountPage') {
-      if (item) this.events.publish('addRecipient', item);
+      if (item) {
+        this.events.publish('addRecipient', item);
+      }
+
       this.navCtrl.remove(this.viewCtrl.index - 1).then(() => {
         this.viewCtrl.dismiss();
       });
