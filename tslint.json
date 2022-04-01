@@ -13,7 +13,27 @@
 
     // "no-any": true,
 
+    "typedef-whitespace": {
+      "options": [
+        {
+          "call-signature": "nospace",
+          "index-signature": "nospace",
+          "parameter": "nospace",
+          "property-declaration": "nospace",
+          "variable-declaration": "nospace"
+        },
+        {
+          "call-signature": "onespace",
+          "index-signature": "onespace",
+          "parameter": "onespace",
+          "property-declaration": "onespace",
+          "variable-declaration": "onespace"
+        }
+      ]
+    },
+
     // Temporarily relax rules
+    "semicolon": [true, "always"],
     "member-ordering": false,
     "variable-name": false,
     "no-empty": false,
