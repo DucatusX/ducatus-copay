@@ -5,12 +5,11 @@
         [reveal-at-scroll-pos]="expandableHeader.headerHeight"
         [scrollArea]="scrollArea"
       >
-        {{'Create Deposit' | translate }}
+        {{ 'Create Deposit' | translate }}
       </div>
     </ion-title>
   </ion-navbar>
 </ion-header>
-
 <ion-content #scrollArea>
   <expandable-header
     [scrollArea]="scrollArea"
@@ -22,13 +21,12 @@
       <expandable-header-primary></expandable-header-primary>
     </ion-toolbar>
   </expandable-header>
-
   <div page-content class="deposit-page">
     <ion-list class="deposit-list bp-list">
       <form [formGroup]="DepositGroup">
         <div class="deposit-add-group-wrap">
           <span class="deposit-add-label"
-            >{{'Choose DUC address to be deducted' | translate}}</span
+            >{{ 'Choose DUC address to be deducted' | translate }}</span
           >
           <div class="deposit-add-group">
             <ion-item class="deposit-add-input">
@@ -41,7 +39,6 @@
               >
               </ion-input>
             </ion-item>
-
             <ion-item
               *ngIf="walletAddresses"
               class="deposit-add-select"
@@ -51,9 +48,8 @@
             </ion-item>
           </div>
         </div>
-
         <div class="deposit-add-group-wrap">
-          <span class="deposit-add-label">{{'Amount' | translate}}</span>
+          <span class="deposit-add-label">{{ 'Amount' | translate }}</span>
           <div class="deposit-add-group">
             <ion-item class="deposit-add-input">
               <ion-input
@@ -66,16 +62,16 @@
               >
               </ion-input>
             </ion-item>
-            <div (click)="changeAmountToMax()" class="deposit-btn-sendmax">
+            <div 
+              (click)="changeAmountToMax()" 
+              class="deposit-btn-sendmax"
+            >
               {{ 'Send Max' | translate }}
             </div>
           </div>
         </div>
-
         <div class="deposit-add-group-wrap">
-          <span class="deposit-add-label"
-            >{{'Deposit term (month)' | translate}}</span
-          >
+          <span class="deposit-add-label">{{ 'Deposit term (month)' | translate }}</span>
           <ion-row
             class="deposit-group-radio"
             radio-group
@@ -83,21 +79,21 @@
             [(ngModel)]="depositMonth"
           >
             <ion-item no-lines>
-              <ion-label> <ion-icon name="5"></ion-icon> 5</ion-label>
+              <ion-label><ion-icon name="5"></ion-icon> 5</ion-label>
               <ion-radio
                 (click)="changePercentAndMoth('month')"
                 value="5"
               ></ion-radio>
             </ion-item>
             <ion-item no-lines>
-              <ion-label> <ion-icon name="13"></ion-icon> 13</ion-label>
+              <ion-label><ion-icon name="13"></ion-icon> 13</ion-label>
               <ion-radio
                 (click)="changePercentAndMoth('month')"
                 value="13"
               ></ion-radio>
             </ion-item>
             <ion-item no-lines>
-              <ion-label> <ion-icon name="34"></ion-icon> 34</ion-label>
+              <ion-label><ion-icon name="34"></ion-icon> 34</ion-label>
               <ion-radio
                 (click)="changePercentAndMoth('month')"
                 value="34"
@@ -105,11 +101,8 @@
             </ion-item>
           </ion-row>
         </div>
-
         <div class="deposit-add-group-wrap">
-          <span class="deposit-add-label"
-            >{{'Interest rates (annual)' | translate}}</span
-          >
+          <span class="deposit-add-label">{{ 'Interest rates (annual)' | translate }}</span>
           <ion-row
             class="deposit-group-radio"
             radio-group
@@ -117,14 +110,14 @@
             [(ngModel)]="depositPercent"
           >
             <ion-item class="deposit-group-radio-item" no-lines>
-              <ion-label> <ion-icon name="8"></ion-icon> 8%</ion-label>
+              <ion-label><ion-icon name="8"></ion-icon> 8%</ion-label>
               <ion-radio
                 (click)="changePercentAndMoth('percent')"
                 value="8"
               ></ion-radio>
             </ion-item>
             <ion-item class="deposit-group-radio-item" no-lines>
-              <ion-label> <ion-icon name="13"></ion-icon> 13%</ion-label>
+              <ion-label><ion-icon name="13"></ion-icon> 13%</ion-label>
               <ion-radio
                 (click)="changePercentAndMoth('percent')"
                 value="13"
@@ -139,18 +132,15 @@
             </ion-item>
           </ion-row>
         </div>
-
         <div class="deposit-group-btn">
-          <span class="deposit-group-btn-devidends"
-            >Dividends {{ amountWithPercent || '0' }} Ducatus</span
-          >
+          <span class="deposit-group-btn-devidends">Dividends {{ amountWithPercent || '0' }} Ducatus</span>
           <button
             ion-button
             class="deposit-group-btn-button button-standard deposit-item-button deposit-add-page-button"
             (click)="generateUserDeposit()"
             [disabled]="!DepositGroup.valid || depositLoading"
           >
-            <span *ngIf="!depositLoading">{{'Deposit' | translate}}</span>
+            <span *ngIf="!depositLoading">{{ 'Deposit' | translate }}</span>
             <ion-spinner *ngIf="depositLoading" name="bubbles"></ion-spinner>
           </button>
         </div>
