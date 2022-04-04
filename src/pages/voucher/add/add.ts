@@ -120,6 +120,11 @@ export class VoucherAddPage {
           '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
         text: `Your voucher succesfully activated. You can withdraw your Ducatus after ${options.day} days`
       },
+      error: {
+        title:
+          '<img src="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+        text: 'Please check your activation code'
+      },
       network: {
         title:
           '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
@@ -202,7 +207,7 @@ export class VoucherAddPage {
     .then(res => {
       const result: any = res;
 
-      if(result.readyToWithdraw === false && result.daysToUnlock === null) {
+      if (result.readyToWithdraw === false && result.daysToUnlock === null) {
         this.showModal('ok', { min: '15' });
       }
       else {
@@ -210,8 +215,13 @@ export class VoucherAddPage {
       }
     })
     .catch(err => {
+      if (err.error.detail === 'Not found.') {
+        this.showModal('error');
+      }
+      else {
+        this.showModal('network');
+      }
       this.logger.log(`${JSON.stringify(err)}`);
-      this.showModal('network');
     });
   }
 }
