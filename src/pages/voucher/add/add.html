@@ -5,7 +5,7 @@
         [reveal-at-scroll-pos]="expandableHeader.headerHeight"
         [scrollArea]="scrollArea"
       >
-        {{'Voucher' | translate }}
+        {{ 'Voucher' | translate }}
       </div>
     </ion-title>
   </ion-navbar>
@@ -28,7 +28,7 @@
       <form [formGroup]="VoucherGroup">
         <div class="voucher-add-group-wrap">
           <span class="voucher-add-label"
-            >{{'Enter confirmation code' | translate}}</span
+            >{{ 'Enter confirmation code' | translate }}</span
           >
           <div class="voucher-add-group">
             <ion-item class="voucher-add-input">
@@ -47,7 +47,7 @@
 
         <div class="voucher-add-group-wrap" *ngIf="VoucherGroup.value.VoucherGroupCode">
           <span class="voucher-add-label"
-            >{{'Choose address to send' | translate}}</span
+            >{{ 'Choose address to send' | translate }}</span
           >
 
           <div class="voucher-add-group">
@@ -65,7 +65,6 @@
             </ion-item>
 
             <ion-item
-              *ngIf="walletAddresses"
               class="voucher-add-select"
               (click)="openAddressList()"
             >
@@ -80,7 +79,7 @@
           (click)="activateVoucher()"
           [disabled]="!VoucherGroup.valid || voucherLoading"
         >
-          <span *ngIf="!voucherLoading">{{'Activate' | translate}}</span>
+          <span *ngIf="!voucherLoading">{{ 'Activate' | translate }}</span>
           <ion-spinner *ngIf="voucherLoading" name="bubbles"></ion-spinner>
         </button>
       </form>

@@ -5,12 +5,18 @@ import { VoucherAddPage } from './add/add';
 
 import _ from 'lodash';
 
-import { ApiProvider, ProfileProvider, WalletProvider } from '../../providers';
+import { ApiProvider, 
+  Coin, 
+  Logger, 
+  ProfileProvider, 
+  TxFormatProvider 
+} from '../../providers';
 
 @Component({
   selector: 'page-voucher',
   templateUrl: 'voucher.html'
 })
+
 export class VoucherPage {
   public vouchersLoading = true;
   public vouchers = [];
@@ -22,140 +28,51 @@ export class VoucherPage {
     private navCtrl: NavController,
     private httpClient: HttpClient,
     private profileProvider: ProfileProvider,
-    private walletProvider: WalletProvider,
-    private apiProvider: ApiProvider
+    private apiProvider: ApiProvider,
+    private logger: Logger,
+    private formatProvider: TxFormatProvider
   ) {}
 
   ionViewWillEnter() {
-    const wallets = this.profileProvider.getWallets({ showHidden: true });
-
-    this.walletsGroups = _.values(
-      _.groupBy(
-        _.filter(wallets, wallet => {
-          return wallet.keyId != 'read-only';
-        }),
-        'keyId'
-      )
-    );
-
+    this.wallets = this.profileProvider.getWallets({ showHidden: true });
     this.getVouchers();
-    let walletsGet = this.getWalletsInfoAddress('duc');
-
-    Promise.all([walletsGet]).then(results => {
-      this.wallets = results[0];
-    });
   }
 
-  private getWalletsInfoAddress(coin) {
-    let coins = [];
-    let wallets = [];
-    let walletsRes = [];
+  private getVouchers(): void {
+    const walletsResult = this.getWalletsInfo(Coin.DUC);
 
-    this.walletsGroups.forEach(keyID => {
-      coins = _.concat(
-        coins,
-        keyID.filter(wallet => wallet.coin === coin.toLowerCase())
-      );
-    });
-
-    wallets = coins.map(wallet => {
-      return this.walletProvider.getAddress(wallet, false).then(address => {
-        return { wallet, address };
-      });
-    });
-
-    wallets.map(res => {
-      res.then(result => {
-        walletsRes.push(result);
-      });
-    });
-
-    return walletsRes;
-  }
-
-  private getVouchers() {
-    this.getWalletsInfo('duc').then(wallets => {
-      const walletsResult = [];
-
-      wallets.map(res => {
-        if (!walletsResult.includes(res.walletId))
-          walletsResult.push(res.walletId);
-      });
-
-      this.httpClient
-        .get(
-          `${this.apiProvider.getAddresses().ducatuscoins}/api/v3/get_frozen_vouchers/?wallet_ids=${walletsResult}`
-        )
-        .toPromise()
-        .then(result => {
-          this.vouchers = result as any;
-
-          this.vouchers.map(x => {
-            x.freez_date = new Date(x.cltv_details.lock_time * 1000);
-            x.freez_date_count = Math.ceil(
-              Math.abs(x.freez_date.getTime() - new Date().getTime()) /
-                (1000 * 3600 * 24)
-            );
-            x.withdrow_check = false;
-          });
-
-          this.vouchersLoading = false;
+    this.httpClient
+      .get(
+        this.apiProvider.getAddresses().deposit + `user/vouchers/list/?wallet_ids=${walletsResult}`
+      )
+      .toPromise()
+      .then(result => {
+        this.vouchers = result as any;
+        this.vouchers.map( x => {
+          x.ducAmount = this.formatProvider.satToUnit(x.ducAmount, Coin.DUC);
+          x.withdrow_check = false;
         });
-    });
+        this.vouchersLoading = false;
+      });
   }
 
-  public goToVoucehrAddPage() {
+  public goToVoucehrAddPage(): void {
     this.navCtrl.push(VoucherAddPage);
   }
 
-  private getAddress(wallet) {
-    return new Promise(resolve => {
-      this.walletProvider.getAddress(wallet, false).then(addr => {
-        return resolve(addr);
-      });
+  private getWalletsInfo(coin: Coin): string[] {
+    const walletsFiltered = this.wallets.filter( wallet => {
+      return wallet.coin === coin.toLowerCase();
     });
-  }
 
-  private getVoucher(id) {
-    return this.httpClient
-      .get(`${this.apiProvider.getAddresses().ducatuscoins}/api/v3/get_withdraw_info/?voucher_id=${id}`)
-      .toPromise();
-  }
-
-  private sendTX(raw_tx_hex) {
-    return this.httpClient
-      .post(`${this.apiProvider.getAddresses().ducatuscoins}/api/v3/send_raw_transaction/`, {
-        raw_tx_hex
-      })
-      .toPromise();
-  }
-
-  private getWalletsInfo(coin): Promise<any> {
-    return new Promise(resolve => {
-      let coins = [];
-      let wallets = [];
-
-      this.walletsGroups.forEach(keyID => {
-        coins = _.concat(
-          coins,
-          keyID.filter(wallet => wallet.coin === coin.toLowerCase())
-        );
-      });
-
-      wallets = coins.map(wallet => {
-        return {
-          walletId: wallet.credentials.walletId,
-          requestPubKey: wallet.credentials.requestPubKey,
-          wallet,
-          address: this.getAddress(wallet)
-        };
-      });
-
-      resolve(wallets);
+    const walletsId: string[] = walletsFiltered.map( wallet => {
+      return wallet.credentials.walletId;
     });
+
+    return walletsId;
   }
 
-  private showModal(type: string, id?: number, ducAmount?: number) {
+  private showModal(type: string, id?: number, ducAmount?: number): void {
     const modalAnswers = {
       success: {
         title:
@@ -218,45 +135,25 @@ export class VoucherPage {
     }, 2000);
   }
 
-  public withdrowTrigger(id: number) {
-    this.vouchers.map(t => {
-      if (t.id === id) t.withdrow_check = true;
-    });
+  private withdraw (wallet_id: number): Promise<object> {
+    let url = this.apiProvider.getAddresses().deposit + `user/vouchers/${wallet_id}/withdraw/`;
 
-    this.getVoucher(id).then(async res => {
-      const voucher: any = res;
+    return this.httpClient
+      .put(url, "")
+      .toPromise();
+  }
 
-      voucher.cltv_details.sending_amount =
-        voucher.voucherinput_set[0].amount - voucher.tx_fee;
-      voucher.cltv_details.tx_hash = voucher.voucherinput_set[0].mint_tx_hash;
-      voucher.cltv_details.user_duc_address = voucher.user_duc_address;
-      voucher.cltv_details.vout_number = voucher.voucherinput_set[0].tx_vout;
-
-      const addressFilter = this.wallets.find(t => {
-        return t.address === voucher.cltv_details.user_duc_address;
-      });
-
-      const walletToUnfreeze = addressFilter
-        ? addressFilter.wallet
-        : this.wallets.find(t => {
-            return t.wallet.credentials.walletId === voucher.wallet_id;
-          }).wallet;
-
-      const txHex = await this.walletProvider.signFreeze(
-        walletToUnfreeze,
-        voucher.cltv_details,
-        !!addressFilter
-      );
-
-      this.sendTX(txHex)
-        .then(() => {
-          this.showModal('success', id, voucher.duc_amount);
-        })
-        .catch(err => {
-          err.error.detail === '-27: transaction already in block chain'
-            ? this.showModal('alreadyActivated', id)
-            : this.showModal('network', id);
-        });
+  public withdrowTrigger(id: number): void {
+    this.withdraw(id)
+    .then(
+      res => {
+        this.logger.debug(res);
+        this.showModal('success', id, );
+    })
+    .catch(
+      err => {
+        this.logger.debug(err);
+        this.showModal('network', id);
     });
   }
 }
