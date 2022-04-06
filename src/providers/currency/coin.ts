@@ -708,5 +708,40 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       backgroundColor: 'rgba(0,220,250,1)',
       gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
     }
+  },
+  'aa+': {
+    name: 'AA+',
+    chain: 'DUCX',
+    coin: 'aa+',
+    unitInfo: {
+      unitName: 'AA+',
+      unitToSatoshi: 1e5,
+      unitDecimals: 5,
+      unitCode: 'aa+'
+    },
+    properties: {
+      hasMultiSig: false,
+      hasMultiSend: false,
+      isUtxo: false,
+      isERCToken: true,
+      isStableCoin: true,
+      singleAddress: true
+    },
+    paymentInfo: {
+      paymentCode: 'EIP681b',
+      protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
+      ratesApi: 'https://bitpay.com/api/rates/',
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+    },
+    feeInfo: {
+      feeUnit: 'Gwei',
+      feeUnitAmount: 1e5,
+      blockTime: 0.2,
+      maxMerchantFee: 'urgent'
+    },
+    theme: {
+      backgroundColor: 'rgba(0,220,250,1)',
+      gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
+    }
   }
 };

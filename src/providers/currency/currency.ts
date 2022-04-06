@@ -22,7 +22,8 @@ export enum Coin {
   'MDXB' = 'mdxb',
   'G.O.L.D.' = 'g.o.l.d.',
   'JWAN' = 'jwan',
-  'TKF' = 'tkf'
+  'TKF' = 'tkf',
+  'AA+' = 'aa+'
 }
 
 export const availableCurrencys = [
