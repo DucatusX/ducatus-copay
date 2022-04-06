@@ -99,6 +99,11 @@ export class WebExtensionsProvider {
   }
 
   public async setDucxAddresses(wallets): Promise<void> {
+
+    if ( !chrome || !chrome.storage ) { 
+      return;
+    }
+
     const ducxAddresses: string[] = [];
 
     for ( let i = 0; i < wallets.length; i++ ) {
