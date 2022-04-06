@@ -24,12 +24,12 @@
   <div page-content class="calculator-page">
     <ion-list class="calculator-list bp-list">
       <div class="calculator-explanation">
-        <div class="calculator-heading" translate>Convert</div>
+        <div class="calculator-heading" translate> Convert </div>
       </div>
       <div class="calculator-convert-type">
         <div class="calculator-convert-type-send">
           <div class="amount-info">
-            <span class="transaction-type">PAY</span> 
+            <span class="transaction-type"> PAY </span> 
             <span>{{ formCoins.amountSend }}</span>
           </div>
           <div class="coin-info">
@@ -51,7 +51,7 @@
         </ion-icon>
         <div class="calculator-convert-type-get">
           <div class="amount-info">
-            <span class="transaction-type">GET</span> 
+            <span class="transaction-type"> GET </span> 
             <span>{{ formCoins.amountGet }}</span>
           </div>
           <div class="coin-info">
@@ -72,10 +72,12 @@
         >
           <span class="calculator-convert-label">{{ 'Choose address to pay' | translate }}</span>
           <div class="calculator-convert-select">
-            <span *ngIf="!sendAddress" class="calculator-convert-select-placeholder">Select your address</span>
+            <span *ngIf="!sendAddress" class="calculator-convert-select-placeholder"> Select your address </span>
             <div *ngIf="!fullSize" class="calculator-convert-select-address">{{ sendAddress | shortenedAddress: 22 }}</div>
             <div *ngIf="fullSize" class="calculator-convert-select-address">{{ sendAddress }}</div>
-            <div class="calculator-convert-select-icon"><ion-icon name="arrow-dropdown"></ion-icon></div>
+            <div class="calculator-convert-select-icon">
+              <ion-icon name="arrow-dropdown"></ion-icon>
+            </div>
           </div>
         </div>
         <div 
@@ -85,16 +87,18 @@
         >
           <span class="calculator-convert-label">{{ 'Choose address to get' | translate }}</span>
           <div class="calculator-convert-select">
-            <span *ngIf="!sendAddress" class="calculator-convert-select-placeholder">Select your address</span>
-            <div *ngIf="!fullSize" class="calculator-convert-select-address">{{getAddress | shortenedAddress: 22}}</div>
-            <div *ngIf="fullSize" class="calculator-convert-select-address">{{getAddress}}</div>
-            <div class="calculator-convert-select-icon"><ion-icon name="arrow-dropdown"></ion-icon></div>
+            <span *ngIf="!getAddress" class="calculator-convert-select-placeholder"> Select your address </span>
+            <div *ngIf="!fullSize" class="calculator-convert-select-address">{{ getAddress | shortenedAddress: 22 }}</div>
+            <div *ngIf="fullSize" class="calculator-convert-select-address">{{ getAddress }}</div>
+            <div class="calculator-convert-select-icon">
+              <ion-icon name="arrow-dropdown"></ion-icon>
+            </div>
           </div>
         </div>
         <button
           ion-button
           class="button-standard calculator-button"
-          (click)="inizilizationOfSend()"
+          (click)="initializationOfSend()"
           [disabled]="(!sendAddress || !getAddress) || sendDisabled"
         >
           {{ 'Send' | translate }}
