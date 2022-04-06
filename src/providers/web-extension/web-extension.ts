@@ -17,8 +17,8 @@ export class WebExtensionsProvider {
   }
 
   init(): void {
-   
-    if ( !chrome || !chrome.storage ) {
+  
+    if ( !window.chrome || !window.chrome.storage ) {
       return;
     }
 
@@ -99,8 +99,8 @@ export class WebExtensionsProvider {
   }
 
   public async setDucxAddresses(wallets): Promise<void> {
-
-    if ( !chrome || !chrome.storage ) { 
+    
+    if ( !window.chrome || !window.chrome.storage ) { 
       return;
     }
 
