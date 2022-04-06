@@ -95,6 +95,9 @@ export class AltCurrencyPage {
       {
         isoCode: 'TKF'
       },
+      {
+        isoCode: 'AA+'
+      }
     ];
   }
 

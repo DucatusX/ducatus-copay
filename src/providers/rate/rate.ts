@@ -38,7 +38,8 @@ export class RateProvider {
         'mdxb',
         'g.o.l.d.',
         'jwan',
-        'tkf'
+        'tkf',
+        'aa+'
       ];
 
       if (coin === 'ducx') {
@@ -113,7 +114,8 @@ export class RateProvider {
           'mdxb',
           'g.o.l.d.',
           'jwan',
-          'tkf'
+          'tkf',
+          'aa+'
         ].includes(chain)
       ) {
         resolve([]);
