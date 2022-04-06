@@ -1,20 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { AlertController, NavParams, Platform } from 'ionic-angular';
 import * as _ from 'lodash';
 import env from '../../../environments';
-import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
-import { ApiProvider } from '../../../providers/api/api';
-import { ErrorsProvider } from '../../../providers/errors/errors';
-import { ProfileProvider } from '../../../providers/profile/profile';
-import { WalletProvider } from '../../../providers/wallet/wallet';
-import { TranslateService } from '@ngx-translate/core';
 import {
+  ActionSheetProvider,
+  ApiProvider,
   BwcErrorProvider,
+  Coin,
+  ErrorsProvider,
   IncomingDataProvider,
-  TxFormatProvider
+  Logger,
+  ProfileProvider,
+  TxFormatProvider,
+  WalletProvider
 } from '../../../providers';
-import { Logger } from '../../../providers/logger/logger';
+
 import { coinInfo, ICoinInfo } from '../calculator-parameters';
 
 @Component({
@@ -76,44 +78,6 @@ export class CalculatorConvertPage {
     this.isProduction = ( mode === 'production' );
   }
 
-  public getLastKnownBalance(wallet, currency): string {
-    return (
-      wallet.lastKnownBalance &&
-      wallet.lastKnownBalance.replace(` ${currency}`, '')
-    );
-  }
-
-  public getBalance(wallet, currency): string {
-    const lastKnownBalance: string = this.getLastKnownBalance(wallet, currency);
-
-    if (currency === 'XRP') {
-      const availableBalanceStr: string =
-        wallet.cachedStatus &&
-        wallet.cachedStatus.availableBalanceStr &&
-        wallet.cachedStatus.availableBalanceStr.replace(` ${currency}`, '');
-
-      return availableBalanceStr || lastKnownBalance;
-    } else {
-      const totalBalanceStr: string =
-        wallet.cachedStatus &&
-        wallet.cachedStatus.totalBalanceStr &&
-        wallet.cachedStatus.totalBalanceStr.replace(` ${currency}`, '');
-
-      return totalBalanceStr || lastKnownBalance;
-    }
-  }
-
-  public ballanceStrToNumber(balance:string): number {
-
-    if (balance) {
-      balance = balance.replace(/[\s,%]/g, '');
-      const balanceNum: number = parseFloat(balance);
-
-      return balanceNum;
-    } else {
-      return 0;
-    }
-  }
 
   public ionViewWillEnter(): void {
     const wallets = this.profileProvider.getWallets({ showHidden: true });
@@ -187,13 +151,23 @@ export class CalculatorConvertPage {
 
 
   public openAddressListSend(wallets): void {
+
     wallets = wallets.filter(elemWallets => {
-      const currency = elemWallets && elemWallets.wallet && elemWallets.wallet.coin.toUpperCase();
-      const walletBalanceStr: string  = this.getBalance(elemWallets.wallet, currency);
-      const walletBalance = this.ballanceStrToNumber(walletBalanceStr);
+      const currency: Coin = 
+        elemWallets && 
+        elemWallets.wallet && 
+        elemWallets.wallet.coin;
+
+      const walletBalanceSat: number = 
+        elemWallets && 
+        elemWallets.wallet && 
+        elemWallets.wallet.cachedStatus &&
+        elemWallets.wallet.cachedStatus.availableBalanceSat;
+
+      const walletBalanceUnit = Number(this.txFormatProvider.satToUnit(walletBalanceSat,currency));
       const amountSend = parseFloat(this.formCoins.amountSend);
 
-      if (walletBalance >= amountSend) {
+      if (walletBalanceUnit >= amountSend) {
         return true;
       } 
         
@@ -213,7 +187,7 @@ export class CalculatorConvertPage {
     
     infoSheet.present();
     
-    infoSheet.onDidDismiss((option,item)=>{
+    infoSheet.onDidDismiss((option,item) => {
       this.sendWallet = item;
       this.sendAddress = option;
       this.getAddress = '';
@@ -221,20 +195,19 @@ export class CalculatorConvertPage {
   }
 
   openAddressListGet(wallets): void {
-    if (!this.sendAddress){
+    if (!this.sendAddress) {
       return;
     }
 
-
-    wallets = wallets.filter(elemWallets=>{
+    wallets = wallets.filter( elemWallets => {
       if (elemWallets.wallet.network === this.sendWallet.wallet.network) {
         return true;
       } 
 
       return false;
-    })
+    });
 
-    if (wallets.length == 0){
+    if (wallets.length == 0) {
       this.viewWalletsError('You do not have suitable wallets');
       
       return;
@@ -245,10 +218,10 @@ export class CalculatorConvertPage {
       { wallet: wallets }
     );
     infoSheet.present();
-    infoSheet.onDidDismiss((option,item)=>{
+    infoSheet.onDidDismiss((option,item) => {
       this.getAddress = option;
       this.getWallet = item.wallet;
-    })
+    });
   }
 
   public setAddress(type): void {
@@ -280,7 +253,6 @@ export class CalculatorConvertPage {
     )
       .then(result => {
         this.addresses = result;
-        
         this.goToSendPage();
       })
       .catch(err => {
@@ -292,15 +264,11 @@ export class CalculatorConvertPage {
       });
   }
 
-  public getExchange(address: string, currency: string): Promise<any> {
-    let network: string = 'testnet';
-    
-    if (this.sendWallet.wallet.network === 'livenet'){
-      network = 'livenet';
-    } 
+  public getExchange(address: string, currency: string): Promise<object> {
+    let network: string = this.sendWallet.wallet.network;
     
     return this.httpClient
-      .post(
+      .post<object>(
         this.apiProvider.getAddresses().getExchange[network] + '/api/v1/exchange/',
         {
           to_address: address,
@@ -513,7 +481,7 @@ export class CalculatorConvertPage {
   }
 
   private checkTransitionLimitDucToDucx(getAddress: string, amountSend: number): Promise<void> {
-    const network = this.sendWallet.wallet.network
+    const network = this.sendWallet.wallet.network;
     
     return this.httpClient
       .post(
