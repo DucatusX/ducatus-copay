@@ -307,7 +307,7 @@ msgid "BitPay does not receive and does not control miner fees."
 msgstr ""
 
 msgid "Bitcoin Address"
-msgstr "Биткойн-адрес"
+msgstr ""
 
 msgid "Bitcoin Cash Address"
 msgstr ""

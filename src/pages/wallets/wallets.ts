@@ -397,22 +397,24 @@ export class WalletsPage {
       .getData()
       .then(async data => {
         this.validDataFromClipboard = this.incomingDataProvider.parseData(data);
+
         if (!this.validDataFromClipboard) {
           return;
         }
-        else if (this.validDataFromClipboard.title === 'DucatusX Uri') {
-          this.validDataFromClipboard.title = 'DucatusX Address';
-        }
+
         const dataToIgnore = [
           'BitcoinAddress',
           'BitcoinCashAddress',
           'EthereumAddress',
-          'PlainUrl'
+          'PlainUrl',
+          'DucatusAddress'
         ];
+
         if (dataToIgnore.indexOf(this.validDataFromClipboard.type) > -1) {
           this.validDataFromClipboard = null;
           return;
         }
+
         if (
           this.validDataFromClipboard.type === 'PayPro' ||
           this.validDataFromClipboard.type === 'InvoiceUri'
@@ -426,10 +428,12 @@ export class WalletsPage {
             );
             const { expires, paymentOptions, payProUrl } = payproOptions;
             let selected = paymentOptions.filter(option => option.selected);
+
             if (selected.length === 0) {
               // No Currency Selected default to BTC
               selected.push(payproOptions.paymentOptions[0]); // BTC
             }
+
             const [{ currency, estimatedAmount }] = selected;
             this.payProDetailsData = payproOptions;
             this.payProDetailsData.coin = currency.toLowerCase();
@@ -443,6 +447,7 @@ export class WalletsPage {
             this.logger.warn('Error in Payment Protocol', err);
           }
         }
+        
         await Observable.timer(50).toPromise();
         this.slideDown = true;
       })
