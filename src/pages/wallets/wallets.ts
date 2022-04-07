@@ -204,14 +204,14 @@ export class WalletsPage {
     opts = opts || {};
     opts.alsoUpdateHistory = true;
     this.fetchWalletStatus(opts);
-  };
+  }
 
   private walletActionHandler = opts => {
     this.logger.debug('RECV Local/TxAction @home', opts);
     opts = opts || {};
     opts.alsoUpdateHistory = true;
     this.fetchWalletStatus(opts);
-  };
+  }
 
   ionViewDidLoad() {
     this.logger.info('Loaded: WalletsPage');
@@ -297,7 +297,7 @@ export class WalletsPage {
     }
     this.walletProvider.invalidateCache(wallet);
     this.debounceFetchWalletStatus(walletId, alsoUpdateHistory);
-  };
+  }
 
   private updateDesktopOnFocus() {
     const { remote } = (window as any).require('electron');
@@ -390,7 +390,7 @@ export class WalletsPage {
     this.readOnlyWalletsGroup = this.profileProvider.getWalletsFromGroup({
       keyId: 'read-only'
     });
-  };
+  }
 
   public checkClipboard() {
     return this.clipboardProvider
@@ -399,6 +399,9 @@ export class WalletsPage {
         this.validDataFromClipboard = this.incomingDataProvider.parseData(data);
         if (!this.validDataFromClipboard) {
           return;
+        }
+        else if (this.validDataFromClipboard.title === 'DucatusX Uri') {
+          this.validDataFromClipboard.title = 'DucatusX Address';
         }
         const dataToIgnore = [
           'BitcoinAddress',
@@ -595,7 +598,7 @@ export class WalletsPage {
           this.fetchTxHistory({ walletId: opts.walletId, force: opts.force });
         }
       });
-  };
+  }
 
   private updateTxps() {
     this.profileProvider
