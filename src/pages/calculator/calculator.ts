@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Decimal} from 'decimal.js';
 import { ModalController, NavController } from 'ionic-angular';
 import * as _ from 'lodash';
+import { Subscription } from 'rxjs';
 import { TxDetailsModal } from '../../pages/tx-details/tx-details';
 import { ActionSheetProvider, AppProvider } from '../../providers';
 import { ApiProvider } from '../../providers/api/api';
@@ -45,6 +46,11 @@ export class CalculatorPage {
   public calculationError = false;
   public coins: CoinsMap<CoinOpts> = availableCoins;
   public oldValueForm: string; // past form value
+
+  public subSendAmount$: Subscription;
+  public subGetAmount$: Subscription;
+  public subSendCoin$: Subscription;
+  public subGetCoin$: Subscription;
   
   public valueGetForOneCoin: number = 0.10; // set value for 1 Duc -> 10.00 DucX
 
@@ -97,24 +103,23 @@ export class CalculatorPage {
       });
     });
 
-    this.calculatorForm.get('sendAmount').valueChanges.subscribe( result => {
+    this.subSendAmount$ = this.calculatorForm.get('sendAmount').valueChanges.subscribe( result => {
       this.handlingDataInput('sendAmount', 'sendCoin', 'getAmount', result);
     });
 
-    this.calculatorForm.get('getAmount').valueChanges.subscribe( result => {
+    this.subGetAmount$ = this.calculatorForm.get('getAmount').valueChanges.subscribe( result => {
       this.handlingDataInput('getAmount', 'getCoin', 'sendAmount', result);
     });
 
-    this.calculatorForm.get('sendCoin').valueChanges.subscribe( sendCoin => {
+    this.subSendCoin$ = this.calculatorForm.get('sendCoin').valueChanges.subscribe( sendCoin => {
       this.formCoins.get = convertCoins[sendCoin]; // changing the possible choice for getCoin
       this.calculatorForm.get('getCoin').setValue(this.formCoins.get.items[0], { emitEvent: false });
-      
       // update value when coin type changes
       const sendValue = this.calculatorForm.get('sendAmount').value;
       this.calculatorForm.get('sendAmount').setValue(sendValue);
     });
 
-    this.calculatorForm.get('getCoin').valueChanges.subscribe( () => {
+    this.subGetCoin$ = this.calculatorForm.get('getCoin').valueChanges.subscribe( () => {
       // update value when coin type changes
       const sendValue = this.calculatorForm.get('sendAmount').value;
       this.calculatorForm.get('sendAmount').setValue(sendValue);
@@ -199,6 +204,10 @@ export class CalculatorPage {
         this.logger.log(JSON.stringify(err));
         this.isAvailableSwapWDUCXtoDUCX = false;
       });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribeForm();
   }
 
   public getCalculatedFieldValue(value: string,editField: string) {
@@ -310,6 +319,8 @@ export class CalculatorPage {
       return;
     }
 
+    this.unsubscribeForm();
+
     this.navCtrl.push(CalculatorConvertPage, {
       get: this.calculatorForm.value.getCoin,
       send: this.calculatorForm.value.sendCoin,
@@ -336,5 +347,12 @@ export class CalculatorPage {
 
   public createdWithinPastDay(time) {
     return this.timeProvider.withinPastDay(time);
+  }
+
+  public unsubscribeForm() {
+    this.subSendAmount$.unsubscribe();
+    this.subGetAmount$.unsubscribe();
+    this.subSendCoin$.unsubscribe();
+    this.subGetCoin$.unsubscribe();
   }
 }
