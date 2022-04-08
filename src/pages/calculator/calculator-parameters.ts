@@ -6,7 +6,7 @@ export const convertCoins = {
   WDUCX: { name: 'WDUCX', items: ['DUCX'] }
 };
 
-export const convertSendCoins = ['DUC','DUCX', 'ETH' , 'BTC',]
+export const convertSendCoins = ['DUC','DUCX', 'ETH' , 'BTC',];
 export const convertGetCoins =  ['DUCX'];
 
 export interface ICoinInfo {
@@ -15,7 +15,7 @@ export interface ICoinInfo {
   ETH: 'Etherium';
   BTC: 'Bitcoin';
   WDUCX: 'WRAPPED DUCX';
-};
+}
 
 export const coinInfo: ICoinInfo = {
   DUC: 'Ducatus',

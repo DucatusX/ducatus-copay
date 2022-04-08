@@ -6,16 +6,13 @@
       </div>
 
       <form [formGroup]="calculatorForm">
-        <div class="calculator-form-group">
+        <div class="calculator-form-group" [ngClass]="{error: calculationError}">
           <ion-item class="calculator-input">
             <ion-label stacked>{{'Send' | translate}}</ion-label>
             <ion-input
-              [disabled]="!rates"
+              [disabled]="!rates && calculationError"
               type="number"
               formControlName="sendAmount"
-              [value]="calculatorForm.value.sendAmount"
-              (click)="selectInputType('Send')"
-              (ionChange)="changeAmount('Send')"
               OnlyNumber="true"
               required
             >
@@ -34,8 +31,6 @@
               class="calculator-select-ion"
               interface="popover"
               formControlName="sendCoin"
-              [(ngModel)]="calculatorForm.value.sendCoin"
-              (ionChange)="changeCoin('Send')"
             >
               <ion-option
                 *ngFor="let item of convertSendCoins"
@@ -60,16 +55,13 @@
         
         </ion-item>
 
-        <div class="calculator-form-group">
+        <div class="calculator-form-group" [ngClass]="{error: calculationError}">
           <ion-item class="calculator-input">
             <ion-label stacked>{{'Get' | translate}}</ion-label>
             <ion-input
-              [disabled]="!rates"
+              [disabled]="!rates && calculationError"
               type="number"
               formControlName="getAmount"
-              [value]="calculatorForm.value.getAmount"
-              (click)="selectInputType('Get')"
-              (ionChange)="changeAmount('Get')"
               OnlyNumber="true"
               required
             >
@@ -88,8 +80,6 @@
               class="calculator-select-ion"
               interface="popover"
               formControlName="getCoin"
-              [(ngModel)]="calculatorForm.value.getCoin"
-              (ionChange)="changeCoin('Get')"
             >
               <ion-option *ngFor="let item of formCoins.get.items" [value]="item">
                 {{ item }}</ion-option
@@ -161,8 +151,9 @@
           <ion-note item-end text-end>
             <div class="date">
               <span *ngIf="tx.time && createdWithinPastDay(tx.time * 1000)">{{tx.time * 1000 | amTimeAgo}}</span>
-              <span *ngIf="tx.time && !createdWithinPastDay(tx.time * 1000)">{{tx.time * 1000 | amDateFormat:'MMM
-                D, YYYY'}}</span>
+              <span *ngIf="tx.time && !createdWithinPastDay(tx.time * 1000)">
+                {{tx.time * 1000 | amDateFormat:'MMMD, YYYY'}}
+              </span>
             </div>
           </ion-note> 
         </button>
@@ -170,47 +161,4 @@
     </ion-list>
 
   </div>
-
-  <!--
-    <div class="control-container" ion-fixed>
-      <div class="ducatus-scan-buttons">
-        <button class="ducatus-scan-button" (click)="openMoonPay()">
-          <span class="ducatus-scan-button_icon">
-            <img src="assets/img/tab-icons/tab-buy.svg" />
-          </span>
-          <span class="ducatus-scan-button_icon_active">
-            <img src="assets/img/tab-icons/tab-buy-active.svg" />
-          </span>
-          <span class="ducatus-scan-button_text" translate>Buy</span>
-        </button>
-        <button class="ducatus-scan-button activated">
-          <span class="ducatus-scan-button_icon">
-            <img src="assets/img/tab-icons/tab-swap.svg" />
-          </span>
-          <span class="ducatus-scan-button_icon_active">
-            <img src="assets/img/tab-icons/tab-swap-active.svg" />
-          </span>
-          <span class="ducatus-scan-button_text" translate>Swap</span>
-        </button>
-        <button class="ducatus-scan-button">
-          <span class="ducatus-scan-button_icon">
-            <img src="assets/img/tab-icons/tab-deposits.svg" />
-          </span>
-          <span class="ducatus-scan-button_icon_active">
-            <img src="assets/img/tab-icons/tab-deposits-active.svg" />
-          </span>
-          <span class="ducatus-scan-button_text" translate>Deposits</span>
-        </button>
-        <button class="ducatus-scan-button" (click)="openVoucher()">
-          <span class="ducatus-scan-button_icon">
-            <img src="assets/img/tab-icons/tab-voucher.svg" />
-          </span>
-          <span class="ducatus-scan-button_icon_active">
-            <img src="assets/img/tab-icons/tab-voucher-active.svg" />
-          </span>
-          <span class="ducatus-scan-button_text" translate>Voucher</span>
-        </button>
-      </div>
-    </div>
-  -->
 </wide-header-page>
