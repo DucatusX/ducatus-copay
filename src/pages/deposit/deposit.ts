@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { AlertController, NavController } from 'ionic-angular';
 import _ from 'lodash';
+import moment from 'moment';
 import { 
   ApiProvider, Coin, 
   FilterProvider, Logger,  
@@ -9,7 +10,6 @@ import {
   TxFormatProvider, WalletProvider 
 } from '../../providers';
 import { DepositAddPage } from './deposit-add/deposit-add';
-import moment from 'moment';
 
 @Component({
   selector: 'page-deposit',
@@ -108,7 +108,7 @@ export class DepositPage {
         deposit.amountAdd = Number(this.formatProvider.satToUnit(deposit.amountToWithdraw, Coin.DUC)) - deposit.amountUnit;
         deposit.amountAdd = deposit.amountAdd.toFixed(2);
         deposit.amountAlt = await this.unitToFiat(deposit.amountDeposited);
-        deposit.percent = this.tableMP[deposit.lockMonths];
+        deposit.interestRate *= 100;
         deposit.executeRange = this.getTimePassed(
           deposit.createdAt,
           deposit.readyToWithdrawDate,

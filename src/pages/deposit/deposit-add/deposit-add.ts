@@ -26,6 +26,7 @@ export class DepositAddPage {
   public depositMonth = 13;
   public depositPercent = 13;
   public maxAmount = 0;
+  public tableMP: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -40,6 +41,18 @@ export class DepositAddPage {
     private apiProvider: ApiProvider,
     private logger: Logger
   ) {
+    this.httpClient
+      .get(this.apiProvider.getAddresses().deposit + 'user/deposits/months-rates/')
+      .toPromise()
+      .then(res => {
+        for (let key in res) {
+          if (typeof res[key] == 'number') {
+            res[key] *= 100;
+          }
+        } 
+       this.tableMP = res;
+      });
+
     this.DepositGroup = this.formBuilder.group({
       Address: [
         '',
@@ -89,20 +102,15 @@ export class DepositAddPage {
   }
 
   public changePercentAndMoth(type: string): void {
-    const tableMP = {
-      '5': '8',
-      '13': '13',
-      '34': '21'
-    };
 
     if ( type === 'month') {
       this.DepositGroup.controls.Percent.setValue(
-        tableMP[this.DepositGroup.controls.Month.value]
+        this.tableMP[this.DepositGroup.controls.Month.value]
       );
     } else {
       this.DepositGroup.controls.Month.setValue(
-        Object.keys(tableMP).find(
-          key => tableMP[key] === this.DepositGroup.controls.Percent.value
+        Object.keys(this.tableMP).find(
+          key => this.tableMP[key] === this.DepositGroup.controls.Percent.value
         )
       );
     }
@@ -182,7 +190,7 @@ export class DepositAddPage {
   ): Promise<any> {
     const address = this.apiProvider.getAddresses().deposit + 'user/deposits/create/';
 
-    return await this.httpClient
+    return this.httpClient
       .post(address, {
         wallet,
         duc_address,
