@@ -26,6 +26,7 @@ export class DepositAddPage {
   public depositMonth = 13;
   public depositPercent = 13;
   public maxAmount = 0;
+  public tableMP: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -40,6 +41,8 @@ export class DepositAddPage {
     private apiProvider: ApiProvider,
     private logger: Logger
   ) {
+    this.getMonthsRates();
+
     this.DepositGroup = this.formBuilder.group({
       Address: [
         '',
@@ -56,6 +59,22 @@ export class DepositAddPage {
       Month: ['13', Validators.compose([Validators.required])],
       Percent: ['8', Validators.compose([Validators.required])]
     });
+  }
+
+  public getMonthsRates() {
+    const address = 'user/deposits/months-rates/';
+
+    this.httpClient
+      .get(this.apiProvider.getAddresses().deposit + address )
+      .toPromise()
+      .then(rates => {
+
+        for (let rate in rates) {
+          rates[rate] *= 100;
+        }
+
+        this.tableMP = rates;
+      });
   }
 
   public async ionViewWillEnter(): Promise<void> {
@@ -89,20 +108,15 @@ export class DepositAddPage {
   }
 
   public changePercentAndMoth(type: string): void {
-    const tableMP = {
-      '5': '8',
-      '13': '13',
-      '34': '21'
-    };
 
     if ( type === 'month') {
       this.DepositGroup.controls.Percent.setValue(
-        tableMP[this.DepositGroup.controls.Month.value]
+        this.tableMP[this.DepositGroup.controls.Month.value]
       );
     } else {
       this.DepositGroup.controls.Month.setValue(
-        Object.keys(tableMP).find(
-          key => tableMP[key] === this.DepositGroup.controls.Percent.value
+        Object.keys(this.tableMP).find(
+          key => this.tableMP[key] === this.DepositGroup.controls.Percent.value
         )
       );
     }
@@ -182,7 +196,7 @@ export class DepositAddPage {
   ): Promise<any> {
     const address = this.apiProvider.getAddresses().deposit + 'user/deposits/create/';
 
-    return await this.httpClient
+    return this.httpClient
       .post(address, {
         wallet,
         duc_address,
