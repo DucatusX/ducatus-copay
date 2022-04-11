@@ -41,17 +41,7 @@ export class DepositAddPage {
     private apiProvider: ApiProvider,
     private logger: Logger
   ) {
-    this.httpClient
-      .get(this.apiProvider.getAddresses().deposit + 'user/deposits/months-rates/')
-      .toPromise()
-      .then(res => {
-        for (let key in res) {
-          if (typeof res[key] == 'number') {
-            res[key] *= 100;
-          }
-        } 
-       this.tableMP = res;
-      });
+    this.getMonthsRates();
 
     this.DepositGroup = this.formBuilder.group({
       Address: [
@@ -69,6 +59,22 @@ export class DepositAddPage {
       Month: ['13', Validators.compose([Validators.required])],
       Percent: ['8', Validators.compose([Validators.required])]
     });
+  }
+
+  public getMonthsRates() {
+    const address = 'user/deposits/months-rates/';
+
+    this.httpClient
+      .get(this.apiProvider.getAddresses().deposit + address )
+      .toPromise()
+      .then(rates => {
+
+        for (let rate in rates) {
+          rates[rate] *= 100;
+        }
+
+        this.tableMP = rates;
+      });
   }
 
   public async ionViewWillEnter(): Promise<void> {
