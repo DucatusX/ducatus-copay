@@ -27,6 +27,7 @@ export class DepositAddPage {
   public depositPercent = 13;
   public maxAmount = 0;
   public tableMP: any;
+  public useSendMax: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -163,7 +164,7 @@ export class DepositAddPage {
       infoSheet.onDidDismiss(option => {
         if (option) {
           this.DepositGroup.value.Address = option;
-
+          this.useSendMax = false;
           this.wallet = this.walletAddresses.find(wallet => wallet.address === option);
           this.sendMax();
 
@@ -187,6 +188,7 @@ export class DepositAddPage {
     });
 
     this.maxAmount = amount.availableAmount / 100000000;
+    this.useSendMax = true;
   }
 
   private async generateDeposit(
@@ -231,10 +233,15 @@ export class DepositAddPage {
           resultPrepare.wallet.wallet.coin.toUpperCase()
         );
 
+        this.useSendMax = this.DepositGroup.value.Amount === this.maxAmount
+          ? true
+          : false;
+
         const redirParms = {
           activePage: 'ScanPage',
           walletId: resultPrepare.wallet.wallet.id,
-          amount: parsedAmount.amountSat
+          amount: parsedAmount.amountSat,
+          useSendMax: this.useSendMax
         };
 
         this.incomingDataProvider.redir(addressView, redirParms);

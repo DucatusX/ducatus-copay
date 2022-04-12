@@ -21,6 +21,7 @@ export interface RedirParams {
   walletId?: number;
   tokenAddress?: string;
   wDucxAddress?: string;
+  useSendMax?: boolean;
 }
 
 @Injectable()
@@ -344,7 +345,7 @@ export class IncomingDataProvider {
         Number(result).toLocaleString('fullwide', { useGrouping: false }),
         10
       ).toString();
-      this.goSend(address, amount, message, coin, requiredFeeParam);
+      this.goSend(address, amount, message, coin, undefined, requiredFeeParam);
     } else {
       this.goToAmountPage(address, coin);
     }
@@ -395,9 +396,10 @@ export class IncomingDataProvider {
     let parsed = this.bwcProvider.getDucatuscore().URI(data);
     let address = parsed.address ? parsed.address.toString() : '';
     let message = parsed.message;
+    let useSendMax = redirParams.useSendMax;
     let amount = parsed.amount || amountFromRedirParams;
     if (parsed.r) this.goToPayPro(data, coin);
-    else this.goSend(address, amount, message, coin);
+    else this.goSend(address, amount, message, coin, useSendMax);
   }
 
   private handleDucatusXUri(data: string, redirParams?: RedirParams): void {
@@ -997,7 +999,7 @@ export class IncomingDataProvider {
         data,
         type: 'DucatusXUri',
         title: this.translate.instant('DucatusX URI')
-      }
+      };
       // Ethereum URI 
     } else if (this.isValidEthereumUri(data)) {
       return {
@@ -1174,6 +1176,7 @@ export class IncomingDataProvider {
     amount: string,
     message: string,
     coin: Coin,
+    useSendMax?: boolean,
     requiredFeeRate?: string,
     destinationTag?: string,
     tokenAddress?: string,
@@ -1194,6 +1197,9 @@ export class IncomingDataProvider {
       }
       if (wDucxAddress) {
         stateParams.wDucxAddress = wDucxAddress;
+      }
+      if (useSendMax) {
+        stateParams.useSendMax = useSendMax;
       }
       let nextView = {
         name: 'ConfirmPage',
