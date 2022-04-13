@@ -345,7 +345,7 @@ export class IncomingDataProvider {
         Number(result).toLocaleString('fullwide', { useGrouping: false }),
         10
       ).toString();
-      this.goSend(address, amount, message, coin, undefined, requiredFeeParam);
+      this.goSend(address, amount, message, coin, requiredFeeParam);
     } else {
       this.goToAmountPage(address, coin);
     }
@@ -398,8 +398,22 @@ export class IncomingDataProvider {
     let message = parsed.message;
     let useSendMax = redirParams.useSendMax;
     let amount = parsed.amount || amountFromRedirParams;
-    if (parsed.r) this.goToPayPro(data, coin);
-    else this.goSend(address, amount, message, coin, useSendMax);
+    if (parsed.r) {
+      this.goToPayPro(data, coin);
+    }
+    else {
+      this.goSend(
+        address,
+        amount, 
+        message,
+        coin,
+        undefined,
+        undefined,
+        undefined,
+        undefined, 
+        useSendMax
+      );
+    }
   }
 
   private handleDucatusXUri(data: string, redirParams?: RedirParams): void {
@@ -1176,11 +1190,11 @@ export class IncomingDataProvider {
     amount: string,
     message: string,
     coin: Coin,
-    useSendMax?: boolean,
     requiredFeeRate?: string,
     destinationTag?: string,
     tokenAddress?: string,
-    wDucxAddress?: string
+    wDucxAddress?: string,
+    useSendMax?: boolean
   ): void {
     if (amount) {
       let stateParams: any = {
