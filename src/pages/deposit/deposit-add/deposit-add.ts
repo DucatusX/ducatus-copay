@@ -233,9 +233,11 @@ export class DepositAddPage {
           resultPrepare.wallet.wallet.coin.toUpperCase()
         );
 
-        this.useSendMax = this.DepositGroup.value.Amount === this.maxAmount
-          ? true
-          : false;
+        this.useSendMax = false;  
+
+        if (this.DepositGroup.value.Amount === this.maxAmount) {
+          this.useSendMax = true;
+        }
 
         const redirParms = {
           activePage: 'ScanPage',

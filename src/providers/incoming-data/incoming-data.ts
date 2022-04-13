@@ -24,6 +24,18 @@ export interface RedirParams {
   useSendMax?: boolean;
 }
 
+type SendParams = [
+  string, 
+  string, 
+  string, 
+  Coin, 
+  string, 
+  string, 
+  string, 
+  string, 
+  boolean,
+];
+
 @Injectable()
 export class IncomingDataProvider {
   private activePage: string;
@@ -394,25 +406,27 @@ export class IncomingDataProvider {
       redirParams && redirParams.amount ? redirParams.amount : '';
     const coin = Coin.DUC;
     let parsed = this.bwcProvider.getDucatuscore().URI(data);
-    let address = parsed.address ? parsed.address.toString() : '';
-    let message = parsed.message;
-    let useSendMax = redirParams.useSendMax;
-    let amount = parsed.amount || amountFromRedirParams;
+    let address: string = parsed.address ? parsed.address.toString() : '';
+    let message: string = parsed.message;
+    let useSendMax: boolean = redirParams.useSendMax;
+    let amount: string = parsed.amount || amountFromRedirParams;
+    let sendParams: SendParams = [
+      address,
+      amount,
+      message,
+      coin,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      useSendMax
+    ];
+
     if (parsed.r) {
       this.goToPayPro(data, coin);
     }
     else {
-      this.goSend(
-        address,
-        amount, 
-        message,
-        coin,
-        undefined,
-        undefined,
-        undefined,
-        undefined, 
-        useSendMax
-      );
+      this.goSend(...sendParams);
     }
   }
 
