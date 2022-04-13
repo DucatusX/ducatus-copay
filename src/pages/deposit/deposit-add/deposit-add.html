@@ -78,25 +78,11 @@
             formControlName="Month"
             [(ngModel)]="depositMonth"
           >
-            <ion-item no-lines>
-              <ion-label><ion-icon name="5"></ion-icon> 5</ion-label>
+            <ion-item no-lines *ngFor="let month of months">
+              <ion-label><ion-icon name="month"></ion-icon> {{ month }} </ion-label>
               <ion-radio
                 (click)="changePercentAndMoth('month')"
-                value="5"
-              ></ion-radio>
-            </ion-item>
-            <ion-item no-lines>
-              <ion-label><ion-icon name="13"></ion-icon> 13</ion-label>
-              <ion-radio
-                (click)="changePercentAndMoth('month')"
-                value="13"
-              ></ion-radio>
-            </ion-item>
-            <ion-item no-lines>
-              <ion-label><ion-icon name="34"></ion-icon> 34</ion-label>
-              <ion-radio
-                (click)="changePercentAndMoth('month')"
-                value="34"
+                [value]="month"
               ></ion-radio>
             </ion-item>
           </ion-row>
@@ -109,25 +95,11 @@
             formControlName="Percent"
             [(ngModel)]="depositPercent"
           >
-            <ion-item class="deposit-group-radio-item" no-lines>
-              <ion-label><ion-icon name="8"></ion-icon> 8%</ion-label>
+            <ion-item class="deposit-group-radio-item" no-lines *ngFor="let percent of percents">
+              <ion-label><ion-icon [name]="percent"></ion-icon> {{ percent + '%' }} </ion-label>
               <ion-radio
                 (click)="changePercentAndMoth('percent')"
-                value="8"
-              ></ion-radio>
-            </ion-item>
-            <ion-item class="deposit-group-radio-item" no-lines>
-              <ion-label><ion-icon name="13"></ion-icon> 13%</ion-label>
-              <ion-radio
-                (click)="changePercentAndMoth('percent')"
-                value="13"
-              ></ion-radio>
-            </ion-item>
-            <ion-item class="deposit-group-radio-item" no-lines>
-              <ion-label> <ion-icon name="21"></ion-icon> 21%</ion-label>
-              <ion-radio
-                (click)="changePercentAndMoth('percent')"
-                value="21"
+                [value]="percent"
               ></ion-radio>
             </ion-item>
           </ion-row>
