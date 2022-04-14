@@ -23,10 +23,12 @@ export class DepositAddPage {
   public depositLoading = false;
   public amountWithPercent: any;
   public amountWallet = 0;
-  public depositMonth = 13;
-  public depositPercent = 13;
+  public depositMonth: string;
+  public depositPercent: number;
   public maxAmount = 0;
   public tableMP: any;
+  public months: string[] = [];
+  public percents: number[] = [];
   public useSendMax: boolean = false;
 
   constructor(
@@ -57,8 +59,8 @@ export class DepositAddPage {
           Validators.min(0)
         ])
       ],
-      Month: ['13', Validators.compose([Validators.required])],
-      Percent: ['8', Validators.compose([Validators.required])]
+      Month: [this.months[1], Validators.compose([Validators.required])],
+      Percent: [this.percents[1], Validators.compose([Validators.required])]
     });
   }
 
@@ -72,8 +74,12 @@ export class DepositAddPage {
 
         for (let rate in rates) {
           rates[rate] *= 100;
+          this.percents.push(rates[rate]);
         }
 
+        this.months = Object.keys(rates);
+        this.depositMonth = this.months[1];
+        this.depositPercent = this.percents[1];
         this.tableMP = rates;
       });
   }
