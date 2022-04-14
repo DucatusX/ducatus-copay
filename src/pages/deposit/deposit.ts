@@ -20,11 +20,6 @@ export class DepositPage {
   public deposits: any[] = [];
   public walletsGroups: any;
   public wallets: any;
-  public tableMP = {
-    '5': '8',
-    '13': '13',
-    '34': '21'
-  };
   
   constructor(
     private alertCtrl: AlertController,
@@ -138,10 +133,12 @@ export class DepositPage {
     const createdAt: number = moment(depositDateCreated).valueOf();
     const endDate: number = moment(depositDateEnd).valueOf();
     const coefficient = 24 * 60 * 60 * 1000;
-    const passedDays: number = (createdAt - endDate) / coefficient * -1; // passed 5 (days)
-    const passedDaysPercent = ((passedDays - Number(daysToWithdraw)) / passedDays) * 100; // passed 1 (%)
+    let passedDays: number = (endDate - createdAt) / coefficient; // passed 5 (days)
+    passedDays = Math.floor(passedDays);
+    let passedDaysPercent = ((passedDays - Number(daysToWithdraw)) / passedDays) * 100; // passed 1 (%)
+    passedDaysPercent = Math.trunc(passedDaysPercent) || 1;
     
-    if ( +daysToWithdraw <= 0 || +daysToWithdraw === -0 ) {
+    if ( Number(daysToWithdraw) < 1 ) {
       return 100;
     } else {
       return passedDaysPercent;
