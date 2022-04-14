@@ -149,6 +149,7 @@ export class DepositAddPage {
 
     const amountWithPercentValue = (
       amount
+      * (parseFloat(this.DepositGroup.value.Percent) / 100)
       * (parseFloat(this.DepositGroup.value.Month) / 12)
     ).toFixed(4);
 
