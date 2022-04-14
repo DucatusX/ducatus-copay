@@ -16,7 +16,8 @@ import * as _ from 'lodash';
 
 // Providers
 import { Config, ConfigProvider } from '../../../providers/config/config';
-import { Coin, CurrencyProvider } from '../../../providers/currency/currency';
+import { availableCoins, CoinOpts } from '../../../providers/currency/coin';
+import { Coin, CoinsMap, CurrencyProvider} from '../../../providers/currency/currency';
 import { ElectronProvider } from '../../../providers/electron/electron';
 import { FilterProvider } from '../../../providers/filter/filter';
 import { Logger } from '../../../providers/logger/logger';
@@ -28,6 +29,7 @@ import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
 import {
   ActionSheetProvider,
   // GiftCardProvider,
+  FormControllerProvider,
   IABCardProvider
 } from '../../../providers';
 import { getActivationFee } from '../../../providers/gift-card/gift-card';
@@ -87,6 +89,7 @@ export class AmountPage {
   public requestingAmount: boolean;
   public wallet: any;
   public token: any;
+  public coins: CoinsMap<CoinOpts> = availableCoins;
 
   public cardName: string;
   public cardConfig: CardConfig;
@@ -113,7 +116,8 @@ export class AmountPage {
     private viewCtrl: ViewController,
     private profileProvider: ProfileProvider,
     private navCtrl: NavController,
-    private iabCardProvider: IABCardProvider
+    private iabCardProvider: IABCardProvider,
+    private formCtrl: FormControllerProvider
   ) {
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
@@ -200,7 +204,7 @@ export class AmountPage {
 
   private walletDisableHardwareKeyboardHandler: any = () => {
     this._disableHardwareKeyboard();
-  };
+  }
 
   private _disableHardwareKeyboard() {
     this.disableHardwareKeyboard = true;
@@ -387,6 +391,8 @@ export class AmountPage {
   }
 
   public pushDigit(digit: string): void {
+    const coin = this.wallet.coin;
+    const decimalsCoin = this.coins[coin].unitInfo.unitDecimals;
     this.useSendMax = false;
 
     if (digit === 'delete') {
@@ -396,7 +402,7 @@ export class AmountPage {
     const isDecimals: boolean = ( this.expression.length === 0 && digit === "." );
 
     if( isDecimals  || this.expression === '0' ){
-      this.expression = '0.'
+      this.expression = '0.';
     }
 
     const numberOfPoints = this.expression.split('.').length - 1;
@@ -410,6 +416,7 @@ export class AmountPage {
       return;
     this.zone.run(() => {
       this.expression = (this.expression + digit).replace('..', '.');
+      this.expression = this.formCtrl.trimStrToDecimalsCoin(this.expression, decimalsCoin);
       this.processAmount();
       this.changeDetectorRef.detectChanges();
       this.resizeFont();
