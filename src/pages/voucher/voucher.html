@@ -12,9 +12,11 @@
 </ion-header>
 
 <ion-content #scrollArea>
+
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+
   <div class="wrapper">
     <expandable-header
       [scrollArea]="scrollArea"
@@ -23,24 +25,19 @@
       #expandableHeader
     >
       <ion-toolbar class="wide-header__title">
-        <expandable-header-primary>
-          {{ 'Voucher' | translate }}
-        </expandable-header-primary>
+        <expandable-header-primary> {{ 'Voucher' | translate }} </expandable-header-primary>
       </ion-toolbar>
+
     </expandable-header>
 
     <ion-list class="voucher-list">
       <div *ngIf="!vouchersLoading">
         <div *ngFor="let item of vouchers">
-          <ion-item class="voucher-item" *ngIf="!item.cltv_details.withdraw">
+          <ion-item class="voucher-item" *ngIf="!item.withdrawn">
             <ion-label class="voucher-item-inner">
               <div class="voucher-item-info">
-                <span class="voucher-item-title"
-                  >{{ item.duc_amount }} DUC</span
-                >
-                <span class="voucher-item-date"
-                  >{{ item.cltv_details.frozen_at | date:'dd.LL.y' }}</span
-                >
+                <span class="voucher-item-title"> {{ item.ducAmount }} DUC </span>
+                <span *ngIf="item.daysToUnlock" class="voucher-item-date"> {{ item.daysToUnlock }} Days to unlock </span>
               </div>
               <div
                 class="voucher-item-info"
@@ -53,7 +50,7 @@
                 </div>
                 <div *ngIf="!item.withdrow_check" style="text-align: center;">
                   <div
-                    *ngIf="!item.ready_to_withdraw"
+                    *ngIf="!item.readyToWithdraw"
                     class="voucher-item-info-unactive-button"
                   >
                     <img
@@ -62,19 +59,14 @@
                       height="18px"
                     />
                     <span
-                      *ngIf="!item.ready_to_withdraw"
+                      *ngIf="!item.readyToWithdraw"
                       ion-button
                       class="voucher-item-button"
                       >WITHDRAW</span
                     >
                   </div>
                   <span
-                    *ngIf="!item.ready_to_withdraw"
-                    class="voucher-item-text"
-                    >Available in {{ item.freez_date_count }} days</span
-                  >
-                  <span
-                    *ngIf="item.ready_to_withdraw"
+                    *ngIf="item.readyToWithdraw"
                     ion-button
                     class="voucher-item-button"
                     (click)="withdrowTrigger(item.id)"
@@ -94,52 +86,10 @@
           ion-button
           (click)="goToVoucehrAddPage()"
           class="voucher-add-button icon icon__add"
-          >New Voucher</span
         >
+          New Voucher
+        </span>
       </div>
     </ion-list>
   </div>
-
-  <!--
-    <div class="control-container" ion-fixed>
-      <div class="ducatus-scan-buttons">
-        <button class="ducatus-scan-button" (click)="openMoonPay()">
-          <span class="ducatus-scan-button_icon">
-            <img src="assets/img/tab-icons/tab-buy.svg" />
-          </span>
-          <span class="ducatus-scan-button_icon_active">
-            <img src="assets/img/tab-icons/tab-buy-active.svg" />
-          </span>
-          <span class="ducatus-scan-button_text" translate>Buy</span>
-        </button>
-        <button class="ducatus-scan-button" (click)="openSwap()">
-          <span class="ducatus-scan-button_icon">
-            <img src="assets/img/tab-icons/tab-swap.svg" />
-          </span>
-          <span class="ducatus-scan-button_icon_active">
-            <img src="assets/img/tab-icons/tab-swap-active.svg" />
-          </span>
-          <span class="ducatus-scan-button_text" translate>Swap</span>
-        </button>
-        <button class="ducatus-scan-button">
-          <span class="ducatus-scan-button_icon">
-            <img src="assets/img/tab-icons/tab-deposits.svg" />
-          </span>
-          <span class="ducatus-scan-button_icon_active">
-            <img src="assets/img/tab-icons/tab-deposits-active.svg" />
-          </span>
-          <span class="ducatus-scan-button_text" translate>Deposits</span>
-        </button>
-        <button class="ducatus-scan-button activated">
-          <span class="ducatus-scan-button_icon">
-            <img src="assets/img/tab-icons/tab-voucher.svg" />
-          </span>
-          <span class="ducatus-scan-button_icon_active">
-            <img src="assets/img/tab-icons/tab-voucher-active.svg" />
-          </span>
-          <span class="ducatus-scan-button_text" translate>Voucher</span>
-        </button>
-      </div>
-    </div>
-  -->
 </ion-content>

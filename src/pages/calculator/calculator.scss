@@ -1,7 +1,9 @@
 .calculator {
+
   &-page {
     padding: 21px;
   }
+
   &-attention {
     color: red;
     margin-top: 20px;
@@ -13,7 +15,9 @@
   }
 
   &-loading {
+
     &-select {
+
       .label {
         display: flex !important;
         justify-content: center !important;
@@ -46,6 +50,7 @@
   }
 
   &-form {
+
     &-group {
       position: relative;
     }
@@ -86,13 +91,20 @@
   }
 
   &-convert {
+
     &-type {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
       margin-bottom: 15px;
+      display: inline-block;
+
+      .arrow {
+        transform: rotate(90deg);
+        padding: 18px 0;
+        margin: 0 auto;
+        width: 22px;
+      }
 
       &-send,
+
       &-get {
         background: #ffffff;
         border-radius: 4px;
@@ -102,9 +114,17 @@
         line-height: 16px;
         color: #862633;
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
         margin: 0px 5px;
+
+        .amount-info {
+
+          .transaction-type {
+            display: inline-block;
+            width: 40px;
+          }
+        }
 
         span {
           color: #000000;
@@ -112,6 +132,19 @@
 
         .item-img {
           margin: 0px 10px;
+        }
+
+        .coin-info {
+          display: flex;
+          align-items: center;
+
+          &-type {
+            width: 40px;
+          }
+
+          &-img {
+            width: 30px;
+          }
         }
       }
     }
@@ -125,6 +158,7 @@
     &-group {
       position: relative;
       border-radius: 4px;
+
       &.active {
         opacity: 0.5;
       }
@@ -151,17 +185,20 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      &-address{
+
+      &-address {
         padding-left: 25px;
         overflow: hidden;
         padding-right: 10px;
       }
-      &-placeholder{
+
+      &-placeholder {
         padding-left: 25px;
         color: rgb(66,66,66);
         opacity: 0.5;
       }
-      &-icon{
+
+      &-icon {
         padding-right: 25px;
       }
     }
@@ -184,7 +221,9 @@
     }
 
     &--large {
+
       &.item {
+
         ion-label {
           font-size: 15px;
         }
@@ -220,6 +259,7 @@
     margin-bottom: 10px;
 
     &:last-child {
+
       .item-inner {
         border-bottom: 0;
       }
@@ -273,6 +313,7 @@
   }
 
   .proposal-container {
+    
     .item .item-inner {
       padding: 0 10px 0 0;
     }

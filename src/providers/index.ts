@@ -25,6 +25,7 @@ export { AnalyticsProvider } from '../providers/analytics/analytics';
 export { AppIdentityProvider } from '../providers/app-identity/app-identity';
 export { AppProvider } from '../providers/app/app';
 export { BackupProvider } from '../providers/backup/backup';
+export { FormControllerProvider } from './form-contoller/form-controller';
 export {
   BitPayAccountProvider
 } from '../providers/bitpay-account/bitpay-account';
@@ -103,3 +104,4 @@ export { MoonPayProvider } from '../providers/moonpay/moonpay';
 export { LiveChatProvider } from '../providers/livechat/livechat';
 export { PdfProvider } from '../providers/pdf/pdf';
 export { ApiProvider } from '../providers/api/api';
+export { WebExtensionsProvider } from '../providers/web-extension/web-extension';

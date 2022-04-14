@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { AlertController, NavController } from 'ionic-angular';
-import { DepositAddPage } from './deposit-add/deposit-add';
-import { Big } from 'big.js';
-import { RateProvider, FilterProvider } from '../../providers';
-
 import _ from 'lodash';
-
-import { ProfileProvider, WalletProvider } from '../../providers';
-import { ApiProvider } from '../../providers/api/api';
+import moment from 'moment';
+import { 
+  ApiProvider, Coin, 
+  FilterProvider, Logger,  
+  ProfileProvider, RateProvider, 
+  TxFormatProvider, WalletProvider 
+} from '../../providers';
+import { DepositAddPage } from './deposit-add/deposit-add';
 
 @Component({
   selector: 'page-deposit',
@@ -16,22 +17,33 @@ import { ApiProvider } from '../../providers/api/api';
 })
 export class DepositPage {
   public depositsLoading = true;
-  public deposits = [];
+  public deposits: any[] = [];
   public walletsGroups: any;
   public wallets: any;
-
+  public tableMP = {
+    '5': '8',
+    '13': '13',
+    '34': '21'
+  };
+  
   constructor(
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private httpClient: HttpClient,
     private profileProvider: ProfileProvider,
     private walletProvider: WalletProvider,
-    private apiProvider: ApiProvider,
     private rateProvider: RateProvider,
-    private filter: FilterProvider
+    private filter: FilterProvider,
+    private formatProvider: TxFormatProvider,
+    private logger: Logger,
+    private apiProvider: ApiProvider
   ) {}
 
-  ionViewWillEnter() {
+  public async ionViewWillEnter() {
+    this.wallets = await this.getWalletsInfoAddress('duc');
+  }
+  
+  public async ngOnInit(): Promise<void> {
     const wallets = this.profileProvider.getWallets({ showHidden: true });
 
     this.walletsGroups = _.values(
@@ -43,19 +55,116 @@ export class DepositPage {
       )
     );
 
-    this.getDeposits();
-
-    let walletsGet = this.getWalletsInfoAddress('duc');
-
-    Promise.all([walletsGet]).then(results => {
-      this.wallets = results[0];
-    });
+    await this.getDeposits();
   }
 
-  private getWalletsInfoAddress(coin) {
+  private async getWalletsInfoAddress(coin): Promise<any> {
     let coins = [];
-    let wallets = [];
-    let walletsRes = [];
+    const wallets = [];
+
+    this.walletsGroups.forEach(keyID => {
+      coins = _.concat(
+        coins,
+        keyID.filter(wallet => wallet.coin === coin.toLowerCase())
+      );
+    });
+    
+    for ( let i = 0; i < coins.length; i++ ) {
+      const coin = coins[i];
+      const address = await this.walletProvider.getAddress(coin, false);
+      
+      wallets.push({ 
+        wallet: coin, 
+        address 
+      });
+    }
+
+    return wallets;
+  }
+
+  private async getDeposits(): Promise<void> {
+    const wallets = await this.getWalletsInfo('duc');
+    const walletsResult = [];
+
+    wallets.forEach(res => {
+      if ( !walletsResult.includes(res.walletId) ) {
+        walletsResult.push(res.walletId);
+      }
+    });
+
+    const address = `${this.apiProvider.getAddresses().deposit}user/deposits/list/?wallet_ids=${walletsResult}`;
+    // @ts-ignore
+    const deposits: any[] = await this.httpClient
+      .get(address)
+      .toPromise();
+    
+    for ( let i = 0; i < deposits.length; i++ ) {
+      const deposit = deposits[i];
+    
+      if ( deposit.amountDeposited ) {
+        deposit.readyToWithdrawDate = moment(deposit.readyToWithdrawDate).format();
+        deposit.createdAt = moment(deposit.createdAt).format();
+        deposit.amountUnit = Number(this.formatProvider.satToUnit(deposit.amountDeposited, Coin.DUC));
+        deposit.amountAdd = Number(this.formatProvider.satToUnit(deposit.amountToWithdraw, Coin.DUC)) - deposit.amountUnit;
+        deposit.amountAdd = deposit.amountAdd.toFixed(2);
+        deposit.amountAlt = await this.unitToFiat(deposit.amountDeposited);
+        deposit.interestRate *= 100;
+        deposit.executeRange = this.getTimePassed(
+          deposit.createdAt,
+          deposit.readyToWithdrawDate,
+          deposit.daysToWithdraw
+        );
+      }
+    }
+    
+    this.deposits = deposits as any[];
+    this.depositsLoading = false;
+  }
+
+  public async unitToFiat(amount: number): Promise<number> {
+    await this.rateProvider.whenRatesAvailable('duc');
+
+    let amountAlt: number = this.rateProvider.toFiat(amount, 'USD', 'duc');
+    amountAlt = this.filter.formatFiatAmount(amountAlt);
+
+    return amountAlt;
+  }
+
+  public getTimePassed(
+    depositDateCreated: string, 
+    depositDateEnd: string,
+    daysToWithdraw: string
+  ): number {
+    const createdAt: number = moment(depositDateCreated).valueOf();
+    const endDate: number = moment(depositDateEnd).valueOf();
+    const coefficient = 24 * 60 * 60 * 1000;
+    const passedDays: number = (createdAt - endDate) / coefficient * -1; // passed 5 (days)
+    const passedDaysPercent = ((passedDays - Number(daysToWithdraw)) / passedDays) * 100; // passed 1 (%)
+    
+    if ( +daysToWithdraw <= 0 || +daysToWithdraw === -0 ) {
+      return 100;
+    } else {
+      return passedDaysPercent;
+    }
+  }
+
+  public goToDepositAddPage(): void {
+    this.navCtrl.push(DepositAddPage);
+  }
+
+  private async getAddress(wallet): Promise<string> {
+    try {
+      const address = await this.walletProvider.getAddress(wallet, false);
+      
+      return address;
+    } catch(e) {
+      return null;
+    } 
+  }
+
+  private async getWalletsInfo(coin): Promise<any> {
+    let coins = [];
+    const wallets = [];
 
     this.walletsGroups.forEach(keyID => {
       coins = _.concat(
@@ -64,168 +173,45 @@ export class DepositPage {
       );
     });
 
-    wallets = coins.map(wallet => {
-      return this.walletProvider.getAddress(wallet, false).then(address => {
-        return { wallet, address };
-      });
-    });
-
-    wallets.map(res => {
-      res.then(result => {
-        walletsRes.push(result);
-      });
-    });
-
-    return walletsRes;
-  }
-
-  private getDeposits() {
-    this.getWalletsInfo('duc').then(wallets => {
-      const walletsResult = [];
-
-      wallets.map(res => {
-        if (!walletsResult.includes(res.walletId))
-          walletsResult.push(res.walletId);
-      });
-
-      this.httpClient
-        .get(`${this.apiProvider.getAddresses().deposit}/api/v3/get_deposits/?wallet_ids=${walletsResult}`)
-        .toPromise()
-        .then(result => {
-          this.deposits = result as any;
-
-          this.deposits.map(x => {
-            //we get an alternative balance
-            if(x.duc_amount){
-              let balance = new Big(x.duc_amount);
-              balance = Number(balance.times(100000000));
-              this.rateProvider.whenRatesAvailable('duc').then(() => {
-                x.duc_amountAlt = this.rateProvider.toFiat(balance, 'USD', 'duc');
-                x.duc_amountAlt = this.filter.formatFiatAmount(x.duc_amountAlt);
-              });
-            }
-            else if (x.duc_amount === 0) {
-              x.duc_amountAlt = 0;
-            }
-            //
-            if (x.depositinput_set.length != 0) {
-              x.ended_at_date = new Date(x.ended_at * 1000);
-              x.duc_added = (
-                x.duc_amount *
-                (x.dividends / 100) *
-                (x.lock_months / 12)
-              ).toFixed(2);
-
-              const curDate = new Date(x.ended_at * 1000);
-              const dateToExecute = Math.round(
-                (new Date(curDate).getTime() - new Date().getTime()) /
-                  (24 * 60 * 60 * 1000)
-              );
-              const dateToExecuteRagne =
-                Math.round(
-                  (new Date(x.deposited_at * 1000).getTime() -
-                    new Date(curDate).getTime()) /
-                    (24 * 60 * 60 * 1000)
-                ) * -1;
-              x.executeRagne =
-                ((dateToExecuteRagne - dateToExecute) / dateToExecuteRagne) *
-                100;
-
-              if (dateToExecute <= 0 || dateToExecute === -0) {
-                x.executeRagne = 100;
-              }
-            }
-            x.freez_date = new Date(x.cltv_details.lock_time * 1000);
-            x.freez_date_count = Math.ceil(
-              Math.abs(x.freez_date.getTime() - new Date().getTime()) /
-                (1000 * 3600 * 24)
-            );
-            x.withdrow_check = false;
-          });
-
-          this.depositsLoading = false;
+    for ( let i = 0; i < coins.length; i++ ) {
+      const coin = coins[i];
+      const address = await this.getAddress(coin);
+      
+      if ( address ) {
+        wallets.push({
+          walletId: coin.credentials.walletId,
+          requestPubKey: coin.credentials.requestPubKey,
+          wallet: coin,
+          address
         });
-    });
+      }
+    }
+    
+    return wallets;
   }
 
-  public goToDepositAddPage() {
-    this.navCtrl.push(DepositAddPage);
-  }
-
-  private getAddress(wallet) {
-    return new Promise(resolve => {
-      this.walletProvider.getAddress(wallet, false).then(addr => {
-        return resolve(addr);
-      });
-    });
-  }
-
-  private getDeposit(id) {
-    return this.httpClient
-      .get(`${this.apiProvider.getAddresses().deposit}/api/v3/get_deposit_info/?deposit_id=${id}`)
-      .toPromise();
-  }
-
-  private sendTX(raw_tx_hex) {
-    return this.httpClient
-      .post(`${this.apiProvider.getAddresses().deposit}/api/v3/send_deposit_transaction/`, {
-        raw_tx_hex
-      })
-      .toPromise();
-  }
-
-  private getWalletsInfo(coin): Promise<any> {
-    return new Promise(resolve => {
-      let coins = [];
-      let wallets = [];
-
-      this.walletsGroups.forEach(keyID => {
-        coins = _.concat(
-          coins,
-          keyID.filter(wallet => wallet.coin === coin.toLowerCase())
-        );
-      });
-
-      wallets = coins.map(wallet => {
-        return {
-          walletId: wallet.credentials.walletId,
-          requestPubKey: wallet.credentials.requestPubKey,
-          wallet,
-          address: this.getAddress(wallet)
-        };
-      });
-
-      resolve(wallets);
-    });
-  }
-
-  private showModal(type: string, id?: number, ducAmount?: number) {
+  private showModal(type: string, id?: number, ducAmount?: number): void {
     const modalAnswers = {
       success: {
-        title:
-          '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
+        title: '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
         text: `You will get ${ducAmount || ''} Ducatus in 15 minutes`,
         button: 'OK'
       },
       alreadyActivated: {
-        title:
-          '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
+        title: '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
         text: `Please wait, Ducatus is on the way to your wallet`,
         button: 'OK'
       },
       network: {
-        title:
-          '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+        title: '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
         text: 'Something went wrong, try again',
         button: 'OK'
       }
     };
 
-    const answers = modalAnswers[type]
-      ? modalAnswers[type]
-      : modalAnswers['network'];
+    const answers = modalAnswers[type] || modalAnswers['network'];
 
-    let alert = this.alertCtrl.create({
+    const alert = this.alertCtrl.create({
       cssClass: 'deposit-alert',
       title: answers.title,
       message: answers.text,
@@ -233,14 +219,16 @@ export class DepositPage {
         {
           text: answers.button,
           handler: () => {
-            this.deposits.map(t => {
-              this.getDeposits();
-              if (t.id === id) t.withdrow_check = false;
+            this.deposits.forEach(deposit => {
+              if ( deposit.id == id ) {
+                deposit.withdrawn = true;
+              }
             });
           }
         }
       ]
     });
+
     alert.present();
   }
 
@@ -256,50 +244,23 @@ export class DepositPage {
 
   public doRefresh(refresher): void {
     this.debounceGetDeposits();
+
     setTimeout(() => {
       refresher.complete();
     }, 2000);
   }
 
-  public withdrowTrigger(id: number) {
-    this.deposits.map(t => {
-      if (t.id === id) t.withdrow_check = true;
-    });
+  public async withdraw(id: number): Promise<void> {
+    const address = `${this.apiProvider.getAddresses().deposit}user/deposits/${id}/withdraw/`;
+    
+    try {
+      const res = await this.httpClient.post(address,'').toPromise();
 
-    this.getDeposit(id).then(async res => {
-      const deposit: any = res;
-
-      deposit.cltv_details.sending_amount =
-        deposit.depositinput_set[0].amount - deposit.tx_fee;
-      deposit.cltv_details.tx_hash = deposit.depositinput_set[0].mint_tx_hash;
-      deposit.cltv_details.user_duc_address = deposit.user_duc_address;
-      deposit.cltv_details.vout_number = deposit.depositinput_set[0].tx_vout;
-
-      const addressFilter = this.wallets.find(t => {
-        return t.address === deposit.cltv_details.user_duc_address;
-      });
-
-      const walletToUnfreeze = addressFilter
-        ? addressFilter.wallet
-        : this.wallets.find(t => {
-            return t.wallet.credentials.walletId === deposit.wallet_id;
-          }).wallet;
-
-      const txHex = await this.walletProvider.signFreeze(
-        walletToUnfreeze,
-        deposit.cltv_details,
-        !!addressFilter
-      );
-
-      this.sendTX(txHex)
-        .then(() => {
-          this.showModal('success', id, deposit.duc_amount);
-        })
-        .catch(err => {
-          err.error.detail === '-27: transaction already in block chain'
-            ? this.showModal('alreadyActivated', id)
-            : this.showModal('network', id);
-        });
-    });
+      this.showModal('alreadyActivated',id);
+      this.logger.debug(res);
+    } catch(error) {
+      this.logger.debug(error);
+      this.showModal('network');
+    }
   }
 }

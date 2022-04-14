@@ -44,6 +44,7 @@ import { PopupProvider } from '../../providers/popup/popup';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { SimplexProvider } from '../../providers/simplex/simplex';
 import { WalletProvider } from '../../providers/wallet/wallet';
+import { WebExtensionsProvider } from '../../providers/web-extension/web-extension';
 import { SelectCurrencyPage } from '../add/select-currency/select-currency';
 
 interface UpdateWalletOptsI {
@@ -109,7 +110,8 @@ export class WalletsPage {
     private modalCtrl: ModalController,
     private actionSheetProvider: ActionSheetProvider,
     private coinbaseProvider: CoinbaseProvider,
-    private moonPayProvider: MoonPayProvider
+    private moonPayProvider: MoonPayProvider,
+    private webExtensionsProvider: WebExtensionsProvider
   ) {
     this.slideDown = false;
     this.isBlur = false;
@@ -202,14 +204,14 @@ export class WalletsPage {
     opts = opts || {};
     opts.alsoUpdateHistory = true;
     this.fetchWalletStatus(opts);
-  };
+  }
 
   private walletActionHandler = opts => {
     this.logger.debug('RECV Local/TxAction @home', opts);
     opts = opts || {};
     opts.alsoUpdateHistory = true;
     this.fetchWalletStatus(opts);
-  };
+  }
 
   ionViewDidLoad() {
     this.logger.info('Loaded: WalletsPage');
@@ -295,7 +297,7 @@ export class WalletsPage {
     }
     this.walletProvider.invalidateCache(wallet);
     this.debounceFetchWalletStatus(walletId, alsoUpdateHistory);
-  };
+  }
 
   private updateDesktopOnFocus() {
     const { remote } = (window as any).require('electron');
@@ -383,30 +385,36 @@ export class WalletsPage {
         'keyId'
       )
     );
-
+    
+    this.webExtensionsProvider.setDucxAddresses(this.wallets);
     this.readOnlyWalletsGroup = this.profileProvider.getWalletsFromGroup({
       keyId: 'read-only'
     });
-  };
+  }
 
   public checkClipboard() {
     return this.clipboardProvider
       .getData()
       .then(async data => {
         this.validDataFromClipboard = this.incomingDataProvider.parseData(data);
+
         if (!this.validDataFromClipboard) {
           return;
         }
+
         const dataToIgnore = [
           'BitcoinAddress',
           'BitcoinCashAddress',
           'EthereumAddress',
-          'PlainUrl'
+          'PlainUrl',
+          'DucatusAddress'
         ];
+
         if (dataToIgnore.indexOf(this.validDataFromClipboard.type) > -1) {
           this.validDataFromClipboard = null;
           return;
         }
+
         if (
           this.validDataFromClipboard.type === 'PayPro' ||
           this.validDataFromClipboard.type === 'InvoiceUri'
@@ -420,10 +428,12 @@ export class WalletsPage {
             );
             const { expires, paymentOptions, payProUrl } = payproOptions;
             let selected = paymentOptions.filter(option => option.selected);
+
             if (selected.length === 0) {
               // No Currency Selected default to BTC
               selected.push(payproOptions.paymentOptions[0]); // BTC
             }
+
             const [{ currency, estimatedAmount }] = selected;
             this.payProDetailsData = payproOptions;
             this.payProDetailsData.coin = currency.toLowerCase();
@@ -437,6 +447,7 @@ export class WalletsPage {
             this.logger.warn('Error in Payment Protocol', err);
           }
         }
+        
         await Observable.timer(50).toPromise();
         this.slideDown = true;
       })
@@ -592,7 +603,7 @@ export class WalletsPage {
           this.fetchTxHistory({ walletId: opts.walletId, force: opts.force });
         }
       });
-  };
+  }
 
   private updateTxps() {
     this.profileProvider

@@ -6,7 +6,7 @@
         [reveal-at-scroll-pos]="(expandableHeader.headerHeight - 200)"
         [scrollArea]="scrollArea"
       >
-        {{wallet?.name}}
+        {{ wallet?.name }}
       </div>
     </ion-title>
     <ion-buttons right>
@@ -55,7 +55,7 @@
             class="energized"
             (click)="openExternalLink('https://support.bitpay.com/hc/en-us/articles/360004102011-What-is-testnet-How-do-I-avoid-testnet-Bitcoin-scams-')"
           >
-            {{'Learn more about testnet blockchain' | translate}}
+            {{ 'Learn more about testnet blockchain' | translate }}
             <ion-icon name="arrow-forward"></ion-icon>
           </a>
         </div>
@@ -65,8 +65,7 @@
           class="top-notification warning"
         >
           <a class="energized" (click)="openAddresses()">
-            {{'Spending this balance will need significant Bitcoin network
-            fees'|translate}}
+            {{ 'Spending this balance will need significant Bitcoin network fees'|translate }}
             <ion-icon name="arrow-forward"></ion-icon>
           </a>
         </div>
@@ -249,11 +248,10 @@
             {{ 'Gold Coin' | translate }}
           </button>
           <button
-          style="display: none;"
-          class="button-standard disable-hover"
-          (click)="goToSeedPage()"
-          ion-button
-        >
+            class="button-standard disable-hover"
+            (click)="goToSeedPage()"
+            ion-button
+          >
           {{ 'S.E.E.D' | translate }}
         </button>
 

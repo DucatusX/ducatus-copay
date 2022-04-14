@@ -39,6 +39,7 @@ import {
   FeeProvider,
   File,
   FilterProvider,
+  FormControllerProvider,
   // GiftCardProvider,
   HomeIntegrationsProvider,
   HttpRequestsProvider,
@@ -81,7 +82,8 @@ import {
   TxFormatProvider,
   UserAgent,
   Vibration,
-  WalletProvider
+  WalletProvider,
+  WebExtensionsProvider
 } from './index';
 
 @NgModule({
@@ -154,6 +156,7 @@ import {
     TouchIdProvider,
     TxConfirmNotificationProvider,
     FilterProvider,
+    FormControllerProvider,
     TxFormatProvider,
     UserAgent,
     ApiProvider,
@@ -165,7 +168,8 @@ import {
     CardPhasesProvider,
     MoonPayProvider,
     LiveChatProvider,
-    PdfProvider
+    PdfProvider,
+    WebExtensionsProvider
   ]
 })
 export class ProvidersModule {}

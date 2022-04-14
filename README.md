@@ -1,13 +1,13 @@
 # Ducatus Wallet 2.0(Copay)
 
 <p align="center">
-  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/DUCATUS-revival/ducatus-copay">
+  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/DucatusX/ducatus-copay">
   <a href="https://opensource.org/licenses/MIT/" target="_blank"><img alt="MIT License" src="https://img.shields.io/badge/License-MIT-blue.svg" style="display: inherit;"/></a>
-  <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/DUCATUS-revival/ducatus-copay">
+  <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/DucatusX/ducatus-copay">
 </p>
 
 Ducatus Wallet is a secure ducatus wallet platform for both desktop and mobile devices. 
-Ducatus Wallet uses [DucatusCore Wallet Service](https://github.com/DUCATUS-revival/ducatus-core/tree/master/packages/ducatus-bitcore-wallet-service) (DWS) 
+Ducatus Wallet uses [DucatusCore Wallet Service](https://github.com/DucatusX/ducatus-core/tree/master/packages/ducatus-bitcore-wallet-service) (DWS) 
 for peer synchronization and network interfacing.
 
 Ducatus Wallet is fork [Copay](https://github.com/bitpay/wallet).
@@ -33,12 +33,12 @@ Ducatus Wallet is fork [Copay](https://github.com/bitpay/wallet).
 
 ## Testing in a Browser
 
-> **Note:** This method should only be used for development purposes. When running Ducatus Wallet in a normal browser environment, browser extensions and other malicious code might have access to internal data and private keys. For production use, see the latest official [releases](https://github.com/DUCATUS-revival/ducatus-copay/releases).
+> **Note:** This method should only be used for development purposes. When running Ducatus Wallet in a normal browser environment, browser extensions and other malicious code might have access to internal data and private keys. For production use, see the latest official [releases](https://github.com/DucatusX/ducatus-copay/releases).
 
 Clone the repo and open the directory:
 
 ```sh
-git clone git@github.com:DUCATUS-revival/ducatus-copay.git
+git clone git@github.com:DucatusX/ducatus-copay.git
 cd copay
 ```
 
@@ -114,6 +114,26 @@ npm run prepare:copay
 npm run final:ios
 ```
 
+
+### Web extensions
+
+```sh
+  npm i 
+  npm run apply:copay
+```
+
+#### For Chrome
+
+```sh
+  npm run build:chrome-extension
+```
+
+#### For Firefox
+
+```sh
+  npm run build:firefox-extension
+```
+
 ### Push Notifications
 
 Push notification doesn't work on iOS 12 due to an update of Xcode and plugin `cordova-plugin-fcm`.
@@ -161,7 +181,7 @@ Ducatus Wallet uses the root `m/48'` for hardware multisignature wallets. This w
 
 ## DucatusCore Wallet Service
 
-Ducatus Wallet depends on [DucatusCore Wallet Service](https://github.com/DUCATUS-revival/ducatus-core/tree/master/packages/ducatus-bitcore-wallet-service) (DWS) for blockchain information, networking and wallet synchronization.
+Ducatus Wallet depends on [DucatusCore Wallet Service](https://github.com/DucatusX/ducatus-core/tree/master/packages/ducatus-bitcore-wallet-service) (DWS) for blockchain information, networking and wallet synchronization.
 
 ## Release Schedules
 
@@ -169,7 +189,7 @@ Ducatus uses the `MAJOR.MINOR.BATCH` convention for versioning. Any release that
 
 ## License
 
-Ducatus is released under the MIT License. Please refer to the [LICENSE](https://github.com/DUCATUS-revival/ducatus-copay/blob/master/LICENSE) file that accompanies this project for more information including complete terms and conditions.
+Ducatus is released under the MIT License. Please refer to the [LICENSE](https://github.com/DucatusX/ducatus-copay/blob/master/LICENSE) file that accompanies this project for more information including complete terms and conditions.
 
 
 Copyright 2022 Ducatus.

@@ -955,7 +955,9 @@ export class IncomingDataProvider {
   }
 
   public parseData(data: string): any {
+   
     if (!data) return;
+    
     if (this.isValidBitPayInvoice(data)) {
       return {
         data,
@@ -968,7 +970,6 @@ export class IncomingDataProvider {
         type: 'PayPro',
         title: this.translate.instant('Payment URL')
       };
-
       // Bitcoin URI
     } else if (this.isValidBitcoinUri(data)) {
       return {
@@ -976,7 +977,6 @@ export class IncomingDataProvider {
         type: 'BitcoinUri',
         title: this.translate.instant('Bitcoin URI')
       };
-
       // Bitcoin Cash URI
     } else if (this.isValidBitcoinCashUri(data)) {
       return {
@@ -984,7 +984,6 @@ export class IncomingDataProvider {
         type: 'BitcoinCashUri',
         title: this.translate.instant('Bitcoin Cash URI')
       };
-
       // Ducatus URI
     } else if (this.isValidDucatusUri(data)) {
       return {
@@ -992,21 +991,20 @@ export class IncomingDataProvider {
         type: 'DucatusUri',
         title: this.translate.instant('Ducatus URI')
       };
-      // DucatusX URI
+      // DucatusX URI 
     } else if(this.isValidDucatusXUri(data)){
       return{
         data,
-        type: 'DucatusUri',
-        title: this.translate.instant('DucatusX Uri')
+        type: 'DucatusXUri',
+        title: this.translate.instant('DucatusX URI')
       }
-      // Ethereum URI
+      // Ethereum URI 
     } else if (this.isValidEthereumUri(data)) {
       return {
         data,
         type: 'EthereumUri',
         title: this.translate.instant('Ethereum URI')
       };
-
       // Ripple URI
     } else if (this.isValidRippleUri(data)) {
       return {
@@ -1014,7 +1012,6 @@ export class IncomingDataProvider {
         type: 'RippleUri',
         title: this.translate.instant('Ripple URI')
       };
-
       // Bitcoin Cash URI using Bitcoin Core legacy address
     } else if (this.isValidBitcoinCashUriWithLegacyAddress(data)) {
       return {
@@ -1038,7 +1035,6 @@ export class IncomingDataProvider {
         type: 'BitcoinAddress',
         title: this.translate.instant('Bitcoin Address')
       };
-
       // Plain Address (Bitcoin Cash)
     } else if (this.isValidBitcoinCashAddress(data)) {
       return {
@@ -1046,7 +1042,6 @@ export class IncomingDataProvider {
         type: 'BitcoinCashAddress',
         title: this.translate.instant('Bitcoin Cash Address')
       };
-
       // Plain Address (Ducatus)
     } else if (this.isValidDucatusAddress(data)) {
       return {
@@ -1054,15 +1049,13 @@ export class IncomingDataProvider {
         type: 'DucatusAddress',
         title: this.translate.instant('Ducatus Address')
       };
-
-      // Plain Address (Ethereum)
+      // Plain Address (Ethereum same address DucatusX)
     } else if (this.isValidEthereumAddress(data)) {
       return {
         data,
         type: 'EthereumAddress',
-        title: this.translate.instant('Ethereum Address')
+        title: this.translate.instant('Address')
       };
-
       // Plain Address (Ripple)
     } else if (this.isValidRippleAddress(data)) {
       return {
@@ -1070,7 +1063,6 @@ export class IncomingDataProvider {
         type: 'RippleAddress',
         title: this.translate.instant('XRP Address')
       };
-
       // Coinbase
     } else if (this.isValidCoinbaseUri(data)) {
       return {
@@ -1078,7 +1070,6 @@ export class IncomingDataProvider {
         type: 'Coinbase',
         title: 'Coinbase URI'
       };
-
       // BitPayCard Authentication
     } else if (this.isValidBitPayCardUri(data)) {
       return {
@@ -1086,7 +1077,6 @@ export class IncomingDataProvider {
         type: 'BitPayCard',
         title: 'BitPay Card URI'
       };
-
       // BitPay  URI
     } else if (this.isValidBitPayUri(data)) {
       return {
@@ -1094,7 +1084,6 @@ export class IncomingDataProvider {
         type: 'BitPayUri',
         title: 'BitPay URI'
       };
-
       // Join
     } else if (this.isValidJoinCode(data) || this.isValidJoinLegacyCode(data)) {
       return {
@@ -1102,7 +1091,6 @@ export class IncomingDataProvider {
         type: 'JoinWallet',
         title: this.translate.instant('Invitation Code')
       };
-
       // Check Private Key
     } else if (this.isValidPrivateKey(data)) {
       return {
@@ -1110,7 +1098,6 @@ export class IncomingDataProvider {
         type: 'PrivateKey',
         title: this.translate.instant('Private Key')
       };
-
       // Import Private Key
     } else if (this.isValidImportPrivateKey(data)) {
       return {
@@ -1118,7 +1105,6 @@ export class IncomingDataProvider {
         type: 'ImportPrivateKey',
         title: this.translate.instant('Import Words')
       };
-
       // Anything else
     } else {
       return;

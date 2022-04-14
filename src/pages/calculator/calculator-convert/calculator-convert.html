@@ -5,12 +5,11 @@
         [reveal-at-scroll-pos]="expandableHeader.headerHeight"
         [scrollArea]="scrollArea"
       >
-        {{'Convert' | translate }}
+        {{ 'Convert' | translate }}
       </div>
     </ion-title>
   </ion-navbar>
 </ion-header>
-
 <ion-content #scrollArea>
   <expandable-header
     [scrollArea]="scrollArea"
@@ -22,78 +21,87 @@
       <expandable-header-primary></expandable-header-primary>
     </ion-toolbar>
   </expandable-header>
-
   <div page-content class="calculator-page">
     <ion-list class="calculator-list bp-list">
       <div class="calculator-explanation">
-        <div class="calculator-heading" translate>Convert</div>
+        <div class="calculator-heading" translate> Convert </div>
       </div>
-
       <div class="calculator-convert-type">
         <div class="calculator-convert-type-send">
-          <span>{{ formCoins.amountSend }}</span>
-          <ion-icon class="item-img icon-settings" item-start>
-            <img
-              src="assets/img/calculator/{{ coinInfo[formCoins.send] }}.svg"
-              width="30"
-            />
-          </ion-icon>
-          {{ formCoins.send }}
+          <div class="amount-info">
+            <span class="transaction-type"> PAY </span> 
+            <span>{{ formCoins.amountSend }}</span>
+          </div>
+          <div class="coin-info">
+            <ion-icon class="item-img icon-settings" item-start>
+              <img 
+                class="coin-info-img" 
+                src="assets/img/calculator/{{ coinInfo[formCoins.send] }}.svg"
+              />
+            </ion-icon>
+            <div class="coin-info-type">{{ formCoins.send }}</div>
+          </div>
         </div>
-
         <ion-icon class="item-img icon-settings" item-start>
-          <img src="assets/img/calculator/arrow-right.svg" width="22" />
+          <img 
+            class="arrow" 
+            src="assets/img/calculator/arrow-right.svg" 
+            width="22" 
+          />
         </ion-icon>
-
         <div class="calculator-convert-type-get">
-          <span>{{ formCoins.amountGet }}</span>
-          <ion-icon class="item-img icon-settings" item-start>
-            <img
-              src="assets/img/calculator/{{ coinInfo[formCoins.get] }}.svg"
-              width="30"
-            />
-          </ion-icon>
-          {{ formCoins.get }}
+          <div class="amount-info">
+            <span class="transaction-type"> GET </span> 
+            <span>{{ formCoins.amountGet }}</span>
+          </div>
+          <div class="coin-info">
+            <ion-icon class="item-img icon-settings" item-start>
+              <img 
+                class="coin-info-img" 
+                src="assets/img/calculator/{{ coinInfo[formCoins.get] }}.svg"
+              />
+            </ion-icon>
+            <div class="coin-info-type">{{ formCoins.get }}</div>
+          </div>
         </div>
       </div>
-
       <form >
-        <div class="calculator-convert-group" (click)="openAddressListSend(walletsInfoSend)">
-          <span class="calculator-convert-label"
-            >{{'Choose address to pay' | translate}}</span
-          >
+        <div 
+          class="calculator-convert-group" 
+          (click)="openAddressListSend(walletsInfoSend)"
+        >
+          <span class="calculator-convert-label">{{ 'Choose address to pay' | translate }}</span>
           <div class="calculator-convert-select">
-            <span *ngIf="!sendAddress" class="calculator-convert-select-placeholder">Select your address</span>
-            <div *ngIf="!fullSize" class="calculator-convert-select-address">{{sendAddress | shortenedAddress: 22}}</div>
-            <div *ngIf="fullSize" class="calculator-convert-select-address">{{sendAddress}}</div>
+            <span *ngIf="!sendAddress" class="calculator-convert-select-placeholder"> Select your address </span>
+            <div *ngIf="!fullSize" class="calculator-convert-select-address">{{ sendAddress | shortenedAddress: 22 }}</div>
+            <div *ngIf="fullSize" class="calculator-convert-select-address">{{ sendAddress }}</div>
             <div class="calculator-convert-select-icon">
               <ion-icon name="arrow-dropdown"></ion-icon>
             </div>
           </div>
         </div>
-
-
-        <div class="calculator-convert-group" [ngClass]="{active: !sendAddress}" (click)="openAddressListGet(walletsInfoGet)">
-          <span class="calculator-convert-label"
-            >{{'Choose address to get' | translate}}</span
-          >
+        <div 
+          class="calculator-convert-group" 
+          [ngClass]="{active: !sendAddress}" 
+          (click)="openAddressListGet(walletsInfoGet)"
+        >
+          <span class="calculator-convert-label">{{ 'Choose address to get' | translate }}</span>
           <div class="calculator-convert-select">
-            <span *ngIf="!sendAddress" class="calculator-convert-select-placeholder">Select your address</span>
-            <div *ngIf="!fullSize" class="calculator-convert-select-address">{{getAddress | shortenedAddress: 22}}</div>
-            <div *ngIf="fullSize" class="calculator-convert-select-address">{{getAddress}}</div>
+            <span *ngIf="!getAddress" class="calculator-convert-select-placeholder"> Select your address </span>
+            <div *ngIf="!fullSize" class="calculator-convert-select-address">{{ getAddress | shortenedAddress: 22 }}</div>
+            <div *ngIf="fullSize" class="calculator-convert-select-address">{{ getAddress }}</div>
             <div class="calculator-convert-select-icon">
               <ion-icon name="arrow-dropdown"></ion-icon>
             </div>
           </div>
         </div>
-
         <button
           ion-button
           class="button-standard calculator-button"
-          (click)="inizilizationOfSend()"
+          (click)="initializationOfSend()"
           [disabled]="(!sendAddress || !getAddress) || sendDisabled"
         >
-          {{'Send' | translate}}
+          {{ 'Send' | translate }}
         </button>
       </form>
     </ion-list>

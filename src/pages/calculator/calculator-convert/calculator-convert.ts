@@ -1,25 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { AlertController, NavParams } from 'ionic-angular';
-import {Platform} from 'ionic-angular';
+import { TranslateService } from '@ngx-translate/core';
+import { AlertController, NavParams, Platform } from 'ionic-angular';
 import * as _ from 'lodash';
 import env from '../../../environments';
-import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
-import { ApiProvider } from '../../../providers/api/api';
-import { ErrorsProvider } from '../../../providers/errors/errors';
-import { ProfileProvider } from '../../../providers/profile/profile';
-import { WalletProvider } from '../../../providers/wallet/wallet';
-
-
-import { TranslateService } from '@ngx-translate/core';
 import {
+  ActionSheetProvider,
+  ApiProvider,
   BwcErrorProvider,
+  Coin,
+  ErrorsProvider,
   IncomingDataProvider,
-  TxFormatProvider
+  Logger,
+  ProfileProvider,
+  TxFormatProvider,
+  WalletProvider
 } from '../../../providers';
-import { Logger } from '../../../providers/logger/logger';
-import { coinInfo } from '../calculator-parameters';
 
+import { coinInfo, ICoinInfo } from '../calculator-parameters';
 
 @Component({
   selector: 'page-calculator-convert',
@@ -27,23 +25,26 @@ import { coinInfo } from '../calculator-parameters';
 })
 export class CalculatorConvertPage {
   public formCoins: any = [];
-  public coinInfo = coinInfo;
+  public coinInfo: ICoinInfo = coinInfo;
 
   public walletsGroups: any[];
   public walletsChecker: boolean = false;
-  public walletsInfoGet;
-  public walletsInfoSend;
+
+  public walletsInfoGet: any;
+  public walletsInfoSend: any;
   public addresses: any;
   public typeOpenAddressList: any;
+
   public sendLength: number = 0;
-  public sendDisabled:boolean
+  public sendDisabled: boolean;
   public sendFirstAddress: any;
-  public sendAddress:string;
+  public sendAddress: string;
   public sendWallet: any;
-  public getAddress:string;
-  public getWallet:any;
+  public getAddress: string;
+  public getWallet: any;
   public wallet: any;
-  public fullSize:boolean
+
+  public fullSize: boolean;
 
   public isProduction: boolean;
 
@@ -63,54 +64,22 @@ export class CalculatorConvertPage {
     private alertCtrl: AlertController,
     private platform: Platform
   ) {
-    if (this.platform.width()>500){
-      this.fullSize = true
+
+    if (this.platform.width() > 500) {
+      this.fullSize = true;
     }
+
     this.formCoins.get = this.navParams.data.get;
     this.formCoins.send = this.navParams.data.send;
     this.formCoins.amountGet = this.navParams.data.amountGet;
     this.formCoins.amountSend = this.navParams.data.amountSend;
 
-    const mode: string = env && env.name;
+    const { name: mode } = env;
     this.isProduction = ( mode === 'production' );
   }
 
-  getLastKnownBalance(wallet, currency) {
-    return (
-      wallet.lastKnownBalance &&
-      wallet.lastKnownBalance.replace(` ${currency}`, '')
-    );
-  }
 
-  getBalance(wallet, currency) {
-    const lastKnownBalance = this.getLastKnownBalance(wallet, currency);
-    if (currency === 'XRP') {
-      const availableBalanceStr =
-        wallet.cachedStatus &&
-        wallet.cachedStatus.availableBalanceStr &&
-        wallet.cachedStatus.availableBalanceStr.replace(` ${currency}`, '');
-      return availableBalanceStr || lastKnownBalance;
-    } else {
-      const totalBalanceStr =
-        wallet.cachedStatus &&
-        wallet.cachedStatus.totalBalanceStr &&
-        wallet.cachedStatus.totalBalanceStr.replace(` ${currency}`, '');
-      return totalBalanceStr || lastKnownBalance;
-    }
-  }
-
-  ballanceStrToNumber(balance:string):number {
-    if (balance){
-      // ToValidStrDecimal
-      balance = balance.replace(/[\s,%]/g, '')
-      // toNumber
-      let balanceNum = parseFloat(balance);
-      return balanceNum;
-    }
-    else return 0
-  }
-
-  ionViewWillEnter() {
+  public ionViewWillEnter(): void {
     const wallets = this.profileProvider.getWallets({ showHidden: true });
 
     this.walletsGroups = _.values(
@@ -122,17 +91,19 @@ export class CalculatorConvertPage {
       )
     );
 
-    let walletsGet = this.getWalletsInfo(this.formCoins.get);
-    let walletsSend = this.getWalletsInfo(this.formCoins.send, 'send');
+    const walletsGet = this.getWalletsInfo(this.formCoins.get);
+    const walletsSend = this.getWalletsInfo(this.formCoins.send, 'send');
 
-    Promise.all([walletsGet, walletsSend]).then(results => {
-      this.walletsInfoGet = results[0];
-      this.walletsInfoSend = results[1];
-      this.walletsChecker = true;
-    });
+    Promise
+      .all([walletsGet, walletsSend])
+      .then(results => {
+        this.walletsInfoGet = results[0];
+        this.walletsInfoSend = results[1];
+        this.walletsChecker = true;
+      });
   }
 
-  private getWalletsInfo(coin, type?) {
+  private getWalletsInfo(coin, type?): any[] {
     let coins = [];
     let wallets = [];
     let walletsRes = [];
@@ -145,173 +116,159 @@ export class CalculatorConvertPage {
     });
 
     wallets = coins.map(wallet => {
-      return this.walletProvider.getAddress(wallet, false).then(address => {
-        return { wallet, address };
-      });
+      return this.walletProvider
+        .getAddress(wallet, false)
+        .then(address => {
+          return { wallet, address };
+        });
     });
 
     wallets.map(res => {
       res.then(result => {
         walletsRes.push(result);
       });
-      if (type == 'send') this.sendLength++;
-    });
 
-    // autosubstitution sendAddressInput
-    // if (type == 'send' && this.sendLength === 1) {
-    //   wallets.map(res => {
-    //     res.then(result => {
-    //       this.ConvertGroupForm.value.ConvertFormGroupAddressSendInput =
-    //         result.address;
-    //     });
-    //   });
-    // }
+      if (type == 'send') {
+        this.sendLength++;
+      }
+    });
 
     return walletsRes;
   }
 
-
   private viewWalletsError(message: string): void {
-    let alert = this.alertCtrl.create({
+    const alert = this.alertCtrl.create({
       cssClass: 'voucher-alert',
-      title:
-        '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+      title: '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
       message,
       buttons: [
-        {
-          text: 'Ok'
-        }
+        { text: 'Ok' }
       ]
     });
+
     alert.present();
   }
 
 
- openAddressListSend(wallets){
-  wallets = wallets.filter(elemWallets => {
-    let currency = elemWallets && elemWallets.wallet && elemWallets.wallet.coin.toUpperCase();
-    let walletBalance  = this.getBalance(elemWallets.wallet, currency);
-    walletBalance = this.ballanceStrToNumber(walletBalance);
-    let amountSend = parseFloat(this.formCoins.amountSend);
+  public openAddressListSend(wallets): void {
 
-    if (walletBalance >= amountSend) {
-      return true;
-    } else if (Number.isNaN(walletBalance)) {
+    wallets = wallets.filter(elemWallets => {
+      const currency: Coin = 
+        elemWallets && 
+        elemWallets.wallet && 
+        elemWallets.wallet.coin;
+
+      const walletBalanceSat: number = 
+        elemWallets && 
+        elemWallets.wallet && 
+        elemWallets.wallet.cachedStatus &&
+        elemWallets.wallet.cachedStatus.availableBalanceSat;
+
+      const walletBalanceUnit = Number(this.txFormatProvider.satToUnit(walletBalanceSat,currency));
+      const amountSend = parseFloat(this.formCoins.amountSend);
+
+      if (walletBalanceUnit >= amountSend) {
+        return true;
+      } 
+        
       return false;
-    } else {
+    });
+
+    if (wallets.length == 0) {
+      this.viewWalletsError('You do not have suitable wallets');
+    
+      return;
+    }
+
+    const infoSheet = this.actionSheetProvider.createInfoSheet(
+      'convertor-address',
+      { wallet: wallets }
+    );
+    
+    infoSheet.present();
+    
+    infoSheet.onDidDismiss((option,item) => {
+      this.sendWallet = item;
+      this.sendAddress = option;
+      this.getAddress = '';
+    });
+  }
+
+  openAddressListGet(wallets): void {
+    if (!this.sendAddress) {
+      return;
+    }
+
+    wallets = wallets.filter( elemWallets => {
+      if (elemWallets.wallet.network === this.sendWallet.wallet.network) {
+        return true;
+      } 
+
       return false;
-    }
-  });
+    });
 
-  if (wallets.length == 0)
-  {
-    this.viewWalletsError('You do not have suitable wallets');
-    return;
+    if (wallets.length == 0) {
+      this.viewWalletsError('You do not have suitable wallets');
+      
+      return;
+    }
+
+    const infoSheet = this.actionSheetProvider.createInfoSheet(
+      'convertor-address',
+      { wallet: wallets }
+    );
+    infoSheet.present();
+    infoSheet.onDidDismiss((option,item) => {
+      this.getAddress = option;
+      this.getWallet = item.wallet;
+    });
   }
 
-  const infoSheet = this.actionSheetProvider.createInfoSheet(
-    'convertor-address',
-    { wallet: wallets }
-  );
-   infoSheet.present();
-   infoSheet.onDidDismiss((option,item)=>{
-    this.sendWallet = item
-    this.sendAddress = option
-    this.getAddress = ''
-  })
-
-}
-
-
- openAddressListGet(wallets){
-   if (!this.sendAddress){
-     return;
-   }
-
-
-  wallets = wallets.filter(elemWallets=>{
-    if (elemWallets.wallet.network === this.sendWallet.wallet.network) {
-      return true
+  public setAddress(type): void {
+    const address = this.getAddress;
+    
+    if (
+      type === 'DUC' &&
+      address.length === 34 &&
+      ['L', 'l', 'M', 'm','n','N'].includes(address.substring(0, 1))
+    ) {
+      this.getAddresses();
     }
-    else {
-      return false
+  
+    if (type === 'DUCX') {
+      if (address.length === 42) {
+        this.getAddresses();
+      }
     }
-  })
 
-  if (wallets.length == 0){
-    this.viewWalletsError('You do not have suitable wallets');
-    return;
-  }
-
-  const infoSheet = this.actionSheetProvider.createInfoSheet(
-    'convertor-address',
-    { wallet: wallets }
-  );
-  infoSheet.present();
-  infoSheet.onDidDismiss((option,item)=>{
-    this.getAddress = option;
-    this.getWallet = item.wallet;
-  })
-}
-
-
- public  setAddress(type) {
-   // address validation check
-   
-  const address = this.getAddress;
-  if (
-    type === 'DUC' &&
-    address.length === 34 &&
-    ['L', 'l', 'M', 'm','n','N'].includes(address.substring(0, 1))
-  ) {
-    this.getAddresses();
-  }
- 
-  if (type === 'DUCX') {
-    if (address.length === 42) {
+    if (type === 'WDUCX') {
       this.getAddresses();
     }
   }
 
-  if (type === 'WDUCX') {
-    this.getAddresses();
-  }
-}
-
-  public getAddresses() {
-    // get the address to which we will send
+  public getAddresses(): void {
     this.getExchange(
       this.getAddress,
       this.formCoins.get
     )
       .then(result => {
-        // if we get address
-        this.addresses = result
-        this.goToSendPage()
+        this.addresses = result;
+        this.goToSendPage();
       })
       .catch(err => {
-        // if we don't get address
-        this.sendDisabled = false
+        this.sendDisabled = false;
         this.logger.debug('cant get addresses: ', err);
-        const infoSheet = this.actionSheetProvider.createInfoSheet('cant-get-addresses')
+        const infoSheet = this.actionSheetProvider.createInfoSheet('cant-get-addresses');
+        
         infoSheet.present();
       });
   }
 
-  public getExchange(address: string, currency: string) {
-    let network;
-    if (this.sendWallet.wallet.network==='livenet'){
-      network = "livenet"
-    }
-    else {
-      network = "testnet"
-    }
-
-    // testnet -> devApi
-    // livenet -> prodApi
+  public getExchange(address: string, currency: string): Promise<object> {
+    let network: string = this.sendWallet.wallet.network;
     
     return this.httpClient
-      .post(
+      .post<object>(
         this.apiProvider.getAddresses().getExchange[network] + '/api/v1/exchange/',
         {
           to_address: address,
@@ -327,68 +284,65 @@ export class CalculatorConvertPage {
 
       if (coin === 'Binance') {
         status = /^0x[a-fA-F0-9]{40}$/.test(address);
-        if (status) resolve(true);
+        
+        if (status) {
+          resolve(true);
+        }
       }
 
-      if (!status)
+      if (!status) {
         this.errorsProvider.showDefaultError(
           this.bwcErrorProvider.msg(`${coin} address is not valid`),
           this.translate.instant('Error')
         );
+      }
 
       resolve(false);
     });
   }
 
-  public inizilizationOfSend(){
-    this.sendDisabled = true
-    this.setAddress(this.getWallet.coin.toUpperCase())
+  public initializationOfSend(): void {
+    this.sendDisabled = true;
+    this.setAddress(this.getWallet.coin.toUpperCase());
   }
 
-  public async goToSendPage() {
+  public async goToSendPage(): Promise<void> {
     const dataInfo = {};
-
     const getAddress = this.getAddress as string;
 
-    // Validate addresses
     if (this.formCoins.get.toLowerCase() === 'wducx') {
       const cha = await this.checkAddress(getAddress, 'Binance');
-      if (!cha) return;
+      
+      if (!cha) {
+        return;
+      }
     }
     
-    this.wallet = this.sendWallet.wallet
+    this.wallet = this.sendWallet.wallet;
 
-    // Getting all data
-    let coin = this.formCoins.get.toLowerCase()
+    const coin = this.formCoins.get.toLowerCase();
 
-        if (this.formCoins.get.toLowerCase() === 'wducx'){
-          dataInfo[coin] = await this.getDucxWduxSwapInfo()
-        }
-        else {
-          dataInfo[coin] = {
-            swap_address:
-              this.addresses[this.formCoins.send.toLowerCase() + '_address'] ||
-              getAddress
-          }
-        }
+    if (this.formCoins.get.toLowerCase() === 'wducx') {
+      dataInfo[coin] = await this.getDucxWduxSwapInfo();
+    } else {
+      dataInfo[coin] = {
+        swap_address:
+          this.addresses[this.formCoins.send.toLowerCase() + '_address']
+          || getAddress
+      };
+    }
 
-    // console.log('data ADDRESS', dataInfo);
-    // Getting addresses from all data
     const dataAddress = dataInfo;
 
     if (this.formCoins.get.toLowerCase() === 'wducx') {
-      dataAddress['wducx'] = dataInfo['wducx'].find(
-        i => i.network === 'Ducatusx'
-      );
+      dataAddress['wducx'] = dataInfo['wducx']
+        .find(i => i.network === 'Ducatusx');
     }
-
     // ! ATTENTION
     // * dataAddress Must have swap_address parameter
     // * ex: dataAddress['YOUR_COIN'].swap_address
-
     this.logger.log('dataInfo:', dataInfo, dataAddress);
-
-    // const address = dataAddress[this.formCoins.get.toLowerCase()].swap_address;
+    // Why? This code not work. Check this code place.
     this.formCoins.get.toLowerCase() === 'wdux'
       ? dataInfo['wdux'].find(i => i.network === 'DucatusX').swap_address
       : this.addresses[this.formCoins.send.toLowerCase() + '_address'] ||
@@ -427,21 +381,20 @@ export class CalculatorConvertPage {
     };
 
     if (this.formCoins.get === 'WDUCX') {
-      // redirParms.tokenAddress = this.apiProvider.getAddresses().swap.address;
       redirParms.tokenAddress = dataAddress['wducx'].swap_address;
       redirParms.wDucxAddress = getAddress;
     }
 
     if (
-      this.formCoins.send.toLowerCase() === 'duc' &&
-      this.formCoins.get.toLowerCase() === 'ducx'
+      this.formCoins.send.toLowerCase() === 'duc' 
+      && this.formCoins.get.toLowerCase() === 'ducx'
     ) {
       this.checkTransitionLimitDucToDucx(
         getAddress,
         parseInt(Number(parsedAmount.amount).toLocaleString('fullwide', { useGrouping: false }), 10)
       )
         .then(() => {
-          this.sendDisabled = false
+          this.sendDisabled = false;
           this.incomingDataProvider.redir(addressView, redirParms);
         })
         .catch(err => {
@@ -450,11 +403,15 @@ export class CalculatorConvertPage {
           this.errorsProvider.showDefaultError(err, title);
         });
     } else if (
-      this.formCoins.send.toLowerCase() === 'ducx' &&
-      this.formCoins.get.toLowerCase() === 'wducx'
+      this.formCoins.send.toLowerCase() === 'ducx'
+      && this.formCoins.get.toLowerCase() === 'wducx'
     ) {
       Promise.all([
-        this.checkTransitionLimitDucxToWDucx(parseInt(Number(parsedAmount.amount).toLocaleString('fullwide', { useGrouping: false }), 10)),
+        this.checkTransitionLimitDucxToWDucx(
+          parseInt(
+            Number(parsedAmount.amount).toLocaleString('fullwide', { useGrouping: false }), 10
+          )
+        ),
         this.checkMinimalSwapDucxToWducx(
           parseInt(Number(parsedAmount.amount).toLocaleString('fullwide', { useGrouping: false }), 10),
           dataInfo['wducx'].min_amount
@@ -483,57 +440,27 @@ export class CalculatorConvertPage {
       .toPromise();
   }
 
-  private checkMaxSwapDucxToWducx(amountSend, maxAmount): Promise<any> {
+  private checkMaxSwapDucxToWducx(amountSend: number | string, maxAmount: number | string): Promise<void> {
     return new Promise<void>(resolve => {
-      // console.log('MAX', maxAmount, amountSend);
       if (+maxAmount < +amountSend) {
         throw new Error(`Maximun swap limit is ${+maxAmount || 5000} DUCX`);
-        // reject('Minimal swap limit is 100 DUCX');
-      } else {
-        resolve();
       }
+      
+      resolve();
     });
-
-    // return this.httpClient
-    //   .get(this.apiProvider.getAddresses().swap.network)
-    //   .toPromise()
-    //   .then(res => {
-    //     if (res[0].min_amount > amountSend) {
-    //       throw new Error('Minimal swap limit is 100 DUCX');
-    //     } else {
-    //       return;
-    //     }
-    //   })
-    //   .catch(() => {
-    //     throw new Error('Minimal swap limit is 100 DUCX');
-    //   });
   }
-  private checkMinimalSwapDucxToWducx(amountSend, minimalAmount): Promise<any> {
+
+  private checkMinimalSwapDucxToWducx(amountSend: number | string, minimalAmount: number | string): Promise<void> {
     return new Promise<void>(resolve => {
       if (+minimalAmount > +amountSend) {
         throw new Error('Minimal swap limit is 100 DUCX');
-        // reject('Minimal swap limit is 100 DUCX');
-      } else {
-        resolve();
-      }
-    });
+      } 
 
-    // return this.httpClient
-    //   .get(this.apiProvider.getAddresses().swap.network)
-    //   .toPromise()
-    //   .then(res => {
-    //     if (res[0].min_amount > amountSend) {
-    //       throw new Error('Minimal swap limit is 100 DUCX');
-    //     } else {
-    //       return;
-    //     }
-    //   })
-    //   .catch(() => {
-    //     throw new Error('Minimal swap limit is 100 DUCX');
-    //   });
+      resolve();
+    });
   }
 
-  private checkTransitionLimitDucxToWDucx(amountSend) {
+  private checkTransitionLimitDucxToWDucx(amountSend: number): Promise<void> {
     return this.httpClient
       .get(this.apiProvider.getAddresses().swap.bsc)
       .toPromise()
@@ -553,20 +480,20 @@ export class CalculatorConvertPage {
       });
   }
 
-  private checkTransitionLimitDucToDucx(getAddress, amountSend) {
-    const network = this.sendWallet.wallet.network
+  private checkTransitionLimitDucToDucx(getAddress: string, amountSend: number): Promise<void> {
+    const network = this.sendWallet.wallet.network;
+    
     return this.httpClient
       .post(
         this.apiProvider.getAddresses().getExchange[network] + '/api/v1/transfers/',
-        {
-          address: getAddress
-        }
+        { address: getAddress }
       )
       .toPromise()
       .then(res => {
         const DECIMALS = 1e8;
         const dailyAvailable = res['daily_available'] / DECIMALS;
         const weeklyAvailable = res['weekly_available'] / DECIMALS;
+        
         if (dailyAvailable < amountSend) {
           throw new Error(
             'Daily DUCX swap limit is 25000 DUC. This day you can swap no more than ' +
@@ -584,4 +511,5 @@ export class CalculatorConvertPage {
         }
       });
   }
+  
 }
