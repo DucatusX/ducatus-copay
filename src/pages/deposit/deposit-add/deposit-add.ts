@@ -106,9 +106,7 @@ export class DepositAddPage {
       cssClass: 'voucher-alert',
       title: '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
       message,
-      buttons: [
-        { text: 'Ok' }
-      ]
+      buttons: [{ text: 'Ok' }]
     });
 
     alert.present();
@@ -150,15 +148,14 @@ export class DepositAddPage {
     }
 
     const amountWithPercentValue = (
-      amount *
-      (parseFloat(this.DepositGroup.value.Percent) / 100) *
-      (parseFloat(this.DepositGroup.value.Month) / 12)
+      amount
+      * (parseFloat(this.DepositGroup.value.Month) / 12)
     ).toFixed(4);
 
     this.amountWithPercent = amountWithPercentValue;
   }
 
-  public openAddressList() {
+  public openAddressList(): void {
 
     if ( !this.depositLoading ) {
       const infoSheet = this.actionSheetProvider.createInfoSheet(
@@ -186,12 +183,8 @@ export class DepositAddPage {
 
   public async sendMax(): Promise<void> {
     const { token } = this.wallet.wallet.credentials;
-
-    const amount = await this.walletProvider.getBalance(this.wallet.wallet, {
-        tokenAddress: token 
-          ? token.address 
-          : ''
-    });
+    const tokenAddress = token && token.address || '';
+    const amount = await this.walletProvider.getBalance(this.wallet.wallet, { tokenAddress });
 
     this.maxAmount = amount.availableAmount / 100000000;
     this.useSendMax = true;
@@ -280,9 +273,7 @@ export class DepositAddPage {
         title: '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
         text: 'Needs Backup',
         button: 'OK',
-        handler: () => {
-          this.navCtrl.pop();
-        },
+        handler: () => { this.navCtrl.pop(); },
         enableBackdropDismiss: false
       }
     };
