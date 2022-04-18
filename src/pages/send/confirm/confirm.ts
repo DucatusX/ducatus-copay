@@ -356,7 +356,7 @@ export class ConfirmPage {
       this.wallet &&
       (this.wallet.network == network && this.wallet.coin == coin)
     ) {
-      return Promise.resolve();
+      return Promise.resolve(null);
     }
 
     this.wallets = this.profileProvider.getWallets({
@@ -373,7 +373,7 @@ export class ConfirmPage {
       const title = this.translate.instant('No wallets available');
       return Promise.reject({ msg, title });
     }
-    return Promise.resolve();
+    return Promise.resolve(null);
   }
 
   /* sets a wallet on the UI, creates a TXPs for that wallet */
@@ -519,7 +519,7 @@ export class ConfirmPage {
 
       // End of quick refresh, before wallet is selected.
       if (!wallet) {
-        return resolve();
+        return resolve(null);
       }
 
       this.onGoingProcessProvider.set('calculatingFee');
@@ -562,35 +562,45 @@ export class ConfirmPage {
             tx.feeLevelName = feeOpts[tx.feeLevel];
             tx.feeRate = feeRate;
           }
-
           // call getSendMaxInfo if was selected from amount view
           if (tx.sendMax && this.isChain()) {
             this.useSendMax(tx, wallet, opts)
               .then(() => {
-                return resolve();
+                return resolve(null);
               })
               .catch(err => {
                 return reject(err);
               });
-          } else if (tx.speedUpTx && this.isChain()) {
+          } 
+          else if (tx.sendMax) {
+            this.useSendMaxToken(tx, wallet, opts)
+              .then(() => {
+                return resolve(null);
+              })
+              .catch(err => {
+                return reject(err);
+              });
+          }
+          else if (tx.speedUpTx && this.isChain()) {
             this.speedUpTx(tx, wallet, opts)
               .then(() => {
-                return resolve();
+                return resolve(null);
               })
               .catch(err => {
                 return reject(err);
               });
-          } else {
+          } 
+          else {
             // txp already generated for this wallet?
             if (tx.txp[wallet.id]) {
               this.onGoingProcessProvider.clear();
-              return resolve();
+              return resolve(null);
             }
 
             this.buildTxp(tx, wallet, opts)
               .then(() => {
                 this.onGoingProcessProvider.clear();
-                return resolve();
+                return resolve(null);
               })
               .catch(err => {
                 this.onGoingProcessProvider.clear();
@@ -617,7 +627,7 @@ export class ConfirmPage {
               this.showErrorInfoSheet(
                 this.translate.instant('Not enough funds for fee')
               );
-              return resolve();
+              return resolve(null);
             }
             tx.sendMaxInfo = sendMaxInfo;
             tx.amount = tx.sendMaxInfo.amount;
@@ -626,12 +636,12 @@ export class ConfirmPage {
           this.showWarningSheet(wallet, sendMaxInfo);
           // txp already generated for this wallet?
           if (tx.txp[wallet.id]) {
-            return resolve();
+            return resolve(null);
           }
 
           this.buildTxp(tx, wallet, opts)
             .then(() => {
-              return resolve();
+              return resolve(null);
             })
             .catch(err => {
               return reject(err);
@@ -646,6 +656,29 @@ export class ConfirmPage {
     });
   }
 
+  private useSendMaxToken(tx, wallet, opts): Promise<void> {
+    return new Promise((resolve, reject) => {
+      tx.amount = this.getSendMaxAmountToken();
+      this.getAmountDetails();
+  
+      // txp already generated for this wallet?
+      if (tx.txp[wallet.id]) {
+        this.onGoingProcessProvider.clear();
+        return resolve(null);
+      }
+
+      this.buildTxp(tx, wallet, opts)
+        .then(() => {
+          this.onGoingProcessProvider.clear();
+          return resolve(null);
+        })
+        .catch(err => {
+          this.onGoingProcessProvider.clear();
+          return reject(err);
+        });
+    });
+  }
+
   public speedUpTx(tx, wallet, opts) {
     return this.getSpeedUpTxInfo(_.clone(tx), wallet)
       .then(speedUpTxInfo => {
@@ -656,7 +689,7 @@ export class ConfirmPage {
             this.showErrorInfoSheet(
               this.translate.instant('Not enough funds for fee')
             );
-            return Promise.resolve();
+            return Promise.resolve(null);
           }
           tx.speedUpTxInfo = speedUpTxInfo;
         }
@@ -727,7 +760,7 @@ export class ConfirmPage {
               ' Txp:' +
               txp.id
           );
-          return resolve();
+          return resolve(null);
         })
         .catch(err => {
           if (err.message == 'Insufficient funds') {
@@ -741,7 +774,7 @@ export class ConfirmPage {
 
   private getSendMaxInfo(tx, wallet): Promise<any> {
     return new Promise((resolve, reject) => {
-      if (!tx.sendMax) return resolve();
+      if (!tx.sendMax) return resolve(null);
 
       this.onGoingProcessProvider.set('retrievingInputs');
       this.walletProvider
@@ -762,8 +795,14 @@ export class ConfirmPage {
     });
   }
 
+  private getSendMaxAmountToken(): number {
+    let maxAmountToken = this.wallet.cachedStatus.availableBalanceSat;
+    
+    return maxAmountToken;
+  }
+
   private getSpeedUpTxInfo(tx, wallet): Promise<any> {
-    if (!tx.speedUpTx) return Promise.resolve();
+    if (!tx.speedUpTx) return Promise.resolve(null);
 
     this.onGoingProcessProvider.set('retrievingInputs');
     return this.walletProvider
