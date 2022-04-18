@@ -397,7 +397,7 @@ export class WalletsPage {
       .getData()
       .then(async data => {
         this.validDataFromClipboard = this.incomingDataProvider.parseData(data);
-
+        
         if (!this.validDataFromClipboard) {
           return;
         }
