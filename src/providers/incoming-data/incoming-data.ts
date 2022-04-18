@@ -168,8 +168,8 @@ export class IncomingDataProvider {
 
   private isValidRippleUri(data: string): boolean {
     data = this.sanitizeUri(data);
-
-    return !Boolean(this.bwcProvider.getCore().Validation.validateUri('XRP', data));
+    
+    return Boolean(this.bwcProvider.getCore().Validation.validateUri('XRP', data));
   }
 
   public isValidBitcoinCashUriWithLegacyAddress(data: string): boolean {
@@ -238,7 +238,7 @@ export class IncomingDataProvider {
   private isValidCoinbaseUri(data: string): boolean {
     data = this.sanitizeUri(data);
 
-    return !Boolean(
+    return Boolean(
       data 
       && data.indexOf(this.appProvider.info.name + '://coinbase') === 0
     );
@@ -1151,7 +1151,7 @@ export class IncomingDataProvider {
   }
 
   public parseData(data: string): any {
-   
+    
     if (!data) return;
     
     if (this.isValidBitPayInvoice(data)) {
