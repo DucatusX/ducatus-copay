@@ -78,6 +78,7 @@ export class ConfirmPage {
   public coin: Coin;
   public appName: string;
   public merchantFeeLabel: string;
+  public addressFrom: string;
 
   // Config Related values
   public config;
@@ -162,7 +163,7 @@ export class ConfirmPage {
 
   private updateDestinationTag: any = data => {
     this.tx.destinationTag = data.value;
-  };
+  }
 
   ionViewDidLoad() {
     this.logger.info('Loaded: ConfirmPage');
@@ -172,6 +173,7 @@ export class ConfirmPage {
     let networkName;
     let amount;
     this.setTitle();
+    this.getAddressFrom();
 
     if ( 
       !this.navParams.data.network 
@@ -310,6 +312,12 @@ export class ConfirmPage {
     } else {
       this.mainTitle = this.translate.instant('Confirm Payment');
     }
+  }
+
+  private async getAddressFrom(): Promise<void> {
+    await this.walletProvider.getAddress(this.wallet, false).then( address => {
+      this.addressFrom = address;
+    });
   }
 
   private getAmountDetails() {
@@ -1179,7 +1187,7 @@ export class ConfirmPage {
               return;
             }
             this.publishAndSign(txp, wallet);
-          })
+          });
       })
       .catch(err => {
         this.onGoingProcessProvider.clear();
@@ -1403,7 +1411,7 @@ export class ConfirmPage {
       clearCache: true,
       dryRun: true
     }).catch(err => {
-      this.showErrorInfoSheet(err)
+      this.showErrorInfoSheet(err);
       this.logger.warn('Error updateTx', err);
     });
   }
