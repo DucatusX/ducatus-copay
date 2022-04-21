@@ -795,7 +795,6 @@ export class WalletProvider {
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let res = [];
-
       const result = {
         res,
         shouldContinue: res.length >= limit
@@ -811,7 +810,7 @@ export class WalletProvider {
         },
         (err: Error, txsFromServer) => {
           if (err) return reject(err);
-
+        
           if (_.isEmpty(txsFromServer)) return resolve(result);
 
           res = _.takeWhile(txsFromServer, tx => {
@@ -883,7 +882,21 @@ export class WalletProvider {
           fixTxsUnit(txsFromLocal);
 
           const confirmedTxs = this.removeAndMarkSoftConfirmedTx(txsFromLocal);
-          const endingTxid = confirmedTxs[0] ? confirmedTxs[0].txid : null;
+          let endingTxid = confirmedTxs[0] 
+            ? confirmedTxs[0].txid 
+            : null;
+
+          for (let i = 0; i < confirmedTxs.length; i++) {
+            const tx = confirmedTxs[i];
+
+            if (
+              tx.swap 
+              && tx.swap.status !== 'Success' 
+              && confirmedTxs[i + 1] 
+            ) {
+              endingTxid = confirmedTxs[i + 1];
+            }
+          }
           const endingTs = confirmedTxs[0] ? confirmedTxs[0].time : null;
           // First update
           WalletProvider.progressFn[walletId](txsFromLocal, 0);
@@ -893,7 +906,7 @@ export class WalletProvider {
             walletId: wallet.id,
             complete: false
           });
-
+         
           const getNewTxs = (
             newTxs,
             skip: number,
