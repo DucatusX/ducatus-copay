@@ -744,7 +744,7 @@ export class WalletDetailsPage {
     this.walletProvider.getAddress(this.wallet, false).then(addr => {
       this.navCtrl.push(AmountPage, {
         toAddress: addr,
-        id: this.wallet.credentials.walletId,
+        walletId: this.wallet.credentials.walletId,
         recipientType: 'wallet',
         name: this.wallet.name,
         color: this.wallet.color,
