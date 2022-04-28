@@ -248,16 +248,72 @@ export class DepositPage {
   }
 
   public async withdraw(id: number): Promise<void> {
-    const address = `${this.apiProvider.getAddresses().deposit}user/deposits/${id}/withdraw/`;
-    
-    try {
-      const res = await this.httpClient.post(address,'').toPromise();
+    const deposit = this.deposits.find(element => element.id === id);
+    const startNewDepositDate = new Date(); //TO DO
 
-      this.showModal('alreadyActivated',id);
-      this.logger.debug(res);
-    } catch(error) {
-      this.logger.debug(error);
-      this.showModal('network');
+    if (deposit.createdAt >= startNewDepositDate ) { //TO DO
+      const address = `${this.apiProvider.getAddresses().deposit}user/deposits/${id}/withdraw/`;
+    
+      try {
+        const res = await this.httpClient.post(address,'').toPromise();
+  
+        this.showModal('alreadyActivated',id);
+        this.logger.debug(res);
+      } catch(error) {
+        this.logger.debug(error);
+        this.showModal('network');
+      }
+    } else {
+      this.getDeposit(id)
+        .then(async (deposit: any) => {
+          deposit.cltv_details.sending_amount = deposit.depositinput_set[0].amount - deposit.tx_fee;
+          deposit.cltv_details.tx_hash = deposit.depositinput_set[0].mint_tx_hash;
+          deposit.cltv_details.vout_number = deposit.depositinput_set[0].tx_vout;
+          deposit.cltv_details.user_duc_address = deposit.user_duc_address;
+
+          const addressFilter = this.wallets.find(wallet => 
+            wallet.address === deposit.cltv_details.user_duc_address
+          );
+
+          const walletToUnfreeze = addressFilter
+            ? addressFilter.wallet
+            : this.wallets.find(wallet => 
+                wallet.wallet.credentials.walletId === deposit.wallet_id
+              ).wallet;
+
+          const txHex = await this.walletProvider.signFreeze(
+            walletToUnfreeze,
+            deposit.cltv_details,
+            Boolean(addressFilter)
+          );
+
+          this.sendTX(txHex)
+            .then(() => {
+              this.showModal('success', id, deposit.duc_amount);
+            })
+            .catch(err => {
+              err.error.detail === '-27: transaction already in block chain'
+                ? this.showModal('alreadyActivated', id)
+                : this.showModal('network', id);
+            });
+        });
     }
   }
+
+  private getDeposit(id) {
+    const address = `${this.apiProvider.getAddresses().oldDeposit}get_deposit_info/?deposit_id=${id}`;
+
+    return this.httpClient
+      .get(address)
+      .toPromise();
+  }
+
+  private sendTX(raw_tx_hex) {
+    const address = `${this.apiProvider.getAddresses().oldDeposit}send_deposit_transaction/`;
+
+    return this.httpClient
+      .post(address, { raw_tx_hex })
+      .toPromise();
+  }
+
 }

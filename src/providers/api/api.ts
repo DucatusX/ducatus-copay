@@ -10,6 +10,7 @@ export class ApiProvider {
       pog: 'https://d-pog.com',
       ratesApi: 'https://rates.ducatuscoins.com/api/v1/rates/',
       deposit: 'https://www.ducatuscoins.com/api/v5/',
+      oldDeposit: 'https://www.ducatuscoins.com/api/v5/',
       nftSeed: 'https://nft.goldxb.com/api/v1/nfts/',
       getExchange:{
         livenet: "https://www.ducatuscoins.com",
@@ -29,6 +30,7 @@ export class ApiProvider {
       pog: 'https://devgold.rocknblock.io',
       ratesApi: 'https://ducexpl.rocknblock.io/api/v1/rates/',
       deposit: 'https://dev-vouchers.rocknblock.io/api/v1/',
+      oldDeposit: 'https://dev-vouchers.rocknblock.io/api/v1/',
       nftSeed: 'https://dev-seed.rocknblock.io/api/v1/nfts/',
       getExchange:{
         livenet: "https://www.ducatuscoins.com",
