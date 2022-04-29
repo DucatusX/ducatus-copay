@@ -118,7 +118,6 @@ export class HomePage {
     this.totalBalanceAlternativeIsoCode =
       config.wallet.settings.alternativeIsoCode;
     this.setMerchantDirectoryAdvertisement();
-    // this.showNewDesignSlides();
     this.showSurveyCard();
     this.checkFeedbackInfo();
     this.showTotalBalance = config.totalBalance.show;
@@ -126,9 +125,6 @@ export class HomePage {
     if (this.platformProvider.isElectron) this.checkNewRelease();
     this.showCoinbase = !!config.showIntegration['coinbase'];
     this.setIntegrations();
-    // this.fetchAdvertisements();
-    // await this.setDiscountedCard();
-    // this.fetchDiscountAdvertisements();
 
     this.doRefresh();
   }
@@ -321,57 +317,6 @@ export class HomePage {
       });
   }
 
-  // private async setDiscountedCard(): Promise<void> {
-  //   this.discountedCard = await this.getDiscountedCard();
-  //   this.discountedCard && this.addGiftCardDiscount(this.discountedCard);
-  // }
-
-  // private async getDiscountedCard(): Promise<CardConfig> {
-  //   const availableCards = await this.giftCardProvider.getAvailableCards();
-  //   const discountedCard = availableCards.find(cardConfig =>
-  //     hasVisibleDiscount(cardConfig)
-  //   );
-  //   return discountedCard;
-  // }
-
-  // private addGiftCardDiscount(discountedCard: CardConfig) {
-  //   const discount = discountedCard.discounts[0];
-  //   const discountText =
-  //     discount.type === 'flatrate'
-  //       ? `${this.formatCurrencyPipe.transform(
-  //           discount.amount,
-  //           discountedCard.currency,
-  //           'minimal'
-  //         )}`
-  //       : `${discount.amount}%`;
-  //   const advertisementName = getGiftCardAdvertisementName(discountedCard);
-  //   const alreadyVisible = this.advertisements.find(
-  //     a => a.name === advertisementName
-  //   );
-  //   !alreadyVisible &&
-  //     this.advertisements.unshift({
-  //       name: advertisementName,
-  //       title: `${discountText} off ${discountedCard.displayName}`,
-  //       body: `Save ${discountText} off ${
-  //         discountedCard.displayName
-  //       } gift cards. Limited time offer.`,
-  //       app: 'bitpay',
-  //       linkText: 'Buy Now',
-  //       link: BuyCardPage,
-  //       linkParams: { cardConfig: discountedCard },
-  //       dismissible: true,
-  //       imgSrc: discountedCard.icon
-  //     });
-  // }
-
-  // private async fetchGiftCardDiscount() {
-  //   const availableCards = await this.giftCardProvider.getAvailableCards();
-  //   const discountedCard = availableCards.find(cardConfig =>
-  //     hasVisibleDiscount(cardConfig)
-  //   );
-  //   discountedCard && this.addGiftCardDiscount(discountedCard);
-  // }
-
   public doRefresh(refresher?): void {
     this.exchangeRates.getPrices();
     this.fetchAdvertisements();
@@ -425,11 +370,6 @@ export class HomePage {
     this.externalLinkProvider.open(url);
   }
 
-  // private async fetchDiscountAdvertisements(): Promise<void> {
-  // await this.fetchGiftCardDiscount();
-  // this.logPresentedWithGiftCardDiscountEvent();
-  // }
-
   private fetchAdvertisements(): void {
     this.advertisements.forEach(advertisement => {
       if (
@@ -455,22 +395,6 @@ export class HomePage {
     });
   }
 
-  // logPresentedWithGiftCardDiscountEvent() {
-  //   const giftCardDiscount = this.advertisements.find(a =>
-  //     a.name.includes('gift-card-discount')
-  //   );
-  //   const isCurrentSlide = !this.slides || this.slides.getActiveIndex() === 0;
-  //   giftCardDiscount &&
-  //     isCurrentSlide &&
-  //     this.giftCardProvider.logEvent(
-  //       'presentedWithGiftCardDiscount',
-  //       this.giftCardProvider.getDiscountEventParams(
-  //         this.discountedCard,
-  //         'Home Tab Advertisement'
-  //       )
-  //     );
-  // }
-
   public dismissAdvertisement(advertisement): void {
     this.logger.debug(`Advertisement: ${advertisement.name} dismissed`);
     this.persistenceProvider.setAdvertisementDismissed(advertisement.name);
@@ -491,15 +415,6 @@ export class HomePage {
     } else {
       this.navCtrl.push(page, params);
     }
-    // if (page === BuyCardPage) {
-    //   this.giftCardProvider.logEvent(
-    //     'clickedGiftCardDiscount',
-    //     this.giftCardProvider.getDiscountEventParams(
-    //       params.cardConfig,
-    //       'Home Tab Advertisement'
-    //     )
-    //   );
-    // }
   }
 
   public goToShop() {
@@ -585,20 +500,6 @@ export class HomePage {
     this.externalLinkProvider.open(url);
   }
 
-  /* private showNewDesignSlides() {
-    if (this.appProvider.isLockModalOpen) return; // Opening a modal together with the lock modal makes the pin pad unresponsive
-    this.persistenceProvider.getNewDesignSlidesFlag().then(value => {
-      if (!value) {
-        this.persistenceProvider.setNewDesignSlidesFlag('completed');
-        const modal = this.modalCtrl.create(NewDesignTourPage, {
-          showBackdrop: false,
-          enableBackdropDismiss: false
-        });
-        modal.present();
-      }
-    });
-  } */
-
   public enableBitPayIdPairing() {
     this.tapped++;
 
@@ -617,8 +518,3 @@ export class HomePage {
   }
 }
 
-// function getGiftCardAdvertisementName(discountedCard: CardConfig): string {
-//   return `${discountedCard.discounts[0].code}-${
-//     discountedCard.name
-//   }-gift-card-discount`;
-// }
