@@ -92,7 +92,6 @@ export class DisclaimerPage {
     this.persistenceProvider.setEmailLawCompliance('accepted');
     this.persistenceProvider.setNewDesignSlidesFlag('completed');
     this.persistenceProvider.setDisclaimerAccepted();
-    this.persistenceProvider.setSurveyFlag();
     this.navCtrl.setRoot(TabsPage);
     this.navCtrl.popToRoot({ animate: false });
   }
