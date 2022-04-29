@@ -217,7 +217,7 @@ export class TabsPage {
         );
       } else {
         walletTotalBalanceAlternative = parseFloat(
-          statusWallet.totalBalanceAlternative.replace(/,/g, '')
+          String(statusWallet.totalBalanceAlternative).replace(/,/g, '')
         );
       }
     }
