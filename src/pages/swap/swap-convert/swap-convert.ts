@@ -9,15 +9,15 @@ import {
   TxFormatProvider, WalletProvider
 } from '../../../providers';
 import { Component } from '@angular/core';
-import { ICoinsInfo } from '../calculator-parameters'; 
+import { ICoinsInfo } from '../swap-parameters'; 
 import { HttpClient } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'page-calculator-convert',
-  templateUrl: 'calculator-convert.html'
+  selector: 'page-swap-convert',
+  templateUrl: 'swap-convert.html'
 })
-export class CalculatorConvertPage {
+export class SwapConvertPage {
   public formCoins: {
     getCoin: ICoinsInfo;
     sendCoin: ICoinsInfo;

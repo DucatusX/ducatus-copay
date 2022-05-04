@@ -1,9 +1,9 @@
 import * as _ from 'lodash';
-import { ActionSheetProvider, AppProvider } from '../../providers';
+import { AppProvider } from '../../providers';
 import { ApiProvider } from '../../providers/api/api';
 import { Component } from '@angular/core';
-import { CalculatorConvertPage } from './calculator-convert/calculator-convert';
-import { ICoinsInfo, coinsInfo } from './calculator-parameters';
+import { SwapConvertPage } from './swap-convert/swap-convert';
+import { coinsInfo, ICoinsInfo } from './swap-parameters';
 import { Decimal } from 'decimal.js';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormControllerProvider} from '../../providers/form-contoller/form-controller';
@@ -16,12 +16,12 @@ import { TimeProvider } from '../../providers/time/time';
 import { WalletProvider } from '../../providers/wallet/wallet';
 
 @Component({
-  selector: 'page-calculator',
-  templateUrl: 'calculator.html'
+  selector: 'page-swap',
+  templateUrl: 'swap.html'
 })
-export class CalculatorPage {
+export class SwapPage {
   public coinsInfo: ICoinsInfo[] = coinsInfo;
-  public calculatorForm: FormGroup;
+  public swapForm: FormGroup;
   public sendCoins: ICoinsInfo[];
   public sendCoin: ICoinsInfo;
   public getCoins: ICoinsInfo[];
@@ -61,11 +61,12 @@ export class CalculatorPage {
     this.swapHistory = [];
     this.valueGetForOneSendCoin = '0.10';
     this.appVersion = this.appProvider.info.version;
-    
-    this.sendCoins = this.coinsInfo.filter(coin => coin.isSend);
-    this.getCoins = this.coinsInfo.filter(coin => coin.isGet);
+
+    // @ts-ignore
     this.sendCoin = this.coinsInfo.find(coin => coin.sendDefault);
-    this.getCoin = this.coinsInfo.find(coin => coin.getDefault);
+    this.getCoin = this.coinsInfo.find(coin => coin.symbol === this.sendCoin.toSwap[0]);
+    this.sendCoins = this.coinsInfo.filter(coin => coin.isSend);
+    this.getCoins = this.coinsInfo.filter(coin => this.sendCoin.toSwap.includes(coin.symbol));
     
     this.setFormData({
       send: {
@@ -101,7 +102,7 @@ export class CalculatorPage {
   }
 
   public setFormData({ send, get }): void {
-    this.calculatorForm = this.formBuilder.group({
+    this.swapForm = this.formBuilder.group({
       sendCoin: send.coin,
       getCoin: get.coin,
       sendAmount: [
@@ -124,7 +125,7 @@ export class CalculatorPage {
       ]
     });
     
-    this.oldFormValue = this.calculatorForm.value;
+    this.oldFormValue = this.swapForm.value;
   }
 
   public async loadTxHistory(): Promise<void> {
@@ -274,11 +275,11 @@ export class CalculatorPage {
   }
 
   public goToConvertPage() {
-    this.navCtrl.push(CalculatorConvertPage, {
-      getCoin: this.calculatorForm.value.getCoin,
-      sendCoin: this.calculatorForm.value.sendCoin,
-      getAmount: this.calculatorForm.value.getAmount,
-      sendAmount: this.calculatorForm.value.sendAmount
+    this.navCtrl.push(SwapConvertPage, {
+      getCoin: this.swapForm.value.getCoin,
+      sendCoin: this.swapForm.value.sendCoin,
+      getAmount: this.swapForm.value.getAmount,
+      sendAmount: this.swapForm.value.sendAmount
     });
   }
 
@@ -292,7 +293,7 @@ export class CalculatorPage {
     });
 
     this.getCoins = getCoinList;
-    this.calculatorForm
+    this.swapForm
       .get('getCoin')
       .setValue(getCoinList[0], { emitEvent: false });    
 
@@ -306,7 +307,7 @@ export class CalculatorPage {
   public setGetAmount(amount: string) {
     this.oldFormValue.getAmount = amount;
 
-    this.calculatorForm
+    this.swapForm
       .get('getAmount')
       .setValue( amount, { emitEvent: false });
   }
@@ -314,7 +315,7 @@ export class CalculatorPage {
   public setSendAmount(amount: string) {
     this.oldFormValue.sendAmount = amount;
     
-    this.calculatorForm
+    this.swapForm
       .get('sendAmount')
       .setValue( amount, { emitEvent: false });
   }
@@ -332,7 +333,7 @@ export class CalculatorPage {
       return;
     }
    
-    const coin: any = this.calculatorForm.get(coinPropertyName).value;
+    const coin: any = this.swapForm.get(coinPropertyName).value;
     const formatValue = this.formCtrl.transformValue(value, oldValue, coin.decimals);
 
     if (isSend) {
@@ -345,10 +346,10 @@ export class CalculatorPage {
   }
 
   public calculateChange(isSendInput) {
-    const getCoin: any = this.calculatorForm.get('getCoin').value;
-    const sendCoin: any = this.calculatorForm.get('sendCoin').value;
-    const getAmount: string = this.calculatorForm.get('getAmount').value;
-    const sendAmount: string = this.calculatorForm.get('sendAmount').value;
+    const getCoin: any = this.swapForm.get('getCoin').value;
+    const sendCoin: any = this.swapForm.get('sendCoin').value;
+    const getAmount: string = this.swapForm.get('getAmount').value;
+    const sendAmount: string = this.swapForm.get('sendAmount').value;
     const rate = this.rates[getCoin.symbol][sendCoin.symbol];
     let bgCalculatedValue: string;
 
@@ -380,9 +381,9 @@ export class CalculatorPage {
   }
 
   public onChangeCoin() {
-    const getCoin: any = this.calculatorForm.get('getCoin').value;
-    const sendCoin: any = this.calculatorForm.get('sendCoin').value;
-    const sendAmount: string = this.calculatorForm.get('sendAmount').value;
+    const getCoin: any = this.swapForm.get('getCoin').value;
+    const sendCoin: any = this.swapForm.get('sendCoin').value;
+    const sendAmount: string = this.swapForm.get('sendAmount').value;
     const rate = this.rates[getCoin.symbol][sendCoin.symbol];
     let bgCalculatedValue: string;
 

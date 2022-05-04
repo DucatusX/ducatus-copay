@@ -1,12 +1,12 @@
 <wide-header-page>
-  <div page-content class="calculator-page">
-    <ion-list class="calculator-list bp-list">
-      <div class="calculator-explanation">
-        <div class="calculator-heading" translate>Calculator</div>
+  <div page-content class="swap-page">
+    <ion-list class="swap-list bp-list">
+      <div class="swap-explanation">
+        <div class="swap-heading" translate>Swap</div>
       </div>
-      <form [formGroup]="calculatorForm">
-        <div class="calculator-form-group">
-          <ion-item class="calculator-input">
+      <form [formGroup]="swapForm">
+        <div class="swap-form-group">
+          <ion-item class="swap-input">
             <ion-label stacked>{{ 'Send' | translate }}</ion-label>
             <ion-input
               [disabled]="isLoad"
@@ -15,26 +15,26 @@
               OnlyNumber="true"
               inputmode="decimals"
               (ionChange)="changAmount($event, 'sendAmount')"
-              [value]="calculatorForm.value.sendAmount"
+              [value]="swapForm.value.sendAmount"
               required
             ></ion-input>
           </ion-item>
           <ion-item
-            class="calculator-select calculator-loading-select"
+            class="swap-select swap-loading-select"
             *ngIf="isLoad"
           >
             <ion-spinner name="dots"></ion-spinner>
           </ion-item>
           <ion-item 
-            class="calculator-select" 
+            class="swap-select" 
             *ngIf="!isLoad"
           >
             <ion-select
-              class="calculator-select-ion"
+              class="swap-select-ion"
               interface="popover"
               formControlName="sendCoin"
               (ionChange)="changSendCoin($event)"
-              [(ngModel)]="calculatorForm.value.sendCoin"
+              [(ngModel)]="swapForm.value.sendCoin"
             >
               <ion-option
                 *ngFor="let item of sendCoins"
@@ -46,21 +46,21 @@
           </ion-item>
         </div>
         <ion-item 
-          class="calculator-text" 
+          class="swap-text" 
           *ngIf="isLoad"
         >
           <ion-spinner name="dots"></ion-spinner>
         </ion-item>
         <ion-item 
-          class="calculator-text" 
+          class="swap-text" 
           *ngIf="!isLoad"
         >
           <ion-label stacked>
-            1 {{ calculatorForm.value.sendCoin.name }} = {{ valueGetForOneSendCoin }} {{ calculatorForm.value.getCoin.name }}
+            1 {{ swapForm.value.sendCoin.name }} = {{ valueGetForOneSendCoin }} {{ swapForm.value.getCoin.name }}
            </ion-label>
         </ion-item>
-        <div class="calculator-form-group">
-          <ion-item class="calculator-input">
+        <div class="swap-form-group">
+          <ion-item class="swap-input">
             <ion-label stacked>{{ 'Get' | translate }}</ion-label>
             <ion-input
               [disabled]="isLoad"
@@ -69,23 +69,23 @@
               OnlyNumber="true"
               inputmode="decimals"
               (ionChange)="changAmount($event, 'getAmount')"
-              [value]="calculatorForm.value.getAmount"
+              [value]="swapForm.value.getAmount"
               required
             >
             </ion-input>
           </ion-item>
           <ion-item
-            class="calculator-select calculator-loading-select"
+            class="swap-select swap-loading-select"
             *ngIf="isLoad"
           >
             <ion-spinner name="dots"></ion-spinner>
           </ion-item>
           <ion-item 
-            class="calculator-select" 
+            class="swap-select" 
             *ngIf="!isLoad"
           >
             <ion-select
-              class="calculator-select-ion"
+              class="swap-select-ion"
               interface="popover"
               formControlName="getCoin"
               (ionChange)="changGetCoin($event)"
@@ -100,7 +100,7 @@
           </ion-item>
         </div>
         <div 
-          class="calculator-attention" 
+          class="swap-attention" 
           *ngIf="!isAvailableSwap"
         >
           {{ this.sendCoin.name }} to {{ this.getCoin.name }} swap is
@@ -108,16 +108,16 @@
         </div>
         <button
           ion-button
-          class="button-standard calculator-button"
+          class="button-standard swap-button"
           (click)="goToConvertPage()"
-          [disabled]="!calculatorForm.valid || !rates || !isAvailableSwap"
+          [disabled]="!swapForm.valid || !rates || !isAvailableSwap"
           *ngIf="isAvailableSwap"
         >
           {{ 'Convert' | translate }}
         </button>
         <button
           ion-button
-          class="button-standard calculator-swap-button"
+          class="button-standard swap-swap-button"
           (click)="showSwapHistory()"
           [disabled]="historyIsLoad || !swapHistory || !swapHistory.length"
         >
