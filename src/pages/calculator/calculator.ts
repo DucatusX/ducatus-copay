@@ -1,58 +1,42 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Decimal} from 'decimal.js';
-import { ModalController, NavController } from 'ionic-angular';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
-import { TxDetailsModal } from '../../pages/tx-details/tx-details';
 import { ActionSheetProvider, AppProvider } from '../../providers';
 import { ApiProvider } from '../../providers/api/api';
-import { availableCoins, CoinOpts } from '../../providers/currency/coin';
-import { CoinsMap } from '../../providers/currency/currency';
+import { Component } from '@angular/core';
+import { CalculatorConvertPage } from './calculator-convert/calculator-convert';
+import { ICoinsInfo, coinsInfo } from './calculator-parameters';
+import { Decimal } from 'decimal.js';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormControllerProvider} from '../../providers/form-contoller/form-controller';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Logger } from '../../providers/logger/logger';
+import { ModalController, NavController } from 'ionic-angular';
 import { ProfileProvider } from '../../providers/profile/profile';
+import { TxDetailsModal } from '../../pages/tx-details/tx-details';
 import { TimeProvider } from '../../providers/time/time';
 import { WalletProvider } from '../../providers/wallet/wallet';
-import { CalculatorConvertPage } from './calculator-convert/calculator-convert';
-import {
-  coinInfo,
-  convertCoins,
-  convertGetCoins,
-  convertSendCoins
-} from './calculator-parameters';
-
 
 @Component({
   selector: 'page-calculator',
   templateUrl: 'calculator.html'
 })
 export class CalculatorPage {
+  public coinsInfo: ICoinsInfo[] = coinsInfo;
   public calculatorForm: FormGroup;
-  public formCoins: any = [];
-  public coin_info: any;
-  public convertGetCoins: any;
-  public convertSendCoins: any;
-  public lastChange: any = 'Get';
-  public isAvailableDucSwap: boolean = true;
-  public isAvailableSwapWDUCXtoDUCX: boolean = true;
-  public isAvailableSwap: boolean = true;
+  public sendCoins: ICoinsInfo[];
+  public sendCoin: ICoinsInfo;
+  public getCoins: ICoinsInfo[];
+  public getCoin: ICoinsInfo;
+  public oldFormValue: any;
   public appVersion: string;
+  public historyIsLoad: boolean;
   public rates: any;
-  public isShowSwapHistory: boolean = false;
-  public swapHistory: any[] = [];
-  public historyIsLoaded: boolean = false;
-  public calculationError = false;
-  public coins: CoinsMap<CoinOpts> = availableCoins;
-  public oldValueForm: string; // past form value
-
-  public subSendAmount$: Subscription;
-  public subGetAmount$: Subscription;
-  public subSendCoin$: Subscription;
-  public subGetCoin$: Subscription;
-  
-  public valueGetForOneCoin: number = 0.10; // set value for 1 Duc -> 10.00 DucX
+  public isAvailableExchangeSwapStatus: boolean;
+  public isAvailableBridgeStatus: boolean;
+  public isAvailableSwap: boolean;
+  public isShowSwapHistory: boolean;
+  public swapHistory: any[];
+  public valueGetForOneSendCoin: string;
+  public isLoad: boolean = false;
 
   constructor(
     private navCtrl: NavController,
@@ -60,224 +44,184 @@ export class CalculatorPage {
     private formBuilder: FormBuilder,
     private apiProvider: ApiProvider,
     private appProvider: AppProvider,
-    private httpClient: HttpClient, // private moonPayProvider: MoonPayProvider
+    private httpClient: HttpClient,
     private profileProvider: ProfileProvider,
-    private actionSheetProvider: ActionSheetProvider,
     private walletProvider: WalletProvider,
     private timeProvider: TimeProvider,
     private modalCtrl: ModalController,
     private formCtrl: FormControllerProvider
   ) {
-    Decimal.set({ precision: 50 }); // calculation accuracy 
-    this.formCoins.get = convertCoins['DUC']; // DUCX
-    this.formCoins.send = convertSendCoins[0]; // DUC
-    this.coin_info = coinInfo;
-    this.convertGetCoins = convertGetCoins;
-    this.convertSendCoins = convertSendCoins;
+    this.isLoad = true;
+    this.historyIsLoad = true;
+    this.coinsInfo = coinsInfo;
+    this.isAvailableExchangeSwapStatus = false;
+    this.isAvailableBridgeStatus = false;
+    this.isAvailableSwap = false;
+    this.isShowSwapHistory = false;
+    this.swapHistory = [];
+    this.valueGetForOneSendCoin = '0.10';
     this.appVersion = this.appProvider.info.version;
-    this.logger.log('this.appVersion', this.appVersion);
+    
+    this.sendCoins = this.coinsInfo.filter(coin => coin.isSend);
+    this.getCoins = this.coinsInfo.filter(coin => coin.isGet);
+    this.sendCoin = this.coinsInfo.find(coin => coin.sendDefault);
+    this.getCoin = this.coinsInfo.find(coin => coin.getDefault);
+    
+    this.setFormData({
+      send: {
+        amount: '0',
+        coin: this.sendCoin
+      },
+      get: { 
+        amount: '0',
+        coin: this.getCoin
+      }
+    });
+  }
 
+  public ionViewWillEnter(): void {
+    this.setDecimalPrecision();
+    this.loadData();
+  }
+
+  public setDecimalPrecision() {
+    Decimal.set({ precision: 50 });
+  }
+
+  public async loadData() {
+    await this.setRates();
+    await this.setExchangeStatus();
+    await this.setBridgeStatus();
+
+    this.isLoad = false;
+
+    await this.loadTxHistory();
+
+    this.historyIsLoad = false;
+  }
+
+  public setFormData({ send, get }): void {
     this.calculatorForm = this.formBuilder.group({
-      getAmount: [
-        "0",
-        Validators.compose([Validators.minLength(1), Validators.required,Validators.pattern(/^[0-9.]+$/)])
-      ],
+      sendCoin: send.coin,
+      getCoin: get.coin,
       sendAmount: [
-        "0",
-        Validators.compose([Validators.minLength(1), Validators.required])
+        send.amount,
+        Validators.compose(
+          [
+            Validators.minLength(1), 
+            Validators.required
+          ]
+        )
       ],
-      getCoin: 'DUCX',
-      sendCoin: 'DUC'
+      getAmount: [
+        get.amount,
+        Validators.compose(
+          [
+            Validators.minLength(1), 
+            Validators.required,Validators.pattern(/^[0-9.]+$/)
+          ]
+        )
+      ]
     });
-    this.oldValueForm = this.calculatorForm.value;
+    
+    this.oldFormValue = this.calculatorForm.value;
   }
 
-  ionViewWillEnter() {
+  public async loadTxHistory(): Promise<void> {
     const wallets = this.profileProvider.getWallets({ showHidden: true });
-   
-    wallets.forEach((wallet, index) => {
-      this.fetchTxHistory(wallet, () => {
-        if ( wallets.length - 1 === index ) {
-          this.historyIsLoaded = true;
-        }
-      });
-    });
 
-    this.subSendAmount$ = this.calculatorForm.get('sendAmount').valueChanges.subscribe( result => {
-      this.handlingDataInput('sendAmount', 'sendCoin', 'getAmount', result);
-    });
+    for (let i = 0; i < wallets.length; i++) {
+      const wallet = wallets[i];
 
-    this.subGetAmount$ = this.calculatorForm.get('getAmount').valueChanges.subscribe( result => {
-      this.handlingDataInput('getAmount', 'getCoin', 'sendAmount', result);
-    });
-
-    this.subSendCoin$ = this.calculatorForm.get('sendCoin').valueChanges.subscribe( sendCoin => {
-      this.formCoins.get = convertCoins[sendCoin]; // changing the possible choice for getCoin
-      this.calculatorForm.get('getCoin').setValue(this.formCoins.get.items[0], { emitEvent: false });
-      // update value when coin type changes
-      const sendValue = this.calculatorForm.get('sendAmount').value;
-      this.calculatorForm.get('sendAmount').setValue(sendValue);
-    });
-
-    this.subGetCoin$ = this.calculatorForm.get('getCoin').valueChanges.subscribe( () => {
-      // update value when coin type changes
-      const sendValue = this.calculatorForm.get('sendAmount').value;
-      this.calculatorForm.get('sendAmount').setValue(sendValue);
-    });
-
-    this.rates = null;
-
-    this.httpClient
-      .get(this.apiProvider.getAddresses().ducatuscoins + '/api/v1/rates')
-      .toPromise()
-      .then(
-        (result: { res_rates: any }) => {
-          this.logger.debug('getting rates:', result);
-          this.rates = {
-            ...result,
-            WDUCX: {
-              DUCX: 1
-            }
-          };
-        },
-        err => {
-          this.logger.debug('error in getting rates: ', err);
-        }
-      );
-
-    this.httpClient
-      .get(
-        this.apiProvider.getAddresses().ducatuscoins +
-          '/api/v1/exchange/status/'
-      )
-      .toPromise()
-      .then((res: boolean) => {
-        this.isAvailableDucSwap = res;
-        this.isAvailableSwap = true;
-
-        if (
-          this.formCoins.get.name === 'DUCX' &&
-          this.formCoins.send === 'DUC'
-        ) {
-          this.isAvailableSwap = Boolean(this.isAvailableDucSwap);
-        }
-      })
-      .catch(() => {
-        this.isAvailableDucSwap = false;
-      });
-
-    // WDUCX - DUXX
-
-    this.logger.log(`APP VERSION: ${this.appVersion}`);
-    this.logger.log(
-      `REQUEST URL: ${this.apiProvider.getAddresses().swap.status}`
-    );
-
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    };
-
-    this.httpClient
-      .get(
-        this.apiProvider.getAddresses().swap.status +
-          '?version=' +
-          this.appVersion,
-        httpOptions
-      )
-      .toPromise()
-      .then((res: boolean) => {
-        this.logger.log('WDUCX - DUXX swap res', JSON.stringify(res));
-        this.logger.log(`WDUCX - DUXX swap res:  ${res}`);
-        this.isAvailableSwapWDUCXtoDUCX = res;
-        this.isAvailableSwap = true;
-        if (
-          this.formCoins.get.name === 'WDUCX' &&
-          this.formCoins.send === 'DUCX'
-        ) {
-          this.isAvailableSwap = Boolean(this.isAvailableSwapWDUCXtoDUCX);
-        }
-      })
-      .catch((err: any) => {
-        this.logger.log(err);
-        this.logger.log(JSON.stringify(err));
-        this.isAvailableSwapWDUCXtoDUCX = false;
-      });
-  }
-
-  ngOnDestroy() {
-    this.unsubscribeForm();
-  }
-
-  public getCalculatedFieldValue(value: string,editField: string) {
-    const getCoin: string = this.calculatorForm.get('getCoin').value.toUpperCase();
-    const sendCoin: string = this.calculatorForm.get('sendCoin').value.toUpperCase();
-    const rate = this.rates[getCoin][sendCoin];
-    let decimalsCoin: number;
-    let bgCalculatedValue: string;
-
-    if (editField === 'getAmount') {
-      decimalsCoin = this.coins[sendCoin.toLowerCase()].unitInfo.unitDecimals;
-      bgCalculatedValue = new Decimal(value)
-        .times(rate)
-        .toString();
-    } 
-    else {
-      getCoin.toLowerCase() === 'wducx'
-      ? decimalsCoin = 18
-      : decimalsCoin = this.coins[getCoin.toLowerCase()].unitInfo.unitDecimals;
-
-      bgCalculatedValue = new Decimal(value)
-        .div(rate)
-        .toString();
+      await this.fetchTxHistory(wallet);
     }
-    bgCalculatedValue =  this.formCtrl.trimStrToDecimalsCoin(bgCalculatedValue,decimalsCoin);
-
-    return bgCalculatedValue;
   }
 
-  public handlingDataInput
-  (
-    changeableInputName: string,
-    changeableCoinName: string, 
-    calculatedInputName: string, 
-    changeableValue: string
-  )
-  {
-    this.calculationError = false; // reset if the last attempt to calculate was unsuccessful
-    let calculatedValue = '0'; // default 
-    const changeableCoin = this.calculatorForm.get(changeableCoinName).value.toLowerCase();
-    let valueDecimals: number;
-
-    changeableCoin === 'wducx'
-    ? valueDecimals = 18
-    : valueDecimals = this.coins[changeableCoin].unitInfo.unitDecimals;
-
-    const oldValue: string = this.calculatorForm.value[changeableInputName];
-    let newValue = this.formCtrl.transformValue(changeableValue, valueDecimals, oldValue); // formatted input new value
+  public async setRates(): Promise<void> {
+    const url = `${this.apiProvider.getAddresses().ducatuscoins}/api/v1/rates`;
 
     try {
-      this.calculatorForm.get(changeableInputName).setValue( newValue,{ emitEvent: false });
-      calculatedValue = this.getCalculatedFieldValue(newValue, changeableInputName);
-      this.calculatorForm.get(calculatedInputName).setValue( calculatedValue, { emitEvent: false });
-    } 
-    catch (err) {
-      this.logger.debug(err);
+      const rates  = await this.httpClient
+        .get(url)
+        .toPromise();
 
-      if (!newValue) {
-        this.calculatorForm.get(calculatedInputName).setValue('0', { emitEvent: false });
-      }
-      else {
-        this.calculatorForm.get(changeableInputName).setValue( oldValue, { emitEvent: false });
-        this.calculatorForm.get(calculatedInputName).setValue( newValue, { emitEvent: false });
-      }
-
-      this.calculationError = true;
+      this.rates = {
+        ...rates,
+        WDUCX: { DUCX: 1 }
+      };
+    } catch(error) {
+      this.logger.debug('Error in getting rates: ', error);
     }
   }
+
+  public async setExchangeStatus(): Promise<void> {
+    const urlExchange = `${this.apiProvider.getAddresses().ducatuscoins}/api/v1/exchange/status/`;
   
-  private fetchTxHistory = (wallet, cb) => {
+    try {
+      const isAvailableExchangeSwapStatus = Boolean(
+        await this.httpClient
+          .get(urlExchange)
+          .toPromise()
+      );
+
+      if (isAvailableExchangeSwapStatus) {
+        this.coinsInfo.map((coin) => {
+          if (coin.symbol !== 'WDUCX') {
+            coin.isAvailableSwap = true;
+          }
+
+          return coin;
+        });
+      }
+      
+      this.isAvailableSwap = isAvailableExchangeSwapStatus;
+    } catch(error) {
+        this.coinsInfo.map((coin) => {
+          if (coin.symbol !== 'WDUCX') {
+            coin.isAvailableSwap = false;
+          }
+
+          return coin;
+        });
+
+        this.isAvailableSwap = false;
+    }
+  }
+
+  public async setBridgeStatus(): Promise<void> {
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json'})
+    };
+    const urlBridge = `${this.apiProvider.getAddresses().swap.status}?version=${this.appVersion}`;
+
+    try {
+      const isAvailableBridgeStatus = Boolean(
+        await this.httpClient
+          .get(urlBridge, httpOptions)
+          .toPromise()
+      );
+
+      if (isAvailableBridgeStatus) {
+        this.coinsInfo.map((coin) => {
+          if (coin.symbol === 'WDUCX') {
+            coin.isAvailableSwap = true;
+          }
+
+          return coin;
+        });
+      }
+    } catch(error) {
+      this.coinsInfo.map((coin) => {
+        if (coin.symbol === 'WDUCX') {
+          coin.isAvailableSwap = false;
+        }
+
+        return coin;
+      });
+    }
+  }
+
+  private fetchTxHistory = async (wallet) => {
     const progressFn = ((_, newTxs) => {
       let args = {
         walletId: wallet.walletId,
@@ -289,59 +233,39 @@ export class CalculatorPage {
     }).bind(this);
 
     // Fire a startup event, to allow UI to show the spinner
-    this.walletProvider
-      .fetchTxHistory(wallet, progressFn)
-      .then((txHistory = []) => {
-        txHistory.forEach(tx => {
-          if (tx.swap) {
-            tx.wallet = _.cloneDeep(wallet);
-            this.swapHistory.push(tx);
-          } 
-        });
-        this.swapHistory = this.swapHistory.sort((a, b) => {
-          return b.time - a.time;
-        });
-        
-        cb();
-      })
-      .catch(err => {
-        if (err != 'HISTORY_IN_PROGRESS') {
-          this.logger.warn('fetchTxHistory ERROR', err);
-        }
-        cb();
+    try {
+      const txHistory: any[] = await this.walletProvider.fetchTxHistory(wallet, progressFn);
+      
+      txHistory.forEach(tx => {
+            
+        if (tx.swap) {
+          tx.wallet = _.cloneDeep(wallet);
+          this.swapHistory.push(tx);
+        } 
       });
+      
+      this.swapHistory = this.swapHistory.sort((a, b) => b.time - a.time);
+    } catch(error) {
+      if (error != 'HISTORY_IN_PROGRESS') {
+        this.logger.warn('fetchTxHistory ERROR', error);
+      }
+    } 
   }
 
-  public goToConvertPage() {
-    if (this.calculatorForm.value.getCoin === 'WDUCX') {
-      const infoSheet = this.actionSheetProvider.createInfoSheet('wducx-select');
-      infoSheet.present();
-      return;
-    }
-
-    this.unsubscribeForm();
-
-    this.navCtrl.push(CalculatorConvertPage, {
-      get: this.calculatorForm.value.getCoin,
-      send: this.calculatorForm.value.sendCoin,
-      amountGet: this.calculatorForm.value.getAmount,
-      amountSend: this.calculatorForm.value.sendAmount
-    });
-  }
-
-  public showSwapHistory() {
+  public showSwapHistory(): void {
     this.isShowSwapHistory = !this.isShowSwapHistory;
   }
 
-  public itemTapped(tx) {
+  public itemTapped(tx): void {
     this.goToTxDetails(tx);
   }
 
-  public goToTxDetails(tx) {
+  public goToTxDetails(tx): void {
     const txDetailModal = this.modalCtrl.create(TxDetailsModal, {
       walletId: tx.wallet.credentials.walletId,
       txid: tx.txid
     });
+    
     txDetailModal.present();
   }
 
@@ -349,10 +273,144 @@ export class CalculatorPage {
     return this.timeProvider.withinPastDay(time);
   }
 
-  public unsubscribeForm() {
-    this.subSendAmount$.unsubscribe();
-    this.subGetAmount$.unsubscribe();
-    this.subSendCoin$.unsubscribe();
-    this.subGetCoin$.unsubscribe();
+  public goToConvertPage() {
+    this.navCtrl.push(CalculatorConvertPage, {
+      getCoin: this.calculatorForm.value.getCoin,
+      sendCoin: this.calculatorForm.value.sendCoin,
+      getAmount: this.calculatorForm.value.getAmount,
+      sendAmount: this.calculatorForm.value.sendAmount
+    });
   }
+
+  public changSendCoin(event: ICoinsInfo): void {
+    const getCoinList = this.coinsInfo.filter((coin: ICoinsInfo) => {
+      if (event.toSwap.includes(coin.symbol)) {
+        return true;
+      }
+
+      return false;
+    });
+
+    this.getCoins = getCoinList;
+    this.calculatorForm
+      .get('getCoin')
+      .setValue(getCoinList[0], { emitEvent: false });    
+
+    this.onChangeCoin();
+  }
+
+  public changGetCoin(): void {
+    this.onChangeCoin();
+  }
+
+  public setGetAmount(amount: string) {
+    this.oldFormValue.getAmount = amount;
+
+    this.calculatorForm
+      .get('getAmount')
+      .setValue( amount, { emitEvent: false });
+  }
+
+  public setSendAmount(amount: string) {
+    this.oldFormValue.sendAmount = amount;
+    
+    this.calculatorForm
+      .get('sendAmount')
+      .setValue( amount, { emitEvent: false });
+  }
+
+  public changAmount(event, input: 'sendAmount'|'getAmount'): void {
+    const isSend = (input === 'sendAmount');
+    const value: string = event.value;
+    const oldValue: string = this.oldFormValue[input];
+    const coinPropertyName: string = input === 'sendAmount'
+      ? 'sendCoin'
+      : 'getCoin';
+
+    if (value === oldValue) {
+      // 'emitEvent: false' not work
+      return;
+    }
+   
+    const coin: any = this.calculatorForm.get(coinPropertyName).value;
+    const formatValue = this.formCtrl.transformValue(value, oldValue, coin.decimals);
+
+    if (isSend) {
+      this.setSendAmount(formatValue);
+    } else {
+      this.setGetAmount(formatValue);
+    }
+
+    this.calculateChange(isSend);
+  }
+
+  public calculateChange(isSendInput) {
+    const getCoin: any = this.calculatorForm.get('getCoin').value;
+    const sendCoin: any = this.calculatorForm.get('sendCoin').value;
+    const getAmount: string = this.calculatorForm.get('getAmount').value;
+    const sendAmount: string = this.calculatorForm.get('sendAmount').value;
+    const rate = this.rates[getCoin.symbol][sendCoin.symbol];
+    let bgCalculatedValue: string;
+
+    if (isSendInput) {
+      
+      if (sendAmount) {
+        bgCalculatedValue = new Decimal(sendAmount)
+          .div(rate)
+          .toString();
+        bgCalculatedValue = this.formCtrl.trimStrToDecimalsCoin(bgCalculatedValue, getCoin.decimals);
+      } else {
+        bgCalculatedValue = '0';
+      }
+
+      this.setGetAmount(bgCalculatedValue);
+    } else {
+
+      if (getAmount) {
+        bgCalculatedValue = new Decimal(getAmount)
+          .times(rate)
+          .toString();
+        bgCalculatedValue = this.formCtrl.trimStrToDecimalsCoin(bgCalculatedValue, sendCoin.decimals);
+      } else {
+        bgCalculatedValue = '0';
+      }
+      
+      this.setSendAmount(bgCalculatedValue);
+    }
+  }
+
+  public onChangeCoin() {
+    const getCoin: any = this.calculatorForm.get('getCoin').value;
+    const sendCoin: any = this.calculatorForm.get('sendCoin').value;
+    const sendAmount: string = this.calculatorForm.get('sendAmount').value;
+    const rate = this.rates[getCoin.symbol][sendCoin.symbol];
+    let bgCalculatedValue: string;
+
+    if (Number(sendAmount)) {
+      bgCalculatedValue = new Decimal(sendAmount)
+        .div(rate)
+        .toFixed(getCoin.decimals)
+        .toString()
+        .replace(/[,.]?0+$/, '');
+    } else {
+      bgCalculatedValue = '0';
+    }
+
+    this.valueGetForOneSendCoin = new Decimal(1)
+      .div(rate)
+      .toFixed(getCoin.decimals)
+      .replace(/[,.]?0+$/, '');
+
+    this.setGetAmount(bgCalculatedValue);
+
+    if (
+      getCoin.isAvailableSwap
+      && sendCoin.isAvailableSwap
+    ) {
+      this.isAvailableSwap = true;
+    } else {
+      this.isAvailableSwap = false;
+    }
+  }
+
 }

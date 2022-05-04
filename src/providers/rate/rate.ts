@@ -152,17 +152,12 @@ export class RateProvider {
     chain,
     opts?: { customRate?: number; rates? }
   ): number {
-    if (chain == 'usdc') {
-      debugger;
-    }
     if (!this.isCoinAvailable(chain)) {
       return null;
     }
     const customRate = opts && opts.customRate;
     const rate = customRate || this.getRate(code, chain, opts);
-    if (chain == 'usdc') {
-      debugger;
-    }
+    
     return (
       satoshis *
       (1 / this.currencyProvider.getPrecision(chain).unitToSatoshi) *
