@@ -854,9 +854,9 @@ $settings-inactive: url('../assets/img/tab-icons/tab-settings.svg') no-repeat
   50% 50%;
 $buy-active: url('../assets/img/tab-icons/tab-buy-active.svg') no-repeat 50% 50%;
 $buy-inactive: url('../assets/img/tab-icons/tab-buy.svg') no-repeat 50% 50%;
-$calculator-active: url('../assets/img/tab-icons/tab-calculator-active.svg')
+$swap-active: url('../assets/img/tab-icons/tab-swap-active.svg')
   no-repeat 50% 50%;
-$calculator-inactive: url('../assets/img/tab-icons/tab-calculator.svg')
+$swap-inactive: url('../assets/img/tab-icons/tab-swap.svg')
   no-repeat 50% 50%;
 
 $voucher-active: url('../assets/img/tab-icons/tab-voucher-active.svg') no-repeat
@@ -960,13 +960,13 @@ ion-icon {
     }
   }
 
-  &[class*='tab-calculator'] {
-    background: $calculator-inactive;
+  &[class*='tab-swap'] {
+    background: $swap-inactive;
     background-size: contain;
     opacity: 0.4;
 
     .tab-button[aria-selected='true'] & {
-      background: $calculator-active;
+      background: $swap-active;
       background-size: contain;
       opacity: 1;
     }

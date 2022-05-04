@@ -8,8 +8,8 @@ import { JoinWalletPage } from '../pages/add/join-wallet/join-wallet';
 import { SelectCurrencyPage } from '../pages/add/select-currency/select-currency';
 import { BackupGamePage } from '../pages/backup/backup-game/backup-game';
 import { BackupKeyPage } from '../pages/backup/backup-key/backup-key';
-import { CalculatorPage } from '../pages/calculator/calculator';
-import { CalculatorConvertPage } from '../pages/calculator/calculator-convert/calculator-convert';
+import { SwapPage } from '../pages/swap/swap';
+import { SwapConvertPage } from '../pages/swap/swap-convert/swap-convert';
 import { DepositPage } from '../pages/deposit/deposit';
 import { DepositAddPage } from '../pages/deposit/deposit-add/deposit-add';
 import { SendFeedbackPage } from '../pages/feedback/send-feedback/send-feedback';
@@ -186,8 +186,8 @@ export const PAGES = [
   NftDetailsPage,
   BackupGamePage,
   BackupKeyPage,
-  CalculatorPage,
-  CalculatorConvertPage,
+  SwapPage,
+  SwapConvertPage,
   ConfirmPage,
   MultiSendPage,
   TransferToModalPage,

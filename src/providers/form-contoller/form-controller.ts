@@ -1,12 +1,8 @@
 export class FormControllerProvider {
 
-  public transformValue (valueChange: string, decimals: number, oldValue: string) {
+  public transformValue (valueChange: string, oldValue: string, decimals: number) {
     let newValue: string = valueChange;
     const onlyNumberRegex: RegExp = /[^,.0-9]/; 
-        
-    if (valueChange.length >= 20) {
-      return oldValue;
-    }
 
     if (onlyNumberRegex.test(newValue)) {
       return oldValue;

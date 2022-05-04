@@ -1,0 +1,141 @@
+<ion-header class="bp-header">
+  <ion-navbar>
+    <ion-title>
+      <div
+        [reveal-at-scroll-pos]="expandableHeader.headerHeight"
+        [scrollArea]="scrollArea"
+      >
+        {{ 'Convert' | translate }}
+      </div>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content #scrollArea>
+  <expandable-header
+    [scrollArea]="scrollArea"
+    [fadeFactor]="5"
+    [disableFade]="true"
+    #expandableHeader
+  >
+    <ion-toolbar class="wide-header__title">
+      <expandable-header-primary></expandable-header-primary>
+    </ion-toolbar>
+  </expandable-header>
+  <div page-content class="swap-page">
+    <ion-list class="swap-list bp-list">
+      <div class="swap-explanation">
+        <div class="swap-heading" translate> Convert </div>
+      </div>
+      <div class="swap-convert-type">
+        <div class="swap-convert-type-send">
+          <div class="amount-info">
+            <span class="transaction-type"> PAY </span> 
+            <span>{{ formCoins.sendAmount }}</span>
+          </div>
+          <div class="coin-info">
+            <ion-icon class="item-img icon-settings" item-start>
+              <img 
+                class="coin-info-img" 
+                src="assets/img/swap/{{ formCoins.sendCoin.symbol }}.svg"
+              />
+            </ion-icon>
+            <div class="coin-info-type">{{ formCoins.sendCoin.symbol }}</div>
+          </div>
+        </div>
+        <ion-icon class="item-img icon-settings" item-start>
+          <img 
+            class="arrow" 
+            src="assets/img/swap/arrow-right.svg" 
+            width="22" 
+          />
+        </ion-icon>
+        <div class="swap-convert-type-get">
+          <div class="amount-info">
+            <span class="transaction-type"> GET </span> 
+            <span>{{ formCoins.getAmount }}</span>
+          </div>
+          <div class="coin-info">
+            <ion-icon class="item-img icon-settings" item-start>
+              <img 
+                class="coin-info-img" 
+                src="assets/img/swap/{{ formCoins.sendCoin.symbol }}.svg"
+              />
+            </ion-icon>
+            <div class="coin-info-type">{{ formCoins.getCoin.symbol }}</div>
+          </div>
+        </div>
+      </div>
+      <form >
+        <div 
+          class="swap-convert-group" 
+          (click)="openAddressListSend(walletsInfoSend)"
+        >
+          <span class="swap-convert-label">
+            {{ 'Choose address to pay' | translate }}
+          </span>
+          <div class="swap-convert-select">
+            <span 
+              *ngIf="!sendAddress" 
+              class="swap-convert-select-placeholder"
+            > 
+              Select your address 
+            </span>
+            <div 
+              *ngIf="!fullSize" 
+              class="swap-convert-select-address"
+            >
+              {{ sendAddress | shortenedAddress: 22 }}
+            </div>
+            <div 
+              *ngIf="fullSize" 
+              class="swap-convert-select-address"
+            >
+              {{ sendAddress }}
+            </div>
+            <div class="swap-convert-select-icon">
+              <ion-icon name="arrow-dropdown"></ion-icon>
+            </div>
+          </div>
+        </div>
+        <div 
+          class="swap-convert-group" 
+          [ngClass]="{active: !sendAddress}" 
+          (click)="openAddressListGet(walletsInfoGet)"
+        >
+          <span class="swap-convert-label">{{ 'Choose address to get' | translate }}</span>
+          <div class="swap-convert-select">
+            <span 
+              *ngIf="!getAddress" 
+              class="swap-convert-select-placeholder"
+            > 
+              Select your address 
+            </span>
+            <div 
+              *ngIf="!fullSize" 
+              class="swap-convert-select-address"
+            >
+              {{ getAddress | shortenedAddress: 22 }}
+            </div>
+            <div 
+              *ngIf="fullSize" 
+              class="swap-convert-select-address"
+            >
+              {{ getAddress }}
+            </div>
+            <div class="swap-convert-select-icon">
+              <ion-icon name="arrow-dropdown"></ion-icon>
+            </div>
+          </div>
+        </div>
+        <button
+          ion-button
+          class="button-standard swap-button"
+          (click)="initializationOfSend()"
+          [disabled]="(!sendAddress || !getAddress) || sendDisabled"
+        >
+          {{ 'Send' | translate }}
+        </button>
+      </form>
+    </ion-list>
+  </div>
+</ion-content>

@@ -14,7 +14,7 @@ import { Observable, Subscription } from 'rxjs';
 import { AddPage } from '../add/add';
 import { CopayersPage } from '../add/copayers/copayers';
 import { BackupKeyPage } from '../backup/backup-key/backup-key';
-import { CalculatorPage } from '../calculator/calculator';
+import { SwapPage } from '../swap/swap';
 import { DepositPage } from '../deposit/deposit';
 import { CoinbasePage } from '../integrations/coinbase/coinbase';
 import { CoinbaseAccountPage } from '../integrations/coinbase/coinbase-account/coinbase-account';
@@ -748,7 +748,7 @@ export class WalletsPage {
   }
 
   public openSwap() {
-    this.navCtrl.push(CalculatorPage);
+    this.navCtrl.push(SwapPage);
   }
 
   public openVoucher() {
