@@ -44,12 +44,8 @@ export class DepositPage {
     private apiProvider: ApiProvider
   ) {}
 
-  public ionViewWillEnter() {
-    this.wallets = this.getWalletsInfoAddress('duc');
-  }
-  
   public async ngOnInit(): Promise<void> {
-    const wallets =  await this.profileProvider.getWallets({ showHidden: true });
+    const wallets = this.profileProvider.getWallets({ showHidden: true });
     this.walletsGroups = _.values(
       _.groupBy(
         _.filter(wallets, wallet => {
@@ -58,14 +54,14 @@ export class DepositPage {
         'keyId'
       )
     );
+    this.wallets = await this.getWalletsInfoAddress('duc');
 
     await this.getDeposits();
   }
 
-  private getWalletsInfoAddress(coin: string): any[] {
+  private async getWalletsInfoAddress(coin: string): Promise<any> {
     let coins = [];
-    let wallets = [];
-    let walletsRes = [];
+    const wallets = [];
 
     this.walletsGroups.forEach(keyID => {
       coins = _.concat(
@@ -74,21 +70,17 @@ export class DepositPage {
       );
     });
 
-    wallets = coins.map(wallet => {
-      return this.walletProvider
-        .getAddress(wallet, false)
-        .then(address => {
-          return { wallet, address };
-        });
-    });
+    for ( let i = 0; i < coins.length; i++ ) {
+      const coin = coins[i];
+      const address = await this.walletProvider.getAddress(coin, false);
 
-    wallets.map(res => {
-      res.then(result => {
-        walletsRes.push(result);
+      wallets.push({ 
+        wallet: coin, 
+        address 
       });
-    });
+    }
 
-    return walletsRes;
+    return wallets;
   }
 
   private async getDeposits(): Promise<void> {
@@ -304,34 +296,30 @@ export class DepositPage {
         Boolean(addressFilter)
       );
 
-      this.withdrawnOldDepositsDividends(id)
-        .then(res => {
-          this.logger.debug(res);
-        })
-        .catch(err => {
-          this.logger.debug(err);
-        });
-          
-        this.sendTX(txHex, id)
-          .then(res => {
-            this.logger.debug(res);
-            this.showModal('success', id, deposit.duc_amount);
-          })
-          .catch(err => {
-            err.error.detail === '-27: transaction already in block chain'
-              ? this.showModal('alreadyActivated', id)
-              : this.showModal('network', id);
-          }); 
+      try {
+        const withdrawDeposit = await this.withdrawnOldDepositsDividends(id);
+        this.logger.debug(withdrawDeposit);
+
+        const response = this.sendTX(txHex, id);
+
+        this.logger.debug(response);
+        this.showModal('success', id, deposit.duc_amount);
+      } catch(error) {
+        this.logger.debug(error);
+
+        error.error.detail === '-27: transaction already in block chain'
+          ? this.showModal('alreadyActivated', id)
+          : this.showModal('network', id);
+      }
     }
   }
-
 
   private withdrawnOldDepositsDividends(id: number) {
     const address = `${this.apiProvider.getAddresses().deposit + 'user/deposits/'  + id}/send-dividends/`;
 
     return this.httpClient
-    .post(address, {})
-    .toPromise();
+      .post(address, {})
+      .toPromise();
   }
 
   private sendTX(raw_tx_hex, id: number) {
