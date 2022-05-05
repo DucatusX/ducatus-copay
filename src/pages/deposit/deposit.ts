@@ -11,10 +11,20 @@ import {
 } from '../../providers';
 import { DepositAddPage } from './deposit-add/deposit-add';
 
+interface TxProperties {
+  sending_amount: number;
+  tx_hash: string;
+  vout_number: number;
+  user_duc_address: string;
+  redeem_script: string;
+  lock_time: number;
+}
+
 @Component({
   selector: 'page-deposit',
   templateUrl: 'deposit.html'
 })
+
 export class DepositPage {
   public depositsLoading = true;
   public deposits: any[] = [];
@@ -34,13 +44,12 @@ export class DepositPage {
     private apiProvider: ApiProvider
   ) {}
 
-  public async ionViewWillEnter() {
-    this.wallets = await this.getWalletsInfoAddress('duc');
+  public ionViewWillEnter() {
+    this.wallets = this.getWalletsInfoAddress('duc');
   }
   
   public async ngOnInit(): Promise<void> {
-    const wallets = this.profileProvider.getWallets({ showHidden: true });
-
+    const wallets =  await this.profileProvider.getWallets({ showHidden: true });
     this.walletsGroups = _.values(
       _.groupBy(
         _.filter(wallets, wallet => {
@@ -53,9 +62,10 @@ export class DepositPage {
     await this.getDeposits();
   }
 
-  private async getWalletsInfoAddress(coin): Promise<any> {
+  private getWalletsInfoAddress(coin: string): any[] {
     let coins = [];
-    const wallets = [];
+    let wallets = [];
+    let walletsRes = [];
 
     this.walletsGroups.forEach(keyID => {
       coins = _.concat(
@@ -63,18 +73,22 @@ export class DepositPage {
         keyID.filter(wallet => wallet.coin === coin.toLowerCase())
       );
     });
-    
-    for ( let i = 0; i < coins.length; i++ ) {
-      const coin = coins[i];
-      const address = await this.walletProvider.getAddress(coin, false);
-      
-      wallets.push({ 
-        wallet: coin, 
-        address 
-      });
-    }
 
-    return wallets;
+    wallets = coins.map(wallet => {
+      return this.walletProvider
+        .getAddress(wallet, false)
+        .then(address => {
+          return { wallet, address };
+        });
+    });
+
+    wallets.map(res => {
+      res.then(result => {
+        walletsRes.push(result);
+      });
+    });
+
+    return walletsRes;
   }
 
   private async getDeposits(): Promise<void> {
@@ -248,10 +262,9 @@ export class DepositPage {
   }
 
   public async withdraw(id: number): Promise<void> {
-    const deposit = this.deposits.find(element => element.id === id);
-    const startNewDepositDate = new Date(); //TO DO
+    let deposit = this.deposits.find(element => element.id === id);
 
-    if (deposit.createdAt >= startNewDepositDate ) { //TO DO
+    if (!deposit.extraData) {
       const address = `${this.apiProvider.getAddresses().deposit}user/deposits/${id}/withdraw/`;
     
       try {
@@ -264,52 +277,65 @@ export class DepositPage {
         this.showModal('network');
       }
     } else {
-      this.getDeposit(id)
-        .then(async (deposit: any) => {
-          deposit.cltv_details.sending_amount = deposit.depositinput_set[0].amount - deposit.tx_fee;
-          deposit.cltv_details.tx_hash = deposit.depositinput_set[0].mint_tx_hash;
-          deposit.cltv_details.vout_number = deposit.depositinput_set[0].tx_vout;
-          deposit.cltv_details.user_duc_address = deposit.user_duc_address;
+      const  txProps: TxProperties  = {
+        sending_amount: deposit.amountDeposited,
+        tx_hash: deposit.extraData[0].mintTxHash,
+        vout_number: deposit.extraData[0].txVout,
+        user_duc_address: deposit.extraData[0].userDucAddress,
+        redeem_script: deposit.extraData[0].redeemScript,
+        lock_time: deposit.extraData[0].lockTime
+      };
+          
+      deposit.cltv_details = txProps;
 
-          const addressFilter = this.wallets.find(wallet => 
-            wallet.address === deposit.cltv_details.user_duc_address
-          );
+      const addressFilter = this.wallets.find(wallet => {
+        return wallet.address === deposit.cltv_details.user_duc_address;
+      });
 
-          const walletToUnfreeze = addressFilter
-            ? addressFilter.wallet
-            : this.wallets.find(wallet => 
-                wallet.wallet.credentials.walletId === deposit.wallet_id
-              ).wallet;
+      const walletToUnfreeze = addressFilter
+        ? addressFilter.wallet
+        : this.wallets.find(wallet => 
+            wallet.wallet.credentials.walletId === deposit.wallet_id
+          ).wallet;
 
-          const txHex = await this.walletProvider.signFreeze(
-            walletToUnfreeze,
-            deposit.cltv_details,
-            Boolean(addressFilter)
-          );
+      const txHex = await this.walletProvider.signFreeze(
+        walletToUnfreeze,
+        deposit.cltv_details,
+        Boolean(addressFilter)
+      );
 
-          this.sendTX(txHex)
-            .then(() => {
-              this.showModal('success', id, deposit.duc_amount);
-            })
-            .catch(err => {
-              err.error.detail === '-27: transaction already in block chain'
-                ? this.showModal('alreadyActivated', id)
-                : this.showModal('network', id);
-            });
+      this.withdrawnOldDepositsDividends(id)
+        .then(res => {
+          this.logger.debug(res);
+        })
+        .catch(err => {
+          this.logger.debug(err);
         });
+          
+        this.sendTX(txHex, id)
+          .then(res => {
+            this.logger.debug(res);
+            this.showModal('success', id, deposit.duc_amount);
+          })
+          .catch(err => {
+            err.error.detail === '-27: transaction already in block chain'
+              ? this.showModal('alreadyActivated', id)
+              : this.showModal('network', id);
+          }); 
     }
   }
 
-  private getDeposit(id) {
-    const address = `${this.apiProvider.getAddresses().oldDeposit}get_deposit_info/?deposit_id=${id}`;
+
+  private withdrawnOldDepositsDividends(id: number) {
+    const address = `${this.apiProvider.getAddresses().deposit + 'user/deposits/'  + id}/send-dividends/`;
 
     return this.httpClient
-      .get(address)
-      .toPromise();
+    .post(address, {})
+    .toPromise();
   }
 
-  private sendTX(raw_tx_hex) {
-    const address = `${this.apiProvider.getAddresses().oldDeposit}send_deposit_transaction/`;
+  private sendTX(raw_tx_hex, id: number) {
+    const address = `${this.apiProvider.getAddresses().deposit + 'user/deposits/' + id}/withdraw-with-hex/`;
 
     return this.httpClient
       .post(address, { raw_tx_hex })
