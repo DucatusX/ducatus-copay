@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Slides } from 'ionic-angular';
+import { Platform, Slides } from 'ionic-angular';
 import * as _ from 'lodash';
 import { Coin, CurrencyProvider } from '../../providers/currency/currency';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
@@ -8,7 +8,6 @@ import { FeeProvider } from '../../providers/fee/fee';
 import { Logger } from '../../providers/logger/logger';
 import { PopupProvider } from '../../providers/popup/popup';
 import { ActionSheetParent } from '../action-sheet/action-sheet-parent';
-import {Platform} from 'ionic-angular';
 
 interface FeeOpts {
   feeUnit: string;
@@ -49,7 +48,7 @@ export class ChooseFeeLevelComponent extends ActionSheetParent {
   public showMinWarning: boolean;
   public okText: string;
   public cancelText: string;
-  public slidesView = '2'
+  public slidesView: string = '2';
 
   constructor(
     private currencyProvider: CurrencyProvider,
@@ -72,7 +71,7 @@ export class ChooseFeeLevelComponent extends ActionSheetParent {
     this.feeLevel = this.params.feeLevel;
     this.setFeeUnits();
     if(this.platform.width()<=420){
-      this.slidesView = '1.2'
+      this.slidesView = '1.2';
     }
 
     // IF usingCustomFee

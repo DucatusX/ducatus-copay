@@ -78,7 +78,7 @@ export class WalletServiceUrlPage {
 
   public save(): void {
     let bws;
-    const bwsApi = this.apiProvider.getAddresses().bitcore
+    const bwsApi = this.apiProvider.getAddresses().bitcore;
     switch (this.walletServiceForm.value.bwsurl) {
       case 'prod':
       case 'production':

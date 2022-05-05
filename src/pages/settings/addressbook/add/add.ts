@@ -87,7 +87,7 @@ export class AddressbookAddPage {
         this.parseAddress(data.value)
       );
     }
-  };
+  }
 
   private emailOrEmpty(control: AbstractControl): ValidationErrors | null {
     return control.value === '' ? null : Validators.email(control);

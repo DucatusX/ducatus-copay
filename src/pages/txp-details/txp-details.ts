@@ -151,7 +151,7 @@ export class TxpDetailsPage {
         }
       }
     );
-  };
+  }
 
   private displayFeeValues(): void {
     const chain = this.currencyProvider

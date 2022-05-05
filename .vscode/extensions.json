@@ -3,6 +3,7 @@
     "msjsdiag.debugger-for-chrome",
     "esbenp.prettier-vscode",
     "eg2.tslint",
-    "shinnn.stylelint"
+    "shinnn.stylelint",
+    "ms-vscode.vscode-typescript-tslint-plugin"
   ]
 }

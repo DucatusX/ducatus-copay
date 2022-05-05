@@ -1,6 +1,9 @@
+import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { AlertController, NavParams, Platform } from 'ionic-angular';
 import * as _ from 'lodash';
 import env from '../../../environments';
-import { AlertController, NavParams, Platform } from 'ionic-angular';
 import {
   ActionSheetProvider,ApiProvider,
   BwcErrorProvider, Coin,
@@ -8,10 +11,7 @@ import {
   Logger, ProfileProvider,
   TxFormatProvider, WalletProvider
 } from '../../../providers';
-import { Component } from '@angular/core';
 import { ICoinsInfo } from '../swap-parameters'; 
-import { HttpClient } from '@angular/common/http';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'page-swap-convert',

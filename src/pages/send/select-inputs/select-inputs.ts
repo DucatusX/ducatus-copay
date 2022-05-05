@@ -106,7 +106,7 @@ export class SelectInputsPage {
   private updateAddressHandler: any = data => {
     this.search = data.value;
     this.processInput();
-  };
+  }
 
   private async getInputs(wallet): Promise<any> {
     try {

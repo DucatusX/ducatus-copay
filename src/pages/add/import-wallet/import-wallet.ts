@@ -127,7 +127,7 @@ export class ImportWalletPage {
   private updateWordsHandler: any = data => {
     this.processedInfo = this.processWalletInfo(data.value);
     this.setForm();
-  };
+  }
 
   public getCoinName(coin: Coin) {
     return this.currencyProvider.getCoinName(coin);

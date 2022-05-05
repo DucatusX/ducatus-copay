@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ApiProvider } from '../../../providers/api/api';
 import { AlertController } from 'ionic-angular';
+import { ApiProvider } from '../../../providers/api/api';
 
 @Component({
   selector: 'page-feedback',
@@ -65,8 +65,7 @@ export class FeedbackPage {
   }
 
   public onSubmit() {
-
-    this.disabledForm = true
+    this.disabledForm = true;
 
     this.httpClient
       .post(
@@ -82,14 +81,12 @@ export class FeedbackPage {
       .then(() => {
         this.viewSendResult('We will reply soon', false);
         this.feedbackForm.reset();
-        this.disabledForm = false
+        this.disabledForm = false;
       })
       .catch(()=>{
-        this.viewSendResult('something went wrong please try again later',
-        true)
-        this.disabledForm = false
-     })
-     
+        this.viewSendResult('something went wrong please try again later', true);
+        this.disabledForm = false;
+     });
   }
   
 }

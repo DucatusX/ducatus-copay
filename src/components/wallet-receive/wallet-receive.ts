@@ -84,7 +84,7 @@ export class WalletReceiveComponent extends ActionSheetParent {
           : this.address;
       if (n.data.address == addr) this.setAddress(true);
     }
-  };
+  }
 
   public async setAddress(newAddr?: boolean, failed?: boolean): Promise<void> {
     if (
