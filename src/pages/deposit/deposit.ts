@@ -72,7 +72,14 @@ export class DepositPage {
 
     for ( let i = 0; i < coins.length; i++ ) {
       const coin = coins[i];
-      const address = await this.walletProvider.getAddress(coin, false);
+      let address: string;
+
+      try {
+        address = await this.walletProvider.getAddress(coin, false);
+      }
+      catch {
+       address = '';
+      }
 
       wallets.push({ 
         wallet: coin, 
@@ -256,7 +263,7 @@ export class DepositPage {
   public async withdraw(id: number): Promise<void> {
     let deposit = this.deposits.find(element => element.id === id);
 
-    if (!deposit.extraData) {
+    if (!deposit.extraData.length) {
       const address = `${this.apiProvider.getAddresses().deposit}user/deposits/${id}/withdraw/`;
     
       try {
