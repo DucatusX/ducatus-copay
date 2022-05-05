@@ -1,19 +1,19 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Decimal } from 'decimal.js';
+import { ModalController, NavController } from 'ionic-angular';
 import * as _ from 'lodash';
+import { TxDetailsModal } from '../../pages/tx-details/tx-details';
 import { AppProvider } from '../../providers';
 import { ApiProvider } from '../../providers/api/api';
-import { Component } from '@angular/core';
-import { SwapConvertPage } from './swap-convert/swap-convert';
-import { coinsInfo, ICoinsInfo } from './swap-parameters';
-import { Decimal } from 'decimal.js';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormControllerProvider} from '../../providers/form-contoller/form-controller';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Logger } from '../../providers/logger/logger';
-import { ModalController, NavController } from 'ionic-angular';
 import { ProfileProvider } from '../../providers/profile/profile';
-import { TxDetailsModal } from '../../pages/tx-details/tx-details';
 import { TimeProvider } from '../../providers/time/time';
 import { WalletProvider } from '../../providers/wallet/wallet';
+import { SwapConvertPage } from './swap-convert/swap-convert';
+import { coinsInfo, ICoinsInfo } from './swap-parameters';
 
 @Component({
   selector: 'page-swap',
@@ -404,14 +404,7 @@ export class SwapPage {
 
     this.setGetAmount(bgCalculatedValue);
 
-    if (
-      getCoin.isAvailableSwap
-      && sendCoin.isAvailableSwap
-    ) {
-      this.isAvailableSwap = true;
-    } else {
-      this.isAvailableSwap = false;
-    }
+    this.isAvailableSwap = (getCoin.isAvailableSwap && sendCoin.isAvailableSwap);
   }
 
 }

@@ -10,6 +10,11 @@ import {
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
+import { BackupKeyPage } from '../../pages/backup/backup-key/backup-key';
+import { SendPage } from '../../pages/send/send';
+import { WalletAddressesPage } from '../../pages/settings/wallet-settings/wallet-settings-advanced/wallet-addresses/wallet-addresses';
+import { TxDetailsModal } from '../../pages/tx-details/tx-details';
+import { ProposalsNotificationsPage } from '../../pages/wallets/proposals-notifications/proposals-notifications';
 import { AddressBookProvider } from '../../providers/address-book/address-book';
 import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { CurrencyProvider } from '../../providers/currency/currency';
@@ -23,11 +28,6 @@ import { PlatformProvider } from '../../providers/platform/platform';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { TimeProvider } from '../../providers/time/time';
 import { WalletProvider } from '../../providers/wallet/wallet';
-import { BackupKeyPage } from '../../pages/backup/backup-key/backup-key';
-import { SendPage } from '../../pages/send/send';
-import { WalletAddressesPage } from '../../pages/settings/wallet-settings/wallet-settings-advanced/wallet-addresses/wallet-addresses';
-import { TxDetailsModal } from '../../pages/tx-details/tx-details';
-import { ProposalsNotificationsPage } from '../../pages/wallets/proposals-notifications/proposals-notifications';
 import { Erc721Page } from '../erc-721/erc-721';
 import { SeedPage } from '../seed/seed';
 import { AmountPage } from '../send/amount/amount';
@@ -394,7 +394,7 @@ export class WalletDetailsPage {
         this.showHistory();
       }
     }
-  };
+  }
 
   private updateStatus = opts => {
     if (opts.walletId != this.wallet.id) {
@@ -449,7 +449,7 @@ export class WalletDetailsPage {
         this.updateStatusError = this.wallet.errorObj;
       }
     }
-  };
+  }
 
   public recreate() {
     this.onGoingProcessProvider.set('recreating');
@@ -715,7 +715,11 @@ export class WalletDetailsPage {
     const listOfOptions: boolean[] = [showRequest, showShare];
     const listLength = listOfOptions.reduce((acc, val) => acc + Number(val), 0);
 
-    return { showRequest, showShare, length: listLength}
+    return { 
+      showRequest, 
+      showShare, 
+      length: listLength
+    };
   }
 
   public showMoreOptions(): void {

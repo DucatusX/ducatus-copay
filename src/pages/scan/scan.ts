@@ -172,7 +172,7 @@ export class ScanPage {
 
   private incomingDataErrorHandler: any = err => {
     this.showErrorInfoSheet(err);
-  };
+  }
 
   private finishIncomingDataMenuEventHandler: any = data => {
     if (!this.isCordova) {
@@ -198,14 +198,14 @@ export class ScanPage {
           this.scanner.startScan(this.selectedDevice);
         }
     }
-  };
+  }
 
   private scannerServiceInitializedHandler: any = () => {
     this.logger.debug(
       'Scanner initialization finished, reinitializing scan view...'
     );
     this._refreshScanView();
-  };
+  }
 
   private showErrorInfoSheet(error: Error | string, title?: string): void {
     let infoSheetTitle = title ? title : this.translate.instant('Error');

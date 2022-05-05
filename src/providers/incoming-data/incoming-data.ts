@@ -20,7 +20,7 @@ export interface RedirParams {
   tokenAddress?: string;
   wDucxAddress?: string;
   useSendMax?: boolean;
-};
+}
 
 export interface RedirParams {
   activePage?: any;
@@ -31,7 +31,7 @@ export interface RedirParams {
   tokenAddress?: string;
   wDucxAddress?: string;
   useSendMax?: boolean;
-};
+}
 
 export interface ISendParams {
   addr: string;
@@ -43,7 +43,7 @@ export interface ISendParams {
   tokenAddress?: string;
   wDucxAddress?: string;
   useSendMax?: boolean;
-};
+}
 
 @Injectable()
 export class IncomingDataProvider {

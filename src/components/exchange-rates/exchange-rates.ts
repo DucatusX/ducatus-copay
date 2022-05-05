@@ -102,8 +102,8 @@ export class ExchangeRates {
 
   private updateValues(i: number, coin: string) {
     if (coin === 'usdc'){
-      this.coins[i].currentPrice = 1
-      return
+      this.coins[i].currentPrice = 1;
+      return;
     }
 
     const coinHistoricalRates = this.coins[i].historicalRates[

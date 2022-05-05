@@ -119,12 +119,12 @@ export class SendPage {
     nextView.params.walletId = this.wallet.credentials.walletId;
     nextView.params.token = this.token;
     this.navCtrl.push(this.pageMap[nextView.name], nextView.params);
-  };
+  }
 
   private updateAddressHandler: any = data => {
     this.search = data.value;
     this.processInput();
-  };
+  }
 
   public shouldShowZeroState() {
     return (

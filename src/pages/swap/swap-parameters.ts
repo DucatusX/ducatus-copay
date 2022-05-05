@@ -2,13 +2,13 @@ export interface ICoinsInfo {
   symbol: string;
   name: string;
   toSwap: string[];
-  isSend: Boolean;
-  isGet: Boolean;
-  sendDefault: Boolean;
-  getDefault: Boolean;
-  isAvailableSwap: Boolean;
+  isSend: boolean;
+  isGet: boolean;
+  sendDefault: boolean;
+  getDefault: boolean;
+  isAvailableSwap: boolean;
   decimals: number;
-};
+}
 
 export const coinsInfo: ICoinsInfo[] = [
   { 

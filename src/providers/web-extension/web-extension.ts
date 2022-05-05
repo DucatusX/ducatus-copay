@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { WalletProvider } from '../../providers/wallet/wallet';
-import { Logger } from '../logger/logger';
 import { IncomingDataProvider } from '../../providers';
 import { ProfileProvider } from '../../providers/profile/profile';
+import { WalletProvider } from '../../providers/wallet/wallet';
+import { Logger } from '../logger/logger';
 
 @Injectable()
 export class WebExtensionsProvider {
@@ -28,8 +28,8 @@ export class WebExtensionsProvider {
       if ( ducxTx ) {
         this.openTxPage(ducxTx);
 
-        chrome.storage.sync.set({ducxTx: null}, function() {
-          console.log('Value is set to null');
+        chrome.storage.sync.set({ducxTx: null}, () => {
+          this.logger.debug('Value is set to null');
         });
       } 
     });
@@ -41,8 +41,8 @@ export class WebExtensionsProvider {
       if ( newValue ) {
         this.openTxPage(newValue);
 
-        chrome.storage.sync.set({ducxTx: null}, function() {
-          console.log('Value is set to null');
+        chrome.storage.sync.set({ducxTx: null}, () => {
+          this.logger.debug('Value is set to null');
         });
       } 
     });
@@ -59,7 +59,7 @@ export class WebExtensionsProvider {
       return;
     }
   
-    let walletId: number = undefined;
+    let walletId: number;
     const wallets = this.profileProvider.getWallets();
 
     for ( let i = 0; i < wallets.length; i++ ) {

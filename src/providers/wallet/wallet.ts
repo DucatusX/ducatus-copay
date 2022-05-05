@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import * as bip65 from 'bip65';
+import * as bitcoin from 'bitcoinjs-lib';
 import { Events } from 'ionic-angular';
 import * as _ from 'lodash';
 import encoding from 'text-encoding';
-import * as bip65 from 'bip65';
-import * as bitcoin from 'bitcoinjs-lib';
 import { AddressProvider } from '../address/address';
 import { BwcErrorProvider } from '../bwc-error/bwc-error';
 import { BwcProvider } from '../bwc/bwc';
