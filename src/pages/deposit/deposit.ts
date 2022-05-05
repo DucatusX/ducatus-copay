@@ -307,9 +307,15 @@ export class DepositPage {
       } catch(error) {
         this.logger.debug(error);
 
-        error.error.detail === '-27: transaction already in block chain'
-          ? this.showModal('alreadyActivated', id)
-          : this.showModal('network', id);
+        if (
+          error 
+          && error.error
+          && error.error.detail === '-27: transaction already in block chain'
+        ) {
+          this.showModal('alreadyActivated', id);
+        } else {
+          this.showModal('network', id);
+        }
       }
     }
   }
