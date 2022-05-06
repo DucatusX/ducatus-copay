@@ -391,7 +391,7 @@ export class AmountPage {
   }
 
   public pushDigit(digit: string): void {
-    const coin = this.wallet.coin;
+    const coin = this.wallet && this.wallet.coin || this.navParams.data.coin;
     const decimalsCoin = this.coins[coin].unitInfo.unitDecimals;
     this.useSendMax = false;
 
