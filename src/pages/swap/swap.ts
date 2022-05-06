@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Decimal } from 'decimal.js';
 import { ModalController, NavController } from 'ionic-angular';
-import * as _ from 'lodash';
 import { TxDetailsModal } from '../../pages/tx-details/tx-details';
 import { AppProvider } from '../../providers';
 import { ApiProvider } from '../../providers/api/api';
@@ -96,7 +95,7 @@ export class SwapPage {
 
     this.isLoad = false;
 
-    await this.loadTxHistory();
+    // await this.loadTxHistory();
 
     this.historyIsLoad = false;
   }
@@ -232,20 +231,19 @@ export class SwapPage {
       // tslint:disable-next-line:no-console
       console.log(args);
     }).bind(this);
-
     // Fire a startup event, to allow UI to show the spinner
     try {
       const txHistory: any[] = await this.walletProvider.fetchTxHistory(wallet, progressFn);
-      
+      const txs: any[] = [];
+
       txHistory.forEach(tx => {
             
         if (tx.swap) {
-          tx.wallet = _.cloneDeep(wallet);
           this.swapHistory.push(tx);
         } 
       });
       
-      this.swapHistory = this.swapHistory.sort((a, b) => b.time - a.time);
+      this.swapHistory = txs.sort((a, b) => b.time - a.time);
     } catch(error) {
       if (error != 'HISTORY_IN_PROGRESS') {
         this.logger.warn('fetchTxHistory ERROR', error);
