@@ -5,12 +5,11 @@
         [reveal-at-scroll-pos]="expandableHeader.headerHeight"
         [scrollArea]="scrollArea"
       >
-        {{'Send to another user deposit' | translate }}
+        {{ 'Create Deposit' | translate }}
       </div>
     </ion-title>
   </ion-navbar>
 </ion-header>
-
 <ion-content #scrollArea>
   <expandable-header
     [scrollArea]="scrollArea"
@@ -19,33 +18,30 @@
     #expandableHeader
   >
     <ion-toolbar class="wide-header__title">
-      <expandable-header-primary
-        >{{'Send to another user deposit' | translate
-        }}</expandable-header-primary
-      >
+      <expandable-header-primary></expandable-header-primary>
     </ion-toolbar>
   </expandable-header>
-
-  <div page-content class="freeze-page">
-    <ion-list class="freeze-list bp-list">
-      <form [formGroup]="FreezeGroup">
-        <div class="freeze-add-group-wrap">
-          <span class="freeze-add-label">{{'Sender address' | translate}}</span>
-          <div class="freeze-add-group">
-            <ion-item class="freeze-add-input">
+  <div page-content class="deposit-page">
+    <ion-list class="deposit-list bp-list">
+      <form [formGroup]="DepositGroup">
+        <div class="deposit-add-group-wrap">
+          <span class="deposit-add-label"
+            >{{ 'Choose DUC address to be deducted' | translate }}</span
+          >
+          <div class="deposit-add-group">
+            <ion-item class="deposit-add-input">
               <ion-input
-                placeholder="Choose sender address"
+                placeholder="Choose DUC address to be deducted"
                 type="text"
                 [readonly]="true"
-                formControlName="Address"
-                [value]="FreezeGroup.value.Address"
+                formControlName="AddressFrom"
+                [value]="DepositGroup.value.AddressFrom"
               >
               </ion-input>
             </ion-item>
-
             <ion-item
               *ngIf="walletAddresses"
-              class="freeze-add-select"
+              class="deposit-add-select"
               (click)="openAddressList()"
             >
               <ion-icon name="arrow-dropdown"></ion-icon>
@@ -53,70 +49,74 @@
           </div>
         </div>
 
-        <div class="freeze-add-group-wrap">
-          <span class="freeze-add-label"
+        <div class="deposit-add-group-wrap">
+          <span class="deposit-add-label"
             >{{'Receiver address' | translate}}</span
           >
-          <div class="freeze-add-group">
-            <ion-item class="freeze-add-input">
+          <div class="deposit-add-group">
+            <ion-item class="deposit-add-input" [ngClass]="{'invalid': invalidAddress }">
               <ion-input
                 placeholder="Input receiver address"
+                (input)="changeAddressTo(DepositGroup.value.AddressTo)"
                 type="text"
                 formControlName="AddressTo"
-                [value]="FreezeGroup.value.AddressTo"
+                [value]="DepositGroup.value.AddressTo"
               >
               </ion-input>
             </ion-item>
           </div>
         </div>
 
-        <div class="freeze-add-group-wrap">
-          <span class="freeze-add-label">{{'Amount' | translate}}</span>
-          <div class="freeze-add-group">
-            <ion-item class="freeze-add-input">
+        <div class="deposit-add-group-wrap">
+          <span class="deposit-add-label">{{ 'Amount' | translate }}</span>
+          <div class="deposit-add-group">
+            <ion-item class="deposit-add-input">
               <ion-input
-                id="floatTextBox"
                 placeholder="Enter amount"
                 type="number"
                 formControlName="Amount"
-                (ionChange)="amountChange($event)"
+                (input)="changeAmount()"
                 [(ngModel)]="amountWallet"
-                [value]="FreezeGroup.value.Amount"
+                [value]="DepositGroup.value.Amount"
               >
               </ion-input>
             </ion-item>
-            <div (click)="changeAmountToMax()" class="freeze-btn-sendmax">
+            <div 
+              (click)="changeAmountToMax()" 
+              class="deposit-btn-sendmax"
+            >
               {{ 'Send Max' | translate }}
             </div>
           </div>
         </div>
 
-        <div class="freeze-add-group-wrap">
-          <span class="freeze-add-label">{{'Days' | translate}}</span>
-          <div class="freeze-add-group">
-            <ion-item class="freeze-add-input">
+        <div class="deposit-add-group-wrap">
+          <span class="deposit-add-label">{{ 'Month' | translate }}</span>
+          <div class="deposit-add-group">
+            <ion-item class="deposit-add-input">
               <ion-input
-                placeholder="Enter freeze days"
+                placeholder="Enter Month"
                 type="number"
-                (ionChange)="daysChange($event)"
-                formControlName="Days"
-                [(ngModel)]="freezeDays"
-                [value]="FreezeGroup.value.Days"
+                (input)="monthChange()"
+                formControlName="Month"
+                [(ngModel)]="depositMonth"
+                [value]="DepositGroup.value.Month"
+
               >
               </ion-input>
             </ion-item>
           </div>
         </div>
 
-        <div class="freeze-group-btn">
+        <div class="deposit-group-btn">
           <button
             ion-button
-            class="freeze-group-btn-button button-standard freeze-item-button freeze-add-page-button"
-            (click)="generateUserFreeze()"
-            [disabled]="!FreezeGroup.valid || freezeLoading"
+            class="deposit-group-btn-button button-standard deposit-item-button deposit-add-page-button"
+            (click)="generateUserDeposit()"
+            [disabled]="!DepositGroup.valid || depositLoading"
           >
-            <span *ngIf="!freezeLoading">{{'freeze' | translate}}</span>
-            <ion-spinner *ngIf="freezeLoading" name="bubbles"></ion-spinner>
+            <span *ngIf="!depositLoading">{{ 'Deposit' | translate }}</span>
+            <ion-spinner *ngIf="depositLoading" name="bubbles"></ion-spinner>
           </button>
         </div>
       </form>
