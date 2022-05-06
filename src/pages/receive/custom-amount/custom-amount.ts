@@ -23,7 +23,7 @@ export class CustomAmountPage {
   public protocolHandler: string;
   public address: string;
   public qrAddress: string;
-  public wallet;
+  public wallet: any = {};
   public showShareButton: boolean;
   public amountUnitStr: string;
   public amountCoin: string;
@@ -43,10 +43,9 @@ export class CustomAmountPage {
     private statusBar: StatusBar,
     private configProvider: ConfigProvider
   ) {
-    const walletId = this.navParams.data.id;
+    const walletId = this.navParams.data.walletId;
     this.showShareButton = this.platformProvider.isCordova;
     this.useLegacyQrCode = this.configProvider.get().legacyQrCode.show;
-
     this.wallet = this.profileProvider.getWallet(walletId);
 
     this.walletProvider.getAddress(this.wallet, false).then(addr => {
