@@ -34,6 +34,8 @@ export class SwapPage {
   public isAvailableSwap: boolean;
   public isShowSwapHistory: boolean;
   public swapHistory: any[];
+  public swapHistoryLimit: number;
+  public chunkSize: number;
   public valueGetForOneSendCoin: string;
   public isLoad: boolean = false;
 
@@ -58,6 +60,8 @@ export class SwapPage {
     this.isAvailableSwap = false;
     this.isShowSwapHistory = false;
     this.swapHistory = [];
+    this.swapHistoryLimit = 5;
+    this.chunkSize = 10;
     this.valueGetForOneSendCoin = '0.10';
     this.appVersion = this.appProvider.info.version;
 
@@ -95,8 +99,8 @@ export class SwapPage {
 
     this.isLoad = false;
 
-    // await this.loadTxHistory();
-
+    await this.loadTxHistory();
+    
     this.historyIsLoad = false;
   }
 
@@ -129,12 +133,42 @@ export class SwapPage {
 
   public async loadTxHistory(): Promise<void> {
     const wallets = this.profileProvider.getWallets({ showHidden: true });
+    let swapHistory: any[] = [];
 
     for (let i = 0; i < wallets.length; i++) {
       const wallet = wallets[i];
+      const history: any [] = await this.fetchTxHistory(wallet);
 
-      await this.fetchTxHistory(wallet);
+      swapHistory = swapHistory.concat(history);
     }
+
+    swapHistory = swapHistory.map((tx) => {
+      const {
+        wallet,
+        confirmations,
+        action,
+        note,
+        message,
+        swap,
+        amountStr,
+        time,
+        txid
+      } = tx;
+      
+      return {
+        walletId: wallet.credentials.walletId,
+        txid,
+        confirmations,
+        action,
+        note,
+        message,
+        swap,
+        amountStr,
+        time
+      };
+    });
+
+    this.swapHistory = swapHistory.sort((a, b) => b.time - a.time);
   }
 
   public async setRates(): Promise<void> {
@@ -234,20 +268,14 @@ export class SwapPage {
     // Fire a startup event, to allow UI to show the spinner
     try {
       const txHistory: any[] = await this.walletProvider.fetchTxHistory(wallet, progressFn);
-      const txs: any[] = [];
-
-      txHistory.forEach(tx => {
-            
-        if (tx.swap) {
-          this.swapHistory.push(tx);
-        } 
-      });
       
-      this.swapHistory = txs.sort((a, b) => b.time - a.time);
+      return txHistory.filter(tx => tx.swap);
     } catch(error) {
       if (error != 'HISTORY_IN_PROGRESS') {
         this.logger.warn('fetchTxHistory ERROR', error);
       }
+
+      return [];
     } 
   }
 
@@ -261,7 +289,7 @@ export class SwapPage {
 
   public goToTxDetails(tx): void {
     const txDetailModal = this.modalCtrl.create(TxDetailsModal, {
-      walletId: tx.wallet.credentials.walletId,
+      walletId: tx.walletId,
       txid: tx.txid
     });
     
@@ -403,6 +431,17 @@ export class SwapPage {
     this.setGetAmount(bgCalculatedValue);
 
     this.isAvailableSwap = (getCoin.isAvailableSwap && sendCoin.isAvailableSwap);
+  }
+
+  public loadTx(infiniteScroll) {
+    if (this.swapHistoryLimit >= this.swapHistory.length) {
+      infiniteScroll.complete();
+      return;
+    }
+
+    this.swapHistoryLimit += this.chunkSize;
+    this.chunkSize *= 2;
+    infiniteScroll.complete();
   }
 
 }
