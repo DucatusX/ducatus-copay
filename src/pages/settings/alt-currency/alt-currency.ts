@@ -1,17 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { Logger } from '../../../providers/logger/logger';
-
-// native
 import { SplashScreen } from '@ionic-native/splash-screen';
-
-// Providers
+import { NavController } from 'ionic-angular';
+import * as _ from 'lodash';
 import { ConfigProvider } from '../../../providers/config/config';
+import { Logger } from '../../../providers/logger/logger';
 import { PersistenceProvider } from '../../../providers/persistence/persistence';
 import { PlatformProvider } from '../../../providers/platform/platform';
-import { RateProvider } from '../../../providers/rate/rate';
-
-import * as _ from 'lodash';
 
 @Component({
   selector: 'page-alt-currency',
@@ -24,103 +18,28 @@ export class AltCurrencyPage {
   public loading;
   public currentCurrency;
   public lastUsedAltCurrencyList;
-
   private PAGE_COUNTER: number = 3;
   private SHOW_LIMIT: number = 10;
-  private unusedCurrencyList;
-
+ 
   constructor(
     private configProvider: ConfigProvider,
     private logger: Logger,
     private navCtrl: NavController,
-    private rate: RateProvider,
     private splashScreen: SplashScreen,
     private platformProvider: PlatformProvider,
     private persistenceProvider: PersistenceProvider
   ) {
     this.completeAlternativeList = [];
     this.altCurrencyList = [];
-    this.unusedCurrencyList = [
-      {
-        isoCode: 'LTL'
-      },
-      {
-        isoCode: 'BTC'
-      },
-      {
-        isoCode: 'BCH'
-      },
-      {
-        isoCode: 'ETH'
-      },
-      {
-        isoCode: 'XRP'
-      },
-      {
-        isoCode: 'USDC'
-      },
-      {
-        isoCode: 'GUSD'
-      },
-      {
-        isoCode: 'PAX'
-      },
-      {
-        isoCode: 'JAMASY'
-      },
-      {
-        isoCode: 'NUYASA'
-      },
-      {
-        isoCode: 'SUNOBA'
-      },
-      {
-        isoCode: 'DSCMED'
-      },
-      {
-        isoCode: 'POG1'
-      },
-      {
-        isoCode: 'WDE'
-      },
-      {
-        isoCode: 'MDXB'
-      },
-      {
-        isoCode: 'G.O.L.D.'
-      },
-      {
-        isoCode: 'JWAN'
-      },
-      {
-        isoCode: 'TKF'
-      },
-      {
-        isoCode: 'AA+'
-      }
-    ];
   }
 
   ionViewWillEnter() {
-    this.rate
-      .whenRatesAvailable('btc')
-      .then(() => {
-        this.completeAlternativeList = this.rate.listAlternatives(true);
-        let idx = _.keyBy(this.unusedCurrencyList, 'isoCode');
-        let idx2 = _.keyBy(this.lastUsedAltCurrencyList, 'isoCode');
-
-        this.completeAlternativeList = _.reject(
-          this.completeAlternativeList,
-          c => {
-            return idx[c.isoCode] || idx2[c.isoCode];
-          }
-        );
-        this.altCurrencyList = this.completeAlternativeList.slice(0, 20);
-      })
-      .catch(err => {
-        this.logger.error(err);
-      });
-
+    this.completeAlternativeList = [{
+      isoCode: 'USD', 
+      name: 'US Dollar'
+    }];
+    this.altCurrencyList = this.completeAlternativeList;
+    
     let config = this.configProvider.get();
     this.currentCurrency = config.wallet.settings.alternativeIsoCode;
 
@@ -167,6 +86,7 @@ export class AltCurrencyPage {
 
     this.configProvider.set(opts);
     this.saveLastUsed(newAltCurrency);
+
     this.navCtrl.popToRoot().then(() => {
       this.reload();
     });
@@ -190,13 +110,16 @@ export class AltCurrencyPage {
   }
 
   public findCurrency(searchedAltCurrency: string): void {
-    this.altCurrencyList = _.filter(this.completeAlternativeList, item => {
-      var val = item.name;
-      var val2 = item.isoCode;
+    const altCurrencyList = _.filter(this.completeAlternativeList, item => {
+      let val = item.name;
+      let val2 = item.isoCode;
+
       return (
         _.includes(val.toLowerCase(), searchedAltCurrency.toLowerCase()) ||
         _.includes(val2.toLowerCase(), searchedAltCurrency.toLowerCase())
       );
     });
+
+    this.altCurrencyList = altCurrencyList;
   }
 }
