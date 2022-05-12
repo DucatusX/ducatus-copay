@@ -60,7 +60,7 @@
         <ion-label>
           <div class="main-label">{{ 'Lock App' | translate }}</div>
         </ion-label>
-        <ion-note *ngIf="lockMethod === 'disabled'" item-end>
+        <ion-note *ngIf="lockMethod === 'disabled' || !lockMethod" item-end>
           {{ 'Disabled' | translate }}
         </ion-note>
         <ion-note *ngIf="lockMethod === 'pin'" item-end>
