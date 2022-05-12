@@ -18,6 +18,7 @@ interface TxProperties {
   user_duc_address: string;
   redeem_script: string;
   lock_time: number;
+  private_path: string;
 }
 
 @Component({
@@ -282,7 +283,8 @@ export class DepositPage {
         vout_number: deposit.extraData[0].txVout,
         user_duc_address: deposit.extraData[0].userDucAddress,
         redeem_script: deposit.extraData[0].redeemScript,
-        lock_time: deposit.extraData[0].lockTime
+        lock_time: deposit.extraData[0].lockTime,
+        private_path: deposit.extraData[0].privatePath
       };
           
       deposit.cltv_details = txProps;
