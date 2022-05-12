@@ -39,7 +39,8 @@ export class RateProvider {
         'g.o.l.d.',
         'jwan',
         'tkf',
-        'aa+'
+        'aa+',
+        'usdc'
       ];
 
       if (coin === 'ducx') {
@@ -156,6 +157,7 @@ export class RateProvider {
     }
     const customRate = opts && opts.customRate;
     const rate = customRate || this.getRate(code, chain, opts);
+    
     return (
       satoshis *
       (1 / this.currencyProvider.getPrecision(chain).unitToSatoshi) *

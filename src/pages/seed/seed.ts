@@ -52,7 +52,7 @@ export class SeedPage {
          const datab: number = new Date(b.transaction.created).getTime();
 
          return datab - dataA;
-        })
+        });
         this.nftData = result;
         this.loaded = true;
       },

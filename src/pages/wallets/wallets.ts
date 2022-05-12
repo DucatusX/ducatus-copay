@@ -14,7 +14,6 @@ import { Observable, Subscription } from 'rxjs';
 import { AddPage } from '../add/add';
 import { CopayersPage } from '../add/copayers/copayers';
 import { BackupKeyPage } from '../backup/backup-key/backup-key';
-import { CalculatorPage } from '../calculator/calculator';
 import { DepositPage } from '../deposit/deposit';
 import { CoinbasePage } from '../integrations/coinbase/coinbase';
 import { CoinbaseAccountPage } from '../integrations/coinbase/coinbase-account/coinbase-account';
@@ -23,6 +22,7 @@ import { SimplexPage } from '../integrations/simplex/simplex';
 import { SimplexBuyPage } from '../integrations/simplex/simplex-buy/simplex-buy';
 // import { ScanPage } from '../scan/scan';
 import { SettingsPage } from '../settings/settings';
+import { SwapPage } from '../swap/swap';
 import { VoucherPage } from '../voucher/voucher';
 import { WalletDetailsPage } from '../wallet-details/wallet-details';
 import { ProposalsNotificationsPage } from './proposals-notifications/proposals-notifications';
@@ -397,7 +397,7 @@ export class WalletsPage {
       .getData()
       .then(async data => {
         this.validDataFromClipboard = this.incomingDataProvider.parseData(data);
-
+        
         if (!this.validDataFromClipboard) {
           return;
         }
@@ -748,7 +748,7 @@ export class WalletsPage {
   }
 
   public openSwap() {
-    this.navCtrl.push(CalculatorPage);
+    this.navCtrl.push(SwapPage);
   }
 
   public openVoucher() {

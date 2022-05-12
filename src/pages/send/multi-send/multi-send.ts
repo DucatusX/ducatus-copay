@@ -105,7 +105,7 @@ export class MultiSendPage {
   private updateAddressHandler: any = data => {
     this.search = data.value;
     this.processInput();
-  };
+  }
 
   public openTransferToModal(): void {
     this.navCtrl.push(TransferToModalPage, {

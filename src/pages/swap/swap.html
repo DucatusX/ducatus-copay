@@ -1,0 +1,121 @@
+<wide-header-page>
+  <div page-content class="swap-page">
+    <ion-list class="swap-list bp-list">
+      <div class="swap-explanation">
+        <div class="swap-heading" translate>Swap</div>
+      </div>
+      <form [formGroup]="swapForm">
+        <div class="swap-form-group">
+          <ion-item class="swap-input">
+            <ion-label stacked>{{ 'Send' | translate }}</ion-label>
+            <ion-input
+              [disabled]="isLoad"
+              type="text"
+              formControlName="sendAmount"
+              OnlyNumber="true"
+              inputmode="decimals"
+              (ionChange)="changAmount($event, 'sendAmount')"
+              [value]="swapForm.value.sendAmount"
+              required
+            ></ion-input>
+          </ion-item>
+          <ion-item
+            class="swap-select swap-loading-select"
+            *ngIf="isLoad"
+          >
+            <ion-spinner name="dots"></ion-spinner>
+          </ion-item>
+          <ion-item 
+            class="swap-select" 
+            *ngIf="!isLoad"
+          >
+            <ion-select
+              class="swap-select-ion"
+              interface="popover"
+              formControlName="sendCoin"
+              (ionChange)="changSendCoin($event)"
+              [(ngModel)]="swapForm.value.sendCoin"
+            >
+              <ion-option
+                *ngFor="let item of sendCoins"
+                [value]="item"
+              >
+                {{ item.symbol }}
+              </ion-option>
+            </ion-select>
+          </ion-item>
+        </div>
+        <ion-item 
+          class="swap-text" 
+          *ngIf="isLoad"
+        >
+          <ion-spinner name="dots"></ion-spinner>
+        </ion-item>
+        <ion-item 
+          class="swap-text" 
+          *ngIf="!isLoad"
+        >
+          <ion-label stacked>
+            1 {{ swapForm.value.sendCoin.name }} = {{ valueGetForOneSendCoin }} {{ swapForm.value.getCoin.name }}
+           </ion-label>
+        </ion-item>
+        <div class="swap-form-group">
+          <ion-item class="swap-input">
+            <ion-label stacked>{{ 'Get' | translate }}</ion-label>
+            <ion-input
+              [disabled]="isLoad"
+              type="text"
+              formControlName="getAmount"
+              OnlyNumber="true"
+              inputmode="decimals"
+              (ionChange)="changAmount($event, 'getAmount')"
+              [value]="swapForm.value.getAmount"
+              required
+            >
+            </ion-input>
+          </ion-item>
+          <ion-item
+            class="swap-select swap-loading-select"
+            *ngIf="isLoad"
+          >
+            <ion-spinner name="dots"></ion-spinner>
+          </ion-item>
+          <ion-item 
+            class="swap-select" 
+            *ngIf="!isLoad"
+          >
+            <ion-select
+              class="swap-select-ion"
+              interface="popover"
+              formControlName="getCoin"
+              (ionChange)="changGetCoin($event)"
+            >
+              <ion-option 
+                *ngFor="let item of getCoins" 
+                [value]="item"
+              >
+                {{ item.symbol }}
+              </ion-option>
+            </ion-select>
+          </ion-item>
+        </div>
+        <div 
+          class="swap-attention" 
+          *ngIf="!isAvailableSwap"
+        >
+          {{ this.sendCoin.name }} to {{ this.getCoin.name }} swap is
+          currently restricted, please try again later
+        </div>
+        <button
+          ion-button
+          class="button-standard swap-button"
+          (click)="goToConvertPage()"
+          [disabled]="!swapForm.valid || !rates || !isAvailableSwap"
+          *ngIf="isAvailableSwap"
+        >
+          {{ 'Convert' | translate }}
+        </button>
+      </form>
+    </ion-list>
+  </div>
+</wide-header-page>

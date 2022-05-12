@@ -19,10 +19,10 @@ import { RateProvider } from '../../providers/rate/rate';
 // import { TabProvider } from '../../providers/tab/tab';
 import { WalletProvider } from '../../providers/wallet/wallet';
 
-import { CalculatorPage } from '../calculator/calculator';
 import { CardsPage } from '../cards/cards';
 import { HomePage } from '../home/home';
 import { SettingsPage } from '../settings/settings';
+import { SwapPage } from '../swap/swap';
 import { WalletsPage } from '../wallets/wallets';
 
 import * as _ from 'lodash';
@@ -125,7 +125,7 @@ export class TabsPage {
         }
       }
     );
-  };
+  }
 
   private processWalletError(wallet, err): void {
     wallet.error = wallet.errorObj = null;
@@ -180,7 +180,7 @@ export class TabsPage {
           },
           err => {
             this.logger.error('Error getting current rate:', err);
-            return resolve();
+            return resolve(null);
           }
         );
     });
@@ -217,7 +217,7 @@ export class TabsPage {
         );
       } else {
         walletTotalBalanceAlternative = parseFloat(
-          statusWallet.totalBalanceAlternative.replace(/,/g, '')
+          String(statusWallet.totalBalanceAlternative).replace(/,/g, '')
         );
       }
     }
@@ -317,5 +317,5 @@ export class TabsPage {
   walletsRoot = WalletsPage;
   cardsRoot = CardsPage;
   settingsRoot = SettingsPage;
-  calculatorRoot = CalculatorPage;
+  swapRoot = SwapPage;
 }

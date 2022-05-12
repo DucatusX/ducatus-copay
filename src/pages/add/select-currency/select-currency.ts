@@ -227,15 +227,11 @@ export class SelectCurrencyPage {
           pairFor: token
         })
       : [];
-
-    let blockchainName = '';
-
-    if (token.blockchain === 'ducx') {
-      blockchainName = 'DucatusX';
-    } else {
-      blockchainName = 'Ethereum';
-    }
-
+ 
+    const blockchainName = (token.blockchain === 'ducx') 
+      ? 'DucatusX'
+      : 'Ethereum';
+   
     let correctWallets = eligibleWallets.filter(
       wallet => wallet.coin === token.blockchain
     );

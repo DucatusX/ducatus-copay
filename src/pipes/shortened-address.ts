@@ -8,8 +8,8 @@ export class ShortenedAddressPipe implements PipeTransform {
   constructor(private incomingDataProvider: IncomingDataProvider) {}
   transform(address: string, length=8) {
     if (!address || address === ''){
-       return ''
-    };
+       return '';
+    }
     const addr = this.incomingDataProvider.extractAddress(address);
     if (addr && addr.length > 4) {
       const firstNumbers = addr.substr(0,length/2);

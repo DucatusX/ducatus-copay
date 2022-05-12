@@ -99,7 +99,7 @@ export class CurrencyProvider {
 
   getAvaibleCurrencys(): string[]  {
     // returns the intersection of available and requested coins
-    return _.intersection(this.availableCoins, availableCurrencys)
+    return _.intersection(this.availableCoins, availableCurrencys);
   }
 
   getAvailableTokens(): Token[] {

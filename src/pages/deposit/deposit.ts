@@ -11,20 +11,25 @@ import {
 } from '../../providers';
 import { DepositAddPage } from './deposit-add/deposit-add';
 
+interface TxProperties {
+  sending_amount: number;
+  tx_hash: string;
+  vout_number: number;
+  user_duc_address: string;
+  redeem_script: string;
+  lock_time: number;
+}
+
 @Component({
   selector: 'page-deposit',
   templateUrl: 'deposit.html'
 })
+
 export class DepositPage {
   public depositsLoading = true;
   public deposits: any[] = [];
   public walletsGroups: any;
   public wallets: any;
-  public tableMP = {
-    '5': '8',
-    '13': '13',
-    '34': '21'
-  };
   
   constructor(
     private alertCtrl: AlertController,
@@ -39,13 +44,8 @@ export class DepositPage {
     private apiProvider: ApiProvider
   ) {}
 
-  public async ionViewWillEnter() {
-    this.wallets = await this.getWalletsInfoAddress('duc');
-  }
-  
   public async ngOnInit(): Promise<void> {
     const wallets = this.profileProvider.getWallets({ showHidden: true });
-
     this.walletsGroups = _.values(
       _.groupBy(
         _.filter(wallets, wallet => {
@@ -54,11 +54,12 @@ export class DepositPage {
         'keyId'
       )
     );
+    this.wallets = await this.getWalletsInfoAddress('duc');
 
     await this.getDeposits();
   }
 
-  private async getWalletsInfoAddress(coin): Promise<any> {
+  private async getWalletsInfoAddress(coin: string): Promise<any> {
     let coins = [];
     const wallets = [];
 
@@ -68,11 +69,18 @@ export class DepositPage {
         keyID.filter(wallet => wallet.coin === coin.toLowerCase())
       );
     });
-    
+
     for ( let i = 0; i < coins.length; i++ ) {
       const coin = coins[i];
-      const address = await this.walletProvider.getAddress(coin, false);
-      
+      let address: string;
+
+      try {
+        address = await this.walletProvider.getAddress(coin, false);
+      }
+      catch {
+       address = '';
+      }
+
       wallets.push({ 
         wallet: coin, 
         address 
@@ -138,10 +146,12 @@ export class DepositPage {
     const createdAt: number = moment(depositDateCreated).valueOf();
     const endDate: number = moment(depositDateEnd).valueOf();
     const coefficient = 24 * 60 * 60 * 1000;
-    const passedDays: number = (createdAt - endDate) / coefficient * -1; // passed 5 (days)
-    const passedDaysPercent = ((passedDays - Number(daysToWithdraw)) / passedDays) * 100; // passed 1 (%)
+    let passedDays: number = (endDate - createdAt) / coefficient; // passed 5 (days)
+    passedDays = Math.floor(passedDays);
+    let passedDaysPercent = ((passedDays - Number(daysToWithdraw)) / passedDays) * 100; // passed 1 (%)
+    passedDaysPercent = Math.trunc(passedDaysPercent) || 1;
     
-    if ( +daysToWithdraw <= 0 || +daysToWithdraw === -0 ) {
+    if ( Number(daysToWithdraw) < 1 ) {
       return 100;
     } else {
       return passedDaysPercent;
@@ -251,16 +261,86 @@ export class DepositPage {
   }
 
   public async withdraw(id: number): Promise<void> {
-    const address = `${this.apiProvider.getAddresses().deposit}user/deposits/${id}/withdraw/`;
-    
-    try {
-      const res = await this.httpClient.post(address,'').toPromise();
+    let deposit = this.deposits.find(element => element.id === id);
 
-      this.showModal('alreadyActivated',id);
-      this.logger.debug(res);
-    } catch(error) {
-      this.logger.debug(error);
-      this.showModal('network');
+    if (!deposit.extraData.length) {
+      const address = `${this.apiProvider.getAddresses().deposit}user/deposits/${id}/withdraw/`;
+    
+      try {
+        const res = await this.httpClient.post(address,'').toPromise();
+  
+        this.showModal('alreadyActivated',id);
+        this.logger.debug(res);
+      } catch(error) {
+        this.logger.debug(error);
+        this.showModal('network');
+      }
+    } else {
+      const  txProps: TxProperties  = {
+        sending_amount: deposit.amountDeposited,
+        tx_hash: deposit.extraData[0].mintTxHash,
+        vout_number: deposit.extraData[0].txVout,
+        user_duc_address: deposit.extraData[0].userDucAddress,
+        redeem_script: deposit.extraData[0].redeemScript,
+        lock_time: deposit.extraData[0].lockTime
+      };
+          
+      deposit.cltv_details = txProps;
+
+      const addressFilter = this.wallets.find(wallet => {
+        return wallet.address === deposit.cltv_details.user_duc_address;
+      });
+
+      const walletToUnfreeze = addressFilter
+        ? addressFilter.wallet
+        : this.wallets.find(wallet => 
+            wallet.wallet.credentials.walletId === deposit.wallet_id
+          ).wallet;
+
+      const txHex = await this.walletProvider.signFreeze(
+        walletToUnfreeze,
+        deposit.cltv_details,
+        Boolean(addressFilter)
+      );
+
+      try {
+        const withdrawDeposit = await this.withdrawnOldDepositsDividends(id);
+        this.logger.debug(withdrawDeposit);
+
+        const response = this.sendTX(txHex, id);
+
+        this.logger.debug(response);
+        this.showModal('success', id, deposit.duc_amount);
+      } catch(error) {
+        this.logger.debug(error);
+
+        if (
+          error 
+          && error.error
+          && error.error.detail === '-27: transaction already in block chain'
+        ) {
+          this.showModal('alreadyActivated', id);
+        } else {
+          this.showModal('network', id);
+        }
+      }
     }
   }
+
+  private withdrawnOldDepositsDividends(id: number) {
+    const address = `${this.apiProvider.getAddresses().deposit + 'user/deposits/'  + id}/send-dividends/`;
+
+    return this.httpClient
+      .post(address, {})
+      .toPromise();
+  }
+
+  private sendTX(raw_tx_hex, id: number) {
+    const address = `${this.apiProvider.getAddresses().deposit + 'user/deposits/' + id}/withdraw-with-hex/`;
+
+    return this.httpClient
+      .post(address, { raw_tx_hex })
+      .toPromise();
+  }
+
 }

@@ -7,7 +7,7 @@ import { PersistenceProvider } from '../persistence/persistence';
 import * as _ from 'lodash';
 
 export interface Config {
-  isProduction: boolean,
+  isProduction: boolean;
   limits: {
     totalCopayers: number;
     mPlusN: number;
@@ -267,7 +267,7 @@ export class ConfigProvider {
             this.configCache = _.clone(this.configDefault);
           }
           this.logImportantConfig(this.configCache);
-          resolve();
+          resolve(null);
         })
         .catch(err => {
           this.logger.error('Error Loading Config');

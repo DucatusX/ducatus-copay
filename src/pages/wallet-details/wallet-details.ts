@@ -3,24 +3,23 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
 import {
-  Events,
-  ModalController,
-  NavController,
-  NavParams,
-  Platform,
-  ViewController
+  Events, ModalController,
+  NavController, NavParams,
+  Platform, ViewController
 } from 'ionic-angular';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
-
-// providers
+import { BackupKeyPage } from '../../pages/backup/backup-key/backup-key';
+import { SendPage } from '../../pages/send/send';
+import { WalletAddressesPage } from '../../pages/settings/wallet-settings/wallet-settings-advanced/wallet-addresses/wallet-addresses';
+import { TxDetailsModal } from '../../pages/tx-details/tx-details';
+import { ProposalsNotificationsPage } from '../../pages/wallets/proposals-notifications/proposals-notifications';
 import { AddressBookProvider } from '../../providers/address-book/address-book';
 import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { CurrencyProvider } from '../../providers/currency/currency';
 import { ErrorsProvider } from '../../providers/errors/errors';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
-// import { GiftCardProvider } from '../../providers/gift-card/gift-card';
 import { CardConfigMap } from '../../providers/gift-card/gift-card.types';
 import { ActionSheetProvider, MoonPayProvider } from '../../providers/index';
 import { Logger } from '../../providers/logger/logger';
@@ -29,13 +28,6 @@ import { PlatformProvider } from '../../providers/platform/platform';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { TimeProvider } from '../../providers/time/time';
 import { WalletProvider } from '../../providers/wallet/wallet';
-
-// pages
-import { BackupKeyPage } from '../../pages/backup/backup-key/backup-key';
-import { SendPage } from '../../pages/send/send';
-import { WalletAddressesPage } from '../../pages/settings/wallet-settings/wallet-settings-advanced/wallet-addresses/wallet-addresses';
-import { TxDetailsModal } from '../../pages/tx-details/tx-details';
-import { ProposalsNotificationsPage } from '../../pages/wallets/proposals-notifications/proposals-notifications';
 import { Erc721Page } from '../erc-721/erc-721';
 import { SeedPage } from '../seed/seed';
 import { AmountPage } from '../send/amount/amount';
@@ -45,6 +37,7 @@ import { WalletBalanceModal } from './wallet-balance/wallet-balance';
 const HISTORY_SHOW_LIMIT = 10;
 const MIN_UPDATE_TIME = 2000;
 const TIMEOUT_FOR_REFRESHER = 1000;
+
 interface UpdateWalletOptsI {
   walletId: string;
   force?: boolean;
@@ -60,7 +53,6 @@ export class WalletDetailsPage {
   private onResumeSubscription: Subscription;
   private analyzeUtxosDone: boolean;
   private zone;
-
   public requiresMultipleSignatures: boolean;
   public wallet;
   public history = [];
@@ -79,10 +71,8 @@ export class WalletDetailsPage {
   public txpsPending: any[];
   public lowUtxosWarning: boolean;
   public associatedWallet: string;
-
   public showOptionsButton: boolean = true;
   private isCordova: boolean;
-
   public supportedCards: Promise<CardConfigMap>;
 
   constructor(
@@ -92,7 +82,6 @@ export class WalletDetailsPage {
     private walletProvider: WalletProvider,
     private addressbookProvider: AddressBookProvider,
     private events: Events,
-    // public giftCardProvider: GiftCardProvider,
     private logger: Logger,
     private timeProvider: TimeProvider,
     private translate: TranslateService,
@@ -116,18 +105,19 @@ export class WalletDetailsPage {
 
   async ionViewDidLoad() {
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
-    // this.supportedCards = this.giftCardProvider.getSupportedCardMap();
 
-    // Getting info from cache
     if (this.navParams.data.clearCache) {
       this.clearHistoryCache();
     } else {
-      if (this.wallet.completeHistory) this.showHistory();
-      else
+
+      if (this.wallet.completeHistory) {
+        this.showHistory();
+      } else {
         this.fetchTxHistory({
           walletId: this.wallet.credentials.walletId,
           force: true
         });
+      }
     }
 
     this.requiresMultipleSignatures = this.wallet.credentials.m > 1;
@@ -148,7 +138,6 @@ export class WalletDetailsPage {
     this.events.subscribe('Local/WalletHistoryUpdate', this.updateHistory);
   }
 
-  // Event handling
   ionViewWillLoad() {
     this.subscribeEvents();
   }
@@ -157,6 +146,7 @@ export class WalletDetailsPage {
     if (this.platformProvider.isIOS) {
       this.statusBar.styleLightContent();
     }
+
     this.onResumeSubscription = this.platform.resume.subscribe(() => {
       this.profileProvider.setFastRefresh(this.wallet);
       this.subscribeEvents();
@@ -171,7 +161,6 @@ export class WalletDetailsPage {
     }
   }
 
-  // Start by firing a walletFocus event.
   ionViewDidEnter() {
     this.profileProvider.setFastRefresh(this.wallet);
     this.events.publish('Local/WalletFocus', {
@@ -192,16 +181,17 @@ export class WalletDetailsPage {
 
   shouldShowSpinner() {
     return (
-      (this.updatingStatus || this.updatingTxHistory) &&
-      !this.walletNotRegistered &&
-      !this.updateStatusError &&
-      !this.updateTxHistoryError
+      (this.updatingStatus || this.updatingTxHistory)
+      && !this.walletNotRegistered 
+      && !this.updateStatusError 
+      && !this.updateTxHistoryError
     );
   }
 
   private fetchTxHistory(opts: UpdateWalletOptsI) {
     if (!opts.walletId) {
       this.logger.error('Error no walletId in update History');
+      
       return;
     }
 
@@ -214,11 +204,11 @@ export class WalletDetailsPage {
       this.events.publish('Local/WalletHistoryUpdate', args);
     }).bind(this);
 
-    // Fire a startup event, to allow UI to show the spinner
     this.events.publish('Local/WalletHistoryUpdate', {
       walletId: opts.walletId,
       finished: false
     });
+
     this.walletProvider
       .fetchTxHistory(this.wallet, progressFn, opts)
       .then(txHistory => {
@@ -255,15 +245,21 @@ export class WalletDetailsPage {
 
   private groupHistory(history) {
     return history.reduce((groups, tx, txInd) => {
-      this.isFirstInGroup(txInd)
-        ? groups.push([tx])
-        : groups[groups.length - 1].push(tx);
+      
+      if (this.isFirstInGroup(txInd)) {
+        groups.push([tx]);
+      } else {
+        groups[groups.length - 1].push(tx);
+      }
+
       return groups;
     }, []);
   }
 
   private showHistory(loading?: boolean) {
-    if (!this.wallet.completeHistory) return;
+    if (!this.wallet.completeHistory) {
+      return;
+    }
 
     this.history = this.wallet.completeHistory.slice(
       0,
@@ -272,11 +268,16 @@ export class WalletDetailsPage {
     this.zone.run(() => {
       this.groupedHistory = this.groupHistory(this.history);
     });
-    if (loading) this.currentPage++;
+
+    if (loading) {
+      this.currentPage++;
+    }
   }
 
   private setPendingTxps(txps) {
-    this.txps = !txps ? [] : _.sortBy(txps, 'createdOn').reverse();
+    this.txps = !txps 
+      ? [] 
+      : _.sortBy(txps, 'createdOn').reverse();
     this.txpsPending = [];
 
     this.txps.forEach(txp => {
@@ -288,7 +289,6 @@ export class WalletDetailsPage {
         this.txpsPending.push(txp);
       }
 
-      // For unsent transactions
       if (action && txp.status == 'accepted') {
         this.txpsPending.push(txp);
       }
@@ -326,78 +326,86 @@ export class WalletDetailsPage {
       this.history.length === this.wallet.completeHistory.length
     ) {
       loading.complete();
+
       return;
     }
+
     setTimeout(() => {
-      this.showHistory(true); // loading in true
+      // loading in true
+      this.showHistory(true); 
       loading.complete();
     }, 300);
   }
 
   private analyzeUtxos(): void {
-    if (this.analyzeUtxosDone) return;
+    if (this.analyzeUtxosDone) {
+      return;
+    }
 
     this.walletProvider
       .getLowUtxos(this.wallet)
       .then(resp => {
-        if (!resp) return;
+        if (!resp) {
+          return;
+        }
+
         this.analyzeUtxosDone = true;
         this.lowUtxosWarning = !!resp.warning;
-        // this.logger.debug('Low UTXOs warning: ', this.lowUtxosWarning);
       })
       .catch(err => {
         this.logger.warn('Analyze UTXOs: ', err);
       });
   }
 
-  // no network //
   private updateHistory = opts => {
     this.logger.debug('RECV Local/WalletHistoryUpdate @walletDetails', opts);
-    if (opts.walletId != this.wallet.id) return;
+    
+    if (opts.walletId != this.wallet.id) {
+      return;
+    }
 
     if (opts.finished) {
       this.updatingTxHistoryProgress = 0;
       this.updatingTxHistory = false;
       this.updateTxHistoryError = false;
 
-      const hasTx = !!this.wallet.completeHistory[0];
+      const hasTx = Boolean(this.wallet.completeHistory[0]);
 
       this.showNoTransactionsYetMsg = !hasTx;
 
-      if (this.wallet.needsBackup && hasTx && this.showBackupNeededMsg)
+      if (
+        this.wallet.needsBackup 
+        && hasTx 
+        && this.showBackupNeededMsg
+      ) {
         this.openBackupModal();
+      }
 
       this.showHistory();
     } else {
       if (opts.error) {
         this.updatingTxHistory = false;
         this.updateTxHistoryError = true;
-
-        // show what we have.
         this.showHistory();
       } else {
         this.updatingTxHistory = true;
         this.updatingTxHistoryProgress = opts.progress;
         this.updateTxHistoryError = false;
-
-        // show what we have
         this.showHistory();
-
-        // Hide prev history if long downlad is happending...
-        //  if (opts.progress > 5) {
-        //  this.history = null;
-        //  }
       }
     }
-  };
+  }
 
-  // no network //
   private updateStatus = opts => {
-    if (opts.walletId != this.wallet.id) return;
+    if (opts.walletId != this.wallet.id) {
+      return;
+    }
+
     this.logger.debug('RECV Local/WalletUpdate @walletDetails', opts);
 
     if (!opts.finished) {
       this.updatingStatus = true;
+
       return;
     }
 
@@ -408,11 +416,12 @@ export class WalletDetailsPage {
         ' Updating wallet with amount ',
         this.wallet.cachedStatus.balance.totalAmount
       );
-      let status = this.wallet.cachedStatus;
+      const status = this.wallet.cachedStatus;
       this.setPendingTxps(status.pendingTxps);
       this.showBalanceButton = status.totalBalanceSat != status.spendableAmount;
 
       const minXrpBalance = 20000000; // 20 XRP * 1e6
+      
       if (this.wallet.coin === 'xrp') {
         this.showBalanceButton =
           status.totalBalanceSat &&
@@ -428,17 +437,19 @@ export class WalletDetailsPage {
     } else {
       this.showBalanceButton = false;
 
-      let err = this.wallet.errorObj;
+      const err = this.wallet.errorObj;
+
       if (err.name && err.name.match(/WALLET_NOT_FOUND/)) {
         this.walletNotRegistered = true;
       }
+
       if (err === 'WALLET_NOT_REGISTERED') {
         this.walletNotRegistered = true;
       } else {
         this.updateStatusError = this.wallet.errorObj;
       }
     }
-  };
+  }
 
   public recreate() {
     this.onGoingProcessProvider.set('recreating');
@@ -446,6 +457,7 @@ export class WalletDetailsPage {
       .recreate(this.wallet)
       .then(() => {
         this.onGoingProcessProvider.clear();
+
         setTimeout(() => {
           this.walletProvider.startScan(this.wallet).then(() => {
             this.updateAll({ force: true });
@@ -465,7 +477,9 @@ export class WalletDetailsPage {
       const infoSheet = this.actionSheetProvider.createInfoSheet('speed-up-tx');
       infoSheet.present();
       infoSheet.onDidDismiss(option => {
-        option ? this.speedUpTx(tx) : this.goToTxDetails(tx);
+        option 
+          ? this.speedUpTx(tx) 
+          : this.goToTxDetails(tx);
       });
     }
   }
@@ -488,6 +502,7 @@ export class WalletDetailsPage {
         name: 'ConfirmPage',
         params: data
       };
+
       this.events.publish('IncomingDataRedir', nextView);
     });
   }
@@ -497,6 +512,7 @@ export class WalletDetailsPage {
       walletId: this.wallet.credentials.walletId,
       txid: tx.txid
     });
+
     txDetailModal.present();
   }
 
@@ -507,7 +523,9 @@ export class WalletDetailsPage {
     );
     infoSheet.present();
     infoSheet.onDidDismiss(option => {
-      if (option) this.openBackup();
+      if (option) {
+        this.openBackup();
+      }
     });
   }
 
@@ -525,6 +543,7 @@ export class WalletDetailsPage {
 
   public getDate(txCreated) {
     const date = new Date(txCreated * 1000);
+
     return date;
   }
 
@@ -536,8 +555,10 @@ export class WalletDetailsPage {
     if (index === 0) {
       return true;
     }
+    
     const curTx = this.history[index];
     const prevTx = this.history[index - 1];
+
     return !this.createdDuringSameMonth(curTx, prevTx);
   }
 
@@ -561,11 +582,12 @@ export class WalletDetailsPage {
   }
 
   public canSpeedUpTx(tx): boolean {
-    if (this.wallet.coin !== 'btc') return false;
+    if (this.wallet.coin !== 'btc') {
+      return false;
+    }
 
     const currentTime = moment();
     const txTime = moment(tx.time * 1000);
-
     // Can speed up the tx after 4 hours without confirming
     return (
       currentTime.diff(txTime, 'hours') >= 4 &&
@@ -597,7 +619,10 @@ export class WalletDetailsPage {
     );
     modal.present();
     modal.onDidDismiss(data => {
-      if (!data || !data.txid) return;
+      if (!data || !data.txid) {
+        return;
+      }
+
       this.goToTxDetails(data);
     });
   }
@@ -624,8 +649,10 @@ export class WalletDetailsPage {
     this.updateAll({ force: true });
 
     setTimeout(() => {
-      refresher.complete();
-    }, TIMEOUT_FOR_REFRESHER);
+        refresher.complete();
+      }, 
+      TIMEOUT_FOR_REFRESHER
+    );
   }
 
   public close() {
@@ -639,13 +666,17 @@ export class WalletDetailsPage {
     const receive = this.actionSheetProvider.createWalletReceive(params);
     receive.present();
     receive.onDidDismiss(data => {
-      if (data === 'goToBackup') this.goToBackup();
-      else if (data) this.showErrorInfoSheet(data);
+      if (data === 'goToBackup') {
+        this.goToBackup();
+      } else if (data) {
+        this.showErrorInfoSheet(data);
+      }
     });
   }
 
   public goToErc721Page() {
     if (this.wallet.credentials.walletId) {
+
       if (this.wallet.needsBackup) {
         this.goToReceivePage();
       } else {
@@ -656,6 +687,7 @@ export class WalletDetailsPage {
 
   public goToSeedPage() {
     if (this.wallet.credentials.walletId) {
+
       if (this.wallet.needsBackup) {
         this.goToReceivePage();
       } else {
@@ -671,20 +703,30 @@ export class WalletDetailsPage {
   }
 
   public genMoreOptionsList() {
-  
     const isTokenWallet = Boolean(this.wallet.linkedEthWallet);
     const showRequest =
-      this.wallet && this.wallet.isComplete() && !this.wallet.needsBackup && !isTokenWallet;
+      this.wallet 
+      && this.wallet.isComplete() 
+      && !this.wallet.needsBackup 
+      && !isTokenWallet;
 
     const showShare = showRequest && this.isCordova;
 
     const listOfOptions: boolean[] = [showRequest, showShare];
-    const listLength = listOfOptions.reduce((acc, val) => acc + Number(val), 0)
-    return { showRequest, showShare, length: listLength}
+    const listLength = listOfOptions.reduce((acc, val) => acc + Number(val), 0);
+
+    return { 
+      showRequest, 
+      showShare, 
+      length: listLength
+    };
   }
 
   public showMoreOptions(): void {
-    const { showShare, showRequest } = this.genMoreOptionsList();
+    const { 
+      showShare, 
+      showRequest 
+    } = this.genMoreOptionsList();
     const optionsSheet = this.actionSheetProvider.createOptionsSheet(
       'wallet-options', 
       { showShare, showRequest }
@@ -692,8 +734,13 @@ export class WalletDetailsPage {
     optionsSheet.present();
 
     optionsSheet.onDidDismiss(option => {
-      if (option == 'request-amount') this.requestSpecificAmount();
-      if (option == 'share-address') this.shareAddress();
+      if (option == 'request-amount') {
+        this.requestSpecificAmount();
+      }
+
+      if (option == 'share-address') {
+        this.shareAddress();
+      }
     });
   }
 
@@ -701,7 +748,7 @@ export class WalletDetailsPage {
     this.walletProvider.getAddress(this.wallet, false).then(addr => {
       this.navCtrl.push(AmountPage, {
         toAddress: addr,
-        id: this.wallet.credentials.walletId,
+        walletId: this.wallet.credentials.walletId,
         recipientType: 'wallet',
         name: this.wallet.name,
         color: this.wallet.color,
@@ -713,7 +760,10 @@ export class WalletDetailsPage {
   }
 
   private shareAddress(): void {
-    if (!this.isCordova) return;
+    if (!this.isCordova) {
+      return;
+    }
+
     this.walletProvider.getAddress(this.wallet, false).then(addr => {
       this.socialSharing.share(addr);
     });
