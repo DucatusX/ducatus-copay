@@ -165,7 +165,7 @@ export class DepositPage {
 
   private async getAddress(wallet): Promise<string> {
     try {
-      const address = await this.walletProvider.getAddress(wallet, false);
+      const address = await this.walletProvider.getAddressForDeposits(wallet, false);
       
       return address;
     } catch(e) {
