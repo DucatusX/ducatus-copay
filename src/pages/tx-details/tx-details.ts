@@ -33,6 +33,7 @@ export class TxDetailsModal {
   private txId: string;
   private config;
   private blockexplorerUrl: string;
+  private blockchainName: string;
 
   public wallet;
   public btx;
@@ -96,6 +97,7 @@ export class TxDetailsModal {
 
     let defaults = this.configProvider.getDefaults();
     this.blockexplorerUrl = defaults.blockExplorerUrl[this.wallet.coin];
+    this.blockchainName = defaults.explorerName[this.wallet.coin];
 
     this.txConfirmNotificationProvider.checkIfEnabled(this.txId).then(res => {
       this.txNotification = {
@@ -305,6 +307,8 @@ export class TxDetailsModal {
     const network =
       this.getShortNetworkName() == 'test' ? 'testnet/' : 'mainnet/';
     let url;
+
+
     switch (this.wallet.coin) {
       case 'btc':
         url = `https://${this.blockexplorerUrl}tx/${btx.txid}`;
@@ -316,11 +320,14 @@ export class TxDetailsModal {
         url = `https://${this.blockexplorerUrl}${network}tx/${btx.txid}`;
         break;
     }
-    let optIn = true;
-    let title = null;
-    let message = this.translate.instant('View Transaction on Insight');
-    let okText = this.translate.instant('Open Insight');
-    let cancelText = this.translate.instant('Go Back');
+
+    const optIn = true;
+    const title = null;
+    const messageStr = `View Transaction on ${this.blockchainName}`;
+    const message = this.translate.instant(messageStr);
+    const okText = this.translate.instant('Open');
+    const cancelText = this.translate.instant('Go Back');
+
     this.externalLinkProvider.open(
       url,
       optIn,

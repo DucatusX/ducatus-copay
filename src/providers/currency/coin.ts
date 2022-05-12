@@ -28,6 +28,7 @@ export interface CoinOpts {
     // Urls
     ratesApi: string;
     blockExplorerUrls: string;
+    explorerName: string;
   };
   feeInfo: {
     // Fee Units
@@ -66,7 +67,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'BIP73',
       protocolPrefix: { livenet: 'ducatus', testnet: 'ducatus' },
       ratesApi: apiProvider.getAddresses().ratesApi,
-      blockExplorerUrls: 'insight.ducatus.io/#/DUC/'
+      blockExplorerUrls: 'insight.ducatus.io/#/DUC/',
+      explorerName: 'insight.ducatus.io'
     },
     feeInfo: {
       feeUnit: 'sat/byte',
@@ -101,7 +103,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'EIP681',
       protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
       ratesApi: apiProvider.getAddresses().ratesApi,
-      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/',
+      explorerName: 'insight.ducatus.io'
     },
     feeInfo: {
       feeUnit: 'Gwei',
@@ -136,7 +139,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'BIP73',
       protocolPrefix: { livenet: 'bitcoin', testnet: 'bitcoin' },
       ratesApi: 'https://bitpay.com/api/rates',
-      blockExplorerUrls: 'www.blockchain.com/btc/'
+      blockExplorerUrls: 'www.blockchain.com/btc/',
+      explorerName: 'www.blockchain.com'
     },
     feeInfo: {
       feeUnit: 'sat/byte',
@@ -171,7 +175,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'BIP73',
       protocolPrefix: { livenet: 'bitcoincash', testnet: 'bchtest' },
       ratesApi: 'https://bitpay.com/api/rates/bch',
-      blockExplorerUrls: 'insight.ducatus.io/#/BCH/'
+      blockExplorerUrls: 'insight.ducatus.io/#/BCH/',
+      explorerName: 'insight.ducatus.io'
     },
     feeInfo: {
       feeUnit: 'sat/byte',
@@ -206,7 +211,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'EIP681',
       protocolPrefix: { livenet: 'ethereum', testnet: 'ethereum' },
       ratesApi: 'https://bitpay.com/api/rates/eth',
-      blockExplorerUrls: 'insight.ducatus.io/#/ETH/'
+      blockExplorerUrls: 'insight.ducatus.io/#/ETH/',
+      explorerName: 'insight.ducatus.io'
     },
     feeInfo: {
       feeUnit: 'Gwei',
@@ -241,7 +247,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'BIP73',
       protocolPrefix: { livenet: 'ripple', testnet: 'ripple' },
       ratesApi: 'https://bitpay.com/api/rates/xrp',
-      blockExplorerUrls: 'xrpscan.com/'
+      blockExplorerUrls: 'xrpscan.com/',
+      explorerName: 'xrpscan.com'
     },
     feeInfo: {
       feeUnit: 'drops',
@@ -276,7 +283,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'EIP681b',
       protocolPrefix: { livenet: 'ethereum', testnet: 'ethereum' },
       ratesApi: 'https://bitpay.com/api/rates/pax',
-      blockExplorerUrls: 'bitpay.com/insight/#/ETH/'
+      blockExplorerUrls: 'bitpay.com/insight/#/ETH/',
+      explorerName: 'bitpay.com'
     },
     feeInfo: {
       feeUnit: 'Gwei',
@@ -311,7 +319,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'EIP681b',
       protocolPrefix: { livenet: 'ethereum', testnet: 'ethereum' },
       ratesApi: 'https://bitpay.com/api/rates/usdc',
-      blockExplorerUrls: 'bitpay.com/insight/#/ETH/'
+      blockExplorerUrls: 'bitpay.com/insight/#/ETH/',
+      explorerName: 'bitpay.com'
     },
     feeInfo: {
       feeUnit: 'Gwei',
@@ -346,7 +355,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'EIP681b',
       protocolPrefix: { livenet: 'ethereum', testnet: 'ethereum' },
       ratesApi: 'https://bitpay.com/api/rates/gusd',
-      blockExplorerUrls: 'bitpay.com/insight/#/ETH/'
+      blockExplorerUrls: 'bitpay.com/insight/#/ETH/',
+      explorerName: 'bitpay.com'
     },
     feeInfo: {
       feeUnit: 'Gwei',
@@ -381,7 +391,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'EIP681b',
       protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
       ratesApi: 'https://bitpay.com/api/rates/',
-      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/',
+      explorerName: 'insight.ducatus.io'
     },
     feeInfo: {
       feeUnit: 'Gwei',
@@ -416,7 +427,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'EIP681b',
       protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
       ratesApi: 'https://bitpay.com/api/rates/',
-      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/',
+      explorerName: 'insight.ducatus.io'
     },
     feeInfo: {
       feeUnit: 'Gwei',
@@ -451,7 +463,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'EIP681b',
       protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
       ratesApi: 'https://bitpay.com/api/rates/',
-      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/',
+      explorerName: 'insight.ducatus.io'
     },
     feeInfo: {
       feeUnit: 'Gwei',
@@ -486,7 +499,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'EIP681b',
       protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
       ratesApi: 'https://bitpay.com/api/rates/',
-      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/',
+      explorerName: 'insight.ducatus.io'
     },
     feeInfo: {
       feeUnit: 'Gwei',
@@ -521,7 +535,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'EIP681b',
       protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
       ratesApi: 'https://bitpay.com/api/rates/',
-      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/',
+      explorerName: 'insight.ducatus.io'
     },
     feeInfo: {
       feeUnit: 'Gwei',
@@ -556,7 +571,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'EIP681b',
       protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
       ratesApi: 'https://bitpay.com/api/rates/',
-      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/',
+      explorerName: 'insight.ducatus.io'
     },
     feeInfo: {
       feeUnit: 'Gwei',
@@ -591,7 +607,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'EIP681b',
       protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
       ratesApi: 'https://bitpay.com/api/rates/',
-      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/',
+      explorerName: 'insight.ducatus.io'
     },
     feeInfo: {
       feeUnit: 'Gwei',
@@ -626,7 +643,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'EIP681b',
       protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
       ratesApi: 'https://bitpay.com/api/rates/',
-      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/',
+      explorerName: 'insight.ducatus.io'
     },
     feeInfo: {
       feeUnit: 'Gwei',
@@ -661,7 +679,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'EIP681b',
       protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
       ratesApi: 'https://bitpay.com/api/rates/',
-      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/',
+      explorerName: 'insight.ducatus.io'
     },
     feeInfo: {
       feeUnit: 'Gwei',
@@ -696,7 +715,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'EIP681b',
       protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
       ratesApi: 'https://bitpay.com/api/rates/',
-      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/',
+      explorerName: 'insight.ducatus.io'
     },
     feeInfo: {
       feeUnit: 'Gwei',
@@ -731,7 +751,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'EIP681b',
       protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
       ratesApi: 'https://bitpay.com/api/rates/',
-      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/'
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/',
+      explorerName: 'insight.ducatus.io'
     },
     feeInfo: {
       feeUnit: 'Gwei',
