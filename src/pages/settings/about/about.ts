@@ -1,21 +1,15 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NavController } from 'ionic-angular';
-
-// pages
-import { SendFeedbackPage } from '../../feedback/send-feedback/send-feedback';
-import { SessionLogPage } from './session-log/session-log';
-
-// providers
+import env from '../../../environments';
 import {
-  ApiProvider,
-  AppProvider,
-  BitPayProvider,
-  ExternalLinkProvider,
-  Logger,
-  PersistenceProvider,
+  ApiProvider, AppProvider,
+  BitPayProvider, ExternalLinkProvider,
+  Logger, PersistenceProvider,
   ReplaceParametersProvider
 } from '../../../providers';
+import { SendFeedbackPage } from '../../feedback/send-feedback/send-feedback';
+import { SessionLogPage } from './session-log/session-log';
 
 @Component({
   selector: 'page-about',
@@ -26,6 +20,8 @@ export class AboutPage {
   public commitHash: string;
   public title: string;
   private tapped = 0;
+  public mode: string;
+
   constructor(
     private navCtrl: NavController,
     private appProvider: AppProvider,
@@ -42,6 +38,7 @@ export class AboutPage {
     this.logger.info('Loaded: AboutPage');
     this.commitHash = this.appProvider.info.commitHash;
     this.version = this.appProvider.info.version;
+    this.mode = env && env.name;
     this.title = this.replaceParametersProvider.replace(
       this.translate.instant('About {{appName}}'),
       { appName: this.appProvider.info.nameCase }
@@ -49,12 +46,11 @@ export class AboutPage {
   }
 
   public openExternalLink(): void {
-    const url =
-      'https://github.com/bitpay/' +
-      this.appProvider.info.gitHubRepoName +
-      '/tree/' +
-      this.appProvider.info.commitHash +
-      '';
+    const url = 'https://github.com/bitpay/'
+      + this.appProvider.info.gitHubRepoName 
+      + '/tree/' 
+      + this.appProvider.info.commitHash 
+      + '';
     const optIn = true;
     const title = this.translate.instant('Open GitHub Project');
     const message = this.translate.instant(
@@ -79,6 +75,7 @@ export class AboutPage {
     const message = this.translate.instant('View Wallet Terms of Use');
     const okText = this.translate.instant('Open');
     const cancelText = this.translate.instant('Go Back');
+
     this.externalLinkProvider.open(
       url,
       optIn,
@@ -96,6 +93,7 @@ export class AboutPage {
     const message = this.translate.instant('View Privacy Policy');
     const okText = this.translate.instant('Open');
     const cancelText = this.translate.instant('Go Back');
+
     this.externalLinkProvider.open(
       url,
       optIn,
@@ -113,15 +111,17 @@ export class AboutPage {
   public openSendFeedbackPage(): void {
     this.navCtrl.push(SendFeedbackPage);
   }
-
   // adding this for testing purposes
   public async wipeBitPayAccounts() {
     this.tapped++;
+
     if (this.tapped >= 10) {
       await this.persistenceProvider.removeAllBitPayAccounts(
         this.bitpayProvider.getEnvironment().network
       );
+
       alert('removed accounts');
+      
       this.tapped = 0;
     }
   }
