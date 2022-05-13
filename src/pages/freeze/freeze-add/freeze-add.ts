@@ -199,11 +199,23 @@ export class FreezeAddPage {
   public async generateUserDeposit(): Promise<void> {
     this.depositLoading = true;
     
+    const receiverAddress = await this.walletProvider
+      .getInfoByAddress(this.walletAddresses, this.DepositGroup.value.AddressFrom, this.DepositGroup.value.AddressTo)
+      .then(res => {
+        return res;
+      });
+
+    const receiverData = (await this.walletProvider
+      .prepareAddFreeze(receiverAddress.wallet, receiverAddress.address[0])
+      .then(res => {
+        return res;
+      })) as any;
+
     const resultPrepare: any = await this.walletProvider.prepareAdd(this.walletAddresses, this.DepositGroup.value.AddressFrom);
     
     try {
       const deposit: any = await this.generateDeposit(
-        resultPrepare.wallet.walletId,
+        receiverData.walletId,
         this.DepositGroup.value.AddressTo,
         String(this.DepositGroup.value.Month)
       );
