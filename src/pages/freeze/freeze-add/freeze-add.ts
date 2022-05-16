@@ -205,11 +205,17 @@ export class FreezeAddPage {
         return res;
       });
 
-    const receiverData = (await this.walletProvider
-      .prepareAddFreeze(receiverAddress.wallet, receiverAddress.address[0])
-      .then(res => {
-        return res;
-      })) as any;
+    let receiverData: any;
+
+    try {
+      receiverData = await this.walletProvider
+        .prepareAddFreeze(receiverAddress.wallet, receiverAddress.address[0]);
+    }
+    catch (err) {
+      this.logger.debug('failed to get walletID. responce err - ' + err);
+      this.showModal('notFoundWalletId');
+      return;
+    }
 
     const resultPrepare: any = await this.walletProvider.prepareAdd(this.walletAddresses, this.DepositGroup.value.AddressFrom);
     
@@ -276,6 +282,13 @@ export class FreezeAddPage {
         text: 'Needs Backup',
         button: 'OK',
         handler: () => { this.navCtrl.pop(); },
+        enableBackdropDismiss: false
+      },
+      notFoundWalletId: {
+        title: '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+        text: 'recipient wallet not found. Please make sure this wallet was created in the app',
+        button: 'OK',
+        handler: () => { this.depositLoading = false; },
         enableBackdropDismiss: false
       }
     };
