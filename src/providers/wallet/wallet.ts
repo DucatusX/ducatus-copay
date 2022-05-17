@@ -1635,10 +1635,16 @@ export class WalletProvider {
   }
 
   public prepareAddFreeze(wallet: any, addressTo: any) {
-    return new Promise(async resolve => {
-      const publicKey = addressTo.publicKeys[0];
+    return new Promise(async (resolve, reject) => {
+      let publicKey;
 
-      resolve({
+      if (addressTo && addressTo.publicKeys[0]) {
+        publicKey = addressTo.publicKeys[0];
+      } else {
+        return reject(new Error('public key not found'));
+      }
+
+      return resolve({
         wallet,
         walletId: addressTo.walletId,
         pubKey: publicKey,
