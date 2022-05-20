@@ -30,6 +30,9 @@ export class AddressbookAddPage {
   public appName: string;
   private regex: RegExp;
 
+  public isDucxAddress: boolean;
+  public isDucAddress: boolean;
+
   constructor(
     private navCtrl: NavController,
     private navParams: NavParams,
@@ -55,6 +58,8 @@ export class AddressbookAddPage {
           new AddressValidator(this.addressProvider).isValid
         ])
       ],
+      isDucxAddress: [true],
+      isDucAddress: [true],
       tag: ['', Validators.pattern(this.regex)]
     });
     if (this.navParams.data.addressbookEntry) {
@@ -64,6 +69,23 @@ export class AddressbookAddPage {
     }
     this.appName = this.appProvider.info.nameCase;
     this.events.subscribe('Local/AddressScan', this.updateAddressHandler);
+    this.onChangeAddress();
+
+    this.isDucxAddress = false;
+    this.isDucAddress = false;
+  }
+
+  onChangeAddress(): void {
+    this.addressBookAdd.get('address').valueChanges.subscribe(address => {
+      const coinProperty: {coin: string; network: string;} = this.addressProvider.getCoinAndNetwork(address);
+
+      if (coinProperty) {
+        const { coin } = coinProperty;
+
+        this.isDucAddress = coin === 'duc';
+        this.isDucxAddress = coin === 'eth';
+      }
+    });
   }
 
   ionViewDidLoad() {
