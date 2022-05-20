@@ -121,11 +121,14 @@
           (click)="showSwapHistory()"
           [disabled]="historyIsLoad || !swapHistory || !swapHistory.length"
         >
-          {{ 
-            this.isShowSwapHistory 
-              ? 'Hide SWAP History' 
-              : 'View SWAP History' 
-          }}
+          <ion-spinner *ngIf="historyIsLoad" name="dots"></ion-spinner>
+          <span  *ngIf="!historyIsLoad">
+            {{ 
+              this.isShowSwapHistory 
+                ? 'Hide SWAP History' 
+                : 'View SWAP History' 
+            }}
+          </span>
         </button>
       </form>
     </ion-list>
