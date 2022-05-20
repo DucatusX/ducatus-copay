@@ -27,6 +27,16 @@
         <ion-icon class="scanner-icon" name="qr-scanner" item-right (click)="openScanner()"></ion-icon>
       </ion-item>
 
+      <ion-item  *ngIf="isDucxAddress">
+        <ion-label stacked>{{ 'DUCX Address' }}</ion-label>
+        <ion-checkbox formControlName="isDucxAddress"></ion-checkbox>
+      </ion-item>
+
+      <ion-item  *ngIf="isDucAddress">
+        <ion-label stacked>{{ 'DUC Address' }}</ion-label>
+        <ion-checkbox formControlName="isDucAddress" ></ion-checkbox>
+      </ion-item>
+
       <ion-item *ngIf="addressBookAdd.value.address && getCoinAndNetwork() && getCoinAndNetwork().coin === 'xrp'">
         <ion-label stacked>{{ 'Destination Tag' | translate }}</ion-label>
         <ion-input formControlName="tag" type="number" [value]="addressBookAdd.value.tag"></ion-input>

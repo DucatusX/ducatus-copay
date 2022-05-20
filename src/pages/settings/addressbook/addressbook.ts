@@ -43,6 +43,20 @@ export class AddressbookPage {
         let contacts: object[] = [];
         _.each(addressBook, (contact, k: string) => {
           const coinInfo = this.getCoinAndNetwork(k);
+          const { coin } = coinInfo;
+
+          if (coin === 'duc') {
+            coinInfo.coin = contact.isDucAddress
+              ? 'duc'
+              : 'btc';
+          }
+
+          if (coin === 'eth') {
+            coinInfo.coin = contact.isDucxAddress
+              ? 'ducx'
+              : 'eth';
+          }
+          
           contacts.push({
             name: _.isObject(contact) ? contact.name : contact,
             address: k,
