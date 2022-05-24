@@ -141,7 +141,7 @@ export class SwapPage {
 
       swapHistory = swapHistory.concat(history);
     }
-
+   
     swapHistory = swapHistory.map((tx) => {
       const {
         wallet,
@@ -267,8 +267,8 @@ export class SwapPage {
     }).bind(this);
     // Fire a startup event, to allow UI to show the spinner
     try {
-      const txHistory: any[] = await this.walletProvider.fetchTxHistory(wallet, progressFn);
-      txHistory.map((tx) => {
+      let txHistory: any[] = await this.walletProvider.fetchTxHistory(wallet, progressFn);
+      txHistory = txHistory.map((tx) => {
         tx.wallet = wallet;
 
         return tx;
