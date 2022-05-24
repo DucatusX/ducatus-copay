@@ -268,6 +268,11 @@ export class SwapPage {
     // Fire a startup event, to allow UI to show the spinner
     try {
       const txHistory: any[] = await this.walletProvider.fetchTxHistory(wallet, progressFn);
+      txHistory.map((tx) => {
+        tx.wallet = wallet;
+
+        return tx;
+      });
       
       return txHistory.filter(tx => tx.swap);
     } catch(error) {
