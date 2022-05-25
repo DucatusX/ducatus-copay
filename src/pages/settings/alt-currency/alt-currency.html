@@ -10,7 +10,6 @@
     </ion-title>
   </ion-navbar>
 </ion-header>
-
 <ion-content #scrollArea>
   <expandable-header
     [scrollArea]="scrollArea"
@@ -24,7 +23,6 @@
       </expandable-header-primary>
     </ion-toolbar>
   </expandable-header>
-
   <ion-searchbar
     class="searchbar"
     placeholder="{{'Search currency' | translate}}"
@@ -38,34 +36,33 @@
     >
       <ion-item *ngIf="lastUsedAltCurrency.isoCode === 'USD'">
         {{ lastUsedAltCurrency.name }}
-        <span class="currency" item-end>{{lastUsedAltCurrency.isoCode}}</span>
+        <span 
+          class="currency" 
+          item-end
+        >
+          {{ lastUsedAltCurrency.isoCode }}
+        </span>
       </ion-item>
     </div>
   </ion-list>
   <div class="line-divider"></div>
   <div *ngIf="altCurrencyList[0] && lastUsedAltCurrencyList[0]" padding></div>
   <ion-list class="settings-list bp-list">
-    <!--
+    <div 
+      *ngFor="let alt of altCurrencyList" 
+      (click)="save(alt)"
+    >
       <ion-item>
-        {{ completeAlternativeList.USD.name }}
-        <ion-note item-end>{{completeAlternativeList.USD.isoCode}}</ion-note>
-      </ion-item>
-    -->
-
-    <div *ngFor="let alt of altCurrencyList" (click)="save(alt)">
-      <ion-item *ngIf="alt.isoCode === 'USD'">
         {{ alt.name }}
-        <ion-note item-end>{{alt.isoCode}}</ion-note>
+        <ion-note item-end>{{ alt.isoCode }}</ion-note>
       </ion-item>
     </div>
   </ion-list>
-
   <ion-spinner
     class="loading"
     *ngIf="!altCurrencyList[0]"
     name="crescent"
   ></ion-spinner>
-
   <ion-infinite-scroll (ionInfinite)="loadAltCurrencies($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>

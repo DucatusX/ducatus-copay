@@ -71,7 +71,25 @@ export class AddressBookProvider {
 
   public add(entry): Promise<any> {
     return new Promise((resolve, reject) => {
+      const {
+        isDucxAddress, 
+        isDucAddress
+      } = entry;
       const addrData = this.addressProvider.getCoinAndNetwork(entry.address);
+      const { coin } = addrData;
+
+      if (coin === 'duc') {
+        addrData.coin = isDucAddress
+          ? 'duc'
+          : 'btc';
+      }
+
+      if (coin === 'eth') {
+        addrData.coin = isDucxAddress
+          ? 'ducx'
+          : 'eth';
+      }
+      
       if (_.isEmpty(addrData)) {
         let msg = this.translate.instant('Not valid bitcoin address');
         return reject(msg);

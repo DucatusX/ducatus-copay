@@ -663,6 +663,38 @@ export class WalletProvider {
     return protoAddr;
   }
 
+  public getAddressForDeposits(wallet, forceNew: boolean): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let walletId = wallet.id;
+      const { token } = wallet.credentials;
+
+      if (token) {
+        walletId = wallet.id.replace(`-${token.address}`, '');
+      }
+
+      this.persistenceProvider
+        .getLastAddress(walletId)
+        .then((addr: string) => {
+          if (addr) {
+            // prevent to show legacy address
+            const isBchLegacy = wallet.coin == 'bch' && addr.match(/^[CHmn]/);
+            const isValid = this.addressProvider.isValid(addr);
+            
+            if (!forceNew && !isBchLegacy && isValid) {
+              return resolve(addr);
+            } else {
+              return resolve(null);
+            }
+          }
+
+          return resolve(null);
+        })
+        .catch(err => {
+          return reject(err);
+        });
+    });
+  }
+
   public getAddress(wallet, forceNew: boolean): Promise<string> {
     return new Promise((resolve, reject) => {
       let walletId = wallet.id;
@@ -1603,10 +1635,16 @@ export class WalletProvider {
   }
 
   public prepareAddFreeze(wallet: any, addressTo: any) {
-    return new Promise(async resolve => {
-      const publicKey = addressTo.publicKeys[0];
+    return new Promise(async (resolve, reject) => {
+      let publicKey;
 
-      resolve({
+      if (addressTo && addressTo.publicKeys[0]) {
+        publicKey = addressTo.publicKeys[0];
+      } else {
+        return reject(new Error('public key not found'));
+      }
+
+      return resolve({
         wallet,
         walletId: addressTo.walletId,
         pubKey: publicKey,

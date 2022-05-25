@@ -34,9 +34,17 @@ export class AddressbookViewPage {
     private actionSheetProvider: ActionSheetProvider
   ) {
     this.address = this.navParams.data.contact.address;
-    const addrData = this.addressProvider.getCoinAndNetwork(this.address);
-    this.coin = addrData.coin;
-    this.network = addrData.network;
+    
+    if (this.navParams.data.contact.coin) {
+      this.coin = this.navParams.data.contact.coin;
+      this.network = this.navParams.data.contact.network;
+    } else {
+      const addrData = this.addressProvider.getCoinAndNetwork(this.address);
+
+      this.coin = addrData.coin;
+      this.network = addrData.network;
+    }
+
     this.name = this.navParams.data.contact.name;
     this.email = this.navParams.data.contact.email;
     this.tag = this.navParams.data.contact.tag;
