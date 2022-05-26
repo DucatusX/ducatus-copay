@@ -296,7 +296,7 @@ export class DepositPage {
       const walletToUnfreeze = addressFilter
         ? addressFilter.wallet
         : this.wallets.find(wallet => 
-            wallet.wallet.credentials.walletId === deposit.wallet_id
+            wallet.wallet.credentials.walletId === deposit.walletId
           ).wallet;
 
       const txHex = await this.walletProvider.signFreeze(
