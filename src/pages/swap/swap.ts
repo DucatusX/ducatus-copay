@@ -448,5 +448,4 @@ export class SwapPage {
     this.chunkSize *= 2;
     infiniteScroll.complete();
   }
-
 }
