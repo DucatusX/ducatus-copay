@@ -93,6 +93,13 @@ export const DRCTokenOpts = {
     address: '0xFCb965D9Da10A15eb87B3Da539383997ce6fA597',
     blockchain: 'ducx'
   },
+  '0xA75185edc9745B000379e8304deBA5DeAbB39f30': {
+    name: 'Takaful',
+    symbol: 'TKF',
+    decimal: 8,
+    address: '0xA75185edc9745B000379e8304deBA5DeAbB39f30',
+    blockchain: 'ducx'
+  },
   '0x986083CD47dBBC931585D2FE2330FD29B3e849b0': {
     name: 'AA+',
     symbol: 'AA+',

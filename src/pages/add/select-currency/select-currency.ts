@@ -78,10 +78,9 @@ export class SelectCurrencyPage {
       : this.currencyProvider.getAvailableChains();
     this.availableTokens = this.currencyProvider.getAvailableTokens();
     this.drcAvailableTokens = this.currencyProvider.getDRCAvailableTokens();
-    // for (const coin of this.availableChains) {
+    this.drcAvailableTokens = this.drcAvailableTokens.filter(token => token.symbol != 'TKF');
     this.coinsSelected['duc'] = true;
     this.coinsSelected['ducx'] = true;
-    // }
     this.shouldShowKeyOnboarding();
     this.setTokens();
   }
