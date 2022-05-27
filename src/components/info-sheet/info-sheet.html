@@ -31,6 +31,15 @@
 
     </info-sheet-template>
 
+    <info-sheet-template *ngSwitchCase="'forbidden'" type="warning">
+      <span sheet-title-text translate>forbidden</span>
+      <span sheet-text translate>
+        Swap is currently restricted, please try again later
+      </span>
+      <span sheet-button-text translate>GOT IT</span>
+
+    </info-sheet-template>
+
     <info-sheet-template
       *ngSwitchCase="'backup-needed-with-activity'"
       type="info"

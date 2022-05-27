@@ -258,8 +258,12 @@ export class SwapConvertPage {
       .catch(err => {
         this.sendDisabled = false;
         this.logger.debug('cant get addresses: ', err);
-        const infoSheet = this.actionSheetProvider.createInfoSheet('cant-get-addresses');
-        
+        let infoSheet = this.actionSheetProvider.createInfoSheet('cant-get-addresses');
+
+        if (err && err.status && err.status === 403) {
+          infoSheet = this.actionSheetProvider.createInfoSheet('forbidden');
+        }
+       
         infoSheet.present();
       });
   }
