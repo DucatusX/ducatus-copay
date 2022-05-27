@@ -377,6 +377,7 @@ export class WalletsPage {
     */
 
     this.wallets = this.profileProvider.getWallets();
+    this.wallets = this.wallets.filter( wallet => wallet.coin !== "tkf");
     this.walletsGroups = _.values(
       _.groupBy(
         _.filter(this.wallets, wallet => {
