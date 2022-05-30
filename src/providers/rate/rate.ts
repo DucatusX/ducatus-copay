@@ -53,8 +53,8 @@ export class RateProvider {
         usdValue = 0.01;
         ngnValue = 0.01;
       } else if (coin === 'jwan') {
-        usdValue = 0.01;
-        ngnValue = 0.01;
+        usdValue = 0.02;
+        ngnValue = 0.02;
       } else if (coin === 'tkf') {
         usdValue = 0.25;
         ngnValue = 0.25;
