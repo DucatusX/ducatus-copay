@@ -26,44 +26,7 @@ export class RateProvider {
     this.alternatives = {};
     for (const coin of this.currencyProvider.getAvailableCoins()) {
       this.rateServiceUrl[coin] = env.ratesAPI[coin];
-      // let usdValue;
-      // let ngnValue;
-      // const token = [
-      //   'jamasy',
-      //   'nuyasa',
-      //   'sunoba',
-      //   'dscmed',
-      //   'pog1',
-      //   'wde',
-      //   'mdxb',
-      //   'g.o.l.d.',
-      //   'jwan',
-      //   'tkf',
-      //   'aa+',
-      //   'usdc'
-      // ];
-      // if (coin === 'ducx') {
-      //   usdValue = 0.6;
-      //   ngnValue = 0.6;
-      // } else if (coin === 'duc') {
-      //   usdValue = 0.06;
-      //   ngnValue = 29.05;
-      // } else if (coin === 'g.o.l.d.') {
-      //   usdValue = 0.01;
-      //   ngnValue = 0.01;
-      // } else if (coin === 'jwan') {
-      //   usdValue = 0.02;
-      //   ngnValue = 0.02;
-      // } else if (coin === 'tkf') {
-      //   usdValue = 0.25;
-      //   ngnValue = 0.25;
-      // } else if (token.includes(coin)) {
-      //   usdValue = 1;
-      //   ngnValue = 1;
-      // } else {
-      //   
-      // }
-
+     
       this.rates[coin] = {
         USD: this.rates[coin],
         NGN: this.rates[coin]
@@ -103,27 +66,9 @@ export class RateProvider {
 
   public getCoin(chain: string): Promise<any> {
     return new Promise(resolve => {
-      // if (
-      //   [
-      //     'jamasy',
-      //     'nuyasa',
-      //     'sunoba',
-      //     'dscmed',
-      //     'pog1',
-      //     'wde',
-      //     'mdxb',
-      //     'g.o.l.d.',
-      //     'jwan',
-      //     'tkf',
-      //     'aa+'
-      //   ].includes(chain)
-      // ) {
-      //   resolve([]);
-      // } else {
         this.http.get(this.rateServiceUrl[chain]).subscribe(data => {
           resolve(data);
         });
-      // }
     });
   }
 
