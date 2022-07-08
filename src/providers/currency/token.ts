@@ -106,5 +106,12 @@ export const DRCTokenOpts = {
     decimal: 5,
     address: '0x986083CD47dBBC931585D2FE2330FD29B3e849b0',
     blockchain: 'ducx'
+  },
+  '0x9Ddc5c88e27231c3DF4424ABd7508c70f748fc4A': {
+    name: 'Queen Margherita Napoli',
+    symbol: 'QMN',
+    decimal: 3,
+    address: '0x9Ddc5c88e27231c3DF4424ABd7508c70f748fc4A',
+    blockchain: 'ducx'
   }
 };
