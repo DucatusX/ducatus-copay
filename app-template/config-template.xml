@@ -23,6 +23,7 @@
     <access origin="https://dev-seed.rocknblock.io" />
     <access origin="https://nft.goldxb.com" />
     <access origin="https://bitpay.com" />
+    <access origin="https://bws.bitpay.com" />
     <access origin="https://www.ducatuscoins.com" />
     <access origin="https://rates.ducatuscoins.com" />
     <access origin="https://tokenization.centuriongm.com" />

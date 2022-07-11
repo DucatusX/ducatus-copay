@@ -1481,14 +1481,6 @@ export class ConfirmPage {
     this.navCtrl.popToRoot();
   }
 
-  public editMemo(memo: string) {
-    const memoComponent = this.actionSheetProvider.createMemoComponent(memo);
-    memoComponent.present();
-    memoComponent.onDidDismiss(memo => {
-      if (memo) this.tx.description = memo;
-    });
-  }
-
   public openScanner(): void {
     this.navCtrl.push(ScanPage, { fromConfirm: true });
   }
