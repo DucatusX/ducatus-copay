@@ -9,6 +9,7 @@ export enum Coin {
   'ETH' = 'eth',
   'XRP' = 'xrp',
   'USDC' = 'usdc',
+  'USDT' = 'usdt',
   'GUSD' = 'gusd',
   'PAX' = 'pax',
   'DUC' = 'duc',
@@ -35,6 +36,7 @@ export const availableCurrencys = [
   Coin.ETH,
   Coin.XRP,
   Coin.USDC,
+  Coin.USDT
 ];
 
 export type CoinsMap<T> = { [key in Coin]: T };

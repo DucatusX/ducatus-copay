@@ -333,6 +333,42 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       gradientBackgroundColor: 'rgba(93,156,224, 0.2)'
     }
   },
+  'usdt': {
+    name: 'Tether USD',
+    chain: 'ETH',
+    coin: 'usdt',
+    unitInfo: {
+      unitName: 'USDT',
+      unitToSatoshi: 1e6,
+      unitDecimals: 6,
+      unitCode: 'usdt'
+    },
+    properties: {
+      hasMultiSig: false,
+      hasMultiSend: false,
+      isUtxo: false,
+      isERCToken: true,
+      isStableCoin: true,
+      singleAddress: true
+    },
+    paymentInfo: {
+      paymentCode: 'EIP681b',
+      protocolPrefix: { livenet: 'ethereum', testnet: 'ethereum' },
+      ratesApi: 'https://bws.bitpay.com/bws/api/v3/fiatrates/usdt',
+      blockExplorerUrls: 'bitpay.com/insight/#/ETH/',
+      explorerName: 'bitpay.com'
+    },
+    feeInfo: {
+      feeUnit: 'Gwei',
+      feeUnitAmount: 1e9,
+      blockTime: 0.2,
+      maxMerchantFee: 'urgent'
+    },
+    theme: {
+      backgroundColor: 'rgba(79,174,147,1)',
+      gradientBackgroundColor: 'rgba(255,255,255, 0.2)'
+    }
+  },
   'gusd': {
     name: 'Gemini Dollar',
     chain: 'ETH',

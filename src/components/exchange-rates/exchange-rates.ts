@@ -106,6 +106,11 @@ export class ExchangeRates {
       return;
     }
 
+    if (coin === 'usdt'){
+      this.coins[i].currentPrice = 1;
+      return;
+    }
+    
     const coinHistoricalRates = this.coins[i].historicalRates[
       this.coins[i].historicalRates.length - 1
     ];
