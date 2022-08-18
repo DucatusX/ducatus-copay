@@ -45,6 +45,10 @@ export class RateProvider {
               this.rates[chain][currency.code] = currency.rate;
               if (currency.name)
                 this.alternatives[currency.code] = { name: currency.name };
+            } else {
+              this.rates[chain][currency.code] = 1;
+              if (currency.name)
+                this.alternatives[currency.code] = { name: currency.name };
             }
           });
           if (
