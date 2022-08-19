@@ -19,6 +19,7 @@ export { UserAgent } from '@ionic-native/user-agent';
 
 /* Providers */
 export { ActionSheetProvider } from '../providers/action-sheet/action-sheet';
+export { TransactionUtilsProvider } from '../providers/transactions-utils/transactions-utils';
 export { AddressBookProvider } from '../providers/address-book/address-book';
 export { AddressProvider } from '../providers/address/address';
 export { AnalyticsProvider } from '../providers/analytics/analytics';
