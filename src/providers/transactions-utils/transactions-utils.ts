@@ -22,6 +22,7 @@ export class TransactionUtilsProvider {
   public ducatuscore;
   public FEE_TOO_HIGH_LIMIT_PER: number;
   public tx: ITx;
+  public feeOpts;
 
   public txDefaultParameters: ITxDefaultParameters = {
     amount: 0,
@@ -48,36 +49,13 @@ export class TransactionUtilsProvider {
     this.bitcoreCash = this.bwcProvider.getBitcoreCash();
     this.ducatuscore = this.bwcProvider.getDucatuscore();
     this.FEE_TOO_HIGH_LIMIT_PER = 15;
+    this.feeOpts = this.feeProvider.getFeeOpts();
 
     this.config = this.configProvider.get();
   }
 
-  public setNetworkTx(object, network) {
-    object.txProps.network = network;
-  }
-
-  public setToAddressTx(object, toAddress) {
-    object.toAddress = toAddress;
-    object.origToAddress = toAddress;
-  }
-
-  public setDataTx(object, data) {
-    object.data = data;
-  }
-
-  public setWalletIdTx(object, walletId) {
-    object.walletId = walletId;
-  }
-
-  public setSpendUnConfirmed(object, spendUnConfirmed) {
-    object.spendUnConfirmed = spendUnConfirmed;
-  }
-
-  public setFeeTx(object) {
-    const feeOpts = this.feeProvider.getFeeOpts();
-
-    object.feeLevel = this.feeProvider.getCoinCurrentFeeLevel(this.txDefaultParameters.coin);
-    object.feeLevelName = feeOpts[object.feeLevel];
+  public setFeeLevelName(object) {
+    object.feeLevelName = this.feeOpts[object.feeLevel];
   }
 
   public getTransactionInfo(wallet): Promise<Partial<TransactionProposal>> {
@@ -92,19 +70,20 @@ export class TransactionUtilsProvider {
   ) {
     const wallet = this.profileProvider.getWallet(walletId);
 
-    let txDinamicParameters: ITxDinamicParameters;
-    
-    // set transaction parameters that can change
-    this.setNetworkTx(txDinamicParameters, network);
-    this.setToAddressTx(txDinamicParameters, toAddress);
-    this.setToAddressTx(txDinamicParameters, toAddress);
-    this.setDataTx(txDinamicParameters, data);
-    this.setWalletIdTx(txDinamicParameters, walletId);
-    this.setSpendUnConfirmed(txDinamicParameters, this.config.spendUnConfirmed);
-    this.setFeeTx(txDinamicParameters);
+    let txDinamicParameters = {
+      network, 
+      toAddress, 
+      data, 
+      walletId,
+      origToAddress: toAddress,
+      spendUnConfirmed: this.config.spendUnConfirmed,
+      feeLevel: this.feeProvider.getCoinCurrentFeeLevel(this.txDefaultParameters.coin),
+      feeLevelName: ''
+    };
+
+    this.setFeeLevelName(txDinamicParameters);
 
     this.tx = {...txDinamicParameters, ...this.txDefaultParameters};
-
     this.updateTx(this.tx, wallet, { dryRun: true });
   }
 
