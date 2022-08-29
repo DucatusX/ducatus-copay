@@ -12,6 +12,7 @@ import * as _ from 'lodash';
 import { Logger } from '../../../providers/logger/logger';
 
 // Pages
+import { TransactionUtilsProvider } from '../../../providers/transactions-utils/transactions-utils';
 import { FinishModalPage } from '../../finish/finish';
 import { CoinbaseAccountPage } from '../../integrations/coinbase/coinbase-account/coinbase-account';
 import { ScanPage } from '../../scan/scan';
@@ -40,7 +41,6 @@ import { ReplaceParametersProvider } from '../../../providers/replace-parameters
 import { TxConfirmNotificationProvider } from '../../../providers/tx-confirm-notification/tx-confirm-notification';
 import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
 import {
-  TransactionProposal,
   WalletProvider
 } from '../../../providers/wallet/wallet';
 @Component({
@@ -128,7 +128,8 @@ export class ConfirmPage {
     protected events: Events,
     protected coinbaseProvider: CoinbaseProvider,
     protected appProvider: AppProvider,
-    private iabCardProvider: IABCardProvider
+    private iabCardProvider: IABCardProvider,
+    private txUtilsProvider: TransactionUtilsProvider
   ) {
     this.token = this.navParams.data.token;
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
@@ -170,10 +171,10 @@ export class ConfirmPage {
     this.navCtrl.swipeBackEnabled = false;
     this.isOpenSelector = false;
     this.coin = this.navParams.data.coin;
-    let networkName;
-    let amount;
     this.setTitle();
     this.getAddressFrom();
+    let amount: number;
+    let networkName: string;
 
     if ( 
       !this.navParams.data.network 
@@ -221,43 +222,16 @@ export class ConfirmPage {
         return;
       }
     }
-    
-    // parseInt('2e21',10) = 2
-    // parseInt('2000000000000000000000',10) = 2e+21
-    this.tx = {
-      toAddress: this.navParams.data.toAddress,
-      sendMax: this.navParams.data.useSendMax ? true : false,
-      amount:
-        this.navParams.data.useSendMax && this.isChain()
-          ? 0
-          : parseInt(
-              Number(amount).toLocaleString('fullwide', { useGrouping: false }), 
-              10
-            ),
-      description: this.navParams.data.description,
-      destinationTag: this.navParams.data.destinationTag, // xrp
-      paypro: this.navParams.data.paypro,
-      data: this.navParams.data.data, // eth
-      invoiceID: this.navParams.data.invoiceID, // xrp
-      payProUrl: this.navParams.data.payProUrl,
-      spendUnconfirmed: this.config.wallet.spendUnconfirmed,
 
-      // Vanity tx info (not in the real tx)
-      recipientType: this.navParams.data.recipientType,
-      name: this.navParams.data.name,
-      email: this.navParams.data.email,
-      color: this.navParams.data.color,
-      network: this.navParams.data.network
-        ? this.navParams.data.network
-        : networkName,
-      coin: this.navParams.data.coin,
-      txp: {},
-      tokenAddress: this.navParams.data.tokenAddress,
-      wDucxAddress: this.navParams.data.wDucxAddress,
-      speedUpTx: this.isSpeedUpTx,
-      fromSelectInputs: this.navParams.data.fromSelectInputs ? true : false,
-      inputs: this.navParams.data.inputs
-    };
+    this.tx = this.txUtilsProvider
+      .getTx(
+        this.navParams.data,
+        this.wallet,
+       this.isSpeedUpTx,
+       this.fromMultiSend,
+       this.fromSelectInputs
+      );
+      
     
     this.tx.origToAddress = this.tx.toAddress;
 
@@ -740,7 +714,18 @@ export class ConfirmPage {
 
   private buildTxp(tx, wallet, opts): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.getTxp(_.clone(tx), wallet, opts.dryRun)
+      this.txUtilsProvider
+        .getTxp(
+          _.clone(tx), 
+          wallet, 
+          opts.dryRun, 
+          this.navParams.data.recipients, 
+          this.token, 
+          { fromMultiSend: this.fromMultiSend,
+            usingCustomFee: this.usingCustomFee,
+            usingMerchantFee: this.usingMerchantFee
+          }
+        )
         .then(txp => {
           if (this.currencyProvider.isUtxoCoin(tx.coin)) {
             const per = this.getFeeRate(txp.amount, txp.fee);
@@ -880,217 +865,6 @@ export class ConfirmPage {
     return warningMsg.join('\n');
   }
 
-  private getTxp(tx, wallet, dryRun: boolean): Promise<any> {
-    return new Promise((resolve, reject) => {
-      // ToDo: use a credential's (or fc's) function for this
-      if (tx.description && !wallet.credentials.sharedEncryptingKey) {
-        const msg = this.translate.instant(
-          'Could not add message to imported wallet without shared encrypting key'
-        );
-        return reject(msg);
-      }
-      if (
-        this.currencyProvider.isUtxoCoin(tx.coin) &&
-        tx.amount > Number.MAX_SAFE_INTEGER
-      ) {
-        const msg = this.translate.instant('Amount too big');
-        return reject(msg);
-      }
-
-      const txp: Partial<TransactionProposal> = {};
-      // set opts.coin to wallet.coin
-      txp.coin = wallet.coin;
-
-      if (this.fromMultiSend) {
-        txp.outputs = [];
-        this.navParams.data.recipients.forEach(recipient => {
-          if (tx.coin && tx.coin == 'bch') {
-            recipient.toAddress = this.bitcoreCash
-              .Address(recipient.toAddress)
-              .toString(true);
-
-            recipient.addressToShow = this.walletProvider.getAddressView(
-              tx.coin,
-              tx.network,
-              recipient.toAddress
-            );
-          }
-
-          if (tx.coin && tx.coin == 'duc') {
-            recipient.toAddress = this.ducatuscore
-              .Address(recipient.toAddress)
-              .toString(true);
-
-            recipient.addressToShow = this.walletProvider.getAddressView(
-              tx.coin,
-              tx.network,
-              recipient.toAddress
-            );
-          }
-
-          txp.outputs.push({
-            toAddress: recipient.toAddress,
-            amount: recipient.amount,
-            message: tx.description,
-            data: tx.data
-          });
-        });
-      } else if (tx.paypro) {
-        txp.outputs = [];
-        const { instructions } = tx.paypro;
-        for (const instruction of instructions) {
-          txp.outputs.push({
-            toAddress: instruction.toAddress,
-            amount: instruction.amount,
-            message: instruction.message,
-            data: instruction.data
-          });
-        }
-      } else {
-        if (tx.fromSelectInputs) {
-          const size = this.walletProvider.getEstimatedTxSize(
-            wallet,
-            1,
-            tx.inputs.length
-          );
-          const result = (tx.feeRate / 1000).toFixed(0);
-          const estimatedFee =
-            size * parseInt(
-              Number(result).toLocaleString('fullwide', { useGrouping: false }), 
-              10
-            );
-          tx.fee = estimatedFee;
-          tx.amount = tx.amount - estimatedFee;
-        }
-
-        txp.outputs = [
-          {
-            toAddress: tx.toAddress,
-            amount: tx.amount,
-            message: tx.description,
-            data: tx.data
-          }
-        ];
-      }
-      txp.excludeUnconfirmedUtxos = !tx.spendUnconfirmed;
-      txp.dryRun = dryRun;
-
-      if (tx.sendMaxInfo) {
-        txp.inputs = tx.sendMaxInfo.inputs;
-        txp.fee = tx.sendMaxInfo.fee;
-      } else if (tx.speedUpTx) {
-        txp.inputs = [];
-        txp.inputs.push(tx.speedUpTxInfo.input);
-        txp.fee = tx.speedUpTxInfo.fee;
-        txp.excludeUnconfirmedUtxos = true;
-      } else if (tx.fromSelectInputs) {
-        txp.inputs = tx.inputs;
-        txp.fee = tx.fee;
-      } else {
-        if (this.usingCustomFee || this.usingMerchantFee) {
-          txp.feePerKb = tx.feeRate;
-        } else txp.feeLevel = tx.feeLevel;
-      }
-
-      txp.message = tx.description;
-
-      if (tx.paypro) {
-        txp.payProUrl = tx.payProUrl;
-        tx.paypro.host = new URL(tx.payProUrl).host;
-      }
-
-      if (tx.recipientType == 'wallet') {
-        txp.customData = {
-          toWalletName: tx.name ? tx.name : null
-        };
-      } else if (tx.recipientType == 'coinbase') {
-        txp.customData = {
-          service: 'coinbase'
-        };
-      }
-
-      if (tx.tokenAddress) {
-        txp.tokenAddress = tx.tokenAddress;
-        txp.wDucxAddress = tx.wDucxAddress;
-
-        const originalChain = this.bwcProvider.getUtils().getChain(tx.coin);
-        let chain;
-        switch (originalChain) {
-          case 'DUCX':
-            chain = 'DRC20';
-            break;
-          default:
-            chain = 'ERC20';
-        }
-        if (tx.wDucxAddress) {
-          chain = 'TOB';
-        }
-        
-        for (const output of txp.outputs) {
-          if (!output.data) {
-            output.data = this.bwcProvider
-              .getCore()
-              .Transactions.get({ chain })
-              .encodeData({
-                recipients: [
-                  { address: output.toAddress, amount: output.amount }
-                ],
-                tokenAddress: tx.tokenAddress,
-                wDucxAddress: tx.wDucxAddress
-              });
-          }
-        }
-      }
-
-      if (wallet.coin === 'xrp') {
-        txp.invoiceID = tx.invoiceID;
-        txp.destinationTag = tx.destinationTag;
-      }
-
-      this.walletProvider
-        .getAddress(this.wallet, false)
-        .then(address => {
-          txp.from = address;
-
-          if (this.token && this.token.type === 'erc721') {
-            txp.tokenAddress = this.token.base.address;
-            txp.tokenId = this.token.selected.tokenId;
-
-            for (const output of txp.outputs) {
-              if (!output.data) {
-                output.data = this.bwcProvider
-                  .getCore()
-                  .Transactions.get({ chain: 'ERC721' })
-                  .encodeData({
-                    recipients: [
-                      {
-                        address: output.toAddress,
-                        amount: output.amount
-                      }
-                    ],
-                    from: address,
-                    tokenId: this.token.selected.tokenId,
-                    tokenAddress: tx.tokenAddress
-                  });
-              }
-            }
-          }
-          
-          this.walletProvider
-            .createTx(wallet, txp)
-            .then(ctxp => {
-              return resolve(ctxp);
-            })
-            .catch(err => {
-              return reject(err);
-            });
-        })
-        .catch(err => {
-          return reject(err);
-        });
-    });
-  }
-
   private getInput(wallet): Promise<any> {
     return this.walletProvider.getUtxos(wallet).then(utxos => {
       let biggestUtxo = 0;
@@ -1214,10 +988,18 @@ export class ConfirmPage {
 
     this.onGoingProcessProvider.set('creatingTx');
     
-    return this.getTxp(_.clone(tx), wallet, false)
+    return this.txUtilsProvider
+      .getTxp(
+        _.clone(tx), wallet, false,
+        this.navParams.data.recipients, 
+        this.token, 
+        { fromMultiSend: this.fromMultiSend,
+          usingCustomFee: this.usingCustomFee,
+          usingMerchantFee: this.usingMerchantFee
+        }
+      )
       .then(txp => {
         this.logger.debug('Transaction Fee:', txp.fee);
-        
         return this.confirmTx(txp, wallet)
           .then((nok: boolean) => {
             if (nok) {
@@ -1225,7 +1007,27 @@ export class ConfirmPage {
               this.onGoingProcessProvider.clear();
               return;
             }
-            this.publishAndSign(txp, wallet);
+            let redir;
+
+            if (txp.payProUrl && txp.payProUrl.includes('redir=wc')) {
+              redir = 'wc';
+            }
+            this.txUtilsProvider.publishAndSign(txp, wallet)
+            .then(()=>{
+              this.onGoingProcessProvider.clear();
+              return this.openFinishModal(false, { redir });
+            })
+            .catch( err => {
+              this.onGoingProcessProvider.clear();
+              if (this.isCordova) this.slideButton.isConfirmed(false);
+              this.showErrorInfoSheet(err);
+              if (txp.payProUrl) {
+                this.logger.warn('Paypro error: removing payment proposal');
+                this.walletProvider.removeTx(wallet, txp).catch(() => {
+                  this.logger.warn('Could not delete payment proposal');
+                });
+              }
+            });
           });
       })
       .catch(err => {
@@ -1275,57 +1077,6 @@ export class ConfirmPage {
           this.logger.warn('Error getting transaction proposal', err);
         });
     });
-  }
-
-  protected publishAndSign(txp, wallet) {
-    if (!wallet.canSign) {
-      return this.onlyPublish(txp, wallet);
-    }
-
-    return this.walletProvider
-      .publishAndSign(wallet, txp)
-      .then(txp => {
-        this.onGoingProcessProvider.clear();
-        if (
-          this.config.confirmedTxsNotifications &&
-          this.config.confirmedTxsNotifications.enabled
-        ) {
-          this.txConfirmNotificationProvider.subscribe(wallet, {
-            txid: txp.txid
-          });
-        }
-        let redir;
-        if (txp.payProUrl && txp.payProUrl.includes('redir=wc')) {
-          redir = 'wc';
-        }
-        return this.openFinishModal(false, { redir });
-      })
-      .catch(err => {
-        if (this.isCordova) this.slideButton.isConfirmed(false);
-        this.onGoingProcessProvider.clear();
-        this.showErrorInfoSheet(err);
-        if (txp.payProUrl) {
-          this.logger.warn('Paypro error: removing payment proposal');
-          this.walletProvider.removeTx(wallet, txp).catch(() => {
-            this.logger.warn('Could not delete payment proposal');
-          });
-        }
-      });
-  }
-
-  private onlyPublish(txp, wallet): Promise<void> {
-    this.logger.info('No signing proposal: No private key');
-    this.onGoingProcessProvider.set('sendingTx');
-    return this.walletProvider
-      .onlyPublish(wallet, txp)
-      .then(() => {
-        this.onGoingProcessProvider.clear();
-        this.openFinishModal(true);
-      })
-      .catch(err => {
-        this.onGoingProcessProvider.clear();
-        this.showErrorInfoSheet(err);
-      });
   }
 
   protected async openFinishModal(
