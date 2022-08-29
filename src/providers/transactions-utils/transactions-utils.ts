@@ -191,7 +191,17 @@ export class TransactionUtilsProvider {
     return chain.includes(coin);
   }
 
-  public getTxp(tx, wallet, dryRun: boolean, recipients?, token? ,opts?: {fromMultiSend, usingCustomFee, usingMerchantFee}): Promise<any> {
+  public getTxp(
+    tx: ITx, 
+    wallet, 
+    dryRun: boolean, 
+    recipients?, 
+    token? ,
+    opts?: {
+      fromMultiSend, 
+      usingCustomFee, 
+      usingMerchantFee
+    }): Promise<any> {
     return new Promise((resolve, reject) => {
       // ToDo: use a credential's (or fc's) function for this
       if (tx.description && !wallet.credentials.sharedEncryptingKey) {

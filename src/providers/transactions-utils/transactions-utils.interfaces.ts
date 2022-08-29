@@ -1,6 +1,8 @@
+import { Coin } from "../currency/currency";
+
 export interface ITx {
   amount: number;
-  coin: string;
+  coin: Coin;
   name: string;
   recipientType: string;
   fromSelectInputs: boolean;
@@ -13,7 +15,7 @@ export interface ITx {
   speedUpTx: boolean;
   feeRate?: number;
   useSendMax?: boolean;
-  paypro?: string;
+  paypro?: any;
   totalInputsAmount?: number;
   tokenAddress?: string;
   totalAmount?: number;
@@ -28,13 +30,16 @@ export interface ITx {
   data?: string; // eth
   feeLevel?: string;
   feeLevelName?: string;
+  sendMaxInfo?: any;
+  speedUpTxInfo?: any;
+  fee?: number;
 }
 
 export interface ITxBase {
   network: string; 
   amount: number;
   toAddress: string;
-  coin: string;
+  coin: Coin;
   useSendMax?: boolean;
   totalInputsAmount?: number;
   totalAmount?: number;
