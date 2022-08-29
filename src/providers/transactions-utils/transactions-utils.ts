@@ -202,6 +202,7 @@ export class TransactionUtilsProvider {
       usingCustomFee, 
       usingMerchantFee
     }): Promise<any> {
+
     return new Promise((resolve, reject) => {
       // ToDo: use a credential's (or fc's) function for this
       if (tx.description && !wallet.credentials.sharedEncryptingKey) {
