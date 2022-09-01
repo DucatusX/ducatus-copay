@@ -18,7 +18,6 @@ export class StakeAddPage {
   public walletsGroups = [];
   public wallets = [];
   public stakeGroup: FormGroup;
-  public selectJwanAddress: string = "0x6d311F0fE811d5E053e19D349e28A13760fB0a62"; // TODO УБРАТЬ ХАРДКОД НАХУЙ И ДИНАМИЧЕСКИ СМОТРЕТЬ ВЫБРАННЫЙ АДРЕС
   public selectWallet;
   public inputAmountValue: number = 100;
   public isApprove: boolean = false;
