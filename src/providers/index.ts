@@ -19,6 +19,7 @@ export { UserAgent } from '@ionic-native/user-agent';
 
 /* Providers */
 export { ActionSheetProvider } from '../providers/action-sheet/action-sheet';
+export { TransactionUtilsProvider } from '../providers/transactions-utils/transactions-utils';
 export { AddressBookProvider } from '../providers/address-book/address-book';
 export { AddressProvider } from '../providers/address/address';
 export { AnalyticsProvider } from '../providers/analytics/analytics';
@@ -26,6 +27,7 @@ export { AppIdentityProvider } from '../providers/app-identity/app-identity';
 export { AppProvider } from '../providers/app/app';
 export { BackupProvider } from '../providers/backup/backup';
 export { FormControllerProvider } from './form-contoller/form-controller';
+export { ContractAddress } from '../providers/contract-address/contract-address';
 export {
   BitPayAccountProvider
 } from '../providers/bitpay-account/bitpay-account';
@@ -89,6 +91,7 @@ export {
 export { ScanProvider } from '../providers/scan/scan';
 export { ShapeshiftProvider } from '../providers/shapeshift/shapeshift';
 export { SimplexProvider } from '../providers/simplex/simplex';
+export { StakeProvider } from '../providers/stake/stake';
 export { TabProvider } from '../providers/tab/tab';
 export { TimeProvider } from '../providers/time/time';
 export { TouchIdProvider } from '../providers/touchid/touchid';

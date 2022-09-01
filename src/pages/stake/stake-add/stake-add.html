@@ -1,0 +1,116 @@
+<ion-header class="bp-header">
+  <ion-navbar>
+    <ion-title>
+      <div
+        [reveal-at-scroll-pos]="expandableHeader.headerHeight"
+        [scrollArea]="scrollArea"
+      >
+        {{ 'Stake' | translate }}
+      </div>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content #scrollArea>
+
+  <expandable-header
+    [scrollArea]="scrollArea"
+    [fadeFactor]="5"
+    [disableFade]="true"
+    #expandableHeader
+  >
+    <ion-toolbar class="wide-header__title">
+      <expandable-header-primary></expandable-header-primary>
+    </ion-toolbar>
+  </expandable-header>
+
+  <div page-content class="stake-page">
+    <ion-list class="stake-list bp-list">
+      <form [formGroup]="stakeGroup">
+        <div class="stake-add-group-wrap">
+          <span class="stake-add-label"
+            >{{ 'Choose DUC address to be deducted' | translate }}</span
+          >
+          <div class="stake-add-group">
+            <ion-item class="stake-add-input">
+              <ion-input
+                placeholder="Choose DUC address to be deducted"
+                type="text"
+                [readonly]="true"
+                formControlName="address"
+                [value]="stakeGroup.value.address"
+              >
+              </ion-input>
+            </ion-item>
+            <ion-item
+              *ngIf="walletAddresses"
+              class="stake-add-select"
+              (click)="openAddressList()"
+            >
+              <ion-icon name="arrow-dropdown"></ion-icon>
+            </ion-item>
+          </div>
+        </div>
+        <div class="stake-add-group-wrap">
+          <span class="stake-add-label">{{ 'Amount' | translate }}</span>
+          <div class="stake-add-group">
+            <ion-item class="stake-add-input">
+              <ion-input
+                placeholder="Enter amount"
+                type="number"
+                formControlName="amount"
+                [value]="stakeGroup.value.amount"
+              >
+              </ion-input>
+            </ion-item>
+            <div 
+              (click)="sendMax()" 
+              class="stake-btn-sendmax"
+            >
+              {{ 'Send Max' | translate }}
+            </div>
+          </div>
+        </div>
+
+        <div class="stake-add-group-wrap">
+          <span class="stake-add-label">{{ 'Stake term (month)' | translate }}</span>
+          <div class="chip-container">
+            <div class="chip-center">
+              12
+            </div>
+          </div>
+        </div>
+        <div class="stake-add-group-wrap">
+          <span class="stake-add-label">{{ 'Interest rates (annual)' | translate }}</span>
+            <div class="chip-container">
+              <div class="chip-center">
+                4%
+              </div>
+            </div>
+        </div>
+        <div class="stake-group-btn">  
+          <button
+            ion-button
+            *ngIf="stakeGroup.valid"
+            class="stake-group-btn-button button-standard stake-item-button stake-add-page-button"
+            [disabled]="isApprove || approveLoading"
+            (click)="approve()"
+          >
+            <span *ngIf="!approveLoading">{{ 'Approve' | translate }}</span>
+            <ion-spinner *ngIf="approveLoading" name="bubbles"></ion-spinner>
+          </button>
+          <span class="stake-group-btn-devidends">Dividends {{ amountWithPercent || '0' }} Jwan</span>
+          <button
+            ion-button
+            class="stake-group-btn-button button-standard stake-item-button stake-add-page-button"
+            [disabled]="!isApprove"
+            (click)="stake()"
+          >
+            <span *ngIf="!stakeLoading">{{ 'Stake' | translate }}</span>
+            <ion-spinner *ngIf="stakeLoading" name="bubbles"></ion-spinner>
+          </button>
+        </div>
+      </form>
+    </ion-list>
+  </div>
+</ion-content>
+  
