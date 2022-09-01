@@ -1,0 +1,72 @@
+<ion-header class="bp-header">
+  <ion-navbar>
+    <ion-title>
+      {{ 'JWAN Staking ' | translate }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <expandable-header
+    [scrollArea]="scrollArea"
+    [fadeFactor]="5"
+    [disableFade]="true"
+    #expandableHeader
+  >
+    <ion-toolbar class="wide-header__title">
+      <expandable-header-primary>{{ 'JWAN Staking ' | translate }}</expandable-header-primary>
+    </ion-toolbar>
+  </expandable-header>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list class="stake-list bp-list">
+      <div class="stake-add-group-wrap">
+        <div class="stake-add-group">
+          <ion-item class="stake-add-input">
+            <ion-input
+              type="number"
+              readonly
+              [value]="reward"
+            >
+            </ion-input>
+          </ion-item>
+          <button ion-button
+            class="stake-btn-claim"
+            (click)="claim()"
+            [disabled]="!reward"
+          >
+            {{ 'Claim' | translate }}
+          </button>
+        </div>
+      </div>
+       <button ion-button class="button-standard" (click)="goToStakeAdd()">
+          Stake
+       </button>
+  </ion-list> 
+
+ 
+
+  <ion-list class="stake-list bp-list">
+    <div class="stake-title">My staked</div>
+      <ion-item *ngFor="let deposit of deposits" class="stake-item">
+        <div class="stake-item-info">
+          <span class="stake-item-info-amount">
+            {{deposit.amount | satToUnit: "jwan"}} 
+          </span>
+          <span class="stake-item-info-date">
+            {{deposit.enteredAt | date:'dd.LL.y' }}
+          </span>
+        </div>
+        <button 
+          ion-button 
+          class="stake-item-button"  
+          (click)="withdrawn(deposit.metaInfo.userJwanAddress, deposit.metaInfo.amountDeposited, deposit.amount)"
+          [disabled]="!deposit.isReadyToWithdrawn"
+        >
+          Unstake
+        </button>
+      </ion-item>
+  </ion-list>
+
+</ion-content>
