@@ -87,8 +87,7 @@
               </div>
             </div>
         </div>
-        <div class="stake-group-btn">
-          <span class="stake-group-btn-devidends">Dividends {{ amountWithPercent || '0' }} Jwan</span>
+        <div class="stake-group-btn">  
           <button
             ion-button
             *ngIf="stakeGroup.valid"
@@ -99,6 +98,7 @@
             <span *ngIf="!approveLoading">{{ 'Approve' | translate }}</span>
             <ion-spinner *ngIf="approveLoading" name="bubbles"></ion-spinner>
           </button>
+          <span class="stake-group-btn-devidends">Dividends {{ amountWithPercent || '0' }} Jwan</span>
           <button
             ion-button
             class="stake-group-btn-button button-standard stake-item-button stake-add-page-button"

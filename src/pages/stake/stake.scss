@@ -9,6 +9,17 @@
   }
 
   .stake {
+    &-input {
+      &-label {
+        font-weight: 400;
+        font-size: 14px;
+        color: #75633F;
+        z-index: 999999;
+        left: 19px;
+        top: 12px;
+        position: absolute;
+      }
+    }
     &-title {
       font-weight: 500;
       font-size: 14px;
@@ -148,7 +159,7 @@
 
     &-btn-claim {
       position: absolute;
-      top: 12px;
+      top: 19px;
       width: 85px;
       right: 10px;
       cursor: pointer;
@@ -226,6 +237,7 @@
   
             .stake-item-button {
               opacity: 0.5;
+              margin-top: 20px;
             }
           }
         }
@@ -299,6 +311,7 @@
         padding: 20px 15px !important;
         cursor: pointer;
         height: 40px;
+        margin-bottom: 20px;
       }
   
       &-text {
@@ -408,9 +421,15 @@
       }
   
       &-input {
-        background: #fff;
-        border-radius: 4px;
-        padding-left: 5px !important;
+        &.earned {
+          background: #fff;
+          border-radius: 4px;
+          padding: 18px 0 0 19px !important;
+          font-weight: 700;
+          font-size: 14px;
+          line-height: 162.02%;
+          color: #862633;
+        }
       }
   
       &-select {
