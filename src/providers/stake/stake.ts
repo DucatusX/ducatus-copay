@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import Web3 from 'web3';
 import { Coin } from '../../providers';
 import { ActionSheetProvider } from '../action-sheet/action-sheet';
-import { ApiProvider } from '../api/api';
+import { ContractAddress } from '../contract-address/contract-address';
 import { ProfileProvider } from '../profile/profile';
 import { TransactionUtilsProvider } from '../transactions-utils/transactions-utils';
 import { JWAN_STAKE_ABI } from './jwan-stake-abi';
@@ -36,17 +36,14 @@ public approveData;
 public unixYear: number = 300;
 
   constructor (
-    private api: ApiProvider,
+    private contractAddress: ContractAddress,
     private transactionUtilsProvider: TransactionUtilsProvider,
     private profileProvider: ProfileProvider,
     private actionSheetProvider: ActionSheetProvider
-    // private walletProvider: WalletProvider
-    ) {
-    // tslint:disable-next-line:no-console
-    console.log(this.rpcURL);
+  ) {
     this.web3 = new Web3(this.rpcURL);
-    this.jwanStakeAddress = this.api.getAddresses().jwanStakeAddress;
-    this.jwanTokenAddress = this.api.getAddresses().jwanTokenAddress;
+    this.jwanStakeAddress = this.contractAddress.getAddresses().jwanStakeAddress;
+    this.jwanTokenAddress = this.contractAddress.getAddresses().jwanTokenAddress;
     this.jwanContractToken = new this.web3.eth.Contract(JWAN_TOKEN_ABI, this.jwanTokenAddress);
     this.jwanContractStake = new this.web3.eth.Contract(JWAN_STAKE_ABI, this.jwanStakeAddress);
     this.depositData = this.jwanContractStake.methods.deposit(this.etherToWei("100")).encodeABI();
