@@ -19,10 +19,7 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import { ReplaceParametersProvider } from '../../providers/replace-parameters/replace-parameters';
 import { TxConfirmNotificationProvider } from '../../providers/tx-confirm-notification/tx-confirm-notification';
 import { TxFormatProvider } from '../../providers/tx-format/tx-format';
-import {
-  TransactionProposal,
-  WalletProvider
-} from '../../providers/wallet/wallet';
+import { WalletProvider } from '../../providers/wallet/wallet';
 
 import { ITx, ITxBase } from './transactions-utils.interfaces';
 
@@ -86,7 +83,6 @@ export class TransactionUtilsProvider {
     if (!wallet.canSign) {
       return this.onlyPublish(txp, wallet);
     }
-
     return this.walletProvider.publishAndSign(wallet, txp);
   }
 
@@ -95,7 +91,7 @@ export class TransactionUtilsProvider {
     wallet: any,
     isSpeedUpTx?: boolean,
     fromMultiSend?: boolean,
-    fromSelectInputs?: boolean
+    fromSelectInputs?: boolean,
   ): ITx {
     let networkName: string;
     let tx: ITx;
@@ -196,11 +192,12 @@ export class TransactionUtilsProvider {
     wallet, 
     dryRun: boolean, 
     recipients?, 
-    token? ,
+    token?,
     opts?: {
-      fromMultiSend, 
-      usingCustomFee, 
-      usingMerchantFee
+      isContractCall?: boolean,
+      fromMultiSend?, 
+      usingCustomFee?, 
+      usingMerchantFee?,
     }): Promise<any> {
 
     return new Promise((resolve, reject) => {
@@ -219,9 +216,13 @@ export class TransactionUtilsProvider {
         return reject(msg);
       }
 
-      const txp: Partial<TransactionProposal> = {};
+      const txp: any = {};
       // set opts.coin to wallet.coin
       txp.coin = wallet.coin;
+
+      if(opts.isContractCall) {
+        txp.isContractCall = true;
+      }
 
       if (opts.fromMultiSend) {
         txp.outputs = [];
