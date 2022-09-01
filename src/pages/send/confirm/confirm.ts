@@ -173,55 +173,7 @@ export class ConfirmPage {
     this.coin = this.navParams.data.coin;
     this.setTitle();
     this.getAddressFrom();
-    let amount: number;
-    let networkName: string;
 
-    if ( 
-      !this.navParams.data.network 
-      && this.wallet 
-      &&  this.wallet.network
-    ) {
-      this.navParams.data.network = this.wallet.network;
-    }
-
-    if (this.fromSelectInputs) {
-      networkName = this.navParams.data.network;
-      amount = this.navParams.data.amount
-        ? this.navParams.data.amount
-        : this.navParams.data.totalInputsAmount;
-    } else if (this.fromMultiSend) {
-      networkName = this.navParams.data.network;
-      amount = this.navParams.data.totalAmount;
-    } else {
-      amount = this.navParams.data.amount;
-
-      try {
-        networkName = this.addressProvider.getCoinAndNetwork(
-          this.navParams.data.toAddress,
-          this.navParams.data.network || 'livenet'
-        ).network;
-      } catch (e) {
-        const message = this.replaceParametersProvider.replace(
-          this.translate.instant(
-            '{{appName}} only supports Bitcoin Cash using new version numbers addresses.'
-          ),
-          { appName: this.appName }
-        );
-        const backText = this.translate.instant('Go back');
-        const learnText = this.translate.instant('Learn more');
-        this.popupProvider
-          .ionicConfirm(null, message, backText, learnText)
-          .then(back => {
-            if (!back) {
-              const url =
-                'https://support.bitpay.com/hc/en-us/articles/115004671663';
-              this.externalLinkProvider.open(url);
-            }
-            this.navCtrl.pop();
-          });
-        return;
-      }
-    }
 
     this.tx = this.txUtilsProvider
       .getTx(
@@ -237,12 +189,8 @@ export class ConfirmPage {
 
     if (this.navParams.data.requiredFeeRate) {
       this.usingMerchantFee = true;
-      this.tx.feeRate = +this.navParams.data.requiredFeeRate;
     } else if (this.isSpeedUpTx) {
       this.usingCustomFee = true;
-      this.tx.feeLevel = 'custom';
-    } else {
-      this.tx.feeLevel = this.feeProvider.getCoinCurrentFeeLevel(this.tx.coin);
     }
 
     if (this.tx.coin && this.tx.coin == 'bch' && !this.fromMultiSend) {
@@ -570,7 +518,6 @@ export class ConfirmPage {
               this.onGoingProcessProvider.clear();
               return resolve(null);
             }
-
             this.buildTxp(tx, wallet, opts)
               .then(() => {
                 this.onGoingProcessProvider.clear();
@@ -716,7 +663,7 @@ export class ConfirmPage {
     return new Promise((resolve, reject) => {
       this.txUtilsProvider
         .getTxp(
-          _.clone(tx), 
+          _.clone(tx),
           wallet, 
           opts.dryRun, 
           this.navParams.data.recipients, 
