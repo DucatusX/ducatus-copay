@@ -1,12 +1,14 @@
 import { Component } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
 import { Big } from 'big.js';
-import { NavController } from "ionic-angular";
+import { ModalController ,NavController } from "ionic-angular";
 import * as _ from 'lodash';
 import { Logger } from "../../providers/logger/logger";
 import { OnGoingProcessProvider } from '../../providers/on-going-process/on-going-process';
 import { ProfileProvider } from "../../providers/profile/profile";
 import { IDeposit, StakeProvider } from "../../providers/stake/stake";
 import { WalletProvider } from "../../providers/wallet/wallet";
+import { FinishModalPage } from "../finish/finish";
 import { StakeAddPage } from "./stake-add/stake-add";
 
 @Component({
@@ -29,7 +31,9 @@ export class StakePage {
     private walletProvider: WalletProvider,
     private stakeProvider: StakeProvider,
     private onGoingProcessProvider: OnGoingProcessProvider,
-    private logger: Logger
+    private logger: Logger,
+    private modalCtrl: ModalController,
+    private translate: TranslateService
   ) {}
 
   public async ngOnInit(): Promise<void> {
@@ -71,11 +75,25 @@ export class StakePage {
     });
   }
 
+  public async createFinishModal() {
+    const finishText = this.translate.instant('Transaction broadcasted');
+    const finishComment = this.translate.instant('It may take up to 10 minutes for the transaction to be confirmed'); 
+    const params = { finishText, finishComment ,autoDismiss: false };
+
+    const modal = this.modalCtrl.create(FinishModalPage, params, {
+      showBackdrop: true,
+      enableBackdropDismiss: false,
+      cssClass: 'finish-modal'
+    });
+    await modal.present();
+  }
+
   public claim() {
     this.stakeProvider.claimAll(this.wallets, this.rewards)
     .then((res) => {
       this.onGoingProcessProvider.clear();
       this.logger.debug(res);
+      this.createFinishModal();
     })
     .catch((err) =>{
       this.onGoingProcessProvider.clear();
@@ -94,6 +112,7 @@ export class StakePage {
       .then((res) => {
         this.onGoingProcessProvider.clear();
         this.logger.debug(res);
+        this.createFinishModal();
       })
       .catch(err =>{
         this.onGoingProcessProvider.clear();

@@ -5,6 +5,7 @@ import Web3 from 'web3';
 import { Coin } from '../../providers';
 import { ActionSheetProvider } from '../action-sheet/action-sheet';
 import { ContractAddress } from '../contract-address/contract-address';
+import { OnGoingProcessProvider} from '../on-going-process/on-going-process';
 import { ProfileProvider } from '../profile/profile';
 import { TransactionUtilsProvider } from '../transactions-utils/transactions-utils';
 import { JWAN_STAKE_ABI } from './jwan-stake-abi';
@@ -39,7 +40,8 @@ public unixYear: number = 300;
     private contractAddress: ContractAddress,
     private transactionUtilsProvider: TransactionUtilsProvider,
     private profileProvider: ProfileProvider,
-    private actionSheetProvider: ActionSheetProvider
+    private actionSheetProvider: ActionSheetProvider,
+    private onGoingProcessProvider: OnGoingProcessProvider
   ) {
     this.web3 = new Web3(this.rpcURL);
     this.jwanStakeAddress = this.contractAddress.getAddresses().jwanStakeAddress;
@@ -162,6 +164,14 @@ public unixYear: number = 300;
       });
       
     });
+  }
+
+  public getPercent(): Promise<string> {
+    return this.callMethod(this.jwanContractStake, 'REWARD', []);
+  }
+
+  public weiToEther(amount: string) {
+    return this.web3.utils.fromWei(amount, 'ether');
   }
 
   public claimAll(userJwanWallets, userReward: any) {
@@ -293,23 +303,25 @@ public unixYear: number = 300;
   public approve(amount, walletId) {
     const wallet = this.profileProvider.getWallet(walletId);
     const dataTx = this.getApproveData(amount);
+    this.onGoingProcessProvider.set('calculatingFee');
 
     return  this.buildTxp(walletId, dataTx, this.jwanTokenAddress, false)
       .then(async (txp) => {
-        const userChoise = await this.openActionSheet(this.web3.utils.fromWei(txp.fee, 'ether'), 'approve', amount);
+        this.onGoingProcessProvider.clear();
 
+        const userChoise = await this.openActionSheet(this.web3.utils.fromWei(txp.fee, 'ether'), 'approve', amount);
         if (userChoise) {
           return this.transactionUtilsProvider.publishAndSign(txp, wallet);
         }
         else {
-          return;
+          throw new Error;
         }
       });
   }
 
   public claimReward(walletId) {
     const wallet = this.profileProvider.getWallet(walletId);
-
+    
     const dataTx = this.getClaimRewardData();
 
     return this.buildTxp(walletId, dataTx, this.jwanStakeAddress, true)
@@ -338,18 +350,20 @@ public unixYear: number = 300;
 
   public deposit(amount, walletId) {
     const wallet = this.profileProvider.getWallet(walletId);
-
     const dataTx = this.getDepositData(amount);
+    
+    this.onGoingProcessProvider.set('calculatingFee');
 
     return this.buildTxp(walletId, dataTx, this.jwanStakeAddress, true)
       .then(async (txp) => {
+        this.onGoingProcessProvider.clear();
         const userChoise = await this.openActionSheet(this.web3.utils.fromWei(txp.fee, 'ether'), 'deposit', amount);
 
         if (userChoise) {
           return this.transactionUtilsProvider.publishAndSign(txp, wallet);
         }
         else {
-          return;
+          throw new Error;
         }
       });
   }
