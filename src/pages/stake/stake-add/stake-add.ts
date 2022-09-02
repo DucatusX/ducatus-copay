@@ -77,7 +77,7 @@ export class StakeAddPage {
         if(amount != '0' && amount != '') {
           const amountInputValid = this.formlCtrl.transformValue(amount);
           this.setIsApprove(amount);
-          this.sumRewards = Number(amountInputValid) * Number(this.reward);
+          this.sumRewards = Number(amountInputValid) * Number(this.reward || this.defaultReward);
           this.isEmptyInput = !Boolean(Number(amount));
           this.setAmountInput(amountInputValid);
         }
@@ -145,7 +145,7 @@ export class StakeAddPage {
   public setAmountInput(amount: string): void {
     this.stakeGroup
     .get('amount')
-    .setValue( amount);
+    .setValue(amount);
    }
   
 
