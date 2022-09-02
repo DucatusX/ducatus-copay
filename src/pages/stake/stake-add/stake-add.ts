@@ -19,6 +19,7 @@ import { WalletProvider } from "../../../providers/wallet/wallet";
 })
 
 export class StakeAddPage {
+  public defaultReward = "4";
   public walletsGroups = [];
   public wallets = [];
   public stakeGroup: FormGroup;
@@ -74,10 +75,11 @@ export class StakeAddPage {
       )
       .subscribe( amount => {
         if(amount != '0' && amount != '') {
-          this.setIsApprove(amount); 
-          this.sumRewards = Number(amount) * Number(this.reward);
+          const amountInputValid = this.formlCtrl.transformValue(amount);
+          this.setIsApprove(amount);
+          this.sumRewards = Number(amountInputValid) * Number(this.reward);
           this.isEmptyInput = !Boolean(Number(amount));
-          this.setAmountInput(this.formlCtrl.transformValue(amount));
+          this.setAmountInput(amountInputValid);
         }
         else {
           this.isEmptyInput = true;
@@ -98,6 +100,10 @@ export class StakeAddPage {
     this.wallets = await this.getWalletsInfoAddress('jwan');
     this.stakeProvider.getPercent().then( rewards =>{
       this.reward = rewards;
+    })
+    .catch(err => {
+      this.logger.debug(err);
+      this.reward = this.defaultReward;
     });
   }
 
@@ -139,7 +145,7 @@ export class StakeAddPage {
   public setAmountInput(amount: string): void {
     this.stakeGroup
     .get('amount')
-    .setValue( amount, { emitEvent: false });
+    .setValue( amount);
    }
   
 
