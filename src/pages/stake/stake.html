@@ -48,7 +48,7 @@
 
  
 
-  <ion-list class="stake-list bp-list">
+  <ion-list *ngIf="deposits?.length" class="stake-list bp-list">
     <div class="stake-title">My staked</div>
       <ion-item *ngFor="let deposit of deposits" class="stake-item">
         <div class="stake-item-info">
