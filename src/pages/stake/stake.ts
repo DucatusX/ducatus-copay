@@ -51,31 +51,33 @@ export class StakePage {
     );
     this.wallets = await this.getWalletsInfoAddress('jwan');
 
-      this.walletAddresses = this.wallets.map(wallet => wallet.address);
+    this.walletAddresses = this.wallets.map(wallet => wallet.address);
 
-      this.stakeProvider.getAllDeposits(this.walletAddresses).then((result: any) => {
+    this.getDeposits();
+    this.getReward();
+  }
+
+  public getDeposits(): void {
+    this.stakeProvider.getAllDeposits(this.walletAddresses)
+      .then((result: any) => {
         this.deposits = result;
       })
       .catch((error) => {
         this.logger.debug(error);
       });
+  }
 
-      this.stakeProvider.getReward(this.walletAddresses).then((res: number[])=>{
+  private getReward(): void {
+    this.stakeProvider.getReward(this.walletAddresses)
+      .then((res: number[]) => {
         this.rewards = res;
 
         this.reward = res.reduce((rewardAccum, reward) => rewardAccum + Number(reward),0);
         this.reward = Big(this.reward).div(100000000);
+      })
+      .catch((error) => {
+        this.logger.debug(error);
       });
-    
-  }
-
-  public getDeposits(): void {
-    this.stakeProvider.getAllDeposits(this.walletAddresses).then((result: any) => {
-      this.deposits = result;
-    })
-    .catch((error) => {
-      this.logger.debug(error);
-    });
   }
   
   private showErrorMessage(err): void {
@@ -112,16 +114,16 @@ export class StakePage {
 
   public claim() {
     this.stakeProvider.claimAll(this.wallets, this.rewards)
-    .then((res) => {
-      this.onGoingProcessProvider.clear();
-      this.logger.debug(res);
-      this.createFinishModal();
-    })
-    .catch((err) =>{
-      this.onGoingProcessProvider.clear();
-      this.logger.debug(err);
-      this.showErrorMessage(err);
-    });
+      .then((res) => {
+        this.onGoingProcessProvider.clear();
+        this.logger.debug(res);
+        this.createFinishModal();
+      })
+      .catch((err) =>{
+        this.onGoingProcessProvider.clear();
+        this.logger.debug(err);
+        this.showErrorMessage(err);
+      });
   }
 
   public withdrawn(
