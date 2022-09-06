@@ -149,6 +149,7 @@ export class StakePage {
   private debounceGetDeposits = _.debounce(
     async () => {
       this.getDeposits();
+      this.getReward();
     },
     5000,
     {
