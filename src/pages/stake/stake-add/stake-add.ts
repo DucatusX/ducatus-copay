@@ -7,6 +7,7 @@ import { debounceTime, distinctUntilChanged} from "rxjs/operators";
 import { FinishModalPage } from "../../../pages/finish/finish";
 import { Logger } from "../../../providers";
 import { ActionSheetProvider } from "../../../providers/action-sheet/action-sheet";
+import { ErrorsProvider } from "../../../providers/errors/errors";
 import { FormControllerProvider } from "../../../providers/form-contoller/form-controller";
 import { OnGoingProcessProvider } from '../../../providers/on-going-process/on-going-process';
 import { ProfileProvider } from "../../../providers/profile/profile";
@@ -51,6 +52,7 @@ export class StakeAddPage {
     private modalCtrl: ModalController,
     private navCtrl: NavController,
     private formlCtrl: FormControllerProvider,
+    private errorsProvider: ErrorsProvider
   ) {
       this.stakeGroup = this.formBuilder.group({
         address: [
@@ -77,7 +79,7 @@ export class StakeAddPage {
         if(amount != '0' && amount != '') {
           const amountInputValid = this.formlCtrl.transformValue(amount);
           this.setIsApprove(amount);
-          this.sumRewards = Number(amountInputValid) * Number(this.reward || this.defaultReward);
+          this.sumRewards = (Number(amountInputValid) / 100) * Number(this.reward || this.defaultReward);
           this.isEmptyInput = !Boolean(Number(amount));
           this.setAmountInput(amountInputValid);
         }
@@ -85,6 +87,12 @@ export class StakeAddPage {
           this.isEmptyInput = true;
         }
     });
+  }
+
+  private showErrorMessage(message: string): void {
+    const title = this.translate.instant('Error');
+
+    this.errorsProvider.showDefaultError(message, title);
   }
 
   public async ngOnInit(): Promise<void> {
@@ -98,13 +106,14 @@ export class StakeAddPage {
       )
     );
     this.wallets = await this.getWalletsInfoAddress('jwan');
-    this.stakeProvider.getPercent().then( rewards =>{
-      this.reward = rewards;
-    })
-    .catch(err => {
-      this.logger.debug(err);
-      this.reward = this.defaultReward;
-    });
+    this.stakeProvider.getPercent()
+      .then(rewards => {
+        this.reward = rewards;
+      })
+      .catch(err => {
+        this.logger.debug(err);
+        this.reward = this.defaultReward;
+      });
   }
 
   public async createFinishModal() {
@@ -126,28 +135,27 @@ export class StakeAddPage {
     const amountInputWei = this.stakeProvider.toWei(String(amountInput));
 
     this.stakeProvider.getApproveAmount(this.selectWallet.address)
-    .then((amount) => {
-      if(Number(amountInputWei) <= Number(amount)) {
-        this.isApprove = true;
-        this.approveLoading = false;
-        this.stopApproveInterval();
-      }
-      else {
-        this.isApprove = false;
-      }
+      .then((amount) => {
+        if(Number(amountInputWei) <= Number(amount)) {
+          this.isApprove = true;
+          this.approveLoading = false;
+          this.stopApproveInterval();
+        }
+        else {
+          this.isApprove = false;
+        }
 
-    })
-    .catch(err => {
-      this.logger.debug(err);
-    });
+      })
+      .catch(err => {
+        this.logger.debug(err);
+      });
   }
 
   public setAmountInput(amount: string): void {
     this.stakeGroup
     .get('amount')
     .setValue(amount);
-   }
-  
+  }
 
   public async ionViewWillEnter() {
     const wallets = this.profileProvider.getWallets({
@@ -169,9 +177,10 @@ export class StakeAddPage {
         this.startApproveInterval();
         this.createFinishModal();
       })
-      .catch( () => {
+      .catch((err) => {
         this.approveLoading = false;
         this.onGoingProcessProvider.clear();
+        this.showErrorMessage(err.message);
       });
   }
 
@@ -191,16 +200,17 @@ export class StakeAddPage {
     this.stakeLoading = true;
 
     this.stakeProvider.deposit(this.stakeGroup.value.amount, this.selectWallet.walletId)
-    .then( () => {
-      this.onGoingProcessProvider.clear();
-      this.stakeLoading = false;
-      this.createFinishModal();
-      this.navCtrl.pop();
-    })
-    .catch( () => {
-      this.onGoingProcessProvider.clear();
-      this.stakeLoading = false;
-    });
+      .then(() => {
+        this.onGoingProcessProvider.clear();
+        this.stakeLoading = false;
+        this.createFinishModal();
+        this.navCtrl.pop();
+      })
+      .catch((err) => {
+        this.onGoingProcessProvider.clear();
+        this.stakeLoading = false;
+        this.showErrorMessage(err.message);
+      });
   }
 
   public async sendMax(): Promise<void> {

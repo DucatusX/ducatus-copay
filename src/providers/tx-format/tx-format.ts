@@ -57,7 +57,7 @@ export class TxFormatProvider {
       return undefined;
     }
 
-    return this.formatAmount(coin, satoshis) + ' ' + coin.toUpperCase();
+    return this.formatAmount(coin, Number(satoshis)) + ' ' + coin.toUpperCase();
   }
 
   public toFiat(
