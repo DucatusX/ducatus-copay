@@ -156,7 +156,6 @@ export class StakeAddPage {
     .get('amount')
     .setValue(amount);
   }
-  
 
   public async ionViewWillEnter() {
     const wallets = this.profileProvider.getWallets({

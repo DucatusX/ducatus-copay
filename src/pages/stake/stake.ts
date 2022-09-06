@@ -112,6 +112,19 @@ export class StakePage {
     await modal.present();
   }
 
+  public async createFinishModal() {
+    const finishText = this.translate.instant('Transaction broadcasted');
+    const finishComment = this.translate.instant('It may take up to 10 minutes for the transaction to be confirmed'); 
+    const params = { finishText, finishComment ,autoDismiss: false };
+
+    const modal = this.modalCtrl.create(FinishModalPage, params, {
+      showBackdrop: true,
+      enableBackdropDismiss: false,
+      cssClass: 'finish-modal'
+    });
+    await modal.present();
+  }
+
   public claim() {
     this.stakeProvider.claimAll(this.wallets, this.rewards)
       .then((res) => {
