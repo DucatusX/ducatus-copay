@@ -7,6 +7,7 @@ import { debounceTime, distinctUntilChanged} from "rxjs/operators";
 import { FinishModalPage } from "../../../pages/finish/finish";
 import { Logger } from "../../../providers";
 import { ActionSheetProvider } from "../../../providers/action-sheet/action-sheet";
+import { ErrorsProvider } from "../../../providers/errors/errors";
 import { FormControllerProvider } from "../../../providers/form-contoller/form-controller";
 import { OnGoingProcessProvider } from '../../../providers/on-going-process/on-going-process';
 import { ProfileProvider } from "../../../providers/profile/profile";
@@ -51,6 +52,7 @@ export class StakeAddPage {
     private modalCtrl: ModalController,
     private navCtrl: NavController,
     private formlCtrl: FormControllerProvider,
+    private errorsProvider: ErrorsProvider
   ) {
       this.stakeGroup = this.formBuilder.group({
         address: [
@@ -85,6 +87,12 @@ export class StakeAddPage {
           this.isEmptyInput = true;
         }
     });
+  }
+
+  private showErrorMessage(message: string): void {
+    const title = this.translate.instant('Error');
+
+    this.errorsProvider.showDefaultError(message, title);
   }
 
   public async ngOnInit(): Promise<void> {
@@ -169,9 +177,10 @@ export class StakeAddPage {
         this.startApproveInterval();
         this.createFinishModal();
       })
-      .catch( () => {
+      .catch((err) => {
         this.approveLoading = false;
         this.onGoingProcessProvider.clear();
+        this.showErrorMessage(err.message);
       });
   }
 
@@ -191,15 +200,16 @@ export class StakeAddPage {
     this.stakeLoading = true;
 
     this.stakeProvider.deposit(this.stakeGroup.value.amount, this.selectWallet.walletId)
-    .then( () => {
+    .then(() => {
       this.onGoingProcessProvider.clear();
       this.stakeLoading = false;
       this.createFinishModal();
       this.navCtrl.pop();
     })
-    .catch( () => {
+    .catch((err) => {
       this.onGoingProcessProvider.clear();
       this.stakeLoading = false;
+      this.showErrorMessage(err.message);
     });
   }
 
