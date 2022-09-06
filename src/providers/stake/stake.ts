@@ -192,7 +192,7 @@ public unixYear: number = 300;
           promises.push(this.claimReward(userJwanWallets[index].wallet.linkedEthWallet));
         }
       });
-      
+
       Promise.all(promises).then((result) => {
         resolve(result);
       })
@@ -204,9 +204,9 @@ public unixYear: number = 300;
 
   public openActionSheet(feePrewiew, title: string, amount?) {
     return new Promise<any>((resolve) => {
-      const needsBackup = this.actionSheetProvider.createTxConfirm({feePrewiew, title, amount});
-      needsBackup.present();
-      needsBackup.onDidDismiss(res => {
+      const approveTxModal = this.actionSheetProvider.createTxConfirm({feePrewiew, title, amount});
+      approveTxModal.present();
+      approveTxModal.onDidDismiss(res => {
         resolve(res);
       });
     });
@@ -325,27 +325,28 @@ public unixYear: number = 300;
     const dataTx = this.getClaimRewardData();
 
     return this.buildTxp(walletId, dataTx, this.jwanStakeAddress, true)
-    .then((txp) => {
-      return this.transactionUtilsProvider.publishAndSign(txp, wallet);
-    });
+      .then((txp) => {
+        return this.transactionUtilsProvider.publishAndSign(txp, wallet);
+      });
   }
 
-  public unStakeDeposit(walletId, indexDeposit, amount) {
+  public unStakeDeposit(walletId, indexDeposit, amountWei) {
     const wallet = this.profileProvider.getWallet(walletId);
+    const amount = Big(amountWei).div(100000000).toString();
 
     const dataTx = this.getUnstakeData(indexDeposit);
 
     return this.buildTxp(walletId, dataTx, this.jwanStakeAddress, true)
-    .then( async (txp) => {
-      const userChoise = await this.openActionSheet(this.web3.utils.fromWei(txp.fee, 'ether'), 'approve', amount);
+      .then( async (txp) => {
+        const userChoise = await this.openActionSheet(this.web3.utils.fromWei(txp.fee, 'ether'), 'approve', amount);
 
-      if (userChoise) {
-        return this.transactionUtilsProvider.publishAndSign(txp, wallet);
-      }
-      else {
-        return;
-      }
-    });
+        if (userChoise) {
+          return this.transactionUtilsProvider.publishAndSign(txp, wallet);
+        }
+        else {
+          throw new Error;
+        }
+      });
   }
 
   public deposit(amount, walletId) {
