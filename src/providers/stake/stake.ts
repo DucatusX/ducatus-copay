@@ -16,6 +16,11 @@ export interface IDeposit {
   amount: number | string;
   enteredAt: number | string;
   gotInYears: number | string;
+  metaInfo: {
+    address: string,
+    amount: number,
+  };
+  isPending?: boolean;
 }
 
 interface IDepositInfo {
@@ -338,13 +343,13 @@ public unixYear: number = 300;
 
     return this.buildTxp(walletId, dataTx, this.jwanStakeAddress, true)
       .then( async (txp) => {
-        const userChoise = await this.openActionSheet(this.web3.utils.fromWei(txp.fee, 'ether'), 'approve', amount);
+        const userChoise = await this.openActionSheet(this.web3.utils.fromWei(txp.fee, 'ether'), 'unDeposit', amount);
 
         if (userChoise) {
           return this.transactionUtilsProvider.publishAndSign(txp, wallet);
         }
         else {
-          throw new Error;
+          throw new Error("User did not approve");
         }
       });
   }
