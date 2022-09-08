@@ -221,7 +221,7 @@ export class StakeAddPage {
     this.maxAmount = amount.availableAmount / 100000000;
     this.stakeGroup
       .get('amount')
-      .setValue( this.maxAmount, { emitEvent: false });
+      .setValue( this.maxAmount);
   }
 
   public openAddressList(): void {
@@ -236,7 +236,6 @@ export class StakeAddPage {
       infoSheet.onDidDismiss((option, item) => {
         if (option) {
           this.stakeGroup.value.address = option;
-          // this.useSendMax = false;
           this.selectWallet = item;
         }
       });

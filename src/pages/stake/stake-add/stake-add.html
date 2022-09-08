@@ -28,12 +28,12 @@
       <form [formGroup]="stakeGroup">
         <div class="stake-add-group-wrap">
           <span class="stake-add-label"
-            >{{ 'Choose DUC address to be deducted' | translate }}</span
+            >{{ 'Choose DUCX address to be deducted' | translate }}</span
           >
           <div class="stake-add-group">
             <ion-item class="stake-add-input">
               <ion-input
-                placeholder="Choose DUC address to be deducted"
+                placeholder="Choose DUCX address to be deducted"
                 type="text"
                 [readonly]="true"
                 formControlName="address"
@@ -57,6 +57,7 @@
               <ion-input
                 placeholder="Enter amount"
                 type="number"
+                [disabled]="!selectWallet"
                 formControlName="amount"
                 [value]="stakeGroup.value.amount"
               >
