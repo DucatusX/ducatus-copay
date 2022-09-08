@@ -33,12 +33,14 @@
             </ion-input>
           </ion-item>
           <button ion-button
+            *ngIf="!isClaiming"
             class="stake-btn-claim"
             (click)="claim()"
             [disabled]="!reward"
           >
             {{ 'Claim' | translate }}
           </button>
+          <ion-spinner class="stake-spinner-claim" *ngIf="isClaiming" name="bubbles"></ion-spinner>
         </div>
       </div>
        <button ion-button class="stake-button-standard" (click)="goToStakeAdd()">
@@ -59,7 +61,8 @@
             {{deposit.enteredAt | date:'dd.LL.y' }}
           </span>
         </div>
-        <button 
+        <button
+          *ngIf="!deposit.isPending"
           ion-button 
           class="stake-item-button"  
           (click)="withdrawn(deposit.metaInfo.userJwanAddress, deposit.metaInfo.amountDeposited, deposit.amount)"
@@ -67,6 +70,7 @@
         >
           Unstake
         </button>
+        <ion-spinner class="stake-spinner-unstake" *ngIf="deposit.isPending" name="bubbles"></ion-spinner>
       </ion-item>
   </ion-list>
 

@@ -25,6 +25,7 @@ export class StakePage {
   public reward: number = 0;
   public rewards = [];
   public walletAddresses: string[];
+  public isClaiming: boolean = false;
   public nonceError: string = "500 - Returned error: Transaction gas price supplied is too low. There is another transaction with same nonce in the queue. Try increasing the gas price or incrementing the nonce.";
 
   constructor(
@@ -40,7 +41,7 @@ export class StakePage {
   ) {}
 
   public async ngOnInit(): Promise<void> {
-    const wallets = this.profileProvider.getWallets({ showHidden: true });
+    const wallets = this.profileProvider.getWallets({ showHidden: true, backedUp: true });
     this.walletsGroups = _.values(
       _.groupBy(
         _.filter(wallets, wallet => {
@@ -60,7 +61,10 @@ export class StakePage {
   public getDeposits(): void {
     this.stakeProvider.getAllDeposits(this.walletAddresses)
       .then((result: any) => {
-        this.deposits = result;
+        this.deposits = result.map(deposit => {
+          deposit.isPending = false;
+          return deposit;
+        });
       })
       .catch((error) => {
         this.logger.debug(error);
@@ -73,7 +77,7 @@ export class StakePage {
         this.rewards = res;
 
         this.reward = res.reduce((rewardAccum, reward) => rewardAccum + Number(reward),0);
-        this.reward = Big(this.reward).div(100000000);
+        this.reward = Big(this.reward).div(100000000).toNumber();
       })
       .catch((error) => {
         this.logger.debug(error);
@@ -84,9 +88,11 @@ export class StakePage {
     const title = this.translate.instant('Error');
     let msg: string;
 
-    
     if (!err.message) {
       msg = 'Network error';
+    }
+    else if(err.message === 'User did not approve') {
+      return;
     }
     // tslint:disable-next-line:prefer-conditional-expression
     else if (err === this.nonceError) {
@@ -113,13 +119,17 @@ export class StakePage {
   }
 
   public claim() {
+    this.isClaiming = true;
+
     this.stakeProvider.claimAll(this.wallets, this.rewards)
       .then((res) => {
+        this.isClaiming = false;
         this.onGoingProcessProvider.clear();
         this.logger.debug(res);
         this.createFinishModal();
       })
-      .catch((err) =>{
+      .catch((err) => {
+        this.isClaiming = false;
         this.onGoingProcessProvider.clear();
         this.logger.debug(err);
         this.showErrorMessage(err);
@@ -132,14 +142,17 @@ export class StakePage {
      amountWei
   ) {
     const wallet = this.wallets.find( wallet => wallet.address === address);
+    this.deposits[indexDeposit].isPending = true;
 
     this.stakeProvider.unStakeDeposit(wallet.wallet.linkedEthWallet, indexDeposit, amountWei)
       .then((res) => {
         this.onGoingProcessProvider.clear();
         this.logger.debug(res);
         this.createFinishModal();
+        this.deposits.splice(indexDeposit, 1);
       })
-      .catch(err =>{
+      .catch(err => {
+        this.deposits[indexDeposit].isPending = false;
         this.onGoingProcessProvider.clear();
         this.logger.debug(err);
         this.showErrorMessage(err);
