@@ -17,7 +17,7 @@
         <div class="container-actions-subtitle">
           By granting permission, you are allowing the following contract to access your funds
         </div>
-        <div class="container-actions-address">
+        <div copy-to-clipboard="{{jwanStakeAddress}}" class="container-actions-address">
           <span>{{jwanStakeAddress | shortenedAddress: 31 }}</span>
           <div class="copy-icon">
             <img src="assets/img/copyIcon.svg" alt="copy">
@@ -29,7 +29,7 @@
         <div class="container-actions-title">
           Collect the reward!
         </div>
-        <div class="container-actions-address">
+        <div copy-to-clipboard="{{jwanStakeAddress}}" class="container-actions-address">
           <span>{{jwanStakeAddress | shortenedAddress: 31 }}</span>
           <div class="copy-icon">
             <img src="assets/img/copyIcon.svg" alt="copy">
@@ -41,7 +41,7 @@
         <div class="container-actions-title">
           Stake JWAN
         </div>
-        <div class="container-actions-address">
+        <div copy-to-clipboard="{{jwanStakeAddress}}" class="container-actions-address">
           <span>{{jwanStakeAddress | shortenedAddress: 31 }}</span>
           <div class="copy-icon">
             <img src="assets/img/copyIcon.svg" alt="copy">
@@ -51,9 +51,9 @@
 
       <div *ngIf="title === 'unDeposit'" class="container-actions">
         <div class="container-actions-title">
-          Withdrawn
+          Unstake JWAN
         </div>
-        <div class="container-actions-address">
+        <div copy-to-clipboard="{{jwanStakeAddress}}" class="container-actions-address">
           <span>{{jwanStakeAddress | shortenedAddress: 31 }}</span>
           <div class="copy-icon">
             <img src="assets/img/copyIcon.svg" alt="copy">
@@ -115,7 +115,7 @@
           <div class="check-icon">
             <img src="assets/img/checkMarkIcon.svg" alt="checkMark">
           </div>
-          Total withdrawn
+          Total Unstake
         </div>
         <div class="total-amount">
           {{amount}}  JWAN

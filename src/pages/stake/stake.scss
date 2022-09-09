@@ -57,6 +57,18 @@
     }
   }
 
+  &-spinner {
+    &-claim {
+      position: absolute;
+      top: 29px;
+      right: 25px;
+    }
+    &-unstake {
+      position: absolute;
+      right: 25px;
+      top: 27px;
+    }
+  }
 
   &-group {
 
