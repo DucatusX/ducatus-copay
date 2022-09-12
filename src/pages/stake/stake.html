@@ -72,6 +72,12 @@
         </button>
         <ion-spinner class="stake-spinner-unstake" *ngIf="deposit.isPending" name="bubbles"></ion-spinner>
       </ion-item>
+      <div class="stake-total">
+        Total Staked:
+        <span class="stake-item-info-amount">
+          {{totalStaked | satToUnit: "jwan"}}
+        </span>
+      </div>
   </ion-list>
 
 </ion-content>

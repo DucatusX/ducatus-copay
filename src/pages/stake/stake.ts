@@ -23,6 +23,7 @@ export class StakePage {
   public isApprove: boolean = false;
   public deposits: IDeposit[];
   public reward: number = 0;
+  public totalStaked: number = 0;
   public rewards = [];
   public walletAddresses: string[];
   public isClaiming: boolean = false;
@@ -61,9 +62,15 @@ export class StakePage {
   public getDeposits(): void {
     this.stakeProvider.getAllDeposits(this.walletAddresses)
       .then((result: any) => {
+        this.totalStaked = 0;
+
         this.deposits = result.map(deposit => {
           deposit.isPending = false;
           return deposit;
+        });
+
+        this.deposits.forEach(deposit => {
+          this.totalStaked += Number(deposit.amount);
         });
       })
       .catch((error) => {
