@@ -31,8 +31,9 @@ tx-confirm {
       border-radius: 4px;
       align-items: center;
       justify-content: center;
-      padding: 5px;
-      margin: 32px 0;
+      padding: 5px 8px;
+      margin: 32px auto;
+      width: max-content;
       align-content: center;
       .copy-icon {
         display: flex;
@@ -88,19 +89,19 @@ tx-confirm {
       max-width: none;
     }
     &-outline {
-    font-weight: 700;
-    cursor: pointer;
-    border: 2px solid #862633;
-    background-color: white;
-    color: #862633;
-    width: 100%;
-    height: 60px;
-    border-radius: 33px;
-      &:hover {
-        color: white;
-        background-color: #862633;
+      font-weight: 700;
+      cursor: pointer;
+      border: 2px solid #862633;
+      background-color: white;
+      color: #862633;
+      width: 100%;
+      height: 60px;
+      border-radius: 33px;
+        &:hover {
+          color: white;
+          background-color: #862633;
+        }
       }
-    }
   }
   
 }
