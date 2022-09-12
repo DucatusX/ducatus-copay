@@ -5,6 +5,7 @@ import Web3 from 'web3';
 import { Coin } from '../../providers';
 import { ActionSheetProvider } from '../action-sheet/action-sheet';
 import { ContractAddress } from '../contract-address/contract-address';
+import { Logger } from '../logger/logger';
 import { OnGoingProcessProvider} from '../on-going-process/on-going-process';
 import { ProfileProvider } from '../profile/profile';
 import { TransactionUtilsProvider } from '../transactions-utils/transactions-utils';
@@ -39,14 +40,15 @@ public jwanContractToken;
 public rpcURL = "https://ducx-mainnet-node1.rocknblock.io/";
 public depositData;
 public approveData;
-public unixYear: number = 300;
+public unixYear: number = 31536000; // default stake time
 
   constructor (
     private contractAddress: ContractAddress,
     private transactionUtilsProvider: TransactionUtilsProvider,
     private profileProvider: ProfileProvider,
     private actionSheetProvider: ActionSheetProvider,
-    private onGoingProcessProvider: OnGoingProcessProvider
+    private onGoingProcessProvider: OnGoingProcessProvider,
+    private logger: Logger
   ) {
     this.web3 = new Web3(this.rpcURL);
     this.jwanStakeAddress = this.contractAddress.getAddresses().jwanStakeAddress;
@@ -54,9 +56,14 @@ public unixYear: number = 300;
     this.jwanContractToken = new this.web3.eth.Contract(JWAN_TOKEN_ABI, this.jwanTokenAddress);
     this.jwanContractStake = new this.web3.eth.Contract(JWAN_STAKE_ABI, this.jwanStakeAddress);
     this.depositData = this.jwanContractStake.methods.deposit(this.etherToWei("100")).encodeABI();
-    this.getYearTime().then((year: number) => {
-      this.unixYear = year;
-    });
+
+    this.getYearTime()
+      .then((year: string) => {
+        this.unixYear = Number(year);
+      })
+      .catch((err) => {
+        this.logger.debug(err);
+      });
   }
 
   public etherToWei(amount) {
@@ -75,7 +82,7 @@ public unixYear: number = 300;
   }
 
   public getYearTime() {
-    return this.callMethod(this.jwanContractStake, 'Year', []);
+    return this.callMethod(this.jwanContractStake, 'YEAR', []);
   }
 
   public getIndexesDeposits(userJwanAddress) {
@@ -190,7 +197,10 @@ public unixYear: number = 300;
 
       const userChoise = await this.openActionSheet(feePrewiew, 'claim', sumUserReward);
 
-      if (!userChoise) return;
+      if (!userChoise) {
+        reject({message: 'User did not approve'});
+        return;
+      }
 
       userReward.forEach((reward, index) => {
         if ( reward > 0) {
@@ -238,7 +248,12 @@ public unixYear: number = 300;
   }
 
   public toWei(amount) {
-    return this.web3.utils.toWei(amount, 'ether');
+    try {
+      return this.web3.utils.toWei(amount, 'ether');
+    }
+    catch {
+      return null;
+    }
   }
 
   public getApproveAmount(userJwanAddress): Promise<string> {

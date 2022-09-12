@@ -1,10 +1,10 @@
 import { Component, ComponentRef } from '@angular/core';
 import { InfoSheetComponent } from '../../components/info-sheet/info-sheet';
-import { ApiProvider } from '../../providers/api/api';
 import { ActionSheetParent } from '../action-sheet/action-sheet-parent';
 
 // Providers
 import { InfoSheetType } from '../../providers/action-sheet/action-sheet';
+import { ContractAddress } from '../../providers/contract-address/contract-address';
 import { DomProvider } from '../../providers/dom/dom';
 
 @Component({
@@ -17,12 +17,15 @@ export class TxConfirmComponent extends ActionSheetParent {
   public amount;
   public title: string;
 
-  constructor(private domProvider: DomProvider, private apiProvider: ApiProvider) {
+  constructor(
+    private domProvider: DomProvider, 
+    private contractAddress: ContractAddress
+  ) {
     super();
   }
 
   ngOnInit() {
-    this.jwanStakeAddress = this.apiProvider.getAddresses().jwanStakeAddress;
+    this.jwanStakeAddress = this.contractAddress.getAddresses().jwanStakeAddress;
     this.feePrewiew = this.params.feePrewiew;
     this.amount = this.params.amount;
     this.title = this.params.title;
