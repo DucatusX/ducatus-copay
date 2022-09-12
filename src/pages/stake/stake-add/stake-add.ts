@@ -1,6 +1,8 @@
 import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { Big } from 'big.js';
+import { Decimal } from 'decimal.js';
 import { ModalController ,NavController } from "ionic-angular";
 import * as _ from 'lodash';
 import { debounceTime, distinctUntilChanged} from "rxjs/operators";
@@ -37,7 +39,7 @@ export class StakeAddPage {
   public stakeLoading: boolean = false;
   public approveCheckInterval;
   public reward: string;
-  public sumRewards: number;
+  public sumRewards: number | string;
   public isEmptyInput: boolean = true;
 
   constructor(
@@ -77,9 +79,10 @@ export class StakeAddPage {
       )
       .subscribe( amount => {
         if(amount != '0' && amount != '') {
-          const amountInputValid = this.formlCtrl.transformValue(amount);
+          const amountInputValid = this.formlCtrl.transformValue(amount, undefined, 8);
+
           this.setIsApprove(amount);
-          this.sumRewards = (Number(amountInputValid) / 100) * Number(this.reward || this.defaultReward);
+          this.sumRewards = new Decimal(amountInputValid).times(0.04).toString();
           this.isEmptyInput = !Boolean(Number(amount));
           this.setAmountInput(amountInputValid);
         }
@@ -218,7 +221,8 @@ export class StakeAddPage {
     const tokenAddress = token && token.address || '';
     const amount = await this.walletProvider.getBalance(this.selectWallet.wallet, { tokenAddress });
 
-    this.maxAmount = amount.availableAmount / 100000000;
+    this.maxAmount = Big(amount.availableAmount).div(100000000).toString();
+    
     this.stakeGroup
       .get('amount')
       .setValue( this.maxAmount);
