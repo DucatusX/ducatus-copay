@@ -11,8 +11,6 @@ export class ApiProvider {
       ratesApi: 'https://rates.ducatuscoins.com/api/v1/rates/',
       deposit: 'https://www.ducatuscoins.com/api/v5/',
       nftSeed: 'https://nft.goldxb.com/api/v1/nfts/',
-      jwanStakeAddress: '0xE303dD7146E67D3Bd438e54971ebd9076908e7d5', 
-      jwanTokenAddress: '0xFCb965D9Da10A15eb87B3Da539383997ce6fA597',
       getExchange:{
         livenet: "https://www.ducatuscoins.com",
         testnet: "https://devducatus.rocknblock.io"
@@ -29,8 +27,6 @@ export class ApiProvider {
       ducatuscoins: 'https://devducatus.rocknblock.io',
       crowdsale: 'https://tokenization.centuriongm.com',
       pog: 'https://devgold.rocknblock.io',
-      jwanStakeAddress: '0xE303dD7146E67D3Bd438e54971ebd9076908e7d5',
-      jwanTokenAddress: '0xFCb965D9Da10A15eb87B3Da539383997ce6fA597',
       ratesApi: 'https://ducexpl.rocknblock.io/api/v1/rates/',
       deposit: 'https://dev-vouchers.rocknblock.io/api/v1/',
       nftSeed: 'https://dev-seed.rocknblock.io/api/v1/nfts/',
