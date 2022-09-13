@@ -32,6 +32,8 @@ import { SearchTxModalPage } from '../pages/wallet-details/search-tx-modal/searc
 import { WalletBalanceModal } from '../pages/wallet-details/wallet-balance/wallet-balance';
 import { WalletDetailsPage } from '../pages/wallet-details/wallet-details';
 import { NftDetailsPage } from './nft-details/nft-details';
+import { StakePage } from './stake/stake';
+import { StakeAddPage } from './stake/stake-add/stake-add';
 
 // Integrations: Invoice
 import { SelectInvoicePage } from '../pages/integrations/invoice/select-invoice/select-invoice';
@@ -212,6 +214,8 @@ export const PAGES = [
   SettingsPage,
   SelectCurrencyPage,
   SelectInvoicePage,
+  StakePage,
+  StakeAddPage,
   CoinbaseSettingsPage,
   ShapeshiftConfirmPage,
   ShapeshiftDetailsPage,

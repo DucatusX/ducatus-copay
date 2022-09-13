@@ -52,6 +52,7 @@ import { PlatformProvider } from '../../../../providers/platform/platform';
 import { PopupProvider } from '../../../../providers/popup/popup';
 import { ProfileProvider } from '../../../../providers/profile/profile';
 import { ReplaceParametersProvider } from '../../../../providers/replace-parameters/replace-parameters';
+import { TransactionUtilsProvider } from '../../../../providers/transactions-utils/transactions-utils';
 import { TxFormatProvider } from '../../../../providers/tx-format/tx-format';
 import {
   TransactionProposal,
@@ -117,7 +118,8 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     events: Events,
     coinbaseProvider: CoinbaseProvider,
     appProvider: AppProvider,
-    iabCardProvider: IABCardProvider
+    iabCardProvider: IABCardProvider,
+    txUtilsProvider: TransactionUtilsProvider
   ) {
     super(
       addressProvider,
@@ -148,7 +150,8 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
       events,
       coinbaseProvider,
       appProvider,
-      iabCardProvider
+      iabCardProvider,
+      txUtilsProvider
     );
     this.configWallet = this.configProvider.get().wallet;
   }

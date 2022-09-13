@@ -6,6 +6,7 @@ import { IncomingDataMenuComponent } from '../../components/incoming-data-menu/i
 import { InfoSheetComponent } from '../../components/info-sheet/info-sheet';
 import { MemoComponent } from '../../components/memo-component/memo-component';
 import { OptionsSheetComponent } from '../../components/options-sheet/options-sheet';
+import { TxConfirmComponent } from '../../components/tx-confirm/tx-confirm';
 import { WalletReceiveComponent } from '../../components/wallet-receive/wallet-receive';
 import { WalletSelectorComponent } from '../../components/wallet-selector/wallet-selector';
 import { WalletTabOptionsComponent } from '../../components/wallet-tab-options/wallet-tab-options';
@@ -78,6 +79,12 @@ export interface WalletTabOptionsParams {
   walletsGroups: any;
 }
 
+export interface TxConfirmParams {
+  feePrewiew: string | number;
+  title: string;
+  amount?: string | number;
+}
+
 export interface ChooseFeeLevelParams {
   network: string;
   coin: Coin;
@@ -117,6 +124,16 @@ export class ActionSheetProvider {
   public createMemoComponent(memo): MemoComponent {
     return this.setupSheet<MemoComponent>(MemoComponent, null, { memo })
       .instance;
+  }
+
+  public createTxConfirm(
+    params: TxConfirmParams
+  ): TxConfirmComponent {
+    return this.setupSheet<TxConfirmComponent>(
+      TxConfirmComponent,
+      null,
+      params
+    ).instance;
   }
 
   public createEmailComponent(): EmailComponent {

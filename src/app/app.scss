@@ -1071,6 +1071,9 @@ ion-icon {
   &_text {
     display: block;
     opacity: 0.5;
+    img {
+      height: 19px;
+    }
   }
 
   &_icon_active {

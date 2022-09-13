@@ -1,0 +1,140 @@
+<action-sheet>
+  <div class="prompt-user-fullscreen-container">
+    <div class="prompt-user">
+      <div class="header-sheet">
+        <div class="header-logo">
+          <img src="assets/img/jwanLogo.svg" alt="Jwan">
+        </div>
+        <div class="header-icon" (click)="dismiss()">
+          <img src="assets/img/closeIcon.svg" alt="Close">
+        </div>
+      </div>
+
+      <div *ngIf="title === 'approve'" class="container-actions">
+        <div class="container-actions-title">
+          Give permission to access your JWAN?
+        </div>
+        <div class="container-actions-subtitle">
+          By granting permission, you are allowing the following contract to access your funds
+        </div>
+        <div copy-to-clipboard="{{jwanStakeAddress}}" class="container-actions-address">
+          <span>{{jwanStakeAddress | shortenedAddress: 20 }}</span>
+          <div class="copy-icon">
+            <img src="assets/img/copyIcon.svg" alt="copy">
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="title === 'claim'" class="container-actions">
+        <div class="container-actions-title">
+          Collect the reward!
+        </div>
+        <div copy-to-clipboard="{{jwanStakeAddress}}" class="container-actions-address">
+          <span>{{jwanStakeAddress | shortenedAddress: 20 }}</span>
+          <div class="copy-icon">
+            <img src="assets/img/copyIcon.svg" alt="copy">
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="title === 'deposit'" class="container-actions">
+        <div class="container-actions-title">
+          Stake JWAN
+        </div>
+        <div copy-to-clipboard="{{jwanStakeAddress}}" class="container-actions-address">
+          <span>{{jwanStakeAddress | shortenedAddress: 20 }}</span>
+          <div class="copy-icon">
+            <img src="assets/img/copyIcon.svg" alt="copy">
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="title === 'unDeposit'" class="container-actions">
+        <div class="container-actions-title">
+          Unstake JWAN
+        </div>
+        <div copy-to-clipboard="{{jwanStakeAddress}}" class="container-actions-address">
+          <span>{{jwanStakeAddress | shortenedAddress: 20 }}</span>
+          <div class="copy-icon">
+            <img src="assets/img/copyIcon.svg" alt="copy">
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+      <div *ngIf="title === 'approve'" class="total">
+        <div class="total-title">
+          <div class="check-icon">
+            <img src="assets/img/checkMarkIcon.svg" alt="checkMark">
+          </div>
+          Approve
+        </div>
+        <div class="total-amount">
+          {{amount}}  JWAN
+        </div>
+        <div class="total-fee">
+          <strong>transaction fee:</strong> ~ {{feePrewiew}} DUCX
+        </div>
+      </div>
+
+      <div *ngIf="title === 'deposit'" class="total">
+        <div class="total-title">
+          <div class="check-icon">
+            <img src="assets/img/checkMarkIcon.svg" alt="checkMark">
+          </div>
+          Total staked
+        </div>
+        <div class="total-amount">
+          {{amount}}  JWAN
+        </div>
+        <div class="total-fee">
+          <strong>transaction fee:</strong> ~ {{feePrewiew}} DUCX
+        </div>
+      </div>
+
+      <div *ngIf="title === 'claim'" class="total">
+        <div class="total-title">
+          <div class="check-icon">
+            <img src="assets/img/checkMarkIcon.svg" alt="checkMark">
+          </div>
+          Total claim
+        </div>
+        <div class="total-amount">
+          {{amount}}  JWAN
+        </div>
+        <div class="total-fee">
+          <strong>transaction fee:</strong> ~ {{feePrewiew}} DUCX
+        </div>
+      </div>
+
+      <div *ngIf="title === 'unDeposit'" class="total">
+        <div class="total-title">
+          <div class="check-icon">
+            <img src="assets/img/checkMarkIcon.svg" alt="checkMark">
+          </div>
+          Total Unstake
+        </div>
+        <div class="total-amount">
+          {{amount}}  JWAN
+        </div>
+        <div class="total-fee">
+          <strong>transaction fee:</strong> ~ {{feePrewiew}} DUCX
+        </div>
+      </div>
+
+
+      <div class="button-confirm">
+        <button ion-button class="button-default safe-area" (click)="dismiss(1)">
+          CONFIRM
+        </button>
+        <button ion-button class="button-outline safe-area" (click)="dismiss(0)">
+          REJECT
+        </button>
+      </div>
+
+    </div>
+  </div>
+</action-sheet>

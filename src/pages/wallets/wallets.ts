@@ -46,6 +46,7 @@ import { SimplexProvider } from '../../providers/simplex/simplex';
 import { WalletProvider } from '../../providers/wallet/wallet';
 import { WebExtensionsProvider } from '../../providers/web-extension/web-extension';
 import { SelectCurrencyPage } from '../add/select-currency/select-currency';
+import { StakePage } from '../stake/stake';
 
 interface UpdateWalletOptsI {
   walletId: string;
@@ -754,6 +755,10 @@ export class WalletsPage {
 
   public openVoucher() {
     this.navCtrl.push(VoucherPage);
+  }
+
+  public openStake() {
+    this.navCtrl.push(StakePage);
   }
 
   public openDeposits() {

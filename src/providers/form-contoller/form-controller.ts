@@ -1,14 +1,18 @@
 export class FormControllerProvider {
 
-  public transformValue (valueChange: string, oldValue: string, decimals: number) {
+  public transformValue (valueChange: string, oldValue?: string, decimals?: number) {
     let newValue: string = valueChange;
     const onlyNumberRegex: RegExp = /[^,.0-9]/; 
 
-    if (onlyNumberRegex.test(newValue)) {
-      return oldValue;
+    if(oldValue) {
+      if (onlyNumberRegex.test(newValue)) {
+        return oldValue;
+      }
     }
 
-    newValue = this.trimStrToDecimalsCoin(valueChange, decimals);
+    if(decimals) {
+      newValue = this.trimStrToDecimalsCoin(valueChange, decimals);
+    }
   
     // .32  to -> 0.32
     if (valueChange[0] === '.') {
