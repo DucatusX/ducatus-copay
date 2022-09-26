@@ -2,7 +2,7 @@
   "name": "walnew",
   "description": "A Secure DucatusCoin Wallet",
   "author": "BitPay",
-  "version": "2.12.19",
+  "version": "2.13.19",
   "keywords": [
     "ducatus",
     "bitcoin",
@@ -114,7 +114,7 @@
     "@angular/tsc-wrapped": "4.4.6",
     "@ducatus/ducatus-core-lib-rev": "8.16.7",
     "@ducatus/ducatus-crypto-wallet-core-rev": "8.16.35",
-    "@ducatus/ducatus-wallet-client-rev": "8.20.31",
+    "@ducatus/ducatus-wallet-client-rev": "8.21.31",
     "@ionic-native/android-fingerprint-auth": "4.14.0",
     "@ionic-native/clipboard": "4.14.0",
     "@ionic-native/core": "^4.14.0",
