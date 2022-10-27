@@ -124,7 +124,7 @@
 
     <info-sheet-template *ngSwitchCase="'convertor-address'">
       <span sheet-text>
-        <ion-list>
+        <ion-list *ngIf="params.wallet && params.wallet.length">
           <div *ngFor="let item of params.wallet">
             <wallet-item-content
               sheet-button-text
@@ -134,6 +134,9 @@
             </wallet-item-content>
           </div>
         </ion-list>
+        <div *ngIf="!params.wallet.length">
+          <span sheet-title-text translate>Please create JWAN wallet first</span>
+        </div>
       </span>
     </info-sheet-template>
 
