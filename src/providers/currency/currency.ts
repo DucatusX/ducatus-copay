@@ -25,7 +25,8 @@ export enum Coin {
   'JWAN' = 'jwan',
   'TKF' = 'tkf',
   'AA+' = 'aa+',
-  'QMN' = 'qmn'
+  'QMN' = 'qmn',
+  'MPE' = 'mpe'
 }
 
 export const availableCurrencys = [

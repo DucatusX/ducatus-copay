@@ -229,7 +229,6 @@ export class StakeAddPage {
   }
 
   public openAddressList(): void {
-
     if ( !this.depositLoading ) {
       const infoSheet = this.actionSheetProvider.createInfoSheet(
         'convertor-address',
