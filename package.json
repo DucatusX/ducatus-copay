@@ -32,8 +32,9 @@
     "url": "https://github.com/DucatusX/ducatus-copay/issues"
   },
   "scripts": {
-    "postinstall": "npm run env:dev && npm run prompt",
+    "postinstall": "npm run env:dev && npm run android:patch && npm run prompt",
     "electron:patch": "(! grep -q 'com.apple.security.app-sandbox' ./node_modules/app-builder-lib/templates/entitlements.mac.plist && sed -i -e \"/<dict>/ a\\ \n<key>com.apple.security.app-sandbox</key><true/>\" ./node_modules/app-builder-lib/templates/entitlements.mac.plist) | echo 'electron patched.'",
+    "android:patch": "sed -i -e 27d ./node_modules/cordova-plugin-file-opener2/plugin.xml | echo 'android patched.'",
     "prompt": "\n\n\n\n\n\n#\n#  Choose a distribution with:\n#\n#     $ npm run apply:copay\n#              or\n#     $ npm run apply:bitpay\n#\n",
     "patch:chrome-extension": "(cat ./web_extensions/chrome/chrome.css >> ./www/build/main.css) && (sed -i -e 's/build\\/main.js/load.js/g' www/index.html) | echo 'ChromeExtension patched.'",
     "patch:firefox-extension": "(cat ./web_extensions/firefox/firefox.css >> ./www/build/main.css) && (sed -i -e 's/build\\/main.js/load.js/g' www/index.html) | echo 'FirefoxExtension patched.'",
