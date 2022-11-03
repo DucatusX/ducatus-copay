@@ -43,21 +43,44 @@
               {{ deposit.readyToWithdrawDate | date:'dd.LL.y' }}
             </span>
           </div>
-          <div>
+          <div class="deposit-item-buttons">
             <span
               *ngIf="!deposit.readyToWithdraw"
               class="deposit-item-percent"
             >
               {{ deposit.interestRate }}%
             </span>
-            <span
-              *ngIf="deposit.readyToWithdraw"
-              ion-button
-              class="deposit-item-button"
-              (click)="withdraw(deposit.id)"
-            > 
-              WITHDRAW
-            </span>
+
+            <div *ngIf="!deposit.extraData.length" class="deposit-withdraw">
+              <span
+                *ngIf="deposit.readyToWithdraw"
+                ion-button
+                class="deposit-item-button"
+                (click)="withdraw(deposit.id)"
+              >
+                WITHDRAW
+              </span>
+            </div>
+
+            <div *ngIf="deposit.extraData.length" class="deposit-old-withdraw">
+              <span
+                *ngIf="deposit.readyToWithdraw"
+                ion-button
+                class="deposit-item-old-button"
+                (click)="withdraw(deposit.id)"
+              > 
+                WITHDRAW
+              </span>              
+              <span
+                *ngIf="deposit.readyToWithdraw"
+                ion-button
+                class="deposit-item-old-button"
+                (click)="getRewards(deposit.id)"
+              >
+                Get Rewards
+              </span>
+            </div>
+
           </div>
           <div
             class="deposit-range-limit"
