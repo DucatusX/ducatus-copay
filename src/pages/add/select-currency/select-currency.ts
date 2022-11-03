@@ -81,6 +81,7 @@ export class SelectCurrencyPage {
     this.drcAvailableTokens = this.drcAvailableTokens.filter(token => token.symbol != 'TKF');
     this.coinsSelected['duc'] = true;
     this.coinsSelected['ducx'] = true;
+    this.tokensSelected['AA+'] = true;
     this.shouldShowKeyOnboarding();
     this.setTokens();
   }
