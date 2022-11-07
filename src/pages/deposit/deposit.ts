@@ -217,6 +217,16 @@ export class DepositPage {
         title: '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
         text: 'Something went wrong, try again',
         button: 'OK'
+      },
+      oldDividendsWithdrawnFailed: {
+        title: '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+        text: 'Failed to receive reward, try again',
+        button: 'OK'
+      },
+      oldDepositWithdrawnFailed: {
+        title: '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+        text: 'Failed to withdraw deposit, try again',
+        button: 'OK'
       }
     };
 
@@ -306,9 +316,6 @@ export class DepositPage {
       );
 
       try {
-        const withdrawDeposit = await this.withdrawnOldDepositsDividends(id);
-        this.logger.debug(withdrawDeposit);
-
         const response = this.sendTX(txHex, id);
 
         this.logger.debug(response);
@@ -323,10 +330,22 @@ export class DepositPage {
         ) {
           this.showModal('alreadyActivated', id);
         } else {
-          this.showModal('network', id);
+          this.showModal('oldDepositWithdrawnFailed', id);
         }
       }
     }
+  }
+
+  public getRewards(id) {
+    this.withdrawnOldDepositsDividends(id)
+      .then(result =>  {
+        this.logger.debug(result);
+        this.showModal('alreadyActivated', id);
+      })
+      .catch(error => {
+        this.logger.debug(error);
+        this.showModal('oldDepositWithdrawnFailed');
+      });
   }
 
   private withdrawnOldDepositsDividends(id: number) {

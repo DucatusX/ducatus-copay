@@ -176,6 +176,11 @@
       }
     }
 
+    &-buttons {
+      display: flex;
+      flex-direction: column;
+    }
+
     &-title {
       font-weight: 600;
       font-size: 16px;
@@ -228,6 +233,27 @@
       &:hover {
         background-color: #f4efe4 !important;
       }
+    }
+
+    .deposit-old-withdraw {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &-old-button {
+      background: #862633;
+      border-radius: 33px;
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 16px;
+      text-align: center;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #ffffff;
+      width: 115px;
+      padding: 10px 15px;
+      cursor: pointer;
+      height: 35px;
     }
 
     &-button {
