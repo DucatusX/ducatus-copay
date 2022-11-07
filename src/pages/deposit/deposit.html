@@ -51,7 +51,10 @@
               {{ deposit.interestRate }}%
             </span>
 
-            <div *ngIf="!deposit.extraData.length" class="deposit-withdraw">
+            <div 
+              *ngIf="!deposit.extraData.length" 
+              class="deposit-withdraw"
+             >
               <span
                 *ngIf="deposit.readyToWithdraw"
                 ion-button
@@ -62,7 +65,10 @@
               </span>
             </div>
 
-            <div *ngIf="deposit.extraData.length" class="deposit-old-withdraw">
+            <div 
+              *ngIf="deposit.extraData.length" 
+              class="deposit-old-withdraw"
+            >
               <span
                 *ngIf="deposit.readyToWithdraw"
                 ion-button
