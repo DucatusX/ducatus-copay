@@ -269,7 +269,7 @@
       </button>
     </div> -->
     <div class="ducatus-scan-buttons" *ngIf="wallets && wallets[0]">
-      <button class="ducatus-scan-button" (click)="openMoonPay()">
+      <button class="ducatus-scan-button"  *ngIf="!isIOS" (click)="openMoonPay()">
         <span class="ducatus-scan-button_icon">
           <img src="assets/img/tab-icons/tab-buy.svg" />
         </span>

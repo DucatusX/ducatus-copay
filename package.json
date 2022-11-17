@@ -2,7 +2,7 @@
   "name": "walnew",
   "description": "A Secure DucatusCoin Wallet",
   "author": "BitPay",
-  "version": "2.13.20",
+  "version": "2.13.21",
   "keywords": [
     "ducatus",
     "bitcoin",
@@ -280,7 +280,12 @@
         "ANDROID_PATHPREFIX": "",
         "SEVENTH_URL_SCHEME": "wc",
         "EIGHTH_URL_SCHEME": "dogecoin",
-        "NINTH_URL_SCHEME": "litecoin"
+        "NINTH_URL_SCHEME": "litecoin",
+        "UL_HOST": " ",
+        "UL_TEST_HOST": " ",
+        "UL_STAGING_HOST": " ",
+        "UL_PREFIX_1": " ",
+        "UL_PREFIX_2": " "
       },
       "cordova-plugin-fcm-ng": {},
       "cordova-plugin-globalization": {},

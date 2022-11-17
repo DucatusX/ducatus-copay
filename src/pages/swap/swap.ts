@@ -8,6 +8,7 @@ import { AppProvider } from '../../providers';
 import { ApiProvider } from '../../providers/api/api';
 import { FormControllerProvider} from '../../providers/form-contoller/form-controller';
 import { Logger } from '../../providers/logger/logger';
+import { PlatformProvider } from '../../providers/platform/platform';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { TimeProvider } from '../../providers/time/time';
 import { WalletProvider } from '../../providers/wallet/wallet';
@@ -50,11 +51,11 @@ export class SwapPage {
     private walletProvider: WalletProvider,
     private timeProvider: TimeProvider,
     private modalCtrl: ModalController,
-    private formCtrl: FormControllerProvider
+    private formCtrl: FormControllerProvider,
+    private platformProvider: PlatformProvider,
   ) {
     this.isLoad = true;
     this.historyIsLoad = true;
-    this.coinsInfo = coinsInfo;
     this.isAvailableExchangeSwapStatus = false;
     this.isAvailableBridgeStatus = false;
     this.isAvailableSwap = false;
@@ -65,10 +66,23 @@ export class SwapPage {
     this.valueGetForOneSendCoin = '0.10';
     this.appVersion = this.appProvider.info.version;
 
+    if (this.platformProvider.isIOS) {
+      this.coinsInfo = coinsInfo.map((coin): ICoinsInfo  => {
+        
+        if (coin.symbol === 'BTC' || coin.symbol === 'ETH') {
+          coin.isAvailableSwap = false;
+        }
+        
+        return coin;
+      });
+    } else {
+      this.coinsInfo = coinsInfo;
+    }
+    
     // @ts-ignore
     this.sendCoin = this.coinsInfo.find(coin => coin.sendDefault);
     this.getCoin = this.coinsInfo.find(coin => coin.symbol === this.sendCoin.toSwap[0]);
-    this.sendCoins = this.coinsInfo.filter(coin => coin.isSend);
+    this.sendCoins = this.coinsInfo.filter(coin => coin.isSend && coin.isAvailableSwap );
     this.getCoins = this.coinsInfo.filter(coin => this.sendCoin.toSwap.includes(coin.symbol));
     
     this.setFormData({
@@ -200,7 +214,15 @@ export class SwapPage {
 
       if (isAvailableExchangeSwapStatus) {
         this.coinsInfo.map((coin) => {
-          if (coin.symbol !== 'WDUCX') {
+          if (
+            this.platformProvider.isIOS
+            && (
+              coin.symbol === 'BTC'
+              || coin.symbol === 'ETH'
+            )
+          ) {
+            coin.isAvailableSwap = false;
+          } else if (coin.symbol !== 'WDUCX') {
             coin.isAvailableSwap = true;
           }
 
@@ -244,6 +266,7 @@ export class SwapPage {
           return coin;
         });
       }
+      
     } catch(error) {
       this.coinsInfo.map((coin) => {
         if (coin.symbol === 'WDUCX') {

@@ -87,6 +87,7 @@ export class WalletsPage {
   public showCoinbase: boolean;
   public coinbaseLinked: boolean;
   public coinbaseData: object = {};
+  public isIOS: boolean = false;
 
   constructor(
     private plt: Platform,
@@ -143,6 +144,7 @@ export class WalletsPage {
   ionViewWillEnter() {
     if (this.platformProvider.isIOS) {
       this.statusBar.styleDefault();
+      this.isIOS = true;
     }
 
     // Update list of wallets, status and TXPs
