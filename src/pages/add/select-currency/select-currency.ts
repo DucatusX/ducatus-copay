@@ -25,7 +25,6 @@ import {
   OnGoingProcessProvider,
   PersistenceProvider,
   ProfileProvider,
-  PushNotificationsProvider,
   WalletProvider
 } from '../../../providers';
 import {
@@ -66,7 +65,6 @@ export class SelectCurrencyPage {
     private profileProvider: ProfileProvider,
     private onGoingProcessProvider: OnGoingProcessProvider,
     private walletProvider: WalletProvider,
-    private pushNotificationsProvider: PushNotificationsProvider,
     private bwcErrorProvider: BwcErrorProvider,
     private translate: TranslateService,
     private modalCtrl: ModalController,
@@ -149,7 +147,6 @@ export class SelectCurrencyPage {
       .createMultipleWallets(coins, selectedTokens)
       .then(wallets => {
         this.walletProvider.updateRemotePreferences(wallets);
-        this.pushNotificationsProvider.updateSubscription(wallets);
         this.profileProvider.setNewWalletGroupOrder(
           wallets[0].credentials.keyId
         );

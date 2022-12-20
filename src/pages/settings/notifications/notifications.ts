@@ -11,7 +11,6 @@ import { EmailNotificationsProvider } from '../../../providers/email-notificatio
 import { ExternalLinkProvider } from '../../../providers/external-link/external-link';
 import { PersistenceProvider } from '../../../providers/persistence/persistence';
 import { PlatformProvider } from '../../../providers/platform/platform';
-import { PushNotificationsProvider } from '../../../providers/push-notifications/push-notifications';
 
 // validators
 import { EmailValidator } from '../../../validators/email';
@@ -42,7 +41,6 @@ export class NotificationsPage {
     private configProvider: ConfigProvider,
     private appProvider: AppProvider,
     private platformProvider: PlatformProvider,
-    private pushProvider: PushNotificationsProvider,
     private emailProvider: EmailNotificationsProvider,
     private externalLinkProvider: ExternalLinkProvider,
     private logger: Logger,
@@ -104,9 +102,6 @@ export class NotificationsPage {
     };
 
     this.configProvider.set(opts);
-
-    if (opts.pushNotifications.enabled) this.pushProvider.init();
-    else this.pushProvider.disable();
   }
 
   public desktopNotificationChange() {
@@ -133,7 +128,6 @@ export class NotificationsPage {
       }
     };
     this.configProvider.set(opts);
-    this.updateTopic(this.productsUpdates, 'productsupdates');
   }
 
   public offersAndPromotionsChange() {
@@ -143,12 +137,6 @@ export class NotificationsPage {
       }
     };
     this.configProvider.set(opts);
-    this.updateTopic(this.offersAndPromotions, 'offersandpromotions');
-  }
-
-  public updateTopic(enabled, topic) {
-    if (enabled) this.pushProvider.subscribeToTopic(topic);
-    else this.pushProvider.unsubscribeFromTopic(topic);
   }
 
   public emailNotificationsChange() {

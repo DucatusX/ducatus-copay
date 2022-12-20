@@ -1066,11 +1066,6 @@ export class ConfirmPage {
 
     this.navCtrl.popToRoot().then(_ => {
       if (this.fromCoinbase) {
-        this.coinbaseProvider.logEvent({
-          method: 'deposit',
-          amount: this.amount,
-          currency: this.coin
-        });
         this.navCtrl.push(CoinbaseAccountPage, {
           id: this.fromCoinbase.accountId
         });

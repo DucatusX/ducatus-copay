@@ -165,13 +165,11 @@ export class PhaseOneCardIntro {
   }
 
   public async orderBitPayCard() {
-    this.bitPayCardProvider.logEvent('legacycard_order', {});
     let url = 'https://bitpay.com/visa/get-started';
     this.externalLinkProvider.open(url);
   }
 
   public connectBitPayCard() {
-    this.bitPayCardProvider.logEvent('legacycard_connect', {});
     if (this.accounts.length == 0) {
       this.startPairBitPayAccount();
     } else {

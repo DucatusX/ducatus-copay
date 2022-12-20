@@ -16,7 +16,6 @@ import { OnGoingProcessProvider } from '../../../providers/on-going-process/on-g
 import { PlatformProvider } from '../../../providers/platform/platform';
 import { PopupProvider } from '../../../providers/popup/popup';
 import { ProfileProvider } from '../../../providers/profile/profile';
-import { PushNotificationsProvider } from '../../../providers/push-notifications/push-notifications';
 
 @Component({
   selector: 'page-copayers',
@@ -49,7 +48,6 @@ export class CopayersPage {
     private socialSharing: SocialSharing,
     private onGoingProcessProvider: OnGoingProcessProvider,
     private translate: TranslateService,
-    private pushNotificationsProvider: PushNotificationsProvider,
     private viewCtrl: ViewController,
     private actionSheetProvider: ActionSheetProvider,
     private keyProvider: KeyProvider,
@@ -153,7 +151,6 @@ export class CopayersPage {
       .deleteWalletClient(this.wallet)
       .then(() => {
         this.onGoingProcessProvider.clear();
-        this.pushNotificationsProvider.unsubscribe(this.wallet);
 
         const keyId: string = this.wallet.credentials.keyId;
         if (keyId) {

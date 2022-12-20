@@ -10,7 +10,6 @@ import { of } from 'rxjs/observable/of';
 import { timer } from 'rxjs/observable/timer';
 import { mergeMap } from 'rxjs/operators';
 import { promiseSerial } from '../../utils';
-import { AnalyticsProvider } from '../analytics/analytics';
 import { AppProvider } from '../app/app';
 import { BitPayIdProvider } from '../bitpay-id/bitpay-id';
 import { ConfigProvider } from '../config/config';
@@ -20,7 +19,6 @@ import { InvoiceProvider } from '../invoice/invoice';
 import { Logger } from '../logger/logger';
 import {
   GiftCardMap,
-  Network,
   PersistenceProvider
 } from '../persistence/persistence';
 import { PlatformProvider } from '../platform/platform';
@@ -49,7 +47,6 @@ export class GiftCardProvider extends InvoiceProvider {
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAyCAQAAAA38nkBAAAADklEQVR42mP8/4Vx8CEAn9BhqacD+5kAAAAASUVORK5CYII=';
 
   constructor(
-    private analyticsProvider: AnalyticsProvider,
     private appProvider: AppProvider,
     private bitpayIdProvider: BitPayIdProvider,
     private configProvider: ConfigProvider,
@@ -604,11 +601,6 @@ export class GiftCardProvider extends InvoiceProvider {
       Promise.all(images.map(i => this.imageLoader.preload(i)))
     );
     await promiseSerial(fetchBatches);
-  }
-
-  logEvent(eventName: string, eventParams: { [key: string]: any }) {
-    if (this.getNetwork() !== Network.livenet) return;
-    this.analyticsProvider.logEvent(eventName, eventParams);
   }
 
   getDiscountEventParams(discountedCard: CardConfig, context?: string) {

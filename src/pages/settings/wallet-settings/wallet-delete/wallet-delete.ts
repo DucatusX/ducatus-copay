@@ -8,7 +8,6 @@ import { Logger } from '../../../../providers/logger/logger';
 import { OnGoingProcessProvider } from '../../../../providers/on-going-process/on-going-process';
 import { PopupProvider } from '../../../../providers/popup/popup';
 import { ProfileProvider } from '../../../../providers/profile/profile';
-import { PushNotificationsProvider } from '../../../../providers/push-notifications/push-notifications';
 
 @Component({
   selector: 'page-wallet-delete',
@@ -27,7 +26,6 @@ export class WalletDeletePage {
     private logger: Logger,
     private translate: TranslateService,
     private keyProvider: KeyProvider,
-    private pushNotificationsProvider: PushNotificationsProvider,
     private events: Events
   ) {}
 
@@ -58,8 +56,6 @@ export class WalletDeletePage {
       .deleteWalletClient(this.wallet)
       .then(async () => {
         this.onGoingProcessProvider.clear();
-
-        this.pushNotificationsProvider.unsubscribe(this.wallet);
 
         const keyInUse = this.profileProvider.isKeyInUse(this.keyId);
 

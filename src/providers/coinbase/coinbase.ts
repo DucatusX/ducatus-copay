@@ -4,7 +4,6 @@ import { Logger } from '../../providers/logger/logger';
 
 // providers
 import env from '../../environments';
-import { AnalyticsProvider } from '../analytics/analytics';
 import { AppProvider } from '../app/app';
 import { ConfigProvider } from '../config/config';
 import { HomeIntegrationsProvider } from '../home-integrations/home-integrations';
@@ -42,8 +41,7 @@ export class CoinbaseProvider {
     private homeIntegrationsProvider: HomeIntegrationsProvider,
     private configProvider: ConfigProvider,
     private appProvider: AppProvider,
-    private currencyProvider: CurrencyProvider,
-    private analyticsProvider: AnalyticsProvider
+    private currencyProvider: CurrencyProvider
   ) {
     /*
      * Development: Gustavo's Account
@@ -186,7 +184,7 @@ export class CoinbaseProvider {
             } catch (e) {
               this.logger.error('Coinbase: Parse file error', e);
               this.removeData();
-              return resolve();
+              return resolve(null);
             }
           }
           return resolve(data);
@@ -270,7 +268,7 @@ export class CoinbaseProvider {
           this.logger.info('Coinbase: Refresh Access Token SUCCESS');
           this._registerToken(data['access_token'], data['refresh_token']);
           this.setToken(data);
-          return resolve();
+          return resolve(null);
         },
         data => {
           this.isRefreshingToken = false;
@@ -313,8 +311,7 @@ export class CoinbaseProvider {
           this._registerToken(data['access_token'], data['refresh_token']);
           this.setToken(data);
           this.preFetchAllData();
-          this.logAccountLinked();
-          return resolve();
+          return resolve(null);
         },
         data => {
           this.logger.error('Coinbase: GET Access Token: ERROR ' + data.status);
@@ -702,14 +699,6 @@ export class CoinbaseProvider {
   public isLinked(): boolean {
     if (!this.linkedAccount) this.logger.warn('Coinbase: Accounts not linked');
     return !!this.linkedAccount;
-  }
-
-  public logEvent(eventParams: { [key: string]: any }) {
-    this.analyticsProvider.logEvent('coinbase', eventParams);
-  }
-
-  private logAccountLinked() {
-    this.analyticsProvider.setUserProperty('hasLinkedCoinbaseAccount', 'true');
   }
 
   private isLinkedToOldSession(): Promise<boolean> {

@@ -35,7 +35,6 @@ import { Logger } from '../providers/logger/logger';
 import { PlatformProvider } from '../providers/platform/platform';
 import { PopupProvider } from '../providers/popup/popup';
 import { ProfileProvider } from '../providers/profile/profile';
-import { PushNotificationsProvider } from '../providers/push-notifications/push-notifications';
 import { ShapeshiftProvider } from '../providers/shapeshift/shapeshift';
 import { SimplexProvider } from '../providers/simplex/simplex';
 import { TouchIdProvider } from '../providers/touchid/touchid';
@@ -126,7 +125,6 @@ export class CopayApp {
     private emailNotificationsProvider: EmailNotificationsProvider,
     private screenOrientation: ScreenOrientation,
     private popupProvider: PopupProvider,
-    private pushNotificationsProvider: PushNotificationsProvider,
     private incomingDataProvider: IncomingDataProvider,
     private renderer: Renderer,
     private userAgent: UserAgent,
@@ -230,16 +228,10 @@ export class CopayApp {
       this.onResumeSubscription = this.platform.resume.subscribe(() => {
         // Check PIN or Fingerprint on Resume
         this.openLockModal();
-
-        // Clear all notifications
-        this.pushNotificationsProvider.clearAllNotifications();
       });
 
       // Check PIN or Fingerprint
       this.openLockModal();
-
-      // Clear all notifications
-      this.pushNotificationsProvider.clearAllNotifications();
     }
 
     const experiment = await this.persistenceProvider.getCardExperimentFlag();
@@ -320,7 +312,6 @@ export class CopayApp {
 
   private onProfileLoad(profile) {
     this.emailNotificationsProvider.init(); // Update email subscription if necessary
-    this.initPushNotifications();
 
     if (profile) {
       this.logger.info('Profile exists.');
@@ -493,10 +484,6 @@ export class CopayApp {
 
   private getWalletDetailsModal(): Element {
     return document.getElementsByClassName('wallet-details-modal')[0];
-  }
-
-  private initPushNotifications() {
-    this.pushNotificationsProvider.init();
   }
 
   private handleDeepLinks() {

@@ -26,7 +26,6 @@ import { Logger } from '../../../providers/logger/logger';
 import { OnGoingProcessProvider } from '../../../providers/on-going-process/on-going-process';
 import { PlatformProvider } from '../../../providers/platform/platform';
 import { ProfileProvider } from '../../../providers/profile/profile';
-import { PushNotificationsProvider } from '../../../providers/push-notifications/push-notifications';
 import {
   WalletOptions,
   WalletProvider
@@ -71,7 +70,6 @@ export class ImportWalletPage {
     private profileProvider: ProfileProvider,
     private translate: TranslateService,
     private events: Events,
-    private pushNotificationsProvider: PushNotificationsProvider,
     private actionSheetProvider: ActionSheetProvider,
     private derivationPathHelperProvider: DerivationPathHelperProvider,
     private modalCtrl: ModalController,
@@ -246,7 +244,6 @@ export class ImportWalletPage {
   private async finish(wallets: any[]) {
     wallets.forEach(wallet => {
       this.walletProvider.updateRemotePreferences(wallet);
-      this.pushNotificationsProvider.updateSubscription(wallet);
       this.profileProvider.setWalletBackup(wallet.credentials.walletId);
     });
     if (wallets && wallets[0]) {

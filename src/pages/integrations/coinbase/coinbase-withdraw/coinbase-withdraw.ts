@@ -136,11 +136,6 @@ export class CoinbaseWithdrawPage {
       .then(data => {
         this.onGoingProcessProvider.clear();
         this.logger.info(data.data);
-        this.coinbaseProvider.logEvent({
-          method: 'withdraw',
-          amount: tx.amount,
-          currency: tx.currency
-        });
         this.openFinishModal();
       })
       .catch(e => {

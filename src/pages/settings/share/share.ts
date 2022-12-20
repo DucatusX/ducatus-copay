@@ -6,7 +6,6 @@ import { Logger } from '../../../providers/logger/logger';
 import { SocialSharing } from '@ionic-native/social-sharing';
 
 // providers
-import { AnalyticsProvider } from '../../../providers/analytics/analytics';
 import { AppProvider } from '../../../providers/app/app';
 import { ConfigProvider } from '../../../providers/config/config';
 import { PopupProvider } from '../../../providers/popup/popup';
@@ -35,8 +34,7 @@ export class SharePage {
     private configProvider: ConfigProvider,
     private replaceParametersProvider: ReplaceParametersProvider,
     private translate: TranslateService,
-    private popupProvider: PopupProvider,
-    private analyticsProvider: AnalyticsProvider
+    private popupProvider: PopupProvider
   ) {
     this.title = this.replaceParametersProvider.replace(
       this.translate.instant('Share {{appName}}'),
@@ -98,7 +96,6 @@ export class SharePage {
   }
 
   public shareFacebook() {
-    this.analyticsProvider.logEvent('share', { method: 'Facebook' });
     if (!this.facebook) {
       this.showError();
       return;
@@ -113,7 +110,6 @@ export class SharePage {
   }
 
   public shareTwitter() {
-    this.analyticsProvider.logEvent('share', { method: 'Twitter' });
     if (!this.twitter) {
       this.showError();
       return;
@@ -128,7 +124,6 @@ export class SharePage {
   }
 
   public shareWhatsapp() {
-    this.analyticsProvider.logEvent('share', { method: 'Whatsapp' });
     if (!this.whatsapp) {
       this.showError();
       return;

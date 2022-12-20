@@ -21,7 +21,6 @@ import { Logger } from '../../../providers/logger/logger';
 import { OnGoingProcessProvider } from '../../../providers/on-going-process/on-going-process';
 import { PersistenceProvider } from '../../../providers/persistence/persistence';
 import { ProfileProvider } from '../../../providers/profile/profile';
-import { PushNotificationsProvider } from '../../../providers/push-notifications/push-notifications';
 import {
   WalletOptions,
   WalletProvider
@@ -83,7 +82,6 @@ export class CreateWalletPage implements OnInit {
     private walletProvider: WalletProvider,
     private translate: TranslateService,
     private events: Events,
-    private pushNotificationsProvider: PushNotificationsProvider,
     private externalLinkProvider: ExternalLinkProvider,
     private bwcErrorProvider: BwcErrorProvider,
     private bwcProvider: BwcProvider,
@@ -324,7 +322,6 @@ export class CreateWalletPage implements OnInit {
       .then(wallet => {
         this.onGoingProcessProvider.clear();
         this.walletProvider.updateRemotePreferences(wallet);
-        this.pushNotificationsProvider.updateSubscription(wallet);
         this.profileProvider.setNewWalletGroupOrder(wallet.credentials.keyId);
         if (this.createForm.value.selectedSeed == 'set') {
           this.profileProvider.setBackupGroupFlag(wallet.credentials.keyId);

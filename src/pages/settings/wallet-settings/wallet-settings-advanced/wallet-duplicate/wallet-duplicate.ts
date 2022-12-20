@@ -13,7 +13,6 @@ import { ErrorsProvider } from '../../../../../providers/errors/errors';
 import { ExternalLinkProvider } from '../../../../../providers/external-link/external-link';
 import { OnGoingProcessProvider } from '../../../../../providers/on-going-process/on-going-process';
 import { ProfileProvider } from '../../../../../providers/profile/profile';
-import { PushNotificationsProvider } from '../../../../../providers/push-notifications/push-notifications';
 import { WalletProvider } from '../../../../../providers/wallet/wallet';
 
 @Component({
@@ -31,7 +30,6 @@ export class WalletDuplicatePage {
   constructor(
     private walletProvider: WalletProvider,
     private onGoingProcessProvider: OnGoingProcessProvider,
-    private pushNotificationsProvider: PushNotificationsProvider,
     private externalLinkProvider: ExternalLinkProvider,
     private bwcErrorProvider: BwcErrorProvider,
     private logger: Logger,
@@ -132,7 +130,6 @@ export class WalletDuplicatePage {
             let isNew = result.isNew;
 
             this.walletProvider.updateRemotePreferences(newWallet);
-            this.pushNotificationsProvider.updateSubscription(newWallet);
 
             // Multisig wallets? add Copayers
             this.addCopayers(wallet, newWallet, isNew)

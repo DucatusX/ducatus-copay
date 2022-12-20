@@ -134,29 +134,6 @@ export class CardDetailsPage {
     );
   }
 
-  // async archive() {
-  //   await this.giftCardProvider.archiveCard(this.card);
-  //   this.nav.pop();
-  // }
-
-  // async unarchive() {
-  //   await this.giftCardProvider.unarchiveCard(this.card);
-  // }
-
-  // logRedeemCardEvent(isManuallyClaimed) {
-  //   if (!isManuallyClaimed) {
-  //     this.giftCardProvider.logEvent('giftcards_redeem', {
-  //       brand: this.cardConfig.name,
-  //       usdAmount: this.card.amount
-  //     });
-  //   } else {
-  //     this.giftCardProvider.logEvent('giftcards_mark_used', {
-  //       brand: this.cardConfig.name,
-  //       usdAmount: this.card.amount
-  //     });
-  //   }
-  // }
-
   hasPin() {
     const legacyCards: string[] = [
       'Amazon.com',
@@ -170,10 +147,6 @@ export class CardDetailsPage {
       : false;
   }
 
-  // openArchiveSheet() {
-  //   this.showInfoSheet('archive-gift-card', () => this.archive());
-  // }
-
   showInfoSheet(
     sheetName: InfoSheetType,
     onDidDismiss: (confirm?: boolean) => void = () => {}
@@ -182,8 +155,6 @@ export class CardDetailsPage {
     sheet.present();
     sheet.onDidDismiss(confirm => {
       if (confirm) {
-        // const isManuallyClaimed = true;
-        // this.logRedeemCardEvent(isManuallyClaimed);
         onDidDismiss(confirm);
       }
     });

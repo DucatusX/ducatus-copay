@@ -94,52 +94,10 @@ export class CardCatalogPage extends WideHeaderPage {
       isCardInSearchResults(c, this.searchQuery)
     );
   }
-
-  // buyCard(cardConfig: CardConfig) {
-  //   this.logGiftCardBrandView(cardConfig);
-
-  //   this.navCtrl.push(BuyCardPage, { cardConfig });
-  //   if (this.hasPercentageDiscount(cardConfig)) {
-  //     this.logDiscountClick(cardConfig);
-  //   }
-  // }
-
-  // logGiftCardCatalogHomeView() {
-  // this.giftCardProvider.logEvent('giftcards_view_home', {});
-  // }
-
-  // logGiftCardBrandView(cardConfig: CardConfig) {
-  // this.giftCardProvider.logEvent('giftcards_view_brand', {
-  //   brand: cardConfig.name
-  // });
-  // this.giftCardProvider.logEvent('view_item', {
-  //   items: [
-  //     {
-  //       brand: cardConfig.name,
-  //       category: 'giftCards'
-  //     }
-  //   ]
-  // });
-  // }
-
-  // logDiscountClick(cardConfig: CardConfig) {
-  // this.giftCardProvider.logEvent(
-  //   'clickedGiftCardDiscount',
-  //   this.giftCardProvider.getDiscountEventParams(cardConfig, 'Gift Card List')
-  // );
-  // }
-
+  
   hasPercentageDiscount(cardConfig: CardConfig) {
     return hasVisibleDiscount(cardConfig);
   }
-
-  // private showError() {
-  //   const errorInfoSheet = this.actionSheetProvider.createInfoSheet(
-  //     'gift-cards-unavailable'
-  //   );
-  //   errorInfoSheet.present();
-  //   errorInfoSheet.onDidDismiss(() => this.navCtrl.pop());
-  // }
 }
 
 export function isCardInSearchResults(c: CardConfig, search: string = '') {

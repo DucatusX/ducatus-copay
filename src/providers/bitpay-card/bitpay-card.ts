@@ -11,7 +11,6 @@ import { PersistenceProvider } from '../persistence/persistence';
 
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { AnalyticsProvider } from '../analytics/analytics';
 
 @Injectable()
 export class BitPayCardProvider {
@@ -22,14 +21,9 @@ export class BitPayCardProvider {
     private onGoingProcessProvider: OnGoingProcessProvider,
     private persistenceProvider: PersistenceProvider,
     private configProvider: ConfigProvider,
-    private homeIntegrationsProvider: HomeIntegrationsProvider,
-    private analyticsProvider: AnalyticsProvider
+    private homeIntegrationsProvider: HomeIntegrationsProvider
   ) {
     this.logger.debug('BitPayCardProvider initialized');
-  }
-
-  logDebitCardLinked() {
-    this.analyticsProvider.setUserProperty('hasLinkedDebitCard', 'true');
   }
 
   private isActive(cb): void {
@@ -106,10 +100,6 @@ export class BitPayCardProvider {
       type: txn.type,
       runningBalance
     });
-  }
-
-  logEvent(eventName: string, eventParams: { [key: string]: any }) {
-    this.analyticsProvider.logEvent(eventName, eventParams);
   }
 
   public _processTransactions(invoices, history) {
@@ -252,7 +242,6 @@ export class BitPayCardProvider {
             cards
           )
           .then(() => {
-            this.logDebitCardLinked();
             this.onGoingProcessProvider.clear();
             return cb(null, cards);
           });
@@ -475,7 +464,7 @@ export class BitPayCardProvider {
       this.getCards(cards => {
         if (_.isEmpty(cards)) {
           this.homeIntegrationsProvider.updateLink('debitcard', null); // Name, linked
-          return resolve();
+          return resolve(null);
         }
         this.homeIntegrationsProvider.updateLink('debitcard', true); // Name, linked
 

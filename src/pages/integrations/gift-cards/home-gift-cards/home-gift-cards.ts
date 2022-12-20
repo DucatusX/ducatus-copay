@@ -106,32 +106,15 @@ export class HomeGiftCards implements OnInit {
     this.navCtrl.push(CardCatalogPage);
   }
 
-  public async buyCard(cardName: string, discountContext?: string) {
+  public async buyCard(cardName: string) {
     const cardConfig = await this.giftCardProvider.getCardConfig(cardName);
     this.navCtrl.push(BuyCardPage, { cardConfig });
-    if (this.discountedCard && this.discountedCard.name === cardName) {
-      this.logDiscountClick(discountContext);
-    }
-  }
-
-  public logDiscountClick(context: string) {
-    this.giftCardProvider.logEvent(
-      'clickedGiftCardDiscount',
-      this.giftCardProvider.getDiscountEventParams(this.discountedCard, context)
-    );
   }
 
   public onGiftCardAction(event, purchasedCards: GiftCard[]) {
     event.action === 'view'
       ? this.viewGiftCards(event.cardName, purchasedCards)
       : this.showArchiveSheet(event);
-  }
-
-  public onPromoScrollIntoView(context: string) {
-    this.giftCardProvider.logEvent(
-      'presentedWithGiftCardDiscount',
-      this.giftCardProvider.getDiscountEventParams(this.discountedCard, context)
-    );
   }
 
   private async viewGiftCards(cardName: string, cards: GiftCard[]) {

@@ -23,7 +23,6 @@ import { ErrorsProvider } from '../../../providers/errors/errors';
 import { Logger } from '../../../providers/logger/logger';
 import { OnGoingProcessProvider } from '../../../providers/on-going-process/on-going-process';
 import { ProfileProvider } from '../../../providers/profile/profile';
-import { PushNotificationsProvider } from '../../../providers/push-notifications/push-notifications';
 import {
   WalletOptions,
   WalletProvider
@@ -60,7 +59,6 @@ export class JoinWalletPage {
     private logger: Logger,
     private translate: TranslateService,
     private events: Events,
-    private pushNotificationsProvider: PushNotificationsProvider,
     private clipboardProvider: ClipboardProvider,
     private modalCtrl: ModalController,
     private errorsProvider: ErrorsProvider
@@ -278,7 +276,6 @@ export class JoinWalletPage {
         this.clipboardProvider.clearClipboardIfValidData(['JoinWallet']);
         this.onGoingProcessProvider.clear();
         this.walletProvider.updateRemotePreferences(wallet);
-        this.pushNotificationsProvider.updateSubscription(wallet);
 
         this.events.publish('Local/WalletListChange');
         setTimeout(() => {

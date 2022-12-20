@@ -195,44 +195,6 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     this.showWallets(); // Show wallet selector
   }
 
-  public logGiftCardPurchaseEvent(
-    isSlideConfirmFinished: boolean,
-    transactionCurrency: string,
-    giftData?: any
-  ) {
-    if (!isSlideConfirmFinished) {
-      this.giftCardProvider.logEvent('giftcards_purchase_start', {
-        brand: this.cardConfig.name,
-        transactionCurrency
-      });
-      this.giftCardProvider.logEvent('add_to_cart', {
-        brand: this.cardConfig.name,
-        category: 'giftCards'
-      });
-    } else {
-      this.giftCardProvider.logEvent('giftcards_purchase_finish', {
-        brand: this.cardConfig.name,
-        transactionCurrency
-      });
-
-      this.giftCardProvider.logEvent('set_checkout_option', {
-        transactionCurrency,
-        checkout_step: 1
-      });
-
-      this.giftCardProvider.logEvent('purchase', {
-        value: giftData.amount,
-        items: [
-          {
-            name: this.cardConfig.name,
-            category: 'giftCards',
-            quantity: 1
-          }
-        ]
-      });
-    }
-  }
-
   public cancel() {
     this.navCtrl.popToRoot();
   }
@@ -445,17 +407,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     await this.giftCardProvider.saveGiftCard(card);
     this.onGoingProcessProvider.clear();
     this.logger.debug('Saved new gift card with status: ' + card.status);
-    this.logDiscountedPurchase();
     this.finish(card);
-  }
-
-  private logDiscountedPurchase() {
-    if (!getVisibleDiscount(this.cardConfig)) return;
-    const params = {
-      ...this.giftCardProvider.getDiscountEventParams(this.cardConfig),
-      discounted: true
-    };
-    this.giftCardProvider.logEvent('purchasedGiftCard', params);
   }
 
   private async promptEmail() {
@@ -595,8 +547,6 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     }
 
     this.setTotalAmount(wallet, invoiceFeeSat, ctxp.fee);
-
-    this.logGiftCardPurchaseEvent(false, COIN, dataSrc);
   }
 
   public async buyConfirm() {
@@ -614,11 +564,6 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     return this.publishAndSign(this.wallet, this.tx)
       .then(() => {
         this.redeemGiftCard(this.tx.giftData);
-        this.logGiftCardPurchaseEvent(
-          true,
-          this.wallet.coin.toUpperCase(),
-          this.tx.giftData
-        );
       })
       .catch(async err => this.handlePurchaseError(err));
   }
