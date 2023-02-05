@@ -273,8 +273,9 @@ export class DepositPage {
 
   public async withdraw(id: number): Promise<void> {
     let deposit = this.deposits.find(element => element.id === id);
-
-    if (!deposit.extraData.length) {
+    let isOldDeposit = Boolean(deposit.extraData.length);
+    
+    if (!isOldDeposit) {
       const address = `${this.apiProvider.getAddresses().deposit}user/deposits/${id}/withdraw/`;
     
       try {
@@ -299,20 +300,14 @@ export class DepositPage {
           
       deposit.cltv_details = txProps;
 
-      const addressFilter = this.wallets.find(wallet => {
-        return wallet.address === deposit.cltv_details.user_duc_address;
-      });
-
-      const walletToUnfreeze = addressFilter
-        ? addressFilter.wallet
-        : this.wallets.find(wallet => 
-            wallet.wallet.credentials.walletId === deposit.walletId
-          ).wallet;
+      const depositWalletById = this.wallets.find(wallet => 
+        wallet.wallet.credentials.walletId === deposit.walletId
+      ).wallet;
 
       const txHex = await this.walletProvider.signFreeze(
-        walletToUnfreeze,
+        depositWalletById,
         deposit.cltv_details,
-        Boolean(addressFilter)
+        false
       );
 
       try {

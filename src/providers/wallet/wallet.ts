@@ -1767,7 +1767,7 @@ export class WalletProvider {
           wallet.credentials.rootPath
         );
 
-        const xpriv = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
+        const xPriv = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
           derivedPrivKey
         );
 
@@ -1780,9 +1780,9 @@ export class WalletProvider {
         });
 
         if (addressPath) {
-          return xpriv.deriveChild(address.path).privateKey.toWIF();
+          return xPriv.deriveChild(address.path).privateKey.toWIF();
         } else {
-          return xpriv.deriveChild(data.private_path).privateKey.toWIF();
+          return xPriv.deriveChild(data.private_path).privateKey.toWIF();
         }
       })
       .catch(err => {
