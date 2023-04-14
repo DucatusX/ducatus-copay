@@ -2,9 +2,6 @@ import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ActionSheetController } from 'ionic-angular';
 
-// native
-import { SocialSharing } from '@ionic-native/social-sharing';
-
 // providers
 import { ActionSheetProvider } from '../../../../providers/action-sheet/action-sheet';
 import { AppProvider } from '../../../../providers/app/app';
@@ -30,7 +27,6 @@ export class SessionLogPage {
   constructor(
     private configProvider: ConfigProvider,
     private logger: Logger,
-    private socialSharing: SocialSharing,
     private actionSheetCtrl: ActionSheetController,
     private platformProvider: PlatformProvider,
     private translate: TranslateService,
@@ -92,74 +88,6 @@ export class SessionLogPage {
     return log;
   }
 
-  private sendLogs(): void {
-    const logs = this.prepareSessionLogs();
-    const now = new Date().toISOString();
-    const subject: string = this.appProvider.info.nameCase + '-logs ' + now;
-    const message = this.translate.instant(
-      'Session Logs. Be careful, this could contain sensitive private data'
-    );
-
-    const blob = new Blob([logs], { type: 'text/txt' });
-
-    const reader = new FileReader();
-    reader.onload = event => {
-      const attachment = (event as any).target.result; // <-- data url
-
-      if (this.platformProvider.isAndroid) {
-        this.shareAndroid(message, subject, attachment);
-      } else {
-        this.shareIOS(message, subject, attachment);
-      }
-    };
-
-    reader.readAsDataURL(blob);
-  }
-
-  private shareAndroid(message, subject, attachment): void {
-    // share via email with attachment is not working correctly in some android versions
-    // so instead of shareViaEmail() -> share()
-    this.socialSharing.share(message, subject, attachment).catch(err => {
-      this.logger.error('socialSharing Error: ', err);
-    });
-  }
-
-  private shareIOS(message, subject, attachment): void {
-    // Check if sharing via email is supported
-    this.socialSharing
-      .canShareViaEmail()
-      .then(() => {
-        this.logger.info('sharing via email is possible');
-        this.socialSharing
-          .shareViaEmail(
-            message,
-            subject,
-            null, // TO: must be null or an array
-            null, // CC: must be null or an array
-            null, // BCC: must be null or an array
-            attachment // FILES: can be null, a string, or an array
-          )
-          .then(data => {
-            this.logger.info('Email created successfully: ', data);
-          })
-          .catch(err => {
-            this.logger.error('socialSharing Error: ', err);
-          });
-      })
-      .catch(() => {
-        this.logger.warn('sharing via email is not possible');
-        this.socialSharing
-          .share(
-            message,
-            subject,
-            attachment // FILES: can be null, a string, or an array
-          )
-          .catch(err => {
-            this.logger.error('socialSharing Error: ', err);
-          });
-      });
-  }
-
   public showOptionsMenu(): void {
     const downloadText = this.translate.instant('Download logs');
     const shareText = this.translate.instant('Share logs');
@@ -184,9 +112,6 @@ export class SessionLogPage {
       'sensitive-info'
     );
     infoSheet.present();
-    infoSheet.onDidDismiss(option => {
-      if (option) this.isCordova ? this.sendLogs() : this.download();
-    });
   }
 
   public download(): void {

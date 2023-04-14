@@ -4,12 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NavController, NavParams, ToastController } from 'ionic-angular';
 import { Logger } from '../../../../../providers/logger/logger';
 
-// native
 import { Clipboard } from '@ionic-native/clipboard';
-import { SocialSharing } from '@ionic-native/social-sharing';
-
-// providers
-import { AppProvider } from '../../../../../providers/app/app';
 import { BackupProvider } from '../../../../../providers/backup/backup';
 import { BwcErrorProvider } from '../../../../../providers/bwc-error/bwc-error';
 import { ConfigProvider } from '../../../../../providers/config/config';
@@ -46,8 +41,6 @@ export class WalletExportPage {
     private persistenceProvider: PersistenceProvider,
     private backupProvider: BackupProvider,
     private platformProvider: PlatformProvider,
-    private socialSharing: SocialSharing,
-    private appProvider: AppProvider,
     private clipboard: Clipboard,
     private toastCtrl: ToastController,
     private translate: TranslateService,
@@ -266,43 +259,6 @@ export class WalletExportPage {
 
       if (this.exportWalletForm.value.noSignEnabled)
         name = name + '(No Private Key)';
-
-      const subject =
-        this.appProvider.info.nameCase + ' Wallet Backup: ' + name;
-      const body =
-        'Here is the encrypted backup of the wallet ' +
-        name +
-        ': \n\n' +
-        ew +
-        '\n\n To import this backup, copy all text between {...}, including the symbols {}';
-
-      // Check if sharing via email is supported
-      this.socialSharing
-        .canShareViaEmail()
-        .then(() => {
-          this.logger.info('sharing via email is possible');
-          this.socialSharing
-            .shareViaEmail(
-              body,
-              subject,
-              null, // TO: must be null or an array
-              null, // CC: must be null or an array
-              null, // BCC: must be null or an array
-              null // FILES: can be null, a string, or an array
-            )
-            .then(data => {
-              this.logger.info('Email created successfully: ', data);
-            })
-            .catch(err => {
-              this.logger.error('socialSharing Error: ', err);
-            });
-        })
-        .catch(() => {
-          this.logger.warn('sharing via email is not possible');
-          this.socialSharing.share(body, subject).catch(err => {
-            this.logger.error('socialSharing Error: ', err);
-          });
-        });
     });
   }
 

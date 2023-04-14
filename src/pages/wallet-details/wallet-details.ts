@@ -1,5 +1,4 @@
 import { Component, NgZone } from '@angular/core';
-import { SocialSharing } from '@ionic-native/social-sharing';
 import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
 import {
@@ -97,7 +96,6 @@ export class WalletDetailsPage {
     private viewCtrl: ViewController,
     private platformProvider: PlatformProvider,
     private statusBar: StatusBar,
-    private socialSharing: SocialSharing,
     private bwcErrorProvider: BwcErrorProvider,
     private errorsProvider: ErrorsProvider,
     private moonPayProvider: MoonPayProvider
@@ -722,10 +720,6 @@ export class WalletDetailsPage {
       if (option == 'request-amount') {
         this.requestSpecificAmount();
       }
-
-      if (option == 'share-address') {
-        this.shareAddress();
-      }
     });
   }
 
@@ -741,16 +735,6 @@ export class WalletDetailsPage {
         nextPage: 'CustomAmountPage',
         network: this.wallet.network
       });
-    });
-  }
-
-  private shareAddress(): void {
-    if (!this.isCordova) {
-      return;
-    }
-
-    this.walletProvider.getAddress(this.wallet, false).then(addr => {
-      this.socialSharing.share(addr);
     });
   }
 

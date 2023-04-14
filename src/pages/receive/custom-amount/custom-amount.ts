@@ -3,9 +3,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { NavParams } from 'ionic-angular';
 import { Logger } from '../../../providers/logger/logger';
 
-// Native
-import { SocialSharing } from '@ionic-native/social-sharing';
-
 // providers
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
 import { ConfigProvider } from '../../../providers/config/config';
@@ -37,7 +34,6 @@ export class CustomAmountPage {
     private platformProvider: PlatformProvider,
     private walletProvider: WalletProvider,
     private logger: Logger,
-    private socialSharing: SocialSharing,
     private txFormatProvider: TxFormatProvider,
     private actionSheetProvider: ActionSheetProvider,
     private statusBar: StatusBar,
@@ -120,10 +116,6 @@ export class CustomAmountPage {
     if (this.platformProvider.isIOS) {
       this.statusBar.styleDefault();
     }
-  }
-
-  public shareAddress(): void {
-    this.socialSharing.share(this.qrAddress);
   }
 
   public showFullInfo(): void {

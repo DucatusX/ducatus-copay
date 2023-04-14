@@ -43,7 +43,6 @@ import { KeySettingsPage } from './key-settings/key-settings';
 import { LanguagePage } from './language/language';
 import { LockPage } from './lock/lock';
 import { NotificationsPage } from './notifications/notifications';
-import { SharePage } from './share/share';
 import { WalletSettingsPage } from './wallet-settings/wallet-settings';
 
 @Component({
@@ -249,9 +248,6 @@ export class SettingsPage {
     this.navCtrl.push(WalletSettingsPage, { walletId });
   }
 
-  public openSharePage(): void {
-    this.navCtrl.push(SharePage);
-  }
   public toggleQrCodeLegacyFlag(): void {
     let opts = {
       legacyQrCode: { show: this.useLegacyQrCode }

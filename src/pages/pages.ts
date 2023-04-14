@@ -105,7 +105,6 @@ import { FeePolicyPage } from '../pages/settings/fee-policy/fee-policy';
 import { LanguagePage } from '../pages/settings/language/language';
 import { LockPage } from '../pages/settings/lock/lock';
 import { NotificationsPage } from '../pages/settings/notifications/notifications';
-import { SharePage } from '../pages/settings/share/share';
 import { FeedbackPage } from './settings/feedback/feedback';
 
 /* Wallet Group Settings */
@@ -180,7 +179,6 @@ export const PAGES = [
   SeedPage,
   SelectInputsPage,
   FeedbackCardPage,
-  SharePage,
   ImportWalletPage,
   IntegrationsPage,
   JoinWalletPage,
