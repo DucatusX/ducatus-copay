@@ -94,7 +94,7 @@ export class ShapeshiftPage {
 
   private bwsEventHandler: any = (_, type: string) => {
     if (type == 'NewBlock') this.updateShift(this.shifts);
-  };
+  }
 
   private init(): void {
     this.loading = true;

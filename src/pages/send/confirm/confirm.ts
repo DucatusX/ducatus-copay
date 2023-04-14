@@ -162,7 +162,7 @@ export class ConfirmPage {
 
   private updateDestinationTag: any = data => {
     this.tx.destinationTag = data.value;
-  };
+  }
 
   ionViewDidLoad() {
     this.logger.info('Loaded: ConfirmPage');

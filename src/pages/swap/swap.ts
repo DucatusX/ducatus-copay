@@ -303,7 +303,7 @@ export class SwapPage {
 
       return [];
     }
-  };
+  }
 
   public showSwapHistory(): void {
     this.isShowSwapHistory = !this.isShowSwapHistory;

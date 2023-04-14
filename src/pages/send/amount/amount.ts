@@ -208,7 +208,7 @@ export class AmountPage {
 
   private walletDisableHardwareKeyboardHandler: any = () => {
     this._disableHardwareKeyboard();
-  };
+  }
 
   private _disableHardwareKeyboard() {
     this.disableHardwareKeyboard = true;

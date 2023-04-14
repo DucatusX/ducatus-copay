@@ -388,7 +388,7 @@ export class WalletDetailsPage {
         this.showHistory();
       }
     }
-  };
+  }
 
   private updateStatus = opts => {
     if (opts.walletId != this.wallet.id) {
@@ -443,7 +443,7 @@ export class WalletDetailsPage {
         this.updateStatusError = this.wallet.errorObj;
       }
     }
-  };
+  }
 
   public recreate() {
     this.onGoingProcessProvider.set('recreating');

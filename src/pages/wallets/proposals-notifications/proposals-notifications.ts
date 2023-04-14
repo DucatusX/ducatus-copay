@@ -177,7 +177,7 @@ export class ProposalsNotificationsPage {
       .catch(err => {
         this.logger.error(err);
       });
-  };
+  }
 
   private checkStatus(txps: any[]): void {
     this.txpsPending = [];

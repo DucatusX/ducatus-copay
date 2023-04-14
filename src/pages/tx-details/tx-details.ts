@@ -131,7 +131,7 @@ export class TxDetailsModal {
       this.updateTxDebounced({ hideLoading: true });
     }
     this.logger.debug('bwsEvent handler @tx-details. Matched: ' + match);
-  };
+  }
 
   public readMore(): void {
     let url =
