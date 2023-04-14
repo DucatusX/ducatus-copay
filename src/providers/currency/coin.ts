@@ -872,5 +872,41 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       backgroundColor: 'rgba(0,220,250,1)',
       gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
     }
-  }
+  },
+  balisol : {
+    name: 'BaliSol',
+    chain: 'DUCX',
+    coin: 'balisol',
+    unitInfo: {
+      unitName: 'BALISOL',
+      unitToSatoshi: 1e2,
+      unitDecimals: 2,
+      unitCode: 'balisol'
+    },
+    properties: {
+      hasMultiSig: false,
+      hasMultiSend: false,
+      isUtxo: false,
+      isERCToken: true,
+      isStableCoin: true,
+      singleAddress: true
+    },
+    paymentInfo: {
+      paymentCode: 'EIP681b',
+      protocolPrefix: { livenet: 'ducatusx', testnet: 'ducatusx' },
+      ratesApi: apiProvider.getAddresses().ratesApi,
+      blockExplorerUrls: 'insight.ducatus.io/#/DUCX/',
+      explorerName: 'insight.ducatus.io'
+    },
+    feeInfo: {
+      feeUnit: 'Gwei',
+      feeUnitAmount: 1e2,
+      blockTime: 0.2,
+      maxMerchantFee: 'urgent'
+    },
+    theme: {
+      backgroundColor: 'rgba(0,220,250,1)',
+      gradientBackgroundColor: 'rgba(72,233,255, 0.2)'
+    }
+  },
 };

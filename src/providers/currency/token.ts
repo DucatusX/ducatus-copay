@@ -127,5 +127,12 @@ export const DRCTokenOpts = {
     decimal: 8,
     address: '0x212bbB33b6A56a7Ee0819dd82bE01c285F64Fb49',
     blockchain: 'ducx'
+  },
+  '0x519CB2e8f165C2fc2297F544639c71AF33daE148': {
+    name: 'BaliSol',
+    symbol: 'BALISOL',
+    decimal: 2,
+    address: '0x519CB2e8f165C2fc2297F544639c71AF33daE148',
+    blockchain: 'ducx'
   }
 };

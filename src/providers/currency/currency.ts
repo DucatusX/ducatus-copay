@@ -26,7 +26,8 @@ export enum Coin {
   'TKF' = 'tkf',
   'AA+' = 'aa+',
   'QMN' = 'qmn',
-  'MPE' = 'mpe'
+  'MPE' = 'mpe',
+  'BALISOL' = 'balisol',
 }
 
 export const availableCurrencys = [
