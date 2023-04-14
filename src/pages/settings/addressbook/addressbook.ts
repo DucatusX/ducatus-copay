@@ -46,17 +46,13 @@ export class AddressbookPage {
           const { coin } = coinInfo;
 
           if (coin === 'duc') {
-            coinInfo.coin = contact.isDucAddress
-              ? 'duc'
-              : 'btc';
+            coinInfo.coin = contact.isDucAddress ? 'duc' : 'btc';
           }
 
           if (coin === 'eth') {
-            coinInfo.coin = contact.isDucxAddress
-              ? 'ducx'
-              : 'eth';
+            coinInfo.coin = contact.isDucxAddress ? 'ducx' : 'eth';
           }
-          
+
           contacts.push({
             name: _.isObject(contact) ? contact.name : contact,
             address: k,

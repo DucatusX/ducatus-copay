@@ -16,7 +16,7 @@ tx-confirm {
       font-weight: 600;
       font-size: 20px;
       line-height: 32px;
-      color: #1A1A1A;
+      color: #1a1a1a;
       margin: 20px 0;
     }
     &-subtile {
@@ -27,7 +27,7 @@ tx-confirm {
     }
     &-address {
       display: flex;
-      background: #E8E8E8;
+      background: #e8e8e8;
       border-radius: 4px;
       align-items: center;
       justify-content: center;
@@ -67,7 +67,6 @@ tx-confirm {
       font-size: 14px;
       line-height: 20px;
     }
-
   }
 
   button {
@@ -84,7 +83,7 @@ tx-confirm {
       border-radius: 33px;
       width: 100%;
       height: 60px;
-      color: #FFFFFF;
+      color: #ffffff;
       margin: 0;
       max-width: none;
     }
@@ -97,11 +96,10 @@ tx-confirm {
       width: 100%;
       height: 60px;
       border-radius: 33px;
-        &:hover {
-          color: white;
-          background-color: #862633;
-        }
+      &:hover {
+        color: white;
+        background-color: #862633;
       }
+    }
   }
-  
 }

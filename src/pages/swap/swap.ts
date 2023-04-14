@@ -6,7 +6,7 @@ import { ModalController, NavController } from 'ionic-angular';
 import { TxDetailsModal } from '../../pages/tx-details/tx-details';
 import { AppProvider } from '../../providers';
 import { ApiProvider } from '../../providers/api/api';
-import { FormControllerProvider} from '../../providers/form-contoller/form-controller';
+import { FormControllerProvider } from '../../providers/form-contoller/form-controller';
 import { Logger } from '../../providers/logger/logger';
 import { PlatformProvider } from '../../providers/platform/platform';
 import { ProfileProvider } from '../../providers/profile/profile';
@@ -52,7 +52,7 @@ export class SwapPage {
     private timeProvider: TimeProvider,
     private modalCtrl: ModalController,
     private formCtrl: FormControllerProvider,
-    private platformProvider: PlatformProvider,
+    private platformProvider: PlatformProvider
   ) {
     this.isLoad = true;
     this.historyIsLoad = true;
@@ -67,30 +67,37 @@ export class SwapPage {
     this.appVersion = this.appProvider.info.version;
 
     if (this.platformProvider.isIOS) {
-      this.coinsInfo = coinsInfo.map((coin): ICoinsInfo  => {
-        
-        if (coin.symbol === 'BTC' || coin.symbol === 'ETH') {
-          coin.isAvailableSwap = false;
+      this.coinsInfo = coinsInfo.map(
+        (coin): ICoinsInfo => {
+          if (coin.symbol === 'BTC' || coin.symbol === 'ETH') {
+            coin.isAvailableSwap = false;
+          }
+
+          return coin;
         }
-        
-        return coin;
-      });
+      );
     } else {
       this.coinsInfo = coinsInfo;
     }
-    
+
     // @ts-ignore
     this.sendCoin = this.coinsInfo.find(coin => coin.sendDefault);
-    this.getCoin = this.coinsInfo.find(coin => coin.symbol === this.sendCoin.toSwap[0]);
-    this.sendCoins = this.coinsInfo.filter(coin => coin.isSend && coin.isAvailableSwap );
-    this.getCoins = this.coinsInfo.filter(coin => this.sendCoin.toSwap.includes(coin.symbol));
-    
+    this.getCoin = this.coinsInfo.find(
+      coin => coin.symbol === this.sendCoin.toSwap[0]
+    );
+    this.sendCoins = this.coinsInfo.filter(
+      coin => coin.isSend && coin.isAvailableSwap
+    );
+    this.getCoins = this.coinsInfo.filter(coin =>
+      this.sendCoin.toSwap.includes(coin.symbol)
+    );
+
     this.setFormData({
       send: {
         amount: '0',
         coin: this.sendCoin
       },
-      get: { 
+      get: {
         amount: '0',
         coin: this.getCoin
       }
@@ -114,7 +121,7 @@ export class SwapPage {
     this.isLoad = false;
 
     await this.loadTxHistory();
-    
+
     this.historyIsLoad = false;
   }
 
@@ -124,24 +131,18 @@ export class SwapPage {
       getCoin: get.coin,
       sendAmount: [
         send.amount,
-        Validators.compose(
-          [
-            Validators.minLength(1), 
-            Validators.required
-          ]
-        )
+        Validators.compose([Validators.minLength(1), Validators.required])
       ],
       getAmount: [
         get.amount,
-        Validators.compose(
-          [
-            Validators.minLength(1), 
-            Validators.required,Validators.pattern(/^[0-9.]+$/)
-          ]
-        )
+        Validators.compose([
+          Validators.minLength(1),
+          Validators.required,
+          Validators.pattern(/^[0-9.]+$/)
+        ])
       ]
     });
-    
+
     this.oldFormValue = this.swapForm.value;
   }
 
@@ -151,12 +152,12 @@ export class SwapPage {
 
     for (let i = 0; i < wallets.length; i++) {
       const wallet = wallets[i];
-      const history: any [] = await this.fetchTxHistory(wallet);
+      const history: any[] = await this.fetchTxHistory(wallet);
 
       swapHistory = swapHistory.concat(history);
     }
-   
-    swapHistory = swapHistory.map((tx) => {
+
+    swapHistory = swapHistory.map(tx => {
       const {
         wallet,
         confirmations,
@@ -168,7 +169,7 @@ export class SwapPage {
         time,
         txid
       } = tx;
-      
+
       return {
         walletId: wallet.credentials.walletId,
         txid,
@@ -189,37 +190,32 @@ export class SwapPage {
     const url = `${this.apiProvider.getAddresses().ducatuscoins}/api/v1/rates`;
 
     try {
-      const rates  = await this.httpClient
-        .get(url)
-        .toPromise();
+      const rates = await this.httpClient.get(url).toPromise();
 
       this.rates = {
         ...rates,
         WDUCX: { DUCX: 1 }
       };
-    } catch(error) {
+    } catch (error) {
       this.logger.debug('Error in getting rates: ', error);
     }
   }
 
   public async setExchangeStatus(): Promise<void> {
-    const urlExchange = `${this.apiProvider.getAddresses().ducatuscoins}/api/v1/exchange/status/`;
-  
+    const urlExchange = `${
+      this.apiProvider.getAddresses().ducatuscoins
+    }/api/v1/exchange/status/`;
+
     try {
       const isAvailableExchangeSwapStatus = Boolean(
-        await this.httpClient
-          .get(urlExchange)
-          .toPromise()
+        await this.httpClient.get(urlExchange).toPromise()
       );
 
       if (isAvailableExchangeSwapStatus) {
-        this.coinsInfo.map((coin) => {
+        this.coinsInfo.map(coin => {
           if (
-            this.platformProvider.isIOS
-            && (
-              coin.symbol === 'BTC'
-              || coin.symbol === 'ETH'
-            )
+            this.platformProvider.isIOS &&
+            (coin.symbol === 'BTC' || coin.symbol === 'ETH')
           ) {
             coin.isAvailableSwap = false;
           } else if (coin.symbol !== 'WDUCX') {
@@ -229,36 +225,36 @@ export class SwapPage {
           return coin;
         });
       }
-      
+
       this.isAvailableSwap = isAvailableExchangeSwapStatus;
-    } catch(error) {
-        this.coinsInfo.map((coin) => {
-          if (coin.symbol !== 'WDUCX') {
-            coin.isAvailableSwap = false;
-          }
+    } catch (error) {
+      this.coinsInfo.map(coin => {
+        if (coin.symbol !== 'WDUCX') {
+          coin.isAvailableSwap = false;
+        }
 
-          return coin;
-        });
+        return coin;
+      });
 
-        this.isAvailableSwap = false;
+      this.isAvailableSwap = false;
     }
   }
 
   public async setBridgeStatus(): Promise<void> {
     const httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json'})
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     };
-    const urlBridge = `${this.apiProvider.getAddresses().swap.status}?version=${this.appVersion}`;
+    const urlBridge = `${this.apiProvider.getAddresses().swap.status}?version=${
+      this.appVersion
+    }`;
 
     try {
       const isAvailableBridgeStatus = Boolean(
-        await this.httpClient
-          .get(urlBridge, httpOptions)
-          .toPromise()
+        await this.httpClient.get(urlBridge, httpOptions).toPromise()
       );
 
       if (isAvailableBridgeStatus) {
-        this.coinsInfo.map((coin) => {
+        this.coinsInfo.map(coin => {
           if (coin.symbol === 'WDUCX') {
             coin.isAvailableSwap = true;
           }
@@ -266,9 +262,8 @@ export class SwapPage {
           return coin;
         });
       }
-      
-    } catch(error) {
-      this.coinsInfo.map((coin) => {
+    } catch (error) {
+      this.coinsInfo.map(coin => {
         if (coin.symbol === 'WDUCX') {
           coin.isAvailableSwap = false;
         }
@@ -278,7 +273,7 @@ export class SwapPage {
     }
   }
 
-  private fetchTxHistory = async (wallet) => {
+  private fetchTxHistory = async wallet => {
     const progressFn = ((_, newTxs) => {
       let args = {
         walletId: wallet.walletId,
@@ -290,22 +285,25 @@ export class SwapPage {
     }).bind(this);
     // Fire a startup event, to allow UI to show the spinner
     try {
-      let txHistory: any[] = await this.walletProvider.fetchTxHistory(wallet, progressFn);
-      txHistory = txHistory.map((tx) => {
+      let txHistory: any[] = await this.walletProvider.fetchTxHistory(
+        wallet,
+        progressFn
+      );
+      txHistory = txHistory.map(tx => {
         tx.wallet = wallet;
 
         return tx;
       });
-      
+
       return txHistory.filter(tx => tx.swap);
-    } catch(error) {
+    } catch (error) {
       if (error != 'HISTORY_IN_PROGRESS') {
         this.logger.warn('fetchTxHistory ERROR', error);
       }
 
       return [];
-    } 
-  }
+    }
+  };
 
   public showSwapHistory(): void {
     this.isShowSwapHistory = !this.isShowSwapHistory;
@@ -320,7 +318,7 @@ export class SwapPage {
       walletId: tx.walletId,
       txid: tx.txid
     });
-    
+
     txDetailModal.present();
   }
 
@@ -347,9 +345,7 @@ export class SwapPage {
     });
 
     this.getCoins = getCoinList;
-    this.swapForm
-      .get('getCoin')
-      .setValue(getCoinList[0], { emitEvent: false });    
+    this.swapForm.get('getCoin').setValue(getCoinList[0], { emitEvent: false });
 
     this.onChangeCoin();
   }
@@ -361,34 +357,33 @@ export class SwapPage {
   public setGetAmount(amount: string) {
     this.oldFormValue.getAmount = amount;
 
-    this.swapForm
-      .get('getAmount')
-      .setValue( amount, { emitEvent: false });
+    this.swapForm.get('getAmount').setValue(amount, { emitEvent: false });
   }
 
   public setSendAmount(amount: string) {
     this.oldFormValue.sendAmount = amount;
-    
-    this.swapForm
-      .get('sendAmount')
-      .setValue( amount, { emitEvent: false });
+
+    this.swapForm.get('sendAmount').setValue(amount, { emitEvent: false });
   }
 
-  public changAmount(event, input: 'sendAmount'|'getAmount'): void {
-    const isSend = (input === 'sendAmount');
+  public changAmount(event, input: 'sendAmount' | 'getAmount'): void {
+    const isSend = input === 'sendAmount';
     const value: string = event.value;
     const oldValue: string = this.oldFormValue[input];
-    const coinPropertyName: string = input === 'sendAmount'
-      ? 'sendCoin'
-      : 'getCoin';
+    const coinPropertyName: string =
+      input === 'sendAmount' ? 'sendCoin' : 'getCoin';
 
     if (value === oldValue) {
       // 'emitEvent: false' not work
       return;
     }
-   
+
     const coin: any = this.swapForm.get(coinPropertyName).value;
-    const formatValue = this.formCtrl.transformValue(value, oldValue, coin.decimals);
+    const formatValue = this.formCtrl.transformValue(
+      value,
+      oldValue,
+      coin.decimals
+    );
 
     if (isSend) {
       this.setSendAmount(formatValue);
@@ -408,28 +403,28 @@ export class SwapPage {
     let bgCalculatedValue: string;
 
     if (isSendInput) {
-      
       if (sendAmount) {
-        bgCalculatedValue = new Decimal(sendAmount)
-          .div(rate)
-          .toString();
-        bgCalculatedValue = this.formCtrl.trimStrToDecimalsCoin(bgCalculatedValue, getCoin.decimals);
+        bgCalculatedValue = new Decimal(sendAmount).div(rate).toString();
+        bgCalculatedValue = this.formCtrl.trimStrToDecimalsCoin(
+          bgCalculatedValue,
+          getCoin.decimals
+        );
       } else {
         bgCalculatedValue = '0';
       }
 
       this.setGetAmount(bgCalculatedValue);
     } else {
-
       if (getAmount) {
-        bgCalculatedValue = new Decimal(getAmount)
-          .times(rate)
-          .toString();
-        bgCalculatedValue = this.formCtrl.trimStrToDecimalsCoin(bgCalculatedValue, sendCoin.decimals);
+        bgCalculatedValue = new Decimal(getAmount).times(rate).toString();
+        bgCalculatedValue = this.formCtrl.trimStrToDecimalsCoin(
+          bgCalculatedValue,
+          sendCoin.decimals
+        );
       } else {
         bgCalculatedValue = '0';
       }
-      
+
       this.setSendAmount(bgCalculatedValue);
     }
   }
@@ -458,7 +453,7 @@ export class SwapPage {
 
     this.setGetAmount(bgCalculatedValue);
 
-    this.isAvailableSwap = (getCoin.isAvailableSwap && sendCoin.isAvailableSwap);
+    this.isAvailableSwap = getCoin.isAvailableSwap && sendCoin.isAvailableSwap;
   }
 
   public loadTx(infiniteScroll) {

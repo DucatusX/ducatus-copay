@@ -2,11 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, NavController } from 'ionic-angular';
-import { 
-  ActionSheetProvider, 
-  ApiProvider, 
-  Coin, 
-  Logger, 
+import {
+  ActionSheetProvider,
+  ApiProvider,
+  Coin,
+  Logger,
   ProfileProvider,
   WalletProvider
 } from '../../../providers';
@@ -22,15 +22,13 @@ interface WalletData {
   selector: 'page-voucher',
   templateUrl: 'add.html'
 })
-
 export class VoucherAddPage {
-
   public VoucherGroup: FormGroup;
   public voucherLoading = false;
   public isDucx: boolean;
   public walletsInfo: WalletData[] = [];
   public selectWallet: {
-    wallet: any
+    wallet: any;
   };
 
   constructor(
@@ -57,14 +55,13 @@ export class VoucherAddPage {
   }
 
   ionViewWillEnter() {
-
     let wallets = this.profileProvider.getWallets({ showHidden: true });
 
-    const filterWalletsByCoin = wallets.filter( wallet => {
+    const filterWalletsByCoin = wallets.filter(wallet => {
       return wallet.coin === Coin.DUC;
     });
-  
-    filterWalletsByCoin.map( wallet => {
+
+    filterWalletsByCoin.map(wallet => {
       this.walletProvider.getAddress(wallet, false).then(address => {
         this.walletsInfo.push({ wallet, address });
       });
@@ -86,11 +83,10 @@ export class VoucherAddPage {
 
       infoSheet.present();
       infoSheet.onDidDismiss((option, item) => {
-
         if (option) {
           this.selectWallet = item;
           this.VoucherGroup.value.VoucherGroupAddress = option;
-          
+
           if (option.needsBackup)
             this.navCtrl.push(BackupKeyPage, {
               keyId: option.keyId
@@ -113,12 +109,16 @@ export class VoucherAddPage {
       ok: {
         title:
           '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
-        text: `Your voucher successfully activated. You will get Ducatus in ${options.min} minutes`
+        text: `Your voucher successfully activated. You will get Ducatus in ${
+          options.min
+        } minutes`
       },
       ok_freeze: {
         title:
           '<img src="./assets/img/icon-complete.svg" width="42px" height="42px">',
-        text: `Your voucher succesfully activated. You can withdraw your Ducatus after ${options.day} days`
+        text: `Your voucher succesfully activated. You can withdraw your Ducatus after ${
+          options.day
+        } days`
       },
       error: {
         title:
@@ -180,19 +180,19 @@ export class VoucherAddPage {
     alert.present();
   }
 
-  private sendCode (
+  private sendCode(
     activation_code: string,
     user_address: string,
-    wallet_id: string,
-  ) 
-  {
-    let url = this.apiProvider.getAddresses().deposit + 'user/vouchers/activate/';
-    
+    wallet_id: string
+  ) {
+    let url =
+      this.apiProvider.getAddresses().deposit + 'user/vouchers/activate/';
+
     return this.httpClient
       .post(url, {
         activation_code,
         user_address,
-        wallet_id,
+        wallet_id
       })
       .toPromise();
   }
@@ -202,26 +202,24 @@ export class VoucherAddPage {
     this.sendCode(
       this.VoucherGroup.value.VoucherGroupCode, // VoucherCode
       this.VoucherGroup.value.VoucherGroupAddress, // WalletAddress
-      this.selectWallet.wallet.credentials.walletId, // WalletId
+      this.selectWallet.wallet.credentials.walletId // WalletId
     )
-    .then(res => {
-      const result: any = res;
+      .then(res => {
+        const result: any = res;
 
-      if (result.readyToWithdraw === false && result.daysToUnlock === null) {
-        this.showModal('ok', { min: '15' });
-      }
-      else {
-        this.showModal('ok_freeze', { day: result.daysToUnlock });
-      }
-    })
-    .catch(err => {
-      if (err.error.detail === 'Not found.') {
-        this.showModal('error');
-      }
-      else {
-        this.showModal('network');
-      }
-      this.logger.log(`${JSON.stringify(err)}`);
-    });
+        if (result.readyToWithdraw === false && result.daysToUnlock === null) {
+          this.showModal('ok', { min: '15' });
+        } else {
+          this.showModal('ok_freeze', { day: result.daysToUnlock });
+        }
+      })
+      .catch(err => {
+        if (err.error.detail === 'Not found.') {
+          this.showModal('error');
+        } else {
+          this.showModal('network');
+        }
+        this.logger.log(`${JSON.stringify(err)}`);
+      });
   }
 }

@@ -48,10 +48,7 @@
     "default_title": "DucatusWallet 2.0",
     "default_popup": "index.html"
   },
-    "permissions": [
-      "notifications",
-      "storage"
-  ],
+  "permissions": ["notifications", "storage"],
   "background": {
     "page": "background.html"
   },

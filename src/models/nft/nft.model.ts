@@ -4,5 +4,5 @@ export interface Nft {
   numberNft: number;
   transaction: {
     created: string;
-  };  
+  };
 }

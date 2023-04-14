@@ -207,14 +207,14 @@ export class WalletsPage {
     opts = opts || {};
     opts.alsoUpdateHistory = true;
     this.fetchWalletStatus(opts);
-  }
+  };
 
   private walletActionHandler = opts => {
     this.logger.debug('RECV Local/TxAction @home', opts);
     opts = opts || {};
     opts.alsoUpdateHistory = true;
     this.fetchWalletStatus(opts);
-  }
+  };
 
   ionViewDidLoad() {
     this.logger.info('Loaded: WalletsPage');
@@ -300,7 +300,7 @@ export class WalletsPage {
     }
     this.walletProvider.invalidateCache(wallet);
     this.debounceFetchWalletStatus(walletId, alsoUpdateHistory);
-  }
+  };
 
   private updateDesktopOnFocus() {
     const { remote } = (window as any).require('electron');
@@ -380,7 +380,7 @@ export class WalletsPage {
     */
 
     this.wallets = this.profileProvider.getWallets();
-    this.wallets = this.wallets.filter( wallet => wallet.coin !== "tkf");
+    this.wallets = this.wallets.filter(wallet => wallet.coin !== 'tkf');
     this.walletsGroups = _.values(
       _.groupBy(
         _.filter(this.wallets, wallet => {
@@ -389,19 +389,19 @@ export class WalletsPage {
         'keyId'
       )
     );
-    
+
     this.webExtensionsProvider.setDucxAddresses(this.wallets);
     this.readOnlyWalletsGroup = this.profileProvider.getWalletsFromGroup({
       keyId: 'read-only'
     });
-  }
+  };
 
   public checkClipboard() {
     return this.clipboardProvider
       .getData()
       .then(async data => {
         this.validDataFromClipboard = this.incomingDataProvider.parseData(data);
-        
+
         if (!this.validDataFromClipboard) {
           return;
         }
@@ -451,7 +451,7 @@ export class WalletsPage {
             this.logger.warn('Error in Payment Protocol', err);
           }
         }
-        
+
         await Observable.timer(50).toPromise();
         this.slideDown = true;
       })
@@ -607,7 +607,7 @@ export class WalletsPage {
           this.fetchTxHistory({ walletId: opts.walletId, force: opts.force });
         }
       });
-  }
+  };
 
   private updateTxps() {
     this.profileProvider

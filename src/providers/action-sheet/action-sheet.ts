@@ -95,7 +95,7 @@ export interface ChooseFeeLevelParams {
 }
 @Injectable()
 export class ActionSheetProvider {
-  constructor(private domProvider: DomProvider) { }
+  constructor(private domProvider: DomProvider) {}
 
   public createOptionsSheet(
     type: OptionsSheetType,
@@ -126,14 +126,9 @@ export class ActionSheetProvider {
       .instance;
   }
 
-  public createTxConfirm(
-    params: TxConfirmParams
-  ): TxConfirmComponent {
-    return this.setupSheet<TxConfirmComponent>(
-      TxConfirmComponent,
-      null,
-      params
-    ).instance;
+  public createTxConfirm(params: TxConfirmParams): TxConfirmComponent {
+    return this.setupSheet<TxConfirmComponent>(TxConfirmComponent, null, params)
+      .instance;
   }
 
   public createEmailComponent(): EmailComponent {
@@ -181,7 +176,7 @@ export class ActionSheetProvider {
   }
 
   private setupSheet<T extends ActionSheetParent>(
-    componentType: { new(...args): T },
+    componentType: { new (...args): T },
     sheetType?: string,
     params?
   ): ComponentRef<T> {

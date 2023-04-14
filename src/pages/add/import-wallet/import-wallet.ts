@@ -125,7 +125,7 @@ export class ImportWalletPage {
   private updateWordsHandler: any = data => {
     this.processedInfo = this.processWalletInfo(data.value);
     this.setForm();
-  }
+  };
 
   public getCoinName(coin: Coin) {
     return this.currencyProvider.getCoinName(coin);
@@ -546,7 +546,8 @@ export class ImportWalletPage {
       // set opts.useLegacyCoinType
       if (
         opts.coin == 'bch' &&
-        this.derivationPathHelperProvider.parsePath(derivationPath).coinCode == "0'"
+        this.derivationPathHelperProvider.parsePath(derivationPath).coinCode ==
+          "0'"
       ) {
         opts.useLegacyCoinType = true;
         this.logger.debug('Using 0 for BCH creation');

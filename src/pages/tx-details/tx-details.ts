@@ -131,7 +131,7 @@ export class TxDetailsModal {
       this.updateTxDebounced({ hideLoading: true });
     }
     this.logger.debug('bwsEvent handler @tx-details. Matched: ' + match);
-  }
+  };
 
   public readMore(): void {
     let url =
@@ -239,11 +239,12 @@ export class TxDetailsModal {
         if (this.btx.note && this.btx.note.body) {
           this.txMemo = this.btx.note.body;
         }
-        
-        if (this.btx.swap) {
-          this.title = `Swap from ${this.btx.swap.convertedFrom} to ${this.btx.swap.convertedTo}`;
-        } else {
 
+        if (this.btx.swap) {
+          this.title = `Swap from ${this.btx.swap.convertedFrom} to ${
+            this.btx.swap.convertedTo
+          }`;
+        } else {
           if (this.btx.action != 'invalid') {
             if (this.btx.action == 'sent')
               this.title = this.translate.instant('Sent Funds');
@@ -307,7 +308,6 @@ export class TxDetailsModal {
     const network =
       this.getShortNetworkName() == 'test' ? 'testnet/' : 'mainnet/';
     let url;
-
 
     switch (this.wallet.coin) {
       case 'btc':

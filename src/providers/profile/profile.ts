@@ -86,7 +86,7 @@ export class ProfileProvider {
     }, 10000);
 
     // xpub6C8byPoebe5qhmkucDusW2TXpG8vwPYDeyCiyA9YqvcepfNEiSPbJu6sx8a9b483uhYkb9CN98XbNTT43Yctao7BM2Q85GYkSKDMLnEFUVS
-    
+
     const address = Deriver.deriveAddress(
       'DUC',
       'mainnet',
@@ -526,7 +526,7 @@ export class ProfileProvider {
       date = new Date(Number(groupBackupInfo.timestamp));
     this.logger.info(
       `Binding wallet: ${wallet.id} - Backed up: ${!needsBackup} ${
-      date ? date : ''
+        date ? date : ''
       } - Encrypted: ${wallet.isPrivKeyEncrypted} - Token: ${!!wallet
         .credentials.token}`
     );
@@ -575,7 +575,7 @@ export class ProfileProvider {
           return;
         }
         wallet.setNotificationsInterval(this.UPDATE_PERIOD);
-        wallet.openWallet(() => { });
+        wallet.openWallet(() => {});
       }
     );
     this.events.subscribe('Local/ConfigUpdate', opts => {
@@ -1789,8 +1789,7 @@ export class ProfileProvider {
       let erc20TokenObjs = this.currencyProvider.getAvailableTokens();
       let drc20TokenObjs = this.currencyProvider.getDRCAvailableTokens();
 
-
-      const ERC20Tokens = tokens.filter((token) => {
+      const ERC20Tokens = tokens.filter(token => {
         token = erc20TokenObjs.find(x => x.symbol == token);
         return !!token;
       });
@@ -1798,14 +1797,13 @@ export class ProfileProvider {
         reject('No ethereum wallets for tokens');
       }
 
-      const DRC20Tokens = tokens.filter((token) => {
+      const DRC20Tokens = tokens.filter(token => {
         token = drc20TokenObjs.find(x => x.symbol == token);
         return !!token;
       });
       if (DRC20Tokens && DRC20Tokens.length && coins.indexOf('ducx') < 0) {
         reject('No DucatusX wallets for tokens');
       }
-
 
       const defaultOpts = this.getDefaultWalletOpts(coins[0]);
 
@@ -1853,7 +1851,6 @@ export class ProfileProvider {
                 });
                 walletClients = walletClients.concat(drcTokenClients);
               }
-
 
               this.addAndBindWalletClients({
                 key: firstWalletData.key,
@@ -2053,8 +2050,9 @@ export class ProfileProvider {
 
       ret = ret.filter(
         wallet =>
-          !tokenWalletIds.includes(`${wallet.id}-${opts.pairFor.address}`) &&
-          wallet.coin === opts.pairFor.blockchain || 'eth'
+          (!tokenWalletIds.includes(`${wallet.id}-${opts.pairFor.address}`) &&
+            wallet.coin === opts.pairFor.blockchain) ||
+          'eth'
       );
     }
 

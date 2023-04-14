@@ -59,15 +59,8 @@ export class CurrencyProvider {
     this.availableCoins = Object.keys(this.coinOpts) as Coin[];
 
     for (const opts of Object.values(this.coinOpts)) {
-      const { 
-        paymentInfo, 
-        coin 
-      } = opts;
-      const { 
-        blockExplorerUrls, 
-        ratesApi, 
-        explorerName 
-      } = paymentInfo;
+      const { paymentInfo, coin } = opts;
+      const { blockExplorerUrls, ratesApi, explorerName } = paymentInfo;
 
       this.blockExplorerUrls[coin] = blockExplorerUrls;
       this.ratesApi[coin] = ratesApi;
@@ -112,7 +105,7 @@ export class CurrencyProvider {
     );
   }
 
-  getAvaibleCurrencys(): string[]  {
+  getAvaibleCurrencys(): string[] {
     // returns the intersection of available and requested coins
     return _.intersection(this.availableCoins, availableCurrencys);
   }

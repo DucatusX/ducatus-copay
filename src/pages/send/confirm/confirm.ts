@@ -40,9 +40,7 @@ import { ProfileProvider } from '../../../providers/profile/profile';
 import { ReplaceParametersProvider } from '../../../providers/replace-parameters/replace-parameters';
 import { TxConfirmNotificationProvider } from '../../../providers/tx-confirm-notification/tx-confirm-notification';
 import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
-import {
-  WalletProvider
-} from '../../../providers/wallet/wallet';
+import { WalletProvider } from '../../../providers/wallet/wallet';
 @Component({
   selector: 'page-confirm',
   templateUrl: 'confirm.html'
@@ -164,7 +162,7 @@ export class ConfirmPage {
 
   private updateDestinationTag: any = data => {
     this.tx.destinationTag = data.value;
-  }
+  };
 
   ionViewDidLoad() {
     this.logger.info('Loaded: ConfirmPage');
@@ -174,17 +172,14 @@ export class ConfirmPage {
     this.setTitle();
     this.getAddressFrom();
 
+    this.tx = this.txUtilsProvider.getTx(
+      this.navParams.data,
+      this.wallet,
+      this.isSpeedUpTx,
+      this.fromMultiSend,
+      this.fromSelectInputs
+    );
 
-    this.tx = this.txUtilsProvider
-      .getTx(
-        this.navParams.data,
-        this.wallet,
-       this.isSpeedUpTx,
-       this.fromMultiSend,
-       this.fromSelectInputs
-      );
-      
-    
     this.tx.origToAddress = this.tx.toAddress;
 
     if (this.navParams.data.requiredFeeRate) {
@@ -237,7 +232,7 @@ export class ConfirmPage {
   }
 
   private async getAddressFrom(): Promise<void> {
-    await this.walletProvider.getAddress(this.wallet, false).then( address => {
+    await this.walletProvider.getAddress(this.wallet, false).then(address => {
       this.addressFrom = address;
     });
   }
@@ -493,8 +488,7 @@ export class ConfirmPage {
               .catch(err => {
                 return reject(err);
               });
-          } 
-          else if (tx.sendMax) {
+          } else if (tx.sendMax) {
             this.useSendMaxToken(tx, wallet, opts)
               .then(() => {
                 return resolve(null);
@@ -502,8 +496,7 @@ export class ConfirmPage {
               .catch(err => {
                 return reject(err);
               });
-          }
-          else if (tx.speedUpTx && this.isChain()) {
+          } else if (tx.speedUpTx && this.isChain()) {
             this.speedUpTx(tx, wallet, opts)
               .then(() => {
                 return resolve(null);
@@ -511,8 +504,7 @@ export class ConfirmPage {
               .catch(err => {
                 return reject(err);
               });
-          } 
-          else {
+          } else {
             // txp already generated for this wallet?
             if (tx.txp[wallet.id]) {
               this.onGoingProcessProvider.clear();
@@ -581,7 +573,7 @@ export class ConfirmPage {
     return new Promise((resolve, reject) => {
       tx.amount = this.getSendMaxAmountToken();
       this.getAmountDetails();
-  
+
       // txp already generated for this wallet?
       if (tx.txp[wallet.id]) {
         this.onGoingProcessProvider.clear();
@@ -664,11 +656,12 @@ export class ConfirmPage {
       this.txUtilsProvider
         .getTxp(
           _.clone(tx),
-          wallet, 
-          opts.dryRun, 
-          this.navParams.data.recipients, 
-          this.token, 
-          { fromMultiSend: this.fromMultiSend,
+          wallet,
+          opts.dryRun,
+          this.navParams.data.recipients,
+          this.token,
+          {
+            fromMultiSend: this.fromMultiSend,
             usingCustomFee: this.usingCustomFee,
             usingMerchantFee: this.usingMerchantFee
           }
@@ -729,7 +722,7 @@ export class ConfirmPage {
 
   private getSendMaxAmountToken(): number {
     let maxAmountToken = this.wallet.cachedStatus.availableBalanceSat;
-    
+
     return maxAmountToken;
   }
 
@@ -862,14 +855,14 @@ export class ConfirmPage {
     }
 
     this.logger.warn('ERROR:', error);
-    
+
     if (this.isCordova) {
       this.slideButton.isConfirmed(false);
     }
 
     if (
-      (error as Error).message === 'FINGERPRINT_CANCELLED' 
-      || (error as Error).message === 'PASSWORD_CANCELLED'
+      (error as Error).message === 'FINGERPRINT_CANCELLED' ||
+      (error as Error).message === 'PASSWORD_CANCELLED'
     ) {
       return;
     }
@@ -878,7 +871,7 @@ export class ConfirmPage {
       this.errorsProvider.showWrongEncryptPasswordError();
       return;
     }
-    
+
     // Currently the paypro error is the following string: 500 - "{}"
     if (error.toString().includes('64: dust')) {
       msg = this.translate.instant(
@@ -900,16 +893,16 @@ export class ConfirmPage {
           this.fromWalletDetails
             ? this.navCtrl.popToRoot()
             : this.navCtrl.last().name == 'ConfirmCardPurchasePage'
-              ? this.navCtrl.pop()
-              : this.app
-                  .getRootNavs()[0]
-                  .setRoot(TabsPage)
-                  .then(() =>
-                    this.app
-                      .getRootNav()
-                      .getActiveChildNav()
-                      .select(1)
-                  ); // using setRoot(TabsPage) as workaround when coming from scanner
+            ? this.navCtrl.pop()
+            : this.app
+                .getRootNavs()[0]
+                .setRoot(TabsPage)
+                .then(() =>
+                  this.app
+                    .getRootNav()
+                    .getActiveChildNav()
+                    .select(1)
+                ); // using setRoot(TabsPage) as workaround when coming from scanner
         }
       }
     );
@@ -925,7 +918,7 @@ export class ConfirmPage {
 
   public approve(tx, wallet): Promise<void> {
     if (!tx || !wallet) return undefined;
-    
+
     if (this.paymentExpired) {
       this.showErrorInfoSheet(
         this.translate.instant('This bitcoin payment request has expired.')
@@ -934,37 +927,40 @@ export class ConfirmPage {
     }
 
     this.onGoingProcessProvider.set('creatingTx');
-    
+
     return this.txUtilsProvider
       .getTxp(
-        _.clone(tx), wallet, false,
-        this.navParams.data.recipients, 
-        this.token, 
-        { fromMultiSend: this.fromMultiSend,
+        _.clone(tx),
+        wallet,
+        false,
+        this.navParams.data.recipients,
+        this.token,
+        {
+          fromMultiSend: this.fromMultiSend,
           usingCustomFee: this.usingCustomFee,
           usingMerchantFee: this.usingMerchantFee
         }
       )
       .then(txp => {
         this.logger.debug('Transaction Fee:', txp.fee);
-        return this.confirmTx(txp, wallet)
-          .then((nok: boolean) => {
-            if (nok) {
-              if (this.isCordova) this.slideButton.isConfirmed(false);
-              this.onGoingProcessProvider.clear();
-              return;
-            }
-            let redir;
+        return this.confirmTx(txp, wallet).then((nok: boolean) => {
+          if (nok) {
+            if (this.isCordova) this.slideButton.isConfirmed(false);
+            this.onGoingProcessProvider.clear();
+            return;
+          }
+          let redir;
 
-            if (txp.payProUrl && txp.payProUrl.includes('redir=wc')) {
-              redir = 'wc';
-            }
-            this.txUtilsProvider.publishAndSign(txp, wallet)
-            .then(()=>{
+          if (txp.payProUrl && txp.payProUrl.includes('redir=wc')) {
+            redir = 'wc';
+          }
+          this.txUtilsProvider
+            .publishAndSign(txp, wallet)
+            .then(() => {
               this.onGoingProcessProvider.clear();
               return this.openFinishModal(false, { redir });
             })
-            .catch( err => {
+            .catch(err => {
               this.onGoingProcessProvider.clear();
               if (this.isCordova) this.slideButton.isConfirmed(false);
               this.showErrorInfoSheet(err);
@@ -975,7 +971,7 @@ export class ConfirmPage {
                 });
               }
             });
-          });
+        });
       })
       .catch(err => {
         this.onGoingProcessProvider.clear();
@@ -984,25 +980,24 @@ export class ConfirmPage {
   }
 
   private confirmTx(txp, wallet) {
-    
     return new Promise<boolean>(resolve => {
-
       if (wallet.isPrivKeyEncrypted) {
         return resolve(false);
       }
 
-      this.txFormatProvider.formatToUSD(wallet.coin, txp.amount)
+      this.txFormatProvider
+        .formatToUSD(wallet.coin, txp.amount)
         .then(val => {
           const amountUsd = parseFloat(val);
-          
+
           if (amountUsd <= this.CONFIRM_LIMIT_USD) {
             return resolve(false);
           }
-          
+
           const unit = txp.coin.toUpperCase();
           const amount = (
-            this.tx.amount 
-            / this.currencyProvider.getPrecision(txp.coin).unitToSatoshi
+            this.tx.amount /
+            this.currencyProvider.getPrecision(txp.coin).unitToSatoshi
           ).toFixed(8);
           const name = wallet.name;
           const message = this.replaceParametersProvider.replace(
@@ -1013,7 +1008,7 @@ export class ConfirmPage {
           );
           const okText = this.translate.instant('Confirm');
           const cancelText = this.translate.instant('Cancel');
-            
+
           this.popupProvider
             .ionicConfirm(null, message, okText, cancelText)
             .then((ok: boolean) => {
@@ -1135,7 +1130,9 @@ export class ConfirmPage {
     this.tx.feeLevelName = feeOpts[this.tx.feeLevel];
     if (this.usingCustomFee)
       this.tx.feeRate = parseInt(
-        Number(data.customFeePerKB).toLocaleString('fullwide', { useGrouping: false }), 
+        Number(data.customFeePerKB).toLocaleString('fullwide', {
+          useGrouping: false
+        }),
         10
       );
 

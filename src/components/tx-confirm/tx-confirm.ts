@@ -18,7 +18,7 @@ export class TxConfirmComponent extends ActionSheetParent {
   public title: string;
 
   constructor(
-    private domProvider: DomProvider, 
+    private domProvider: DomProvider,
     private contractAddress: ContractAddress
   ) {
     super();

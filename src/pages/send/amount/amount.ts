@@ -17,7 +17,11 @@ import * as _ from 'lodash';
 // Providers
 import { Config, ConfigProvider } from '../../../providers/config/config';
 import { availableCoins, CoinOpts } from '../../../providers/currency/coin';
-import { Coin, CoinsMap, CurrencyProvider} from '../../../providers/currency/currency';
+import {
+  Coin,
+  CoinsMap,
+  CurrencyProvider
+} from '../../../providers/currency/currency';
 import { ElectronProvider } from '../../../providers/electron/electron';
 import { FilterProvider } from '../../../providers/filter/filter';
 import { Logger } from '../../../providers/logger/logger';
@@ -204,7 +208,7 @@ export class AmountPage {
 
   private walletDisableHardwareKeyboardHandler: any = () => {
     this._disableHardwareKeyboard();
-  }
+  };
 
   private _disableHardwareKeyboard() {
     this.disableHardwareKeyboard = true;
@@ -367,10 +371,12 @@ export class AmountPage {
       );
     }
 
-    const maxAmount = Number(this.txFormatProvider.satToUnit(
-      this.wallet.cachedStatus.availableBalanceSat,
-      this.wallet.coin
-    ));
+    const maxAmount = Number(
+      this.txFormatProvider.satToUnit(
+        this.wallet.cachedStatus.availableBalanceSat,
+        this.wallet.coin
+      )
+    );
 
     this.zone.run(() => {
       this.expression = this.availableUnits[this.unitIndex].isFiat
@@ -391,17 +397,17 @@ export class AmountPage {
   }
 
   public pushDigit(digit: string): void {
-    const coin = this.wallet && this.wallet.coin || this.navParams.data.coin;
+    const coin = (this.wallet && this.wallet.coin) || this.navParams.data.coin;
     const decimalsCoin = this.coins[coin].unitInfo.unitDecimals;
     this.useSendMax = false;
 
     if (digit === 'delete') {
       return this.removeDigit();
     }
-  
-    const isDecimals: boolean = ( this.expression.length === 0 && digit === "." );
 
-    if( isDecimals  || this.expression === '0' ){
+    const isDecimals: boolean = this.expression.length === 0 && digit === '.';
+
+    if (isDecimals || this.expression === '0') {
       this.expression = '0.';
     }
 
@@ -416,7 +422,10 @@ export class AmountPage {
       return;
     this.zone.run(() => {
       this.expression = (this.expression + digit).replace('..', '.');
-      this.expression = this.formCtrl.trimStrToDecimalsCoin(this.expression, decimalsCoin);
+      this.expression = this.formCtrl.trimStrToDecimalsCoin(
+        this.expression,
+        decimalsCoin
+      );
       this.processAmount();
       this.changeDetectorRef.detectChanges();
       this.resizeFont();
@@ -533,14 +542,10 @@ export class AmountPage {
     if (ratioCoins) {
       return undefined;
     }
-      
+
     const valFiat = this.rateProvider
-        .toFiat(
-          val * this.unitToSatoshi,
-          this.fiatCode,
-          enterCoinType
-        )
-        .toFixed(2);
+      .toFiat(val * this.unitToSatoshi, this.fiatCode, enterCoinType)
+      .toFixed(2);
 
     return parseFloat(valFiat);
   }
@@ -554,7 +559,7 @@ export class AmountPage {
 
     if (this.isOperator(_.last(val))) {
       result = result.slice(0, -1);
-    } 
+    }
 
     return result.replace('x', '*');
   }
@@ -620,7 +625,7 @@ export class AmountPage {
       amount = unit.isFiat
         ? (this.fromFiat(amount) * this.unitToSatoshi).toFixed(0)
         : (amount * this.unitToSatoshi).toFixed(0);
-        
+
       data = {
         recipientType: this.recipientType,
         amount,
@@ -695,7 +700,8 @@ export class AmountPage {
   private updateUnitUI(): void {
     this.unit = this.availableUnits[this.unitIndex].shortName;
     this.alternativeUnit = this.availableUnits[this.altUnitIndex].shortName;
-    const { unitToSatoshi, unitDecimals } = this.availableUnits[this.unitIndex].isFiat
+    const { unitToSatoshi, unitDecimals } = this.availableUnits[this.unitIndex]
+      .isFiat
       ? this.currencyProvider.getPrecision(
           this.availableUnits[this.altUnitIndex].id
         )

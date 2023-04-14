@@ -27,9 +27,7 @@ export class TxFormatProvider {
   }
 
   public toCashAddress(address: string, withPrefix?: boolean): string {
-    return this.bitcoreCash
-      .Address(address)
-      .toString(!withPrefix);
+    return this.bitcoreCash.Address(address).toString(!withPrefix);
   }
 
   public toLegacyAddress(address: string): string {
@@ -71,10 +69,10 @@ export class TxFormatProvider {
       if (isNaN(satoshis)) {
         return resolve(null);
       }
-      
+
       let v1;
       v1 = this.rate.toFiat(satoshis, code, coin, opts);
-      
+
       if (!v1) {
         return resolve(null);
       }
@@ -93,7 +91,7 @@ export class TxFormatProvider {
       }
 
       v1 = this.rate.toFiat(satoshis, 'USD', coin);
-      
+
       if (!v1) {
         return resolve(null);
       }
@@ -126,7 +124,7 @@ export class TxFormatProvider {
   }
 
   public processTx(coin: Coin, tx) {
-    if (!tx || tx.action == 'invalid')  {
+    if (!tx || tx.action == 'invalid') {
       return tx;
     }
     // New transaction output format. Fill tx.amount and tx.toAmount for
@@ -135,7 +133,6 @@ export class TxFormatProvider {
       const outputsNr = tx.outputs.length;
 
       if (tx.action != 'received') {
-
         if (outputsNr > 1) {
           tx.recipientCount = outputsNr;
           tx.hasMultiplesOutputs = true;
@@ -176,8 +173,8 @@ export class TxFormatProvider {
     tx.feeStr = tx.fee
       ? this.formatAmountStr(chain, tx.fee)
       : tx.fees
-        ? this.formatAmountStr(chain, tx.fees)
-        : 'N/A';
+      ? this.formatAmountStr(chain, tx.fees)
+      : 'N/A';
 
     if (tx.amountStr) {
       tx.amountValueStr = tx.amountStr.split(' ')[0];
@@ -201,7 +198,9 @@ export class TxFormatProvider {
     opts?: { onlyIntegers?: boolean; rates? }
   ) {
     const { alternativeIsoCode } = this.configProvider.get().wallet.settings;
-    const { unitToSatoshi, unitDecimals } = this.currencyProvider.getPrecision(coin);
+    const { unitToSatoshi, unitDecimals } = this.currencyProvider.getPrecision(
+      coin
+    );
     const satToUnit = 1 / unitToSatoshi;
     let amountUnitStr;
     let amountSat;
@@ -225,7 +224,10 @@ export class TxFormatProvider {
       const amountSatStr = (amount * unitToSatoshi).toFixed(0);
       // parseInt('2e21',10) = 2
       // parseInt('2000000000000000000000',10) = 2e+21
-      const formatAmountSatStr = Number(amountSatStr).toLocaleString('fullwide', { useGrouping: false });
+      const formatAmountSatStr = Number(amountSatStr).toLocaleString(
+        'fullwide',
+        { useGrouping: false }
+      );
       amountSat = parseInt(formatAmountSatStr, 10);
       amountUnitStr = this.formatAmountStr(coin, amountSat);
       // WARING! inaccurate calculations.
@@ -244,14 +246,14 @@ export class TxFormatProvider {
   }
 
   public satToUnit(amount: number = 0, coin: Coin): number {
-    const { unitToSatoshi, unitDecimals } = this.currencyProvider.getPrecision(coin);
+    const { unitToSatoshi, unitDecimals } = this.currencyProvider.getPrecision(
+      coin
+    );
     const bgSatToUnit = Big(1 / unitToSatoshi);
     const bgAmount = Big(amount);
-    
-    const unitAmount = bgAmount
-      .times(bgSatToUnit)
-      .toFixed(unitDecimals);
-    
+
+    const unitAmount = bgAmount.times(bgSatToUnit).toFixed(unitDecimals);
+
     return unitAmount;
   }
 }

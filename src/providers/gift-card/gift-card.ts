@@ -17,10 +17,7 @@ import { EmailNotificationsProvider } from '../email-notifications/email-notific
 import { HomeIntegrationsProvider } from '../home-integrations/home-integrations';
 import { InvoiceProvider } from '../invoice/invoice';
 import { Logger } from '../logger/logger';
-import {
-  GiftCardMap,
-  PersistenceProvider
-} from '../persistence/persistence';
+import { GiftCardMap, PersistenceProvider } from '../persistence/persistence';
 import { PlatformProvider } from '../platform/platform';
 import { TimeProvider } from '../time/time';
 import {

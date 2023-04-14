@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import {ApiProvider} from '../../providers/api/api';
+import { ApiProvider } from '../../providers/api/api';
 import { Logger } from '../../providers/logger/logger';
 
 import BWC from '@ducatus/ducatus-wallet-client-rev';
@@ -61,7 +61,8 @@ export class BwcProvider {
 
     // note opts use `bwsurl` all lowercase;
     let bwc = new BWC({
-      baseUrl: opts.bwsurl || this.apiProvider.getAddresses().bitcore + '/bws/api',
+      baseUrl:
+        opts.bwsurl || this.apiProvider.getAddresses().bitcore + '/bws/api',
       verbose: opts.verbose,
       timeout: 100000,
       transports: ['polling'],

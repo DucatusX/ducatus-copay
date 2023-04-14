@@ -125,7 +125,7 @@ export class TabsPage {
         }
       }
     );
-  }
+  };
 
   private processWalletError(wallet, err): void {
     wallet.error = wallet.errorObj = null;

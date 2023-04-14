@@ -11,9 +11,7 @@ import { NftDetailsPage } from '../nft-details/nft-details';
   selector: 'page-seed',
   templateUrl: 'seed.html'
 })
-
 export class SeedPage {
-
   public nftData: Nft[];
   public wallet: any;
   public walletAddress: string;
@@ -26,10 +24,10 @@ export class SeedPage {
     private navParams: NavParams,
     private walletProvider: WalletProvider,
     private logger: Logger,
-    private apiProvider: ApiProvider,
-  ) {} 
+    private apiProvider: ApiProvider
+  ) {}
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.wallet = this.navParams.data.wallet;
     this.walletProvider.getAddress(this.wallet, false).then(address => {
       this.walletAddress = address;
@@ -37,21 +35,22 @@ export class SeedPage {
     });
   }
 
-  public goToNFTDetails(nft: Nft){
+  public goToNFTDetails(nft: Nft) {
     this.navCtrl.push(NftDetailsPage, { nft });
   }
 
   public getTokenMeta() {
-    const url: string = this.apiProvider.getAddresses().nftSeed + this.walletAddress;
+    const url: string =
+      this.apiProvider.getAddresses().nftSeed + this.walletAddress;
     this.http.get<Nft[]>(url).subscribe(
       (result: Nft[]) => {
-        // sorted by time. 
+        // sorted by time.
         // new nft to the beginning of the array
-        result.sort((a,b) => {
-         const dataA: number = new Date(a.transaction.created).getTime();
-         const datab: number = new Date(b.transaction.created).getTime();
+        result.sort((a, b) => {
+          const dataA: number = new Date(a.transaction.created).getTime();
+          const datab: number = new Date(b.transaction.created).getTime();
 
-         return datab - dataA;
+          return datab - dataA;
         });
         this.nftData = result;
         this.loaded = true;
@@ -63,5 +62,3 @@ export class SeedPage {
     );
   }
 }
-
-

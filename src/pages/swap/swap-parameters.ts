@@ -11,7 +11,7 @@ export interface ICoinsInfo {
 }
 
 export const coinsInfo: ICoinsInfo[] = [
-  { 
+  {
     symbol: 'DUCX',
     name: 'DucatusX',
     toSwap: ['DUC', 'WDUCX'],
@@ -22,7 +22,7 @@ export const coinsInfo: ICoinsInfo[] = [
     isAvailableSwap: true,
     decimals: 18
   },
-  { 
+  {
     symbol: 'DUC',
     name: 'Ducatus',
     toSwap: ['DUCX'],
@@ -33,9 +33,9 @@ export const coinsInfo: ICoinsInfo[] = [
     isAvailableSwap: true,
     decimals: 8
   },
-  { 
+  {
     symbol: 'BTC',
-    name: 'Bitcoin', 
+    name: 'Bitcoin',
     toSwap: ['DUC'],
     isSend: true,
     isGet: false,
@@ -44,7 +44,7 @@ export const coinsInfo: ICoinsInfo[] = [
     isAvailableSwap: true,
     decimals: 8
   },
-  { 
+  {
     symbol: 'ETH',
     name: 'Etherium',
     toSwap: ['DUC'],
@@ -54,12 +54,12 @@ export const coinsInfo: ICoinsInfo[] = [
     getDefault: false,
     isAvailableSwap: true,
     decimals: 18
-  }, 
-  { 
+  },
+  {
     symbol: 'WDUCX',
     name: 'Wrapped DucatusX',
     toSwap: ['DUCX'],
-    isSend: false, 
+    isSend: false,
     isGet: true,
     sendDefault: false,
     getDefault: false,

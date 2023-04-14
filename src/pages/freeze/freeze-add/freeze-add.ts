@@ -46,9 +46,8 @@ export class FreezeAddPage {
     private logger: Logger,
     private bwcProvider: BwcProvider
   ) {
-
     this.ducatuscore = this.bwcProvider.getDucatuscore();
-    
+
     this.DepositGroup = this.formBuilder.group({
       AddressFrom: [
         '',
@@ -61,35 +60,41 @@ export class FreezeAddPage {
       Amount: [
         '',
         Validators.compose([
-        Validators.minLength(1),
-        Validators.required,
-        Validators.min(0)
+          Validators.minLength(1),
+          Validators.required,
+          Validators.min(0)
         ])
       ],
-      Month: [''],
+      Month: ['']
     });
   }
 
   public async ionViewWillEnter(): Promise<void> {
-    this.viewAlertAttention('confirmation of the deposit can take up to 1 business day.');
+    this.viewAlertAttention(
+      'confirmation of the deposit can take up to 1 business day.'
+    );
 
     const wallets = this.profileProvider.getWallets({
       showHidden: true,
       backedUp: true
     });
-    const coinWallets: any = await this.walletProvider.getWalletsByCoin(wallets, 'duc');
+    const coinWallets: any = await this.walletProvider.getWalletsByCoin(
+      wallets,
+      'duc'
+    );
 
-    if ( coinWallets.count <= 0 ) {
+    if (coinWallets.count <= 0) {
       this.showModal('needbackup');
-    } 
-    
+    }
+
     this.walletAddresses = coinWallets.wallets;
   }
 
   private viewAlertAttention(message: string): void {
     const alert = this.alertCtrl.create({
       cssClass: 'voucher-alert',
-      title: '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+      title:
+        '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
       message,
       buttons: [{ text: 'Ok' }]
     });
@@ -106,37 +111,35 @@ export class FreezeAddPage {
     const isValid = this.ducatuscore.Address.isValid(addressTo, 'livenet');
     if (addressTo === '') {
       this.invalidAddress = false;
-    }
-    else if (!isValid) {
+    } else if (!isValid) {
       this.invalidAddress = true;
-    }      
+    }
   }
 
   public changeAmount(): void {
     const floatAmount = parseFloat(this.DepositGroup.value.Amount);
-    
-    if ( floatAmount < 0 ) {
+
+    if (floatAmount < 0) {
       this.DepositGroup.controls.Amount.setValue('0');
     }
 
     let amount = floatAmount || 0;
-    
-    if ( floatAmount <= 0 ) {
+
+    if (floatAmount <= 0) {
       amount = 0;
     }
 
     const amountWithPercentValue = (
-      amount
-      * (parseFloat(this.DepositGroup.value.Percent) / 100)
-      * (parseFloat(this.DepositGroup.value.Month) / 12)
+      amount *
+      (parseFloat(this.DepositGroup.value.Percent) / 100) *
+      (parseFloat(this.DepositGroup.value.Month) / 12)
     ).toFixed(4);
 
     this.amountWithPercent = amountWithPercentValue;
   }
 
   public openAddressList(): void {
-
-    if ( !this.depositLoading ) {
+    if (!this.depositLoading) {
       const infoSheet = this.actionSheetProvider.createInfoSheet(
         'convertor-address',
         { wallet: this.walletAddresses }
@@ -147,10 +150,12 @@ export class FreezeAddPage {
         if (option) {
           this.DepositGroup.value.AddressFrom = option;
           this.useSendMax = false;
-          this.wallet = this.walletAddresses.find(wallet => wallet.address === option);
+          this.wallet = this.walletAddresses.find(
+            wallet => wallet.address === option
+          );
           this.sendMax();
 
-          if ( this.wallet.needsBackup ) {
+          if (this.wallet.needsBackup) {
             this.navCtrl.push(BackupKeyPage, {
               keyId: this.wallet.keyId
             });
@@ -162,15 +167,19 @@ export class FreezeAddPage {
 
   public async sendMax(): Promise<void> {
     const { token } = this.wallet.wallet.credentials;
-    const tokenAddress = token && token.address || '';
-    const amount = await this.walletProvider.getBalance(this.wallet.wallet, { tokenAddress });
+    const tokenAddress = (token && token.address) || '';
+    const amount = await this.walletProvider.getBalance(this.wallet.wallet, {
+      tokenAddress
+    });
 
     this.maxAmount = amount.availableAmount / 100000000;
     this.useSendMax = true;
   }
   public monthChange(_event) {
     this.depositMonth = Number(
-      this.DepositGroup.controls['Month'].value.toString().replace(/(\.\d+)+/, '')
+      this.DepositGroup.controls['Month'].value
+        .toString()
+        .replace(/(\.\d+)+/, '')
     );
     this.DepositGroup.controls['Month'].setValue(
       Number(
@@ -184,23 +193,29 @@ export class FreezeAddPage {
   private async generateDeposit(
     wallet: string,
     duc_address: string,
-    lock_months: string,
+    lock_months: string
   ): Promise<any> {
-    const address = this.apiProvider.getAddresses().deposit + 'user/deposits/create-without-dividends/';
+    const address =
+      this.apiProvider.getAddresses().deposit +
+      'user/deposits/create-without-dividends/';
     return this.httpClient
       .post(address, {
         wallet,
         duc_address,
-        lock_months,
+        lock_months
       })
       .toPromise();
   }
 
   public async generateUserDeposit(): Promise<void> {
     this.depositLoading = true;
-    
+
     const receiverAddress = await this.walletProvider
-      .getInfoByAddress(this.walletAddresses, this.DepositGroup.value.AddressFrom, this.DepositGroup.value.AddressTo)
+      .getInfoByAddress(
+        this.walletAddresses,
+        this.DepositGroup.value.AddressFrom,
+        this.DepositGroup.value.AddressTo
+      )
       .then(res => {
         return res;
       });
@@ -208,24 +223,28 @@ export class FreezeAddPage {
     let receiverData: any;
 
     try {
-      receiverData = await this.walletProvider
-        .prepareAddFreeze(receiverAddress.wallet, receiverAddress.address[0]);
-    }
-    catch (err) {
+      receiverData = await this.walletProvider.prepareAddFreeze(
+        receiverAddress.wallet,
+        receiverAddress.address[0]
+      );
+    } catch (err) {
       this.logger.debug('failed to get walletID. responce err - ' + err);
       this.showModal('notFoundWalletId');
       return;
     }
 
-    const resultPrepare: any = await this.walletProvider.prepareAdd(this.walletAddresses, this.DepositGroup.value.AddressFrom);
-    
+    const resultPrepare: any = await this.walletProvider.prepareAdd(
+      this.walletAddresses,
+      this.DepositGroup.value.AddressFrom
+    );
+
     try {
       const deposit: any = await this.generateDeposit(
         receiverData.walletId,
         this.DepositGroup.value.AddressTo,
         String(this.DepositGroup.value.Month)
       );
-      
+
       if (deposit.ducAddress) {
         const addressView = this.walletProvider.getAddressView(
           resultPrepare.wallet.wallet.coin,
@@ -240,7 +259,7 @@ export class FreezeAddPage {
           resultPrepare.wallet.wallet.coin.toUpperCase()
         );
 
-        this.useSendMax = false;  
+        this.useSendMax = false;
 
         if (this.DepositGroup.value.Amount === this.maxAmount) {
           this.useSendMax = true;
@@ -255,7 +274,7 @@ export class FreezeAddPage {
 
         this.incomingDataProvider.redir(addressView, redirParms);
       }
-    } catch(err) {
+    } catch (err) {
       this.showModal('network');
       this.logger.debug(err);
     }
@@ -264,13 +283,14 @@ export class FreezeAddPage {
   private showModal(type: string): void {
     const modalAnswers = {
       network: {
-        title: '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+        title:
+          '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
         text: 'Something went wrong, try again',
         button: 'OK',
         handler: () => {
           this.depositLoading = false;
 
-          if ( type != 'network' ) {
+          if (type != 'network') {
             this.DepositGroup.value.AddressFrom = '';
             this.DepositGroup.value.Amount = '';
           }
@@ -278,17 +298,24 @@ export class FreezeAddPage {
         enableBackdropDismiss: false
       },
       needbackup: {
-        title: '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+        title:
+          '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
         text: 'Needs Backup',
         button: 'OK',
-        handler: () => { this.navCtrl.pop(); },
+        handler: () => {
+          this.navCtrl.pop();
+        },
         enableBackdropDismiss: false
       },
       notFoundWalletId: {
-        title: '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
-        text: 'recipient wallet not found. Please make sure this wallet was created in the app',
+        title:
+          '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">',
+        text:
+          'recipient wallet not found. Please make sure this wallet was created in the app',
         button: 'OK',
-        handler: () => { this.depositLoading = false; },
+        handler: () => {
+          this.depositLoading = false;
+        },
         enableBackdropDismiss: false
       }
     };

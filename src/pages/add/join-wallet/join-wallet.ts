@@ -122,7 +122,7 @@ export class JoinWalletPage {
   private updateInvitationCodeHandler: any = data => {
     const invitationCode = data.value.replace('copay:', '');
     this.onQrCodeScannedJoin(invitationCode);
-  }
+  };
 
   public onQrCodeScannedJoin(data: string): void {
     if (this.regex.test(data)) {

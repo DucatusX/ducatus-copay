@@ -13,9 +13,13 @@ export class MoonPayProvider {
     private platformProvider: PlatformProvider,
     private httpClient: HttpClient
   ) {
-    document.addEventListener("deviceready", () => {
-      window.open = cordova.InAppBrowser.open;
-    }, false);
+    document.addEventListener(
+      'deviceready',
+      () => {
+        window.open = cordova.InAppBrowser.open;
+      },
+      false
+    );
     this.isAndroid = this.platformProvider.isAndroid;
   }
 
@@ -36,12 +40,17 @@ export class MoonPayProvider {
         url += '&currencyCode=' + wallet.coin;
         this.walletProvider.getAddress(wallet, false).then(addr => {
           url += '&walletAddress=' + addr;
-          this.httpClient.post('https://moonpay.ducatuscoins.com/', { url })
-            .toPromise().then((result: { signed_url: string }) => {
-            resolve(result.signed_url || url);
-          }, () => {
-            resolve(url);
-          });
+          this.httpClient
+            .post('https://moonpay.ducatuscoins.com/', { url })
+            .toPromise()
+            .then(
+              (result: { signed_url: string }) => {
+                resolve(result.signed_url || url);
+              },
+              () => {
+                resolve(url);
+              }
+            );
         });
       } else {
         resolve(url);
@@ -57,7 +66,11 @@ export class MoonPayProvider {
 
     linkPromise.then((link: string) => {
       const location = this.isAndroid ? 'yes' : 'no';
-      window.open(link, '_blank', `location=${location},toolbarcolor=#23272A,closebuttoncaption=Сlose,closebuttoncolor=#d8373e,navigationbuttoncolor=#d8373e,fullscreen=no,toolbarposition=bottom,lefttoright=yes`);
+      window.open(
+        link,
+        '_blank',
+        `location=${location},toolbarcolor=#23272A,closebuttoncaption=Сlose,closebuttoncolor=#d8373e,navigationbuttoncolor=#d8373e,fullscreen=no,toolbarposition=bottom,lefttoright=yes`
+      );
     });
 
     return true;

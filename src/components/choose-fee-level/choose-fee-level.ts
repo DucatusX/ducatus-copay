@@ -70,7 +70,7 @@ export class ChooseFeeLevelComponent extends ActionSheetParent {
     this.coin = this.params.coin;
     this.feeLevel = this.params.feeLevel;
     this.setFeeUnits();
-    if(this.platform.width()<=420){
+    if (this.platform.width() <= 420) {
       this.slidesView = '1.2';
     }
 
@@ -191,7 +191,7 @@ export class ChooseFeeLevelComponent extends ActionSheetParent {
     // parseInt('2000000000000000000000',10) = 2e+21
     const result = (value.feePerKb / this.feeUnitAmount).toFixed();
     return parseInt(
-      Number(result).toLocaleString('fullwide', { useGrouping: false }), 
+      Number(result).toLocaleString('fullwide', { useGrouping: false }),
       10
     );
   }
@@ -205,7 +205,7 @@ export class ChooseFeeLevelComponent extends ActionSheetParent {
     const result = (value.feePerKb / this.feeUnitAmount).toFixed();
 
     return parseInt(
-      Number(result).toLocaleString('fullwide', { useGrouping: false }), 
+      Number(result).toLocaleString('fullwide', { useGrouping: false }),
       10
     );
   }

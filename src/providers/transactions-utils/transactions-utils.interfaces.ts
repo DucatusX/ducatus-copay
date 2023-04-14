@@ -1,4 +1,4 @@
-import { Coin } from "../currency/currency";
+import { Coin } from '../currency/currency';
 
 export interface ITx {
   amount: number;
@@ -7,8 +7,8 @@ export interface ITx {
   recipientType: string;
   fromSelectInputs: boolean;
   txp: {};
-  network: string; 
-  toAddress: string; 
+  network: string;
+  toAddress: string;
   origToAddress: string;
   inputs: any;
   sendMax: boolean;
@@ -26,7 +26,7 @@ export interface ITx {
   email?: string;
   color?: string;
   wDucxAddress?: string;
-  spendUnconfirmed?: string; 
+  spendUnconfirmed?: string;
   data?: string; // eth
   feeLevel?: string;
   feeLevelName?: string;
@@ -36,7 +36,7 @@ export interface ITx {
 }
 
 export interface ITxBase {
-  network: string; 
+  network: string;
   amount: number;
   toAddress: string;
   coin: Coin;

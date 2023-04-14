@@ -77,7 +77,10 @@ export class AddressbookAddPage {
 
   onChangeAddress(): void {
     this.addressBookAdd.get('address').valueChanges.subscribe(address => {
-      const coinProperty: {coin: string; network: string;} = this.addressProvider.getCoinAndNetwork(address);
+      const coinProperty: {
+        coin: string;
+        network: string;
+      } = this.addressProvider.getCoinAndNetwork(address);
 
       if (coinProperty) {
         const { coin } = coinProperty;
@@ -109,7 +112,7 @@ export class AddressbookAddPage {
         this.parseAddress(data.value)
       );
     }
-  }
+  };
 
   private emailOrEmpty(control: AbstractControl): ValidationErrors | null {
     return control.value === '' ? null : Validators.email(control);

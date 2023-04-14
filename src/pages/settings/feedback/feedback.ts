@@ -25,8 +25,11 @@ export class FeedbackPage {
   private createForm() {
     this.feedbackForm = this.formBuilder.group({
       subject: ['', Validators.required],
-      email: ['', [Validators.pattern(this.regexEmailValidate), Validators.required]],
-      message: ['', [Validators.minLength(20), Validators.required]],
+      email: [
+        '',
+        [Validators.pattern(this.regexEmailValidate), Validators.required]
+      ],
+      message: ['', [Validators.minLength(20), Validators.required]]
     });
   }
 
@@ -59,7 +62,7 @@ export class FeedbackPage {
       viewWindow.title =
         '<img src ="./assets/img/icon-attantion.svg" width="42px" height="42px">';
     }
-    
+
     let alert = this.alertCtrl.create(viewWindow);
     alert.present();
   }
@@ -69,12 +72,14 @@ export class FeedbackPage {
 
     this.httpClient
       .post(
-        `${this.apiProvider.getAddresses().ducatuscoins}/api/v1/send_ducatus_feedback/`,
+        `${
+          this.apiProvider.getAddresses().ducatuscoins
+        }/api/v1/send_ducatus_feedback/`,
         {
           isWallet: true,
           email: this.feedbackForm.get('email').value,
           message: this.feedbackForm.get('message').value,
-          subject: this.feedbackForm.get('subject').value,
+          subject: this.feedbackForm.get('subject').value
         }
       )
       .toPromise()
@@ -83,10 +88,12 @@ export class FeedbackPage {
         this.feedbackForm.reset();
         this.disabledForm = false;
       })
-      .catch(()=>{
-        this.viewSendResult('something went wrong please try again later', true);
+      .catch(() => {
+        this.viewSendResult(
+          'something went wrong please try again later',
+          true
+        );
         this.disabledForm = false;
-     });
+      });
   }
-  
 }
