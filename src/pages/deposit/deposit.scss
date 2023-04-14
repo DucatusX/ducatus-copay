@@ -4,14 +4,12 @@
 }
 
 .deposit {
-   
   &-list {
     padding: 18px;
     margin-bottom: 100px;
   }
 
   &-group {
-
     &-btn {
       display: flex;
       align-items: center;
@@ -67,7 +65,7 @@
         min-height: 45px !important;
         height: 45px !important;
         padding: 0 !important;
-        
+
         .item-inner {
           margin: 0 !important;
           padding: 0 !important;
@@ -75,7 +73,7 @@
 
         .input-wrapper {
           min-width: 100%;
-          
+
           .label {
             margin: 0 !important;
             display: flex;
@@ -160,7 +158,6 @@
       }
 
       &-unactive {
-        
         &-button {
           display: flex;
           align-items: center;
@@ -309,7 +306,6 @@
     }
 
     &-page {
-      
       &-button {
         min-width: 100%;
         width: 100%;
@@ -364,8 +360,6 @@
         color: color($colors, error);
         background-color: #fff6f7;
       }
-
-
     }
 
     &-label {
@@ -408,7 +402,6 @@
   }
 
   &-alert {
-    
     .alert-wrapper {
       max-width: 340px;
       width: 100%;

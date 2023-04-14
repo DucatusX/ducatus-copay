@@ -505,4 +505,3 @@ export class HomePage {
     }
   }
 }
-

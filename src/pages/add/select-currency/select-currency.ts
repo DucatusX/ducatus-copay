@@ -76,7 +76,9 @@ export class SelectCurrencyPage {
       : this.currencyProvider.getAvailableChains();
     this.availableTokens = this.currencyProvider.getAvailableTokens();
     this.drcAvailableTokens = this.currencyProvider.getDRCAvailableTokens();
-    this.drcAvailableTokens = this.drcAvailableTokens.filter(token => token.symbol != 'TKF');
+    this.drcAvailableTokens = this.drcAvailableTokens.filter(
+      token => token.symbol != 'TKF'
+    );
     this.coinsSelected['duc'] = true;
     this.coinsSelected['ducx'] = true;
     this.tokensSelected['AA+'] = true;
@@ -224,11 +226,10 @@ export class SelectCurrencyPage {
           pairFor: token
         })
       : [];
- 
-    const blockchainName = (token.blockchain === 'ducx') 
-      ? 'DucatusX'
-      : 'Ethereum';
-   
+
+    const blockchainName =
+      token.blockchain === 'ducx' ? 'DucatusX' : 'Ethereum';
+
     let correctWallets = eligibleWallets.filter(
       wallet => wallet.coin === token.blockchain
     );

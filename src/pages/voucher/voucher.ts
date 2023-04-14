@@ -5,18 +5,18 @@ import { VoucherAddPage } from './add/add';
 
 import _ from 'lodash';
 
-import { ApiProvider, 
-  Coin, 
-  Logger, 
-  ProfileProvider, 
-  TxFormatProvider 
+import {
+  ApiProvider,
+  Coin,
+  Logger,
+  ProfileProvider,
+  TxFormatProvider
 } from '../../providers';
 
 @Component({
   selector: 'page-voucher',
   templateUrl: 'voucher.html'
 })
-
 export class VoucherPage {
   public vouchersLoading = true;
   public vouchers = [];
@@ -43,12 +43,13 @@ export class VoucherPage {
 
     this.httpClient
       .get(
-        this.apiProvider.getAddresses().deposit + `user/vouchers/list/?wallet_ids=${walletsResult}`
+        this.apiProvider.getAddresses().deposit +
+          `user/vouchers/list/?wallet_ids=${walletsResult}`
       )
       .toPromise()
       .then(result => {
         this.vouchers = result as any;
-        this.vouchers.map( x => {
+        this.vouchers.map(x => {
           x.ducAmount = this.formatProvider.satToUnit(x.ducAmount, Coin.DUC);
           x.withdrow_check = false;
         });
@@ -61,11 +62,11 @@ export class VoucherPage {
   }
 
   private getWalletsInfo(coin: Coin): string[] {
-    const walletsFiltered = this.wallets.filter( wallet => {
+    const walletsFiltered = this.wallets.filter(wallet => {
       return wallet.coin === coin.toLowerCase();
     });
 
-    const walletsId: string[] = walletsFiltered.map( wallet => {
+    const walletsId: string[] = walletsFiltered.map(wallet => {
       return wallet.credentials.walletId;
     });
 
@@ -135,25 +136,23 @@ export class VoucherPage {
     }, 2000);
   }
 
-  private withdraw (wallet_id: number): Promise<object> {
-    let url = this.apiProvider.getAddresses().deposit + `user/vouchers/${wallet_id}/withdraw/`;
+  private withdraw(wallet_id: number): Promise<object> {
+    let url =
+      this.apiProvider.getAddresses().deposit +
+      `user/vouchers/${wallet_id}/withdraw/`;
 
-    return this.httpClient
-      .put(url, "")
-      .toPromise();
+    return this.httpClient.put(url, '').toPromise();
   }
 
   public withdrowTrigger(id: number): void {
     this.withdraw(id)
-    .then(
-      res => {
+      .then(res => {
         this.logger.debug(res);
-        this.showModal('success', id, );
-    })
-    .catch(
-      err => {
+        this.showModal('success', id);
+      })
+      .catch(err => {
         this.logger.debug(err);
         this.showModal('network', id);
-    });
+      });
   }
 }

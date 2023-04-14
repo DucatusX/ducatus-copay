@@ -94,7 +94,7 @@ export class CardCatalogPage extends WideHeaderPage {
       isCardInSearchResults(c, this.searchQuery)
     );
   }
-  
+
   hasPercentageDiscount(cardConfig: CardConfig) {
     return hasVisibleDiscount(cardConfig);
   }

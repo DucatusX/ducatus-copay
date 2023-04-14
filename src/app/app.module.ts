@@ -151,5 +151,5 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
-  constructor(public config: Config) { }
+  constructor(public config: Config) {}
 }

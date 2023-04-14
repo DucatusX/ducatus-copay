@@ -5,7 +5,7 @@ document.body.appendChild(div);
 
 window.onload = function() {
   const script = document.createElement('script');
- 
+
   script.src = 'build/main.js';
   document.head.append(script);
 };

@@ -103,11 +103,17 @@ export class IncomingDataProvider {
   private isValidPayProNonBackwardsCompatible(data: string): boolean {
     data = this.sanitizeUri(data);
 
-    return Boolean(/^(bitcoin|bitcoincash|ducatus|ducatusx|bchtest|ethereum|ripple)?:\?r=[\w+]/.exec(data));
+    return Boolean(
+      /^(bitcoin|bitcoincash|ducatus|ducatusx|bchtest|ethereum|ripple)?:\?r=[\w+]/.exec(
+        data
+      )
+    );
   }
 
   private isValidBitPayInvoice(data: string): boolean {
-    return Boolean(/^https:\/\/(www.)?(test.|staging.)?bitpay.com\/i\/\w+/.exec(data));
+    return Boolean(
+      /^https:\/\/(www.)?(test.|staging.)?bitpay.com\/i\/\w+/.exec(data)
+    );
   }
 
   private isValidBitPayUri(data: string): boolean {
@@ -118,8 +124,8 @@ export class IncomingDataProvider {
     }
 
     const address = this.extractAddress(data);
-    
-    if (!address) { 
+
+    if (!address) {
       return false;
     }
 
@@ -157,19 +163,25 @@ export class IncomingDataProvider {
   private isValidDucatusXUri(data: string): boolean {
     data = this.sanitizeUri(data);
 
-    return Boolean(this.bwcProvider.getCore().Validation.validateUri('DUCX', data));
+    return Boolean(
+      this.bwcProvider.getCore().Validation.validateUri('DUCX', data)
+    );
   }
 
   private isValidEthereumUri(data: string): boolean {
     data = this.sanitizeUri(data);
 
-    return Boolean(this.bwcProvider.getCore().Validation.validateUri('ETH', data));
+    return Boolean(
+      this.bwcProvider.getCore().Validation.validateUri('ETH', data)
+    );
   }
 
   private isValidRippleUri(data: string): boolean {
     data = this.sanitizeUri(data);
-    
-    return Boolean(this.bwcProvider.getCore().Validation.validateUri('XRP', data));
+
+    return Boolean(
+      this.bwcProvider.getCore().Validation.validateUri('XRP', data)
+    );
   }
 
   public isValidBitcoinCashUriWithLegacyAddress(data: string): boolean {
@@ -194,28 +206,28 @@ export class IncomingDataProvider {
   private isValidBitcoinAddress(data: string): boolean {
     return Boolean(
       this.bwcProvider.getBitcore().Address.isValid(data, 'livenet') ||
-      this.bwcProvider.getBitcore().Address.isValid(data, 'testnet')
+        this.bwcProvider.getBitcore().Address.isValid(data, 'testnet')
     );
   }
 
   public isValidBitcoinCashLegacyAddress(data: string): boolean {
     return Boolean(
       this.bwcProvider.getBitcore().Address.isValid(data, 'livenet') ||
-      this.bwcProvider.getBitcore().Address.isValid(data, 'testnet')
+        this.bwcProvider.getBitcore().Address.isValid(data, 'testnet')
     );
   }
 
   private isValidBitcoinCashAddress(data: string): boolean {
     return Boolean(
       this.bwcProvider.getBitcoreCash().Address.isValid(data, 'livenet') ||
-      this.bwcProvider.getBitcoreCash().Address.isValid(data, 'testnet')
+        this.bwcProvider.getBitcoreCash().Address.isValid(data, 'testnet')
     );
   }
 
   private isValidDucatusAddress(data: string): boolean {
     return Boolean(
       this.bwcProvider.getDucatuscore().Address.isValid(data, 'livenet') ||
-      this.bwcProvider.getDucatuscore().Address.isValid(data, 'testnet')
+        this.bwcProvider.getDucatuscore().Address.isValid(data, 'testnet')
     );
   }
 
@@ -223,7 +235,7 @@ export class IncomingDataProvider {
     const isValid = this.bwcProvider
       .getCore()
       .Validation.validateAddress('ETH', 'livenet', data);
-    
+
     return Boolean(isValid);
   }
 
@@ -231,16 +243,15 @@ export class IncomingDataProvider {
     const isValid = this.bwcProvider
       .getCore()
       .Validation.validateAddress('XRP', 'livenet', data);
-    
-      return Boolean(isValid);
+
+    return Boolean(isValid);
   }
 
   private isValidCoinbaseUri(data: string): boolean {
     data = this.sanitizeUri(data);
 
     return Boolean(
-      data 
-      && data.indexOf(this.appProvider.info.name + '://coinbase') === 0
+      data && data.indexOf(this.appProvider.info.name + '://coinbase') === 0
     );
   }
 
@@ -248,8 +259,7 @@ export class IncomingDataProvider {
     data = this.sanitizeUri(data);
 
     return Boolean(
-      data 
-      && data.indexOf(this.appProvider.info.name + '://shapeshift') === 0
+      data && data.indexOf(this.appProvider.info.name + '://shapeshift') === 0
     );
   }
 
@@ -257,8 +267,7 @@ export class IncomingDataProvider {
     data = this.sanitizeUri(data);
 
     return Boolean(
-      data 
-      && data.indexOf(this.appProvider.info.name + '://simplex') === 0
+      data && data.indexOf(this.appProvider.info.name + '://simplex') === 0
     );
   }
 
@@ -266,51 +275,38 @@ export class IncomingDataProvider {
     data = this.sanitizeUri(data);
 
     return Boolean(
-      data 
-      && data.indexOf(this.appProvider.info.name + '://invoice') === 0
+      data && data.indexOf(this.appProvider.info.name + '://invoice') === 0
     );
   }
 
   private isValidBitPayCardUri(data: string): boolean {
     data = this.sanitizeUri(data);
 
-    return Boolean(
-      data 
-      && data.indexOf('bitpay://bitpay') === 0
-    );
+    return Boolean(data && data.indexOf('bitpay://bitpay') === 0);
   }
 
   private isValidJoinCode(data: string): boolean {
     data = this.sanitizeUri(data);
 
-    return Boolean(
-      data 
-      && data.match(/^copay:[0-9A-HJ-NP-Za-km-z]{70,80}$/)
-    );
+    return Boolean(data && data.match(/^copay:[0-9A-HJ-NP-Za-km-z]{70,80}$/));
   }
 
   private isValidJoinLegacyCode(data: string): boolean {
-    return Boolean(
-      data 
-      && data.match(/^[0-9A-HJ-NP-Za-km-z]{70,80}$/)
-    );
+    return Boolean(data && data.match(/^[0-9A-HJ-NP-Za-km-z]{70,80}$/));
   }
 
   private isValidPrivateKey(data: string): boolean {
     return Boolean(
-      data &&
-      (data.substring(0, 2) == '6P' || this.checkPrivateKey(data))
+      data && (data.substring(0, 2) == '6P' || this.checkPrivateKey(data))
     );
   }
 
   private isValidImportPrivateKey(data: string): boolean {
     return Boolean(
-      data
-      && (
-        data.substring(0, 2) == '1|' 
-        || data.substring(0, 2) == '2|' 
-        || data.substring(0, 2) == '3|'
-      )
+      data &&
+        (data.substring(0, 2) == '1|' ||
+          data.substring(0, 2) == '2|' ||
+          data.substring(0, 2) == '3|')
     );
   }
 
@@ -320,12 +316,14 @@ export class IncomingDataProvider {
     this.showMenu({
       data,
       type: 'privateKey',
-      fromHomeCard: redirParams && redirParams.fromHomeCard || false
+      fromHomeCard: (redirParams && redirParams.fromHomeCard) || false
     });
   }
 
   private handlePayProNonBackwardsCompatible(data: string): void {
-    this.logger.debug('Incoming-data: Payment Protocol with non-backwards-compatible request');
+    this.logger.debug(
+      'Incoming-data: Payment Protocol with non-backwards-compatible request'
+    );
     const url = this.getPayProUrl(data);
 
     this.handleBitPayInvoice(url);
@@ -336,7 +334,9 @@ export class IncomingDataProvider {
 
     try {
       const disableLoader = true;
-      const payProOptions = await this.payproProvider.getPayProOptions(invoiceUrl);
+      const payProOptions = await this.payproProvider.getPayProOptions(
+        invoiceUrl
+      );
 
       const selected = payProOptions.paymentOptions.filter(
         option => option.selected
@@ -404,7 +404,7 @@ export class IncomingDataProvider {
   private handleBitPayUri(data: string, redirParams?: RedirParams): void {
     this.logger.debug('Incoming-data: BitPay URI');
 
-    const amountFromRedirParams = redirParams && redirParams.amount || '';
+    const amountFromRedirParams = (redirParams && redirParams.amount) || '';
     const addr = this.extractAddress(data);
     const params: URLSearchParams = new URLSearchParams(
       data.replace(`bitpay:${addr}`, '')
@@ -425,10 +425,10 @@ export class IncomingDataProvider {
       ).toString();
 
       this.goSend({
-        addr, 
-        amount, 
-        message, 
-        coin, 
+        addr,
+        amount,
+        message,
+        coin,
         requiredFeeRate
       });
     } else {
@@ -439,31 +439,32 @@ export class IncomingDataProvider {
   private handleBitcoinUri(data: string, redirParams?: RedirParams): void {
     this.logger.debug('Incoming-data: Bitcoin URI');
 
-    const amountFromRedirParams = redirParams && redirParams.amount || '';
+    const amountFromRedirParams = (redirParams && redirParams.amount) || '';
     const coin = Coin.BTC;
     let parsed = this.bwcProvider.getBitcore().URI(data);
-    let addr = parsed.address && parsed.address.toString() || '';
+    let addr = (parsed.address && parsed.address.toString()) || '';
     let message = parsed.message;
     let amount = parsed.amount || amountFromRedirParams;
 
     if (parsed.r) {
       const payProUrl = this.getPayProUrl(parsed.r);
       this.goToPayPro(payProUrl, coin);
-    } else this.goSend({
-      addr, 
-      amount, 
-      message, 
-      coin
-    });
+    } else
+      this.goSend({
+        addr,
+        amount,
+        message,
+        coin
+      });
   }
 
   private handleBitcoinCashUri(data: string, redirParams?: RedirParams): void {
     this.logger.debug('Incoming-data: Bitcoin Cash URI');
 
-    const amountFromRedirParams = redirParams && redirParams.amount || '';
+    const amountFromRedirParams = (redirParams && redirParams.amount) || '';
     const coin = Coin.BCH;
     const parsed = this.bwcProvider.getBitcoreCash().URI(data);
-    let addr = parsed.address && parsed.address.toString() || '';
+    let addr = (parsed.address && parsed.address.toString()) || '';
 
     // keep address in original format
     if (parsed.address && data.indexOf(addr) < 0) {
@@ -479,9 +480,9 @@ export class IncomingDataProvider {
       this.goToPayPro(payProUrl, coin);
     } else {
       this.goSend({
-        addr, 
-        amount, 
-        message, 
+        addr,
+        amount,
+        message,
         coin
       });
     }
@@ -490,10 +491,10 @@ export class IncomingDataProvider {
   private handleDucatusUri(data: string, redirParams?: RedirParams): void {
     this.logger.debug('Incoming-data: Ducatus URI');
 
-    const amountFromRedirParams = redirParams && redirParams.amount || '';
+    const amountFromRedirParams = (redirParams && redirParams.amount) || '';
     const coin = Coin.DUC;
     const parsed = this.bwcProvider.getDucatuscore().URI(data);
-    const addr: string = parsed.address && parsed.address.toString() || '';
+    const addr: string = (parsed.address && parsed.address.toString()) || '';
     const message: string = parsed.message;
     const useSendMax: boolean = redirParams.useSendMax;
     const amount: string = parsed.amount || amountFromRedirParams;
@@ -515,7 +516,7 @@ export class IncomingDataProvider {
   private handleDucatusXUri(data: string, redirParams?: RedirParams): void {
     this.logger.debug('Incoming-data: DucatusX URI');
 
-    const amountFromRedirParams = redirParams && redirParams.amount || '';
+    const amountFromRedirParams = (redirParams && redirParams.amount) || '';
     const coin = Coin.DUCX;
     const value = /[\?\&]value=(\d+([\,\.]\d+)?)/i;
     const gasPrice = /[\?\&]gasPrice=(\d+([\,\.]\d+)?)/i;
@@ -554,7 +555,7 @@ export class IncomingDataProvider {
   private handleEthereumUri(data: string, redirParams?: RedirParams): void {
     this.logger.debug('Incoming-data: Ethereum URI');
 
-    const amountFromRedirParams = redirParams && redirParams.amount || '';
+    const amountFromRedirParams = (redirParams && redirParams.amount) || '';
     const coin = Coin.ETH;
     const value = /[\?\&]value=(\d+([\,\.]\d+)?)/i;
     const gasPrice = /[\?\&]gasPrice=(\d+([\,\.]\d+)?)/i;
@@ -575,10 +576,10 @@ export class IncomingDataProvider {
 
     if (amount) {
       this.goSend({
-        addr, 
-        amount, 
-        message, 
-        coin, 
+        addr,
+        amount,
+        message,
+        coin,
         requiredFeeRate
       });
     } else {
@@ -589,7 +590,7 @@ export class IncomingDataProvider {
   private handleRippleUri(data: string, redirParams?: RedirParams): void {
     this.logger.debug('Incoming-data: Ripple URI');
 
-    const amountFromRedirParams = redirParams && redirParams.amount || '';
+    const amountFromRedirParams = (redirParams && redirParams.amount) || '';
     const coin = Coin.XRP;
     const amountParam = /[\?\&]amount=(\d+([\,\.]\d+)?)/i;
     const tagParam = /[\?\&]dt=(\d+([\,\.]\d+)?)/i;
@@ -633,7 +634,7 @@ export class IncomingDataProvider {
       .getBitcore()
       .URI(data.replace(/^(bitcoincash:|bchtest:)/, 'bitcoin:'));
 
-    const oldAddr = parsed.address && parsed.address.toString() || '';
+    const oldAddr = (parsed.address && parsed.address.toString()) || '';
 
     if (!oldAddr) {
       this.logger.error('Could not parse Bitcoin Cash legacy address');
@@ -657,12 +658,13 @@ export class IncomingDataProvider {
       const payProUrl = this.getPayProUrl(parsed.r);
 
       this.goToPayPro(payProUrl, coin);
-    } else this.goSend({
-      addr, 
-      amount, 
-      message, 
-      coin
-    });
+    } else
+      this.goSend({
+        addr,
+        amount,
+        message,
+        coin
+      });
   }
 
   private handlePlainUrl(data: string): void {
@@ -692,9 +694,9 @@ export class IncomingDataProvider {
       });
     } else if (redirParams && redirParams.amount) {
       this.goSend({
-        addr: data, 
-        amount: redirParams.amount, 
-        message: '', 
+        addr: data,
+        amount: redirParams.amount,
+        message: '',
         coin
       });
     } else {
@@ -709,7 +711,7 @@ export class IncomingDataProvider {
     this.logger.debug('Incoming-data: Bitcoin Cash plain address');
 
     const coin = Coin.BCH;
-    
+
     if (redirParams && redirParams.activePage === 'ScanPage') {
       this.showMenu({
         data,
@@ -718,9 +720,9 @@ export class IncomingDataProvider {
       });
     } else if (redirParams && redirParams.amount) {
       this.goSend({
-        addr: data, 
-        amount: redirParams.amount, 
-        message: '', 
+        addr: data,
+        amount: redirParams.amount,
+        message: '',
         coin
       });
     } else {
@@ -744,9 +746,9 @@ export class IncomingDataProvider {
       });
     } else if (redirParams && redirParams.amount) {
       this.goSend({
-        addr: data, 
-        amount: redirParams.amount, 
-        message: '', 
+        addr: data,
+        amount: redirParams.amount,
+        message: '',
         coin
       });
     } else {
@@ -767,9 +769,9 @@ export class IncomingDataProvider {
       });
     } else if (redirParams && redirParams.amount) {
       this.goSend({
-        addr: data, 
-        amount: redirParams.amount, 
-        message: '', 
+        addr: data,
+        amount: redirParams.amount,
+        message: '',
         coin
       });
     } else {
@@ -790,9 +792,9 @@ export class IncomingDataProvider {
       });
     } else if (redirParams && redirParams.amount) {
       this.goSend({
-        addr: data, 
-        amount: redirParams.amount, 
-        message: '', 
+        addr: data,
+        amount: redirParams.amount,
+        message: '',
         coin
       });
     } else {
@@ -802,9 +804,9 @@ export class IncomingDataProvider {
 
   private handleRippleAddress(data: string, redirParams?: RedirParams): void {
     this.logger.debug('Incoming-data: Ripple address');
-    
+
     const coin = Coin.XRP;
-    
+
     if (redirParams && redirParams.activePage === 'ScanPage') {
       this.showMenu({
         data,
@@ -813,9 +815,9 @@ export class IncomingDataProvider {
       });
     } else if (redirParams && redirParams.amount) {
       this.goSend({
-        addr: data, 
-        amount: redirParams.amount, 
-        message: '', 
+        addr: data,
+        amount: redirParams.amount,
+        message: '',
         coin
       });
     } else {
@@ -952,7 +954,7 @@ export class IncomingDataProvider {
     this.logger.debug('Incoming-data (redirect): Invoice URL');
 
     const invoiceUrl = this.getParameterByName('url', data);
-    
+
     this.redir(invoiceUrl);
   }
 
@@ -1151,9 +1153,8 @@ export class IncomingDataProvider {
   }
 
   public parseData(data: string): any {
-    
     if (!data) return;
-    
+
     if (this.isValidBitPayInvoice(data)) {
       return {
         data,
@@ -1187,14 +1188,14 @@ export class IncomingDataProvider {
         type: 'DucatusUri',
         title: this.translate.instant('Ducatus URI')
       };
-      // DucatusX URI 
-    } else if(this.isValidDucatusXUri(data)){
-      return{
+      // DucatusX URI
+    } else if (this.isValidDucatusXUri(data)) {
+      return {
         data,
         type: 'DucatusXUri',
         title: this.translate.instant('DucatusX URI')
       };
-      // Ethereum URI 
+      // Ethereum URI
     } else if (this.isValidEthereumUri(data)) {
       return {
         data,
@@ -1518,7 +1519,7 @@ export class IncomingDataProvider {
         name: 'ConfirmPage',
         params: stateParams
       };
-      
+
       this.incomingDataRedir(nextView);
     } catch (err) {
       this.events.publish('incomingDataError', err);

@@ -9,9 +9,8 @@ export class TabProvider {
   activeGiftCardsPromise: Promise<GiftCard[]>;
 
   constructor(
-    private bitPayCardProvider: BitPayCardProvider
-  ) // private giftCardProvider: GiftCardProvider
-  {}
+    private bitPayCardProvider: BitPayCardProvider // private giftCardProvider: GiftCardProvider
+  ) {}
 
   prefetchBitpayCardItems(): Promise<any> {
     this.bitpayCardItemsPromise = this.bitPayCardProvider.get({

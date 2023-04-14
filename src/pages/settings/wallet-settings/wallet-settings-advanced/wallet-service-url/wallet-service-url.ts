@@ -41,7 +41,7 @@ export class WalletServiceUrlPage {
     private platformProvider: PlatformProvider,
     private replaceParametersProvider: ReplaceParametersProvider,
     private translate: TranslateService,
-    private apiProvider: ApiProvider,
+    private apiProvider: ApiProvider
   ) {
     this.walletServiceForm = this.formBuilder.group({
       bwsurl: [

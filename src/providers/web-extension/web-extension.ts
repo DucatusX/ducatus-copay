@@ -17,74 +17,60 @@ export class WebExtensionsProvider {
   }
 
   init(): void {
-  
-    if ( !window.chrome || !window.chrome.storage ) {
+    if (!window.chrome || !window.chrome.storage) {
       return;
     }
 
-    chrome.storage.sync.get("ducxTx", (data) => {
+    chrome.storage.sync.get('ducxTx', data => {
       const { ducxTx } = data;
 
-      if ( ducxTx ) {
+      if (ducxTx) {
         this.openTxPage(ducxTx);
 
-        chrome.storage.sync.set({ducxTx: null}, () => {
+        chrome.storage.sync.set({ ducxTx: null }, () => {
           this.logger.debug('Value is set to null');
         });
-      } 
+      }
     });
 
-    chrome.storage.onChanged.addListener( (changes) => {
+    chrome.storage.onChanged.addListener(changes => {
       const { ducxTx = {} } = changes;
       const { newValue } = ducxTx;
-    
-      if ( newValue ) {
+
+      if (newValue) {
         this.openTxPage(newValue);
 
-        chrome.storage.sync.set({ducxTx: null}, () => {
+        chrome.storage.sync.set({ ducxTx: null }, () => {
           this.logger.debug('Value is set to null');
         });
-      } 
+      }
     });
   }
 
   public async openTxPage(tx): Promise<void> {
-    const { 
-      from, 
-      to, 
-      amount
-    } = tx;
+    const { from, to, amount } = tx;
 
-    if ( !from || !to || !amount ) {
+    if (!from || !to || !amount) {
       return;
     }
-  
+
     let walletId: number;
     const wallets = this.profileProvider.getWallets();
 
-    for ( let i = 0; i < wallets.length; i++ ) {
+    for (let i = 0; i < wallets.length; i++) {
       const wallet = wallets[i];
-      const { 
-        coin, 
-        needsBackup,
-        network,
-        id
-      } = wallet;
-      
-      if ( 
-        coin === 'ducx' 
-        && !needsBackup 
-        && network !== "testnet" 
-      ) {
+      const { coin, needsBackup, network, id } = wallet;
+
+      if (coin === 'ducx' && !needsBackup && network !== 'testnet') {
         const address = await this.walletProvider.getAddress(wallet, false);
-        
-        if ( from === address ) {
+
+        if (from === address) {
           walletId = id;
         }
       }
     }
 
-    if ( !walletId ) {
+    if (!walletId) {
       return;
     }
 
@@ -99,32 +85,22 @@ export class WebExtensionsProvider {
   }
 
   public async setDucxAddresses(wallets): Promise<void> {
-    
-    if ( !window.chrome || !window.chrome.storage ) { 
+    if (!window.chrome || !window.chrome.storage) {
       return;
     }
 
     const ducxAddresses: string[] = [];
 
-    for ( let i = 0; i < wallets.length; i++ ) {
+    for (let i = 0; i < wallets.length; i++) {
       const wallet = wallets[i];
-      const { 
-        coin, 
-        needsBackup,
-        network
-      } = wallet;
-      
-      if ( 
-        coin === 'ducx' 
-        && !needsBackup 
-        && network !== "testnet" 
-      ) {
+      const { coin, needsBackup, network } = wallet;
+
+      if (coin === 'ducx' && !needsBackup && network !== 'testnet') {
         const address = await this.walletProvider.getAddress(wallet, false);
         ducxAddresses.push(address);
       }
     }
-    
+
     chrome.storage.sync.set({ ducxAddresses });
   }
-
 }

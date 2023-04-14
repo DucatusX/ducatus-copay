@@ -3,9 +3,12 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
 import {
-  Events, ModalController,
-  NavController, NavParams,
-  Platform, ViewController
+  Events,
+  ModalController,
+  NavController,
+  NavParams,
+  Platform,
+  ViewController
 } from 'ionic-angular';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -109,7 +112,6 @@ export class WalletDetailsPage {
     if (this.navParams.data.clearCache) {
       this.clearHistoryCache();
     } else {
-
       if (this.wallet.completeHistory) {
         this.showHistory();
       } else {
@@ -130,7 +132,6 @@ export class WalletDetailsPage {
       .catch(err => {
         this.logger.error(err);
       });
-
   }
 
   subscribeEvents() {
@@ -181,17 +182,17 @@ export class WalletDetailsPage {
 
   shouldShowSpinner() {
     return (
-      (this.updatingStatus || this.updatingTxHistory)
-      && !this.walletNotRegistered 
-      && !this.updateStatusError 
-      && !this.updateTxHistoryError
+      (this.updatingStatus || this.updatingTxHistory) &&
+      !this.walletNotRegistered &&
+      !this.updateStatusError &&
+      !this.updateTxHistoryError
     );
   }
 
   private fetchTxHistory(opts: UpdateWalletOptsI) {
     if (!opts.walletId) {
       this.logger.error('Error no walletId in update History');
-      
+
       return;
     }
 
@@ -245,7 +246,6 @@ export class WalletDetailsPage {
 
   private groupHistory(history) {
     return history.reduce((groups, tx, txInd) => {
-      
       if (this.isFirstInGroup(txInd)) {
         groups.push([tx]);
       } else {
@@ -275,9 +275,7 @@ export class WalletDetailsPage {
   }
 
   private setPendingTxps(txps) {
-    this.txps = !txps 
-      ? [] 
-      : _.sortBy(txps, 'createdOn').reverse();
+    this.txps = !txps ? [] : _.sortBy(txps, 'createdOn').reverse();
     this.txpsPending = [];
 
     this.txps.forEach(txp => {
@@ -332,7 +330,7 @@ export class WalletDetailsPage {
 
     setTimeout(() => {
       // loading in true
-      this.showHistory(true); 
+      this.showHistory(true);
       loading.complete();
     }, 300);
   }
@@ -359,7 +357,7 @@ export class WalletDetailsPage {
 
   private updateHistory = opts => {
     this.logger.debug('RECV Local/WalletHistoryUpdate @walletDetails', opts);
-    
+
     if (opts.walletId != this.wallet.id) {
       return;
     }
@@ -373,11 +371,7 @@ export class WalletDetailsPage {
 
       this.showNoTransactionsYetMsg = !hasTx;
 
-      if (
-        this.wallet.needsBackup 
-        && hasTx 
-        && this.showBackupNeededMsg
-      ) {
+      if (this.wallet.needsBackup && hasTx && this.showBackupNeededMsg) {
         this.openBackupModal();
       }
 
@@ -421,7 +415,7 @@ export class WalletDetailsPage {
       this.showBalanceButton = status.totalBalanceSat != status.spendableAmount;
 
       const minXrpBalance = 20000000; // 20 XRP * 1e6
-      
+
       if (this.wallet.coin === 'xrp') {
         this.showBalanceButton =
           status.totalBalanceSat &&
@@ -477,9 +471,7 @@ export class WalletDetailsPage {
       const infoSheet = this.actionSheetProvider.createInfoSheet('speed-up-tx');
       infoSheet.present();
       infoSheet.onDidDismiss(option => {
-        option 
-          ? this.speedUpTx(tx) 
-          : this.goToTxDetails(tx);
+        option ? this.speedUpTx(tx) : this.goToTxDetails(tx);
       });
     }
   }
@@ -555,7 +547,7 @@ export class WalletDetailsPage {
     if (index === 0) {
       return true;
     }
-    
+
     const curTx = this.history[index];
     const prevTx = this.history[index - 1];
 
@@ -649,10 +641,8 @@ export class WalletDetailsPage {
     this.updateAll({ force: true });
 
     setTimeout(() => {
-        refresher.complete();
-      }, 
-      TIMEOUT_FOR_REFRESHER
-    );
+      refresher.complete();
+    }, TIMEOUT_FOR_REFRESHER);
   }
 
   public close() {
@@ -676,7 +666,6 @@ export class WalletDetailsPage {
 
   public goToErc721Page() {
     if (this.wallet.credentials.walletId) {
-
       if (this.wallet.needsBackup) {
         this.goToReceivePage();
       } else {
@@ -687,7 +676,6 @@ export class WalletDetailsPage {
 
   public goToSeedPage() {
     if (this.wallet.credentials.walletId) {
-
       if (this.wallet.needsBackup) {
         this.goToReceivePage();
       } else {
@@ -705,30 +693,27 @@ export class WalletDetailsPage {
   public genMoreOptionsList() {
     const isTokenWallet = Boolean(this.wallet.linkedEthWallet);
     const showRequest =
-      this.wallet 
-      && this.wallet.isComplete() 
-      && !this.wallet.needsBackup 
-      && !isTokenWallet;
+      this.wallet &&
+      this.wallet.isComplete() &&
+      !this.wallet.needsBackup &&
+      !isTokenWallet;
 
     const showShare = showRequest && this.isCordova;
 
     const listOfOptions: boolean[] = [showRequest, showShare];
     const listLength = listOfOptions.reduce((acc, val) => acc + Number(val), 0);
 
-    return { 
-      showRequest, 
-      showShare, 
+    return {
+      showRequest,
+      showShare,
       length: listLength
     };
   }
 
   public showMoreOptions(): void {
-    const { 
-      showShare, 
-      showRequest 
-    } = this.genMoreOptionsList();
+    const { showShare, showRequest } = this.genMoreOptionsList();
     const optionsSheet = this.actionSheetProvider.createOptionsSheet(
-      'wallet-options', 
+      'wallet-options',
       { showShare, showRequest }
     );
     optionsSheet.present();

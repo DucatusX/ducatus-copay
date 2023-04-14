@@ -546,7 +546,8 @@ export class ImportWalletPage {
       // set opts.useLegacyCoinType
       if (
         opts.coin == 'bch' &&
-        this.derivationPathHelperProvider.parsePath(derivationPath).coinCode == "0'"
+        this.derivationPathHelperProvider.parsePath(derivationPath).coinCode ==
+          "0'"
       ) {
         opts.useLegacyCoinType = true;
         this.logger.debug('Using 0 for BCH creation');

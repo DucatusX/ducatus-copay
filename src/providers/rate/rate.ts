@@ -26,7 +26,7 @@ export class RateProvider {
     this.alternatives = {};
     for (const coin of this.currencyProvider.getAvailableCoins()) {
       this.rateServiceUrl[coin] = env.ratesAPI[coin];
-     
+
       this.rates[coin] = {
         USD: this.rates[coin],
         NGN: this.rates[coin]
@@ -58,7 +58,7 @@ export class RateProvider {
             this.rates[chain].USD = dataCoin[chain.toUpperCase()].USD;
           }
           this.ratesAvailable[chain] = true;
-          
+
           resolve();
         })
         .catch(errorCoin => {
@@ -70,9 +70,9 @@ export class RateProvider {
 
   public getCoin(chain: string): Promise<any> {
     return new Promise(resolve => {
-        this.http.get(this.rateServiceUrl[chain]).subscribe(data => {
-          resolve(data);
-        });
+      this.http.get(this.rateServiceUrl[chain]).subscribe(data => {
+        resolve(data);
+      });
     });
   }
 
@@ -105,7 +105,7 @@ export class RateProvider {
     }
     const customRate = opts && opts.customRate;
     const rate = customRate || this.getRate(code, chain, opts);
-    
+
     return (
       satoshis *
       (1 / this.currencyProvider.getPrecision(chain).unitToSatoshi) *

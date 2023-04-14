@@ -300,7 +300,9 @@ export class TransferToPage {
             walletId: this.navParams.data.wallet.id,
             recipientType: item.recipientType,
             amount: parseInt(
-              Number(this.navParams.data.amount).toLocaleString('fullwide', { useGrouping: false }), 
+              Number(this.navParams.data.amount).toLocaleString('fullwide', {
+                useGrouping: false
+              }),
               10
             ),
             toAddress: addr,

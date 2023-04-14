@@ -18,14 +18,18 @@ export { UserAgent } from '@ionic-native/user-agent';
 
 /* Providers */
 export { ActionSheetProvider } from '../providers/action-sheet/action-sheet';
-export { TransactionUtilsProvider } from '../providers/transactions-utils/transactions-utils';
+export {
+  TransactionUtilsProvider
+} from '../providers/transactions-utils/transactions-utils';
 export { AddressBookProvider } from '../providers/address-book/address-book';
 export { AddressProvider } from '../providers/address/address';
 export { AppIdentityProvider } from '../providers/app-identity/app-identity';
 export { AppProvider } from '../providers/app/app';
 export { BackupProvider } from '../providers/backup/backup';
 export { FormControllerProvider } from './form-contoller/form-controller';
-export { ContractAddress } from '../providers/contract-address/contract-address';
+export {
+  ContractAddress
+} from '../providers/contract-address/contract-address';
 export {
   BitPayAccountProvider
 } from '../providers/bitpay-account/bitpay-account';
@@ -102,4 +106,6 @@ export { MoonPayProvider } from '../providers/moonpay/moonpay';
 export { LiveChatProvider } from '../providers/livechat/livechat';
 export { PdfProvider } from '../providers/pdf/pdf';
 export { ApiProvider } from '../providers/api/api';
-export { WebExtensionsProvider } from '../providers/web-extension/web-extension';
+export {
+  WebExtensionsProvider
+} from '../providers/web-extension/web-extension';

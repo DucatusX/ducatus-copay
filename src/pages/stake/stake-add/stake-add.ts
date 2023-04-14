@@ -1,28 +1,27 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { Big } from 'big.js';
 import { Decimal } from 'decimal.js';
-import { ModalController ,NavController } from "ionic-angular";
+import { ModalController, NavController } from 'ionic-angular';
 import * as _ from 'lodash';
-import { debounceTime, distinctUntilChanged} from "rxjs/operators";
-import { FinishModalPage } from "../../../pages/finish/finish";
-import { Logger } from "../../../providers";
-import { ActionSheetProvider } from "../../../providers/action-sheet/action-sheet";
-import { ErrorsProvider } from "../../../providers/errors/errors";
-import { FormControllerProvider } from "../../../providers/form-contoller/form-controller";
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { FinishModalPage } from '../../../pages/finish/finish';
+import { Logger } from '../../../providers';
+import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
+import { ErrorsProvider } from '../../../providers/errors/errors';
+import { FormControllerProvider } from '../../../providers/form-contoller/form-controller';
 import { OnGoingProcessProvider } from '../../../providers/on-going-process/on-going-process';
-import { ProfileProvider } from "../../../providers/profile/profile";
-import { StakeProvider } from "../../../providers/stake/stake";
-import { WalletProvider } from "../../../providers/wallet/wallet";
+import { ProfileProvider } from '../../../providers/profile/profile';
+import { StakeProvider } from '../../../providers/stake/stake';
+import { WalletProvider } from '../../../providers/wallet/wallet';
 
 @Component({
   selector: 'page-stake-add',
   templateUrl: 'stake-add.html'
 })
-
 export class StakeAddPage {
-  public defaultReward = "4";
+  public defaultReward = '4';
   public walletsGroups = [];
   public wallets = [];
   public stakeGroup: FormGroup;
@@ -31,8 +30,8 @@ export class StakeAddPage {
   public isApprove: boolean = false;
   public depositLoading: boolean = false;
   public walletAddresses = [];
-  public depositPercent: string = "4";
-  public depositMonth: string = "12";
+  public depositPercent: string = '4';
+  public depositMonth: string = '12';
   public txp;
   public maxAmount;
   public approveLoading: boolean = false;
@@ -44,7 +43,7 @@ export class StakeAddPage {
 
   constructor(
     private stakeProvider: StakeProvider,
-    private profileProvider: ProfileProvider, 
+    private profileProvider: ProfileProvider,
     private walletProvider: WalletProvider,
     private actionSheetProvider: ActionSheetProvider,
     private formBuilder: FormBuilder,
@@ -56,40 +55,45 @@ export class StakeAddPage {
     private formlCtrl: FormControllerProvider,
     private errorsProvider: ErrorsProvider
   ) {
-      this.stakeGroup = this.formBuilder.group({
-        address: [
-          '',
-          Validators.compose([Validators.minLength(34), Validators.required])
-        ],
-        amount: [
-          '',
-          Validators.compose([
-            Validators.minLength(1),
-            Validators.required,
-            Validators.min(0)
-          ])
-        ],
-      });
+    this.stakeGroup = this.formBuilder.group({
+      address: [
+        '',
+        Validators.compose([Validators.minLength(34), Validators.required])
+      ],
+      amount: [
+        '',
+        Validators.compose([
+          Validators.minLength(1),
+          Validators.required,
+          Validators.min(0)
+        ])
+      ]
+    });
 
-
-    this.stakeGroup.get("amount").valueChanges
-      .pipe(
+    this.stakeGroup
+      .get('amount')
+      .valueChanges.pipe(
         debounceTime(200),
         distinctUntilChanged()
       )
-      .subscribe( amount => {
-        if(amount != '0' && amount != '') {
-          const amountInputValid = this.formlCtrl.transformValue(amount, undefined, 8);
+      .subscribe(amount => {
+        if (amount != '0' && amount != '') {
+          const amountInputValid = this.formlCtrl.transformValue(
+            amount,
+            undefined,
+            8
+          );
 
           this.setIsApprove(amount);
-          this.sumRewards = new Decimal(amountInputValid).times(0.04).toString();
+          this.sumRewards = new Decimal(amountInputValid)
+            .times(0.04)
+            .toString();
           this.isEmptyInput = !Boolean(Number(amount));
           this.setAmountInput(amountInputValid);
-        }
-        else {
+        } else {
           this.isEmptyInput = true;
         }
-    });
+      });
   }
 
   private showErrorMessage(message: string): void {
@@ -109,7 +113,8 @@ export class StakeAddPage {
       )
     );
     this.wallets = await this.getWalletsInfoAddress('jwan');
-    this.stakeProvider.getPercent()
+    this.stakeProvider
+      .getPercent()
       .then(rewards => {
         this.reward = rewards;
       })
@@ -121,8 +126,10 @@ export class StakeAddPage {
 
   public async createFinishModal() {
     const finishText = this.translate.instant('Transaction broadcasted');
-    const finishComment = this.translate.instant('It may take up to 10 minutes for the transaction to be confirmed'); 
-    const params = { finishText, finishComment ,autoDismiss: false };
+    const finishComment = this.translate.instant(
+      'It may take up to 10 minutes for the transaction to be confirmed'
+    );
+    const params = { finishText, finishComment, autoDismiss: false };
 
     const modal = this.modalCtrl.create(FinishModalPage, params, {
       showBackdrop: true,
@@ -133,21 +140,20 @@ export class StakeAddPage {
   }
 
   public setIsApprove(amountInput): void {
-    if(!amountInput || !this.selectWallet.address) return;
+    if (!amountInput || !this.selectWallet.address) return;
 
     const amountInputWei = this.stakeProvider.toWei(String(amountInput));
 
-    this.stakeProvider.getApproveAmount(this.selectWallet.address)
-      .then((amount) => {
-        if(Number(amountInputWei) <= Number(amount)) {
+    this.stakeProvider
+      .getApproveAmount(this.selectWallet.address)
+      .then(amount => {
+        if (Number(amountInputWei) <= Number(amount)) {
           this.isApprove = true;
           this.approveLoading = false;
           this.stopApproveInterval();
-        }
-        else {
+        } else {
           this.isApprove = false;
         }
-
       })
       .catch(err => {
         this.logger.debug(err);
@@ -155,9 +161,7 @@ export class StakeAddPage {
   }
 
   public setAmountInput(amount: string): void {
-    this.stakeGroup
-    .get('amount')
-    .setValue(amount);
+    this.stakeGroup.get('amount').setValue(amount);
   }
 
   public async ionViewWillEnter() {
@@ -166,21 +170,25 @@ export class StakeAddPage {
       backedUp: true
     });
 
-    const coinWallets: any = await this.walletProvider.getWalletsByCoin(wallets, 'jwan');
+    const coinWallets: any = await this.walletProvider.getWalletsByCoin(
+      wallets,
+      'jwan'
+    );
 
     this.walletAddresses = coinWallets.wallets;
   }
 
   public approve() {
     this.approveLoading = true;
-    this.txp = this.stakeProvider.approve(this.stakeGroup.value.amount, this.selectWallet.walletId)
+    this.txp = this.stakeProvider
+      .approve(this.stakeGroup.value.amount, this.selectWallet.walletId)
       .then(() => {
         this.approveLoading = true;
         this.onGoingProcessProvider.clear();
         this.startApproveInterval();
         this.createFinishModal();
       })
-      .catch((err) => {
+      .catch(err => {
         this.approveLoading = false;
         this.onGoingProcessProvider.clear();
         this.showErrorMessage(err.message);
@@ -202,14 +210,15 @@ export class StakeAddPage {
   public stake() {
     this.stakeLoading = true;
 
-    this.stakeProvider.deposit(this.stakeGroup.value.amount, this.selectWallet.walletId)
+    this.stakeProvider
+      .deposit(this.stakeGroup.value.amount, this.selectWallet.walletId)
       .then(() => {
         this.onGoingProcessProvider.clear();
         this.stakeLoading = false;
         this.createFinishModal();
         this.navCtrl.pop();
       })
-      .catch((err) => {
+      .catch(err => {
         this.onGoingProcessProvider.clear();
         this.stakeLoading = false;
         this.showErrorMessage(err.message);
@@ -218,18 +227,21 @@ export class StakeAddPage {
 
   public async sendMax(): Promise<void> {
     const { token } = this.selectWallet.wallet.credentials;
-    const tokenAddress = token && token.address || '';
-    const amount = await this.walletProvider.getBalance(this.selectWallet.wallet, { tokenAddress });
+    const tokenAddress = (token && token.address) || '';
+    const amount = await this.walletProvider.getBalance(
+      this.selectWallet.wallet,
+      { tokenAddress }
+    );
 
-    this.maxAmount = Big(amount.availableAmount).div(100000000).toString();
-    
-    this.stakeGroup
-      .get('amount')
-      .setValue( this.maxAmount);
+    this.maxAmount = Big(amount.availableAmount)
+      .div(100000000)
+      .toString();
+
+    this.stakeGroup.get('amount').setValue(this.maxAmount);
   }
 
   public openAddressList(): void {
-    if ( !this.depositLoading ) {
+    if (!this.depositLoading) {
       const infoSheet = this.actionSheetProvider.createInfoSheet(
         'convertor-address',
         { wallet: this.walletAddresses }
@@ -256,24 +268,22 @@ export class StakeAddPage {
       );
     });
 
-    for ( let i = 0; i < coins.length; i++ ) {
+    for (let i = 0; i < coins.length; i++) {
       const coin = coins[i];
       let address: string;
 
       try {
         address = await this.walletProvider.getAddress(coin, false);
-      }
-      catch {
-       address = '';
+      } catch {
+        address = '';
       }
 
-      wallets.push({ 
-        wallet: coin, 
-        address 
+      wallets.push({
+        wallet: coin,
+        address
       });
     }
 
     return wallets;
   }
-
 }

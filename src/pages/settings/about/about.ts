@@ -3,9 +3,12 @@ import { TranslateService } from '@ngx-translate/core';
 import { NavController } from 'ionic-angular';
 import env from '../../../environments';
 import {
-  ApiProvider, AppProvider,
-  BitPayProvider, ExternalLinkProvider,
-  Logger, PersistenceProvider,
+  ApiProvider,
+  AppProvider,
+  BitPayProvider,
+  ExternalLinkProvider,
+  Logger,
+  PersistenceProvider,
   ReplaceParametersProvider
 } from '../../../providers';
 import { SendFeedbackPage } from '../../feedback/send-feedback/send-feedback';
@@ -46,11 +49,12 @@ export class AboutPage {
   }
 
   public openExternalLink(): void {
-    const url = 'https://github.com/bitpay/'
-      + this.appProvider.info.gitHubRepoName 
-      + '/tree/' 
-      + this.appProvider.info.commitHash 
-      + '';
+    const url =
+      'https://github.com/bitpay/' +
+      this.appProvider.info.gitHubRepoName +
+      '/tree/' +
+      this.appProvider.info.commitHash +
+      '';
     const optIn = true;
     const title = this.translate.instant('Open GitHub Project');
     const message = this.translate.instant(
@@ -121,7 +125,7 @@ export class AboutPage {
       );
 
       alert('removed accounts');
-      
+
       this.tapped = 0;
     }
   }

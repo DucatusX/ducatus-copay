@@ -380,7 +380,7 @@ export class WalletsPage {
     */
 
     this.wallets = this.profileProvider.getWallets();
-    this.wallets = this.wallets.filter( wallet => wallet.coin !== "tkf");
+    this.wallets = this.wallets.filter(wallet => wallet.coin !== 'tkf');
     this.walletsGroups = _.values(
       _.groupBy(
         _.filter(this.wallets, wallet => {
@@ -389,7 +389,7 @@ export class WalletsPage {
         'keyId'
       )
     );
-    
+
     this.webExtensionsProvider.setDucxAddresses(this.wallets);
     this.readOnlyWalletsGroup = this.profileProvider.getWalletsFromGroup({
       keyId: 'read-only'
@@ -401,7 +401,7 @@ export class WalletsPage {
       .getData()
       .then(async data => {
         this.validDataFromClipboard = this.incomingDataProvider.parseData(data);
-        
+
         if (!this.validDataFromClipboard) {
           return;
         }
@@ -451,7 +451,7 @@ export class WalletsPage {
             this.logger.warn('Error in Payment Protocol', err);
           }
         }
-        
+
         await Observable.timer(50).toPromise();
         this.slideDown = true;
       })

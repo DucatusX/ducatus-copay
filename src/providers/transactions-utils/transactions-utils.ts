@@ -24,11 +24,7 @@ import { WalletProvider } from '../../providers/wallet/wallet';
 import { ITx, ITxBase } from './transactions-utils.interfaces';
 
 import { DecimalPipe } from '@angular/common';
-import {
-  App,
-  Events,
-  ModalController,
-} from 'ionic-angular';
+import { App, Events, ModalController } from 'ionic-angular';
 import { Logger } from '../../providers/logger/logger';
 
 @Injectable()
@@ -65,7 +61,7 @@ export class TransactionUtilsProvider {
     protected clipboardProvider: ClipboardProvider,
     protected events: Events,
     protected coinbaseProvider: CoinbaseProvider,
-    protected appProvider: AppProvider,
+    protected appProvider: AppProvider
   ) {
     this.config = this.configProvider.get();
     this.isCordova = this.platformProvider.isCordova;
@@ -87,29 +83,23 @@ export class TransactionUtilsProvider {
   }
 
   public getTx(
-    txParams: ITxBase, 
+    txParams: ITxBase,
     wallet: any,
     isSpeedUpTx?: boolean,
     fromMultiSend?: boolean,
-    fromSelectInputs?: boolean,
+    fromSelectInputs?: boolean
   ): ITx {
     let networkName: string;
     let tx: ITx;
     let amount: number;
 
-    if (
-      !txParams.network
-      && wallet
-      &&  wallet.network
-    ) {
+    if (!txParams.network && wallet && wallet.network) {
       txParams.network = wallet.network;
     }
 
     if (fromSelectInputs) {
       networkName = txParams.network;
-      amount = txParams.amount
-        ? txParams.amount
-        : txParams.totalInputsAmount;
+      amount = txParams.amount ? txParams.amount : txParams.totalInputsAmount;
     } else if (fromMultiSend) {
       networkName = txParams.network;
       amount = txParams.totalAmount;
@@ -122,7 +112,7 @@ export class TransactionUtilsProvider {
           txParams.network || 'livenet'
         ).network;
       } catch (e) {
-          this.logger.error(e);
+        this.logger.error(e);
       }
     }
 
@@ -133,7 +123,7 @@ export class TransactionUtilsProvider {
         txParams.useSendMax && this.isChain(txParams.coin)
           ? 0
           : parseInt(
-              Number(amount).toLocaleString('fullwide', { useGrouping: false }), 
+              Number(amount).toLocaleString('fullwide', { useGrouping: false }),
               10
             ),
       description: txParams.description,
@@ -149,9 +139,7 @@ export class TransactionUtilsProvider {
       name: txParams.name,
       email: txParams.email,
       color: txParams.color,
-      network: txParams.network
-        ? txParams.network
-        : networkName,
+      network: txParams.network ? txParams.network : networkName,
       coin: txParams.coin,
       txp: {},
       tokenAddress: txParams.tokenAddress,
@@ -159,21 +147,19 @@ export class TransactionUtilsProvider {
       speedUpTx: isSpeedUpTx,
       fromSelectInputs: txParams.fromSelectInputs ? true : false,
       inputs: txParams.inputs,
-      origToAddress: txParams.toAddress,
+      origToAddress: txParams.toAddress
     };
 
     if (txParams.requiredFeeRate) {
       tx.feeRate = +txParams.requiredFeeRate;
     } else if (isSpeedUpTx) {
-      tx.feeLevel = 'custom';  
+      tx.feeLevel = 'custom';
     } else {
       tx.feeLevel = this.feeProvider.getCoinCurrentFeeLevel(tx.coin);
     }
 
     if (tx.coin && tx.coin == 'bch' && !fromMultiSend) {
-      tx.toAddress = this.bitcoreCash
-        .Address(tx.toAddress)
-        .toString(true);
+      tx.toAddress = this.bitcoreCash.Address(tx.toAddress).toString(true);
     }
 
     const feeOpts = this.feeProvider.getFeeOpts();
@@ -181,25 +167,25 @@ export class TransactionUtilsProvider {
 
     return tx;
   }
- 
+
   private isChain(coin) {
     const chain = this.currencyProvider.getAvailableChains();
     return chain.includes(coin);
   }
 
   public getTxp(
-    tx: ITx, 
-    wallet, 
-    dryRun: boolean, 
-    recipients?, 
+    tx: ITx,
+    wallet,
+    dryRun: boolean,
+    recipients?,
     token?,
     opts?: {
-      isContractCall?: boolean,
-      fromMultiSend?, 
-      usingCustomFee?, 
-      usingMerchantFee?,
-    }): Promise<any> {
-
+      isContractCall?: boolean;
+      fromMultiSend?;
+      usingCustomFee?;
+      usingMerchantFee?;
+    }
+  ): Promise<any> {
     return new Promise((resolve, reject) => {
       // ToDo: use a credential's (or fc's) function for this
       if (tx.description && !wallet.credentials.sharedEncryptingKey) {
@@ -220,7 +206,7 @@ export class TransactionUtilsProvider {
       // set opts.coin to wallet.coin
       txp.coin = wallet.coin;
 
-      if(opts.isContractCall) {
+      if (opts.isContractCall) {
         txp.isContractCall = true;
       }
 
@@ -278,8 +264,9 @@ export class TransactionUtilsProvider {
           );
           const result = (tx.feeRate / 1000).toFixed(0);
           const estimatedFee =
-            size * parseInt(
-              Number(result).toLocaleString('fullwide', { useGrouping: false }), 
+            size *
+            parseInt(
+              Number(result).toLocaleString('fullwide', { useGrouping: false }),
               10
             );
           tx.fee = estimatedFee;
@@ -348,7 +335,7 @@ export class TransactionUtilsProvider {
         if (tx.wDucxAddress) {
           chain = 'TOB';
         }
-        
+
         for (const output of txp.outputs) {
           if (!output.data) {
             output.data = this.bwcProvider
@@ -398,7 +385,7 @@ export class TransactionUtilsProvider {
               }
             }
           }
-          
+
           this.walletProvider
             .createTx(wallet, txp)
             .then(ctxp => {

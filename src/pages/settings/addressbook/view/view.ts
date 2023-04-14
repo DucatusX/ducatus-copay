@@ -34,7 +34,7 @@ export class AddressbookViewPage {
     private actionSheetProvider: ActionSheetProvider
   ) {
     this.address = this.navParams.data.contact.address;
-    
+
     if (this.navParams.data.contact.coin) {
       this.coin = this.navParams.data.contact.coin;
       this.network = this.navParams.data.contact.network;

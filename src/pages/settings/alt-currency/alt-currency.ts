@@ -20,7 +20,7 @@ export class AltCurrencyPage {
   public lastUsedAltCurrencyList;
   private PAGE_COUNTER: number = 3;
   private SHOW_LIMIT: number = 10;
- 
+
   constructor(
     private configProvider: ConfigProvider,
     private logger: Logger,
@@ -34,12 +34,14 @@ export class AltCurrencyPage {
   }
 
   ionViewWillEnter() {
-    this.completeAlternativeList = [{
-      isoCode: 'USD', 
-      name: 'US Dollar'
-    }];
+    this.completeAlternativeList = [
+      {
+        isoCode: 'USD',
+        name: 'US Dollar'
+      }
+    ];
     this.altCurrencyList = this.completeAlternativeList;
-    
+
     let config = this.configProvider.get();
     this.currentCurrency = config.wallet.settings.alternativeIsoCode;
 
