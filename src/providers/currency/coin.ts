@@ -658,7 +658,7 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     }
   },
   'g.o.l.d.': {
-    name: 'G.O.L.D.',
+    name: 'GOLD MV',
     chain: 'DUCX',
     coin: 'g.o.l.d.',
     unitInfo: {

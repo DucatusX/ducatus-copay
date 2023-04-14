@@ -87,7 +87,7 @@ export const DRCTokenOpts = {
     blockchain: 'ducx'
   },
   '0xcDdd562C0cF8c262AD8A5c1A476cdBBE114FcC28': {
-    name: 'G.O.L.D.',
+    name: 'GOLD MV',
     symbol: 'G.O.L.D.',
     decimal: 18,
     address: '0xcDdd562C0cF8c262AD8A5c1A476cdBBE114FcC28',
