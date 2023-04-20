@@ -571,14 +571,13 @@ export class WalletsPage {
       .then(status => {
         wallet.cachedStatus = status;
         wallet.error = wallet.errorObj = null;
-
+        
         const balance =
           wallet.coin === 'xrp'
             ? wallet.cachedStatus.availableBalanceStr
             : wallet.cachedStatus.totalBalanceStr;
 
         this.persistenceProvider.setLastKnownBalance(wallet.id, balance);
-
         // Update txps
         this.updateTxps();
         this.events.publish('Local/WalletUpdate', {

@@ -47,7 +47,7 @@ export class WalletItemContent {
   hasZeroBalance(wallet, currency) {
     return (
       (wallet.cachedStatus &&
-        wallet.cachedStatus.totalBalanceAlternative === 0) ||
+        wallet.cachedStatus.totalBalanceSat === 0) ||
       this.getLastKownBalance(wallet, currency) === '0.00'
     );
   }
