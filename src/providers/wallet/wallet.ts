@@ -1765,13 +1765,7 @@ export class WalletProvider {
           keys.xPrivKey
         );
 
-        const derivedPrivKey = xPrivKey.deriveNonCompliantChild(
-          wallet.credentials.rootPath
-        );
-
-        const xPriv = this.bwcProvider.Client.Ducatuscore.HDPrivateKey(
-          derivedPrivKey
-        );
+        let derivedPrivKey = xPrivKey.deriveChild("m/44'/0'/0'");
 
         const address = await this.getMainAddresses(wallet, {
           doNotVerify: false
@@ -1782,9 +1776,9 @@ export class WalletProvider {
         });
 
         if (addressPath) {
-          return xPriv.deriveChild(address.path).privateKey.toWIF();
+          return derivedPrivKey.deriveChild(address.path).privateKey.toWIF();
         } else {
-          return xPriv.deriveChild(data.private_path).privateKey.toWIF();
+          return derivedPrivKey.deriveChild(data.private_path).privateKey.toWIF();
         }
       })
       .catch(err => {
@@ -1808,7 +1802,6 @@ export class WalletProvider {
       Buffer.from(data.redeem_script, 'hex'),
       hashType
     );
-
     const inputScriptFirstBranch = bitcoin.payments.p2sh({
       redeem: {
         input: bitcoin.script.compile([
@@ -1823,7 +1816,6 @@ export class WalletProvider {
     }).input;
 
     tx.setInputScript(0, inputScriptFirstBranch);
-
     return tx.toHex();
   }
 
