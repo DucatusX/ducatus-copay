@@ -184,6 +184,8 @@ export class CopayApp {
   private async onAppLoad(readySource) {
     const deviceInfo = this.platformProvider.getDeviceInfo();
 
+    this.showWallet3Message();
+    
     this.logger.info(
       'Platform ready (' +
         readySource +
@@ -541,5 +543,20 @@ export class CopayApp {
 
   private getGlobalTabs() {
     return this.nav.getActiveChildNavs()[0].viewCtrl.instance.tabs;
+  }
+
+  private showWallet3Message() {
+    const fromDate = '2023-10-15';
+    const toDate = '2023-10-31';
+
+    if (new Date() >= new Date(fromDate) && new Date() <= new Date(toDate)) {
+      const title = 'IMPORTANT';
+      const text = `
+        We are updating the Ducatus Wallet to version 3.0 by the end of October 2023.
+        Please make sure to SAVE your 12-word Recovery Phrase NOW to be able to re-import your wallet after the said update.
+        Click Settings > Key > Backup to retrieve your Recovery Phrase now!
+      `;
+      this.popupProvider.ionicAlert(title, text);
+    }
   }
 }
