@@ -55,8 +55,8 @@ export class DepositAddPage {
           Validators.min(0)
         ])
       ],
-      Month: ['0', Validators.compose([Validators.required])],
-      Percent: ['0', Validators.compose([Validators.required])]
+      Month: ['13', Validators.compose([Validators.required])],
+      Percent: ['8', Validators.compose([Validators.required])]
     });
   }
 
@@ -93,7 +93,6 @@ export class DepositAddPage {
 
   public changePercentAndMoth(type: string) {
     const tableMP = {
-      '0': '0',
       '5': '8',
       '13': '13',
       '34': '21'
@@ -201,7 +200,7 @@ export class DepositAddPage {
           resultPrepare.wallet.walletId,
           this.DepositGroup.value.Address,
           resultPrepare.pubKey,
-          parseFloat(this.DepositGroup.value.Month),
+          0,
           resultPrepare.path
         )
           .then(res => {
