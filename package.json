@@ -219,7 +219,7 @@
     "codecov": "3.6.5",
     "cordova-plugin-useragent": "git+https://github.com/danielsogl/cordova-plugin-useragent.git",
     "core-js": "2.6.10",
-    "electron": "5.0.13",
+    "electron": "22.3.25",
     "electron-builder": "21.2.0",
     "fs-extra": "5.0.0",
     "ionic": "4.10.4",
