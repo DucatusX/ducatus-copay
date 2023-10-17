@@ -183,8 +183,6 @@ export class CopayApp {
 
   private async onAppLoad(readySource) {
     const deviceInfo = this.platformProvider.getDeviceInfo();
-
-    this.showWallet3Message();
     
     this.logger.info(
       'Platform ready (' +
@@ -234,6 +232,8 @@ export class CopayApp {
 
       // Check PIN or Fingerprint
       this.openLockModal();
+    } else {
+      this.showWallet3Message();
     }
 
     const experiment = await this.persistenceProvider.getCardExperimentFlag();
@@ -335,7 +335,10 @@ export class CopayApp {
   }
 
   private openLockModal(): void {
-    if (this.appProvider.isLockModalOpen) return;
+    if (this.appProvider.isLockModalOpen) {
+      this.showWallet3Message();
+      return;
+    }
 
     const config = this.configProvider.get();
     const lockMethod =
@@ -344,6 +347,7 @@ export class CopayApp {
         : null;
 
     if (!lockMethod) {
+      this.showWallet3Message();
       return;
     }
 
@@ -369,6 +373,7 @@ export class CopayApp {
     modal.present({ animate: false });
     modal.onDidDismiss(() => {
       this.onLockDidDismiss();
+      this.showWallet3Message();
     });
   }
 
@@ -385,6 +390,7 @@ export class CopayApp {
     modal.present({ animate: false });
     modal.onDidDismiss(() => {
       this.onLockDidDismiss();
+      this.showWallet3Message();
     });
   }
 
