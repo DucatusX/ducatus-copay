@@ -278,7 +278,7 @@
         </span>
         <span class="ducatus-scan-button_text" translate>Buy</span>
       </button>
-      <button class="ducatus-scan-button" (click)="openSwap()">
+      <button class="ducatus-scan-button" *ngIf="!isIOS" (click)="openSwap()">
         <span class="ducatus-scan-button_icon">
           <img src="assets/img/tab-icons/tab-swap.svg" />
         </span>
