@@ -108,7 +108,7 @@ export class DepositPage {
     }user/deposits/list/?wallet_ids=${walletsResult}`;
     // @ts-ignore
     const deposits: any[] = await this.httpClient.get(address).toPromise();
-
+    
     for (let i = 0; i < deposits.length; i++) {
       const deposit = deposits[i];
 
@@ -134,7 +134,7 @@ export class DepositPage {
         );
       }
     }
-
+    console.log(deposits);
     this.deposits = deposits as any[];
     this.depositsLoading = false;
   }

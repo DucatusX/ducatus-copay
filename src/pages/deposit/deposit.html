@@ -70,7 +70,7 @@
               class="deposit-old-withdraw"
             >
               <span
-                *ngIf="deposit.readyToWithdraw"
+                *ngIf="deposit.extraData[0].dividendsSent" 
                 ion-button
                 class="deposit-item-old-button"
                 (click)="withdraw(deposit.id)"
@@ -78,7 +78,7 @@
                 WITHDRAW
               </span>              
               <span
-                *ngIf="deposit.readyToWithdraw"
+                *ngIf="!deposit.extraData[0].dividendsSent"
                 ion-button
                 class="deposit-item-old-button"
                 (click)="getRewards(deposit.id)"
